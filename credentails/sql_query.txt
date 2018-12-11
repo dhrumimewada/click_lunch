@@ -1,0 +1,8 @@
+ALTER TABLE `shop` ADD `zip_code` VARCHAR(11) NOT NULL AFTER `address`;
+<!-- 12-11-2018 06:50 PM -->
+
+
+ALTER TABLE `shop` CHANGE `payment_mode` `payment_mode` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '0 - Card , 1 - Apple Pay, 2 - Google Pay';
+DONE
+
+

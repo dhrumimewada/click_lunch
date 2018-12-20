@@ -9,7 +9,7 @@ $edit_link = base_url().'item-update';
                 <div class="page-title-box">
                     <h4 class="page-title">Products</h4>
                     <div class="state-information d-none d-sm-block">
-                        <a class="btn btn-primary waves-effect waves-light" href="<?php echo base_url().'item-add'; ?>">Add New Product</a>
+                        <a class="btn btn-primary waves-effect waves-light btn-bg" href="<?php echo base_url().'item-add'; ?>">Add New Product</a>
                     </div>
                 </div>
                 <?php echo get_msg(); ?>
@@ -21,7 +21,7 @@ $edit_link = base_url().'item-update';
             <div class="col-12">
                 <div class="card m-b-20">
                     <div class="card-body">
-                        <table class="table table-bordered table-hover dt-responsive nowrap item_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <table class="table table-hover dt-responsive nowrap item_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
                                 <th>Product Name</th>
@@ -61,16 +61,18 @@ $edit_link = base_url().'item-update';
                                     
                                     if($value["is_active"] == 1){
                                         $btn_name = 'Active';
+                                        $btn_class = 'btn-success';
                                     }else{
                                         $btn_name = 'Deactive';
+                                        $btn_class = 'btn-deactive';
                                     }
-                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn btn-outline-primary waves-effect waves-light deactive_item' status-id='" . $value["is_active"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
+                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." btn-outline-primary waves-effect waves-light deactive_item' status-id='" . $value["is_active"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
                                     
                                     
                                     echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
  
-                                    echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary waves-effect waves-light title='Edit' data-popup='tooltip' > Edit</a>
-                                        <button type='button' class='btn btn-outline-primary waves-effect waves-light delete_item' title='Delete' data-popup='tooltip'>Delete</button></td>
+                                    echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a>
+                                        <button type='button' class='btn btn-danger waves-effect waves-light btn-sm delete_item' title='Delete' data-popup='tooltip'>Delete</button></td>
                                         </td>";
                                     echo '</tr>';
                                 }
@@ -155,11 +157,13 @@ $edit_link = base_url().'item-update';
                 var change_status_to = 'deactive';
                 var change_status_to1 = 'Deactived!';
                 var btn_name_replace = 'Deactive';
+                var btn_cls_replace = 'btn-deactive';
                 var status = '0';
             }else{
                 var change_status_to = 'active';
                 var change_status_to1 = 'Activated!';
                 var btn_name_replace = 'Active';
+                var btn_cls_replace = 'btn-success';
                 var status = '1';
             }
 
@@ -170,7 +174,7 @@ $edit_link = base_url().'item-update';
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonClass: 'btn btn-success',
-                    cancelButtonClass: 'btn btn-danger m-l-10',
+                    cancelButtonClass: 'btn btn-deactive m-l-10',
                     confirmButtonText: 'Yes'
                 }).then(
                     function () {
@@ -191,7 +195,7 @@ $edit_link = base_url().'item-update';
                                     'Item has been '+change_status_to1,
                                     'success'
                                 )
-                                $this.replaceWith("<button type='button' class='btn btn-outline-primary waves-effect waves-light deactive_item' status-id='" +status+ "' title='"+btn_name_replace+"' data-popup='tooltip'>" +btn_name_replace+ "</button>");
+                                $this.replaceWith("<button type='button' class='btn "+btn_cls_replace+ " waves-effect waves-light btn-sm deactive_item' status-id='" +status+ "' title='"+btn_name_replace+"' data-popup='tooltip'>" +btn_name_replace+ "</button>");
                                 
                             } 
                         },
@@ -200,6 +204,7 @@ $edit_link = base_url().'item-update';
                         },
                         complete: function () {
                             $(this).removeAttr("disabled");
+                            $(this).blur();
                         }
                     });    
                 })

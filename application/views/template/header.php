@@ -6,7 +6,9 @@
     <meta content="Admin Dashboard" name="description" />
     <meta content="Themesbrand" name="author" />
     <link rel="shortcut icon" href="<?php echo base_url() . 'assets/images/favicon.ico'; ?>">
-
+    <!-- chart -->
+    <link rel="stylesheet" href="<?php echo base_url() . 'plugins/chartist/css/chartist.min.css'; ?>">
+    
     <link rel="stylesheet" href="<?php echo base_url() . 'plugins/morris/morris.css'; ?>">
     <!-- Sweet Alert -->
     <link rel="stylesheet" href="<?php echo base_url() . 'plugins/sweet-alert2/sweetalert2.min.css'; ?>" type="text/css">
@@ -53,7 +55,7 @@
     <!--Morris Chart-->
     <script src="<?php echo base_url() . 'plugins/morris/morris.min.js'; ?>"></script>
     <script src="<?php echo base_url() . 'plugins/raphael/raphael-min.js'; ?>"></script>
-
+    
     <!-- Sweet-Alert  -->
     <script src="<?php echo base_url() . 'plugins/sweet-alert2/sweetalert2.min.js'; ?>"></script>
 
@@ -82,9 +84,4 @@
 
     <!-- moment -->
     <script src="<?php echo base_url() . 'assets/js/moment/moment.min.js'; ?>"></script>
-
-
-
-
-    
 </head>

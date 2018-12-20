@@ -22,6 +22,10 @@ class Appsetting extends CI_Controller {
 
 	public function index(){
 
+		// echo "<pre>";
+		// print_r($_SESSION);
+		// exit;
+
 		$settings = $this->appsetting_model->get_settings();
 		$output_data["settings"] = $settings;
 		$output_data['main_content'] = "admin/app_setting/index";

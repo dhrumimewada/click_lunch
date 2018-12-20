@@ -8,6 +8,26 @@ $edit_link = base_url().'email-update';
             <div class="col-sm-12">
                 <div class="page-title-box">
                     <h4 class="page-title">Email Templates</h4>
+                    <div class="state-information d-none d-sm-block">
+                        <div class="btn-group ml-1 mo-mb-2">
+                            <button type="button" class="btn btn-bg btn-primary waves-light waves-effect dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                Send Email
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Email to Users</a>
+                                <a class="dropdown-item" href="#">Email to Restaurants</a>
+                            </div>
+                        </div>
+                        <div class="btn-group ml-1 mo-mb-2">
+                            <button type="button" class="btn btn-bg btn-primary waves-light waves-effect dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                Send Push Notification
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Notification to Users</a>
+                                <a class="dropdown-item" href="#">Notification to Restaurants</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <?php echo get_msg(); ?>
             </div>
@@ -18,7 +38,7 @@ $edit_link = base_url().'email-update';
             <div class="col-12">
                 <div class="card m-b-20">
                     <div class="card-body">
-                        <table class="table table-bordered dt-responsive nowrap template_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <table class="table table-hover dt-responsive nowrap template_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
                                 <th>Email Type</th>
@@ -39,7 +59,7 @@ $edit_link = base_url().'email-update';
                                     echo "<td>" . $value["emat_email_name"] . "</td>";
                                     echo "<td>" . $value["emat_email_subject"] . "</td>";
                                     echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
-                                    echo "<td class='text-center'><a href='".$edit_link."/".$id."' class='btn btn-outline-primary waves-effect waves-light' title='Edit' data-popup='tooltip' > Edit</a></td>";
+                                    echo "<td class='text-center'><a href='".$edit_link."/".$id."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a></td>";
                                     echo '</tr>';
                                 }
                             }

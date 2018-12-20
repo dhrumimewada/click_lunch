@@ -9,7 +9,7 @@ $edit_link = base_url().'cuisine-update';
                 <div class="page-title-box">
                     <h4 class="page-title">Cuisines</h4>
                     <div class="state-information d-none d-sm-block">
-                        <a class="btn btn-primary waves-effect waves-light" href="<?php echo base_url().'cuisine-add'; ?>">Add New Cuisine</a>
+                        <a class="btn btn-primary waves-effect waves-light btn-bg" href="<?php echo base_url().'cuisine-add'; ?>">Add New Cuisine</a>
                     </div>
                 </div>
                 <?php echo get_msg(); ?>
@@ -21,7 +21,7 @@ $edit_link = base_url().'cuisine-update';
             <div class="col-12">
                 <div class="card m-b-20">
                     <div class="card-body">
-                        <table class="table table-bordered dt-responsive nowrap cuisine_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <table class="table table-hover dt-responsive nowrap cuisine_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
                                 <th>Name</th>
@@ -43,14 +43,16 @@ $edit_link = base_url().'cuisine-update';
 
                                    if($value["is_active"] == 1){
                                         $btn_name = 'Active';
+                                        $btn_class = 'btn-success';
                                     }else{
                                         $btn_name = 'Deactive';
+                                        $btn_class = 'btn-deactive';
                                     }
-                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn btn-outline-primary waves-effect waves-light deactive_cuisine' status-id='" . $value["is_active"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
+                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." waves-effect waves-light btn-sm deactive_cuisine' status-id='" . $value["is_active"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
 
 
                                     echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
-                                    echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary waves-effect waves-light' title='Edit' data-popup='tooltip' > Edit</a><button type='button' class='btn btn-outline-primary waves-effect waves-light delete_cuisine' title='Delete' data-popup='tooltip'>Delete</button></td>";
+                                    echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a><button type='button' class='btn btn-danger waves-effect waves-light btn-sm delete_cuisine' title='Delete' data-popup='tooltip'>Delete</button></td>";
                                     echo '</tr>';
                                 }
                             }

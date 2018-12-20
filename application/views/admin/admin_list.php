@@ -7,7 +7,7 @@
                 <div class="page-title-box">
                     <h4 class="page-title">Admin List</h4>
                     <div class="state-information d-none d-sm-block">
-                        <a class="btn btn-primary waves-effect waves-light" href="<?php echo base_url().'add_admin' ?>">Add New Admin</a>
+                        <a class="btn btn-primary waves-effect waves-light btn-bg" href="<?php echo base_url().'add_admin' ?>">Add New Admin</a>
                     </div>
                 </div>
                 <?php echo get_msg(); ?>
@@ -19,7 +19,7 @@
             <div class="col-12">
                 <div class="card m-b-20">
                     <div class="card-body">
-                        <table class="table table-bordered dt-responsive nowrap admin_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <table class="table table-hover dt-responsive nowrap admin_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
                                 <th>Name</th>
@@ -42,11 +42,13 @@
                                     echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
                                     if($value["status"] == 1){
                                         $btn_name = 'Active';
+                                        $btn_class = 'btn-success';
                                     }else{
                                         $btn_name = 'Deactive';
+                                        $btn_class = 'btn-deactive';
                                     }
-                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn btn-outline-primary waves-effect waves-light deactive_user' status-id='" . $value["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button>
-                                        <button type='button' class='btn btn-outline-primary waves-effect waves-light delete_user' title='Delete' data-popup='tooltip'>Delete</button></td>";
+                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_user' status-id='" . $value["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button>
+                                        <button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_user' title='Delete' data-popup='tooltip'>Delete</button></td>";
                                     echo '</tr>';
                                 }
                             }

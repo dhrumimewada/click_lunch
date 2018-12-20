@@ -135,6 +135,31 @@ function get_user_type($email=NULL){
 	}
 	return FALSE;
 }
+function get_loggedin_detail($id = NULL){
+
+	$return_data = FALSE;
+	$CI = &get_instance();
+	if($CI->auth->is_admin()){
+		$table = 'admin';
+	}elseif($CI->auth->is_vender()){
+		$table = 'shop';
+	}elseif ($CI->auth->is_employee()){
+		$table = 'employee';
+	}else{
+		return $return_data;
+	}
+
+	
+	$CI->db->select('*');
+	$CI->db->from($table);
+	$CI->db->where("deleted_at", NULL);
+	$sql_query = $CI->db->get();
+	if ($sql_query->num_rows() > 0){
+		$return_data = $sql_query->row();
+	}
+	return $return_data;
+	
+}
 
 function is_allowed($role_id = NULL, $module_name = NULL){
 	$return_value = FALSE;

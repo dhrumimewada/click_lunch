@@ -70,6 +70,8 @@ $route['vender-forgot-password'] = 'vender/vender_login/vender_forgot_password';
 $route['vender-reset-password/(:any)'] = 'vender/vender_login/vender_reset_password/$1'; 
 $route['vender-logout'] = 'vender/vender_login/logout'; 
 
+$route['vender-dashboard'] = 'vender/dashboard/vender_dashboard';  
+
 // Vender item managment
 $route['item-list'] = 'vender/item/item/index'; 
 $route['item-delete'] = 'vender/item/item/delete';
@@ -144,6 +146,10 @@ $route['email-list'] = 'admin/email_template/index';
 $route['email-update/(:any)'] = 'admin/email_template/put/$1';  
 $route['email-save'] = 'admin/email_template/put';  
 $route['email-update'] = 'admin/email_template/index';  
+
+//Admin- History
+$route['transaction-history'] = 'admin/history/transaction_history'; 
+$route['receipt-history'] = 'admin/history/receipt_history'; 
 
 // Admin - Vender setting
 $route['vender-list'] = 'admin/vender/index'; 

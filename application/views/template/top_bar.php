@@ -1,8 +1,22 @@
-Top Bar Start -->
 <?php
 $is_admin = $this->auth->is_admin();
 $is_employee = $this->auth->is_employee();
 $is_vender = $this->auth->is_vender();
+
+$user_data = get_loggedin_detail($_SESSION['session_user']['user_id']);
+$profile_picture = 'https://bootdey.com/img/Content/avatar/avatar6.png';
+if($is_vender){
+    $name =  $user_data->vender_name;
+    $profile_picture = base_url().$this->config->item("profile_path") . '/'.$user_data->profile_picture;
+}elseif($is_employee){
+    $name =  $user_data->first_name.' '.$user_data->last_name;
+}elseif($is_admin){
+    $name =  $user_data->username;
+    $profile_picture = base_url().$this->config->item("profile_path") . '/'.$user_data->profile_picture;
+}else{
+    $name = '';
+}
+
 ?>
 <div class="topbar">
 
@@ -10,7 +24,7 @@ $is_vender = $this->auth->is_vender();
     <div class="topbar-left">
         <a href="<?php echo base_url(); ?>" class="logo">
             <span>
-                <img src="<?php echo base_url().'assets/images/click-lunch.png'; ?>" alt="" height="60">
+                <img src="<?php echo base_url().'assets/images/logo-white.png'; ?>" alt="" height="50">
             </span>
             <i>
                 <img src="<?php echo base_url().'assets/images/logo-sm.png'; ?>" alt="" height="22">
@@ -24,8 +38,9 @@ $is_vender = $this->auth->is_vender();
             <li class="dropdown notification-list">
                 <div class="dropdown notification-list nav-pro-img">
                     <a class="dropdown-toggle nav-link arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="user" class="rounded-circle">
-                    </a>
+                        <img src="<?=$profile_picture?>" alt="user" class="rounded-circle">
+                        <span class="topbar-name" ><?=$name?></span>
+                    </a> 
                     <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                         <!-- item-->
 

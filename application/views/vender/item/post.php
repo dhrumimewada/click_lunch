@@ -255,7 +255,7 @@
                                     <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light">
                                         Submit
                                     </button>
-                                    <a href="<?php echo $back; ?>" class="btn btn-secondary waves-effect m-l-5">
+                                    <a href="<?php echo $back; ?>" class="btn btn-primary waves-effect m-l-5">
                                         Cancel
                                     </a>
                                 </div>

@@ -1,4 +1,11 @@
  <!-- Start content -->
+ <style type="text/css" media="screen">
+.btn-sm{
+    font-size: unset;
+    width: unset;
+    border-radius: unset;
+} 
+ </style>
  <link rel="stylesheet" href="<?php echo base_url() . 'plugins/summernote/summernote-bs4.css'; ?>">
  <?php
  $put_link = base_url().'email-save';

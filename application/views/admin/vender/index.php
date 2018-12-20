@@ -9,7 +9,7 @@ $edit_link = base_url().'vender-update';
                 <div class="page-title-box">
                     <h4 class="page-title">Restaurants</h4>
                     <div class="state-information d-none d-sm-block">
-                        <a class="btn btn-primary waves-effect waves-light" href="<?php echo base_url().'vender-add'; ?>">Add New Restaurant</a>
+                        <a class="btn btn-primary waves-effect waves-light btn-bg" href="<?php echo base_url().'vender-add'; ?>">Add New Restaurant</a>
                     </div>
                 </div>
                 <?php echo get_msg(); ?>
@@ -21,7 +21,7 @@ $edit_link = base_url().'vender-update';
             <div class="col-12">
                 <div class="card m-b-20">
                     <div class="card-body">
-                        <table class="table table-bordered dt-responsive nowrap vender_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <table class="table table-hover dt-responsive nowrap vender_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
                                 <th>Restaurant Name</th>
@@ -48,25 +48,29 @@ $edit_link = base_url().'vender-update';
                                     echo "<td>" . $value["shop_code"] . "</td>";
                                     if($value["status"] == 1){
                                         $btn_name = 'Active';
+                                        $btn_class = 'btn-success';
                                     }else{
                                         $btn_name = 'Deactive';
+                                        $btn_class = 'btn-deactive';
                                     }
                                     if($value["password"] == ''){
-                                        echo "<td class='text-center'><button type='button' class='btn btn-outline-primary waves-effect waves-light disabled' title='Pending' data-popup='tooltip'>Pending</button></td>";
+                                        echo "<td class='text-center'><button type='button' class='btn btn-sm btn-yellow waves-effect waves-light pending' title='Pending' data-popup='tooltip'>Pending</button></td>";
                                     }else{
-                                        echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn btn-outline-primary waves-effect waves-light deactive_shop' status-id='" . $value["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
+                                        echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_shop' status-id='" . $value["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
                                     }
                                     
                                     echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
                                     $disabled = '';
                                     if(empty($value["password"])){
-                                        $disabled = 'disabled';
-                                        $id = '';
+                                        echo "<td class='text-center'><button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vender' title='Delete' data-popup='tooltip'>Delete</button></td>
+                                        </td>";
+                                    }else{
+                                        echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary btn-sm waves-effect waves-light ". $disabled ."' title='Edit' data-popup='tooltip' > Edit</a>
+                                        <button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vender' title='Delete' data-popup='tooltip'>Delete</button></td>
+                                        </td>";
                                     }
                                     //echo "<td>".var_dump($value["password"])."</td>";
-                                        echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary waves-effect waves-light ". $disabled ."' title='Edit' data-popup='tooltip' > Edit</a>
-                                        <button type='button' class='btn btn-outline-primary waves-effect waves-light delete_vender' title='Delete' data-popup='tooltip'>Delete</button></td>
-                                        </td>";
+                                        
                                    
                                     
                                     echo '</tr>';

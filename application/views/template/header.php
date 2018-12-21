@@ -15,7 +15,9 @@
     
     <!-- DataTables -->
     <link href="<?php echo base_url() . 'plugins/datatables/dataTables.bootstrap4.min.css'; ?>" rel="stylesheet" type="text/css" />
-    <link href="<?php echo base_url() . 'plugins/datatables/buttons.bootstrap4.min.css'; ?>" rel="stylesheet" type="text/css" />
+    <!-- <link href="<?php //echo base_url() . 'plugins/datatables/buttons.bootstrap4.min.css'; ?>" rel="stylesheet" type="text/css" /> -->
+    <link href="<?php echo base_url() . 'assets/css/datatable/buttons.dataTables.min.css'; ?>" rel="stylesheet" type="text/css" />
+    
     <!-- Responsive datatable examples -->
     <link href="<?php echo base_url() . 'plugins/datatables/responsive.bootstrap4.min.css'; ?>" rel="stylesheet" type="text/css" />
 
@@ -68,6 +70,16 @@
 
     <script src="<?php echo base_url() . 'plugins/datatables/jquery.dataTables.min.js'; ?>"></script>
     <script src="<?php echo base_url() . 'plugins/datatables/dataTables.bootstrap4.min.js'; ?>"></script>
+
+    <!-- Buttons examples -->
+    <script src="<?php echo base_url() . 'plugins/datatables/dataTables.buttons.min.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'plugins/datatables/buttons.bootstrap4.min.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'plugins/datatables/jszip.min.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'plugins/datatables/pdfmake.min.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'plugins/datatables/vfs_fonts.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'plugins/datatables/buttons.html5.min.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'plugins/datatables/buttons.print.min.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'plugins/datatables/buttons.colVis.min.js'; ?>"></script>
 
     <!-- Responsive examples -->
     <script src="<?php echo base_url() . 'plugins/datatables/dataTables.responsive.min.js'; ?>"></script>

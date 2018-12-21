@@ -42,6 +42,12 @@ $is_vender = $this->auth->is_vender();
                 </li>
 
                 <li>
+                    <a href="#" class="waves-effect">
+                        <i class="mdi mdi-account-multiple-plus"></i><span> Customers </span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="<?php echo base_url().'email-list'; ?>" class="waves-effect">
                         <i class="mdi mdi-email"></i><span> Push/Email Managment</span>
                     </a>
@@ -58,12 +64,12 @@ $is_vender = $this->auth->is_vender();
                     <ul class="submenu">
                         <li><a href="<?php echo base_url().'transaction-history'; ?>">Transaction History </a></li>
                         <li><a href="<?php echo base_url().'receipt-history'; ?>">Receipt History </a></li>
-                        <li><a href="#">Payment History</a></li>
+                        <li><a href="<?php echo base_url().'payment-history'; ?>">Payment History</a></li>
                     </ul>
                 </li>
 
                 <li>
-                    <a href="<?php echo base_url().''; ?>" class="waves-effect">
+                    <a href="<?php echo base_url().'earning-report'; ?>" class="waves-effect">
                         <i class="mdi mdi-book-open"></i><span> Earning Report</span>
                     </a>
                 </li>
@@ -135,23 +141,19 @@ $is_vender = $this->auth->is_vender();
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-food"></i><span> Orders <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li><a href="#">Scheduled</a></li>
-                        <li><a href="#">Processing</a></li>
+                        <li><a href="<?php echo base_url().'order-processing'; ?>">Processing</a></li>
                         <li><a href="#">Completed</a></li>
-                        <li><a href="#">Achieved</a></li>
+                        <li><a href="#">Trashed</a></li>
                     </ul>
                 </li>
 
                 <li>
-                    <a href="#" class="waves-effect">
+                    <a href="<?php echo base_url().'inventory'; ?>" class="waves-effect">
                         <i class="mdi mdi-book-open"></i><span> Inventory </span>
                     </a>
                 </li>
 
-                <li>
-                    <a href="#" class="waves-effect">
-                        <i class="mdi mdi-account-multiple-plus"></i><span> Customers </span>
-                    </a>
-                </li>
+                
 
                 <li>
                     <a href="<?php echo base_url().'employee-list'; ?>" class="waves-effect">
@@ -173,6 +175,12 @@ $is_vender = $this->auth->is_vender();
                 <li>
                     <a href="<?php echo base_url().'promocode-list'; ?>" class="waves-effect">
                         <i class="mdi mdi-tag-multiple"></i><span> Promocode </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="<?php echo base_url().'setup-payment'; ?>" class="waves-effect">
+                        <i class="mdi mdi-credit-card-multiple"></i><span> Setup Payment Portal </span>
                     </a>
                 </li>
                 

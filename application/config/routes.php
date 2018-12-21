@@ -94,6 +94,14 @@ $route['variant-group-list'] = 'vender/item/variant_group/index';
 $route['variant-group-add'] = 'vender/item/variant_group/post'; 
 $route['variant-group-delete'] = 'vender/item/variant_group/delete';
 
+//Vender - Vrient group
+$route['inventory'] = 'vender/inventory/index'; 
+$route['inventory-update'] = 'vender/inventory/put'; 
+$route['inventory-view'] = 'vender/inventory/view';
+
+//Vender - Orders
+$route['order-processing'] = 'vender/order/order_processing';
+
 //Vender - Shop Employees
 $route['employee-list'] = 'vender/employee/employee/index'; 
 $route['employee-add'] = 'vender/employee/employee/post'; 
@@ -150,6 +158,8 @@ $route['email-update'] = 'admin/email_template/index';
 //Admin- History
 $route['transaction-history'] = 'admin/history/transaction_history'; 
 $route['receipt-history'] = 'admin/history/receipt_history'; 
+$route['payment-history'] = 'admin/history/payment_history'; 
+$route['earning-report'] = 'admin/history/earning_report'; 
 
 // Admin - Vender setting
 $route['vender-list'] = 'admin/vender/index'; 
@@ -183,6 +193,10 @@ $route['cuisine-put'] = 'admin/cuisine/put';
 // admin - app setting
 $route['app-setting'] = 'appsetting/index';  
 $route['app-setting-update'] = 'appsetting/put';  
+
+// Admin - Paayment spotal
+
+$route['setup-payment'] = 'admin/setup_payment/index'; 
 
 
 $route['404_override'] = '';

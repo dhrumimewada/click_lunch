@@ -155,11 +155,13 @@ $edit_link = base_url().'vender-update';
                 var change_status_to = 'deactive';
                 var change_status_to1 = 'Deactived!';
                 var btn_name_replace = 'Deactive';
+                var btn_cls_replace = 'btn-deactive';
                 var status = '2';
             }else{
                 var change_status_to = 'active';
                 var change_status_to1 = 'Activated!';
                 var btn_name_replace = 'Active';
+                var btn_cls_replace = 'btn-success';
                 var status = '1';
             }
 
@@ -191,7 +193,7 @@ $edit_link = base_url().'vender-update';
                                     'Shop has been '+change_status_to1,
                                     'success'
                                 )
-                                $this.replaceWith("<button type='button' class='btn btn-outline-primary waves-effect waves-light deactive_shop' status-id='" +status+ "' title='"+btn_name_replace+"' data-popup='tooltip'>" +btn_name_replace+ "</button>");
+                                $this.replaceWith("<button type='button' class='btn "+btn_cls_replace+ " btn-sm waves-effect waves-light deactive_shop' status-id='" +status+ "' title='"+btn_name_replace+"' data-popup='tooltip'>" +btn_name_replace+ "</button>");
                                 
                             } 
                         },

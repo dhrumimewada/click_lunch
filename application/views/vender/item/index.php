@@ -66,12 +66,12 @@ $edit_link = base_url().'item-update';
                                         $btn_name = 'Deactive';
                                         $btn_class = 'btn-deactive';
                                     }
-                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." btn-outline-primary waves-effect waves-light deactive_item' status-id='" . $value["is_active"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
+                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_item' status-id='" . $value["is_active"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
                                     
                                     
                                     echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
  
-                                    echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a>
+                                    echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary  waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a>
                                         <button type='button' class='btn btn-danger waves-effect waves-light btn-sm delete_item' title='Delete' data-popup='tooltip'>Delete</button></td>
                                         </td>";
                                     echo '</tr>';

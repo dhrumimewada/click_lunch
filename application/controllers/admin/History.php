@@ -31,4 +31,16 @@ class History extends CI_Controller {
 		$this->load->view('template/template',$output_data);	
 	}
 
+	public function payment_history(){
+
+		$output_data['main_content'] = "admin/history/payment_history";
+		$this->load->view('template/template',$output_data);	
+	}
+
+	public function earning_report(){
+
+		$output_data['main_content'] = "admin/history/earning_report";
+		$this->load->view('template/template',$output_data);	
+	}
+
 }

@@ -201,3 +201,10 @@ $route['setup-payment'] = 'admin/setup_payment/index';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+
+//--------------------------------------------------
+
+//Vender
+
+$route['home-page'] = 'user/user/index'; 

@@ -1,0 +1,46 @@
+#topnav{
+	background: transparent;
+}
+#topnav .topbar-main .logo{
+	margin-top: 12px;
+    margin-bottom: 12px;
+}
+#topnav .topbar-main .logo .logo-large{
+	height: 65px;
+}
+.menu-extras.topbar-custom ul{
+	margin-top: 0.1rem;
+}
+.menu-extras.topbar-custom ul li{
+	padding-top: 1.5rem;
+	border-top: 0.2rem solid transparent;
+}
+.menu-extras.topbar-custom ul li:hover{
+	border-top: 0.2rem solid #ff0000;
+}
+.menu-extras.topbar-custom ul li, .menu-extras.topbar-custom ul li a{
+	transition: all 0.3s ease;
+}
+.menu-extras.topbar-custom ul li:hover a{
+	color: #ff0000;
+}
+.topbar-custom .nav-link, .notification-list .noti-icon{
+	color: #636c73;
+}
+.topbar-custom .nav-link{
+	padding: 0 12px;
+}
+li.dropdown.notification-list.last-div:before{
+	content: "";
+    position: absolute;
+    top: 30px;
+    height: 50px;
+    width: 50%;
+    border-left: 1px solid rgba(0,0,0,.1);
+}
+.nav-user img{
+	height: 30px;
+    width: 30px;
+	border: 1px solid;
+}
+

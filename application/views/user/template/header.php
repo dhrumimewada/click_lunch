@@ -30,6 +30,10 @@
     <!-- autoclose date picker -->
     <link href="<?php echo base_url() . 'plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'; ?>" rel="stylesheet">
 
+    <!-- OwlCarousel2 -->
+    <link href="<?php echo base_url() . 'user-assets/css/OwlCarousel2/owl.carousel.css'; ?>" rel="stylesheet" type="text/css">
+    <link href="<?php echo base_url() . 'user-assets/css/OwlCarousel2/owl.theme.default.css'; ?>" rel="stylesheet" type="text/css">
+
     <link href="<?php echo base_url() . 'user-assets/css/bootstrap.min.css'; ?>" rel="stylesheet" type="text/css">
     <link href="<?php echo base_url() . 'user-assets/css/metismenu.min.css'; ?>" rel="stylesheet" type="text/css">
     <link href="<?php echo base_url() . 'user-assets/css/icons.css'; ?>" rel="stylesheet" type="text/css">
@@ -96,4 +100,8 @@
 
     <!-- moment -->
     <script src="<?php echo base_url() . 'user-assets/js/moment/moment.min.js'; ?>"></script>
+
+    <!-- OwlCarousel2 -->
+    <script src="<?php echo base_url() . 'user-assets/js/OwlCarousel2/js/owl.carousel.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'user-assets/js/OwlCarousel2/js/owl.autoplay.js'; ?>"></script>
 </head>

@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Vender extends CI_Controller {
+class Delivery_dispatcher extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
@@ -16,36 +16,63 @@ class Vender extends CI_Controller {
 				redirect(base_url() . "logout-admin");
 			}
 		}
-		$this->load->model("vender_model");
-		//$this->load->library("email");
+		$this->load->model("admin/delivery_dispatcher_model");
 	}
 
 	public function index(){
-
-		$vender_list = $this->vender_model->get_vender();
-
-		$output_data["vender_list"] = $vender_list;
-		//echo "<pre>"; print_r($output_data["vender_list"]); exit;
-		$output_data['main_content'] = "admin/vender/index";
+		$output_data['main_content'] = "admin/delivery_dispatcher/index";
 		$this->load->view('template/template',$output_data);	
 	}
 
-	public function sendmail()
-	{
-		$this->load->view('email_templates/activation_mail');
-	}
+	public function delivery_dispatcher_list(){
+	  	$draw = intval($this->input->get("draw"));
+	  	$start = intval($this->input->get("start"));
+	  	$length = intval($this->input->get("length"));
+
+
+	  	$delivery_dispatcher_list = $this->delivery_dispatcher_model->get_delivery_dispatcher();
+
+	 	$data = array();
+	 	$action_data = '';
+	 	$edit_link = base_url().'delivery-dispatcher-update';
+
+		foreach($delivery_dispatcher_list as $key => $delivery_dispatcher) {
+
+		       $action_data = "<a href='".$edit_link."/".encrypt($delivery_dispatcher['id'])."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a><button type='button' class='btn btn-danger waves-effect waves-light btn-sm delete_customer' title='Delete' data-popup='tooltip'>Delete</button>";
+
+		       if($delivery_dispatcher["status"] == 1){
+	                $btn_name = 'Active';
+	                $btn_class = 'btn-success';
+	            }else{
+	                $btn_name = 'Deactive';
+	                $btn_class = 'btn-deactive';
+	            }
+
+		       $status_str = "<button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_customer' status-id='" . $delivery_dispatcher["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button>";
+
+		       $data[] = array(
+		            $delivery_dispatcher['id'],
+		            $delivery_dispatcher['full_name'],
+		            $delivery_dispatcher['email'],
+		            $status_str,
+		            $action_data
+		       );
+
+		}
+
+	  	$output = array(
+	       "draw" => $draw,
+	         "recordsTotal" => count($delivery_dispatcher_list),
+	         "recordsFiltered" => count($delivery_dispatcher_list),
+	         "data" => $data
+	    );
+	  	echo json_encode($output);
+	  	exit();
+  }
 
 	public function customAlpha($str) {
 		if (!preg_match('/^[a-z \-]+$/i', $str)) {
 			$this->form_validation->set_message('customAlpha', 'The {field} field contain only alphabets and space.');
-			return false;
-		}
-		return TRUE;
-	}
-
-	public function valid_taxno($str) {
-		if (strpos($str, '_') !== false) {
-			$this->form_validation->set_message('valid_taxno', 'The {field} field is invalid.');
 			return false;
 		}
 		return TRUE;
@@ -62,15 +89,16 @@ class Vender extends CI_Controller {
 			if (isset($_POST['submit'])){
 				$validation_rules = array(
 					
-					array('field' => 'shop_name', 'label' => 'shop name', 'rules' => 'trim|required|min_length[2]'),
-					array('field' => 'email', 'label' => 'shop email', 'rules' => 'trim|required|max_length[225]|valid_email|callback_isexists'),
-					array('field' => 'vender_name', 'label' => 'owner name', 'rules' => 'trim|required|min_length[3]|callback_customAlpha'),
-					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'full_name', 'label' => 'full name', 'rules' => 'trim|required|min_length[3]|max_length[50]'),
+					array('field' => 'email', 'label' => 'email', 'rules' => 'trim|required|max_length[225]|valid_email|is_unique[customer.email]'),
+					array('field' => 'password', 'label' => 'password', 'rules' => 'trim|required|min_length[6]'),
+					array('field' => 'c_password', 'label' => 'confirm password', 'rules' => 'trim|required|matches[password]'),
+					array('field' => 'contact_no', 'label' => 'contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
+					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|max_length[255]')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
 
-				 
 				if ($this->form_validation->run() === true) {
 
 					$file_upload = true;
@@ -80,10 +108,10 @@ class Vender extends CI_Controller {
 
 					if (isset($_FILES['profile_picture']) && !empty($_FILES['profile_picture']) && strlen($_FILES['profile_picture']['name']) > 0) {
 
-						$config['upload_path'] = FCPATH . $this->config->item("profile_path");
+						$config['upload_path'] = FCPATH . $this->config->item("delivery_dispatcher_photo_path");
 						$config['allowed_types'] = 'jpg|jpeg|png';
 						$config['encrypt_name'] = false;
-						$config['file_name'] = 'vender' . '_' . time();
+						$config['file_name'] = 'delivery_dispatcher' . '_' . time();
 						$config['file_ext_tolower'] = true;
 						// $config['max_size'] = '1024';
 						// $config['min_width'] = '300';
@@ -107,12 +135,12 @@ class Vender extends CI_Controller {
 					}
 
 					if ($file_upload){
-						if($this->vender_model->post($modal_data)){
+						if($this->delivery_dispatcher_model->post($modal_data)){
 							$this->session->set_flashdata($this->auth->get_messages_array());
-							redirect(base_url() . "vender-list");
+							redirect(base_url() . "delivery-dispatcher-list");
 						}else{
 							$this->session->set_flashdata($this->auth->get_messages_array());
-							redirect(base_url() . "vender-add");
+							redirect(base_url() . "delivery-dispatcher-add");
 						}
 					}
 					
@@ -120,7 +148,7 @@ class Vender extends CI_Controller {
 			}
 		}
 
-		$output_data['main_content'] = "admin/vender/post";
+		$output_data['main_content'] = "admin/delivery_dispatcher/post";
 		$this->load->view('template/template',$output_data);	
 	}
 
@@ -135,14 +163,9 @@ class Vender extends CI_Controller {
 			if (isset($_POST['submit'])){
 				$validation_rules = array(
 					
-					array('field' => 'shop_name', 'label' => 'shop name', 'rules' => 'trim|required|min_length[2]'),
-					array('field' => 'email', 'label' => 'email', 'rules' => 'trim'),
-					array('field' => 'vender_name', 'label' => 'owner name', 'rules' => 'trim|required|min_length[3]|callback_customAlpha'),
-					array('field' => 'contact_no1', 'label' => 'contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
-					array('field' => 'contact_no2', 'label' => 'alternate contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
-					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required'),
-					array('field' => 'website', 'label' => 'shop website', 'rules' => 'trim|valid_url'),
-					array('field' => 'tax_number', 'label' => 'TAX number', 'rules' => 'trim|callback_valid_taxno'),
+					array('field' => 'full_name', 'label' => 'full name', 'rules' => 'trim|required|min_length[3]|max_length[50]'),
+					array('field' => 'contact_no', 'label' => 'contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
+					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
@@ -153,10 +176,10 @@ class Vender extends CI_Controller {
 					$file_upload = true;
 					if (isset($_FILES['profile_picture']) && !empty($_FILES['profile_picture']) && strlen($_FILES['profile_picture']['name']) > 0) {
 
-						$config['upload_path'] = FCPATH . $this->config->item("profile_path");
+						$config['upload_path'] = FCPATH . $this->config->item("delivery_dispatcher_photo_path");
 						$config['allowed_types'] = 'jpg|jpeg|png';
 						$config['encrypt_name'] = false;
-						$config['file_name'] = 'vender' . '_' . time();
+						$config['file_name'] = 'delivery_dispatcher' . '_' . time();
 						$config['file_ext_tolower'] = true;
 						// $config['max_size'] = '1024';
 						// $config['min_width'] = '300';
@@ -180,12 +203,12 @@ class Vender extends CI_Controller {
 					}
 
 					if ($file_upload){
-						if($this->vender_model->put($modal_data)){
+						if($this->delivery_dispatcher_model->put($modal_data)){
 							$this->session->set_flashdata($this->auth->get_messages_array());
-							redirect(base_url() . "vender-list");
+							redirect(base_url() . "delivery-dispatcher-list");
 						}else{
 							$this->session->set_flashdata($this->auth->get_messages_array());
-							redirect(base_url() . "vender-update");
+							redirect(base_url() . "customer-update");
 						}
 					}
 					
@@ -193,43 +216,26 @@ class Vender extends CI_Controller {
 			}
 		}
 
-		$output_data["vender_detail"] = $this->vender_model->get_vender(decrypt($id));
+		$output_data["delivery_dispatcher_detail"] = $this->delivery_dispatcher_model->get_delivery_dispatcher(decrypt($id));
 
-		if (!isset($output_data['vender_detail']) || empty($output_data['vender_detail']) || count($output_data['vender_detail']) <= 0){
-			$this->auth->set_error_message("Vender not found");
+		if (!isset($output_data['delivery_dispatcher_detail']) || empty($output_data['delivery_dispatcher_detail']) || count($output_data['delivery_dispatcher_detail']) <= 0){
+			$this->auth->set_error_message("Delivery dispatcher not found");
 			$this->session->set_flashdata($this->auth->get_messages_array());
-			redirect(base_url() . "vender-list");
+			redirect(base_url() . "delivery-dispatcher-list");
 		}
 
 		$output_data['id'] = $id;
-		$output_data['main_content'] = "admin/vender/put";
+		$output_data['main_content'] = "admin/delivery_dispatcher/put";
 		$this->load->view('template/template',$output_data);	
 	}
 
-
-	public function isexists($str) {
-		$this->db->select('email');
-		$this->db->where('email', $str);
-		$this->db->where('deleted_at', NULL);
-		$this->db->from('shop');
-		$sql_query = $this->db->get();
-		if ($sql_query->num_rows() > 0) {
-			$this->form_validation->set_message('isexists', "The shop email is already in use.");
-			return FALSE;
-		} else {
-			return TRUE;
-		}
-	}
-
-	
-
-	public function active_deactive_vender(){
+	public function active_deactive_delivery_dispatcher(){
 		$id = $_POST['id'];
 		$status = $_POST['status'];
 		if (isset($id) && !is_null($id) && !empty($id)) {
-			$user_data = array('status' => $status );
+			$user_data = array('status' => $status, 'updated_at' => date('Y-m-d H:i:s')  );
 			$this->db->where('id', $id);
-			$this->db->update('shop', $user_data);
+			$this->db->update('delivery_dispatcher', $user_data);
 			echo json_encode(array("is_success" => true));
 			return TRUE;
 		}else{
@@ -242,29 +248,7 @@ class Vender extends CI_Controller {
 		if (isset($id) && !is_null($id) && !empty($id)) {
 			$user_data = array('deleted_at' => date('Y-m-d H:i:s') );
 			$this->db->where('id', $id);
-			$this->db->update('shop', $user_data);
-			echo json_encode(array("is_success" => true));
-			return TRUE;
-		}else{
-			return FALSE;
-		}
-	}
-
-	public function vender_perc(){
-		$vender_perc = $this->vender_model->get_vender();
-		$output_data["vender_perc_list"] = $vender_perc;
-		//echo "<pre>"; print_r($output_data["vender_perc"]); exit;
-		$output_data['main_content'] = "admin/vender/vender_perc";
-		$this->load->view('template/template',$output_data);	
-	}
-
-	public function put_vender_perc(){
-		$id = $_POST['id'];
-		$perc_num = $_POST['perc_num'];
-		if (isset($id) && !is_null($id) && !empty($id)) {
-			$user_data = array('percentage' => number_format((float)$perc_num, 2, '.', '') );
-			$this->db->where('id', $id);
-			$this->db->update('shop', $user_data);
+			$this->db->update('delivery_dispatcher', $user_data);
 			echo json_encode(array("is_success" => true));
 			return TRUE;
 		}else{

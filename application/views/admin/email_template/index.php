@@ -1,5 +1,7 @@
 <?php
 $edit_link = base_url().'email-update';
+$to_customer_link = base_url().'custom-email-customer';
+$to_restaurant_link = base_url().'custom-email-restaurant';
 ?>
 <div class="content">
     <div class="container-fluid">
@@ -14,8 +16,8 @@ $edit_link = base_url().'email-update';
                                 Send Email
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Email to Users</a>
-                                <a class="dropdown-item" href="#">Email to Restaurants</a>
+                                <a class="dropdown-item" href="<?php echo $to_customer_link; ?>">Email to Customers</a>
+                                <a class="dropdown-item" href="<?php echo $to_restaurant_link; ?>">Email to Restaurants</a>
                             </div>
                         </div>
                         <div class="btn-group ml-1 mo-mb-2">
@@ -23,7 +25,7 @@ $edit_link = base_url().'email-update';
                                 Send Push Notification
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Notification to Users</a>
+                                <a class="dropdown-item" href="#">Notification to Customers</a>
                                 <a class="dropdown-item" href="#">Notification to Restaurants</a>
                             </div>
                         </div>

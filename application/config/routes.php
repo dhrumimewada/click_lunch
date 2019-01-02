@@ -155,6 +155,10 @@ $route['email-update/(:any)'] = 'admin/email_template/put/$1';
 $route['email-save'] = 'admin/email_template/put';  
 $route['email-update'] = 'admin/email_template/index';  
 
+// admin - send custom Mail
+$route['custom-email-customer'] = 'admin/email_template/custom_email/customer';
+$route['custom-email-restaurant'] = 'admin/email_template/custom_email/restaurant';
+
 //Admin- History
 $route['transaction-history'] = 'admin/history/transaction_history'; 
 $route['receipt-history'] = 'admin/history/receipt_history'; 
@@ -170,14 +174,26 @@ $route['vender-status'] = 'admin/vender/active_deactive_vender';
 $route['vender-delete'] = 'admin/vender/delete';  
 $route['vender-update'] = 'admin/vender/put';  
 
-// Admin - Vender setting
+// admin - vender perc
+$route['vender-perc'] = 'admin/vender/vender_perc'; 
+$route['vender-perc-update'] = 'admin/vender/put_vender_perc'; 
+
+// Admin - customer setting
 $route['customer-list'] = 'admin/customer/index'; 
 $route['customer-update/(:any)'] = 'admin/customer/put/$1';  
 $route['customer-add'] = 'admin/customer/post'; 
 $route['customer-save'] = 'admin/customer/post'; 
 $route['customer-status'] = 'admin/customer/active_deactive_customer';  
-$route['customer-delete'] = 'admin/customer/delete';  
 $route['customer-update'] = 'admin/customer/put';  
+
+// Admin - customer setting
+$route['delivery-dispatcher-list'] = 'admin/delivery_dispatcher/index'; 
+$route['delivery-dispatcher-update/(:any)'] = 'admin/delivery_dispatcher/put/$1';  
+$route['delivery-dispatcher-add'] = 'admin/delivery_dispatcher/post'; 
+$route['delivery-dispatcher-save'] = 'admin/delivery_dispatcher/post'; 
+$route['delivery-dispatcher-status'] = 'admin/delivery_dispatcher/active_deactive_delivery_dispatcher';  
+$route['delivery-dispatcher-update'] = 'admin/delivery_dispatcher/put'; 
+$route['delivery-dispatcher-delete'] = 'admin/delivery_dispatcher/delete';
 
 //Admin - cushions
 $route['cuisine-list'] = 'admin/cuisine/index';  
@@ -188,6 +204,7 @@ $route['cuisine-add'] = 'admin/cuisine/post';
 $route['cuisine-update/(:any)'] = 'admin/cuisine/put/$1'; 
 $route['cuisine-update'] = 'admin/cuisine/index';
 $route['cuisine-put'] = 'admin/cuisine/put';
+
 
 
 // admin - app setting

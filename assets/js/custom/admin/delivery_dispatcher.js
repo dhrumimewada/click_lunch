@@ -45,7 +45,6 @@
                 }
             },
             address: {
-                required:true,
                 maxlength: 255,
                 normalizer: function (value) {
                     return $.trim(value);
@@ -84,7 +83,6 @@
                 maxlength: jQuery.validator.format("Maximum {0} digit allowed")
             },
             address: {
-                required: "The address field is required.",
                 maxlength: jQuery.validator.format("Maximum {0} digit allowed")
             },
             profile_picture:{
@@ -129,26 +127,6 @@ $( document ).ready(function() {
 
     $(document).on('change', '#imgInp', function() {
         readURL(this);
-    });
-
-
-    var customer_url = base_url+ 'admin/customer/customer_list/';
-    $('.customer_list').DataTable( {
-        "ajax": {
-            url : customer_url,
-            type : 'GET'
-        },
-        "order":[[ 0, "desc" ]],
-        createdRow: function(row, data, dataIndex ) {
-                   $(row).attr("id",data[0]);
-              },
-        "columnDefs": [
-            {
-                "targets": [ 0 ],
-                "visible": false
-            },
-            { "orderable": false, "targets": 4 }
-        ]
     });
 
  });

@@ -17,12 +17,12 @@ class Email_template extends CI_Controller {
 			}
 		}
 		$this->load->model("email_template_model");
+		$this->load->model("vender_model");
+		$this->load->model("admin/customer_model");
 	}
 
 	public function index(){
-
 		$template_list = $this->email_template_model->get_templates();
-
 		$output_data["template_list"] = $template_list;
 		$output_data['main_content'] = "admin/email_template/index";
 		$this->load->view('template/template',$output_data);	
@@ -66,6 +66,49 @@ class Email_template extends CI_Controller {
 			redirect(base_url() . "email-list");
 		}
 		$output_data['main_content'] = "admin/email_template/put";
+		$this->load->view('template/template',$output_data);	
+	}
+
+	public function custom_email($to = NULL){
+
+		$this->auth->clear_messages();
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
+
+		if (isset($_POST) && !empty($_POST)){
+			if (isset($_POST['submit'])){
+				$validation_rules = array(
+					array('field' => 'emat_email_subject', 'label' => 'email subject', 'rules' => 'trim|required'),
+					array('field' => 'emat_email_message', 'label' => 'email message', 'rules' => 'trim|required')
+				);
+
+				$this->form_validation->set_rules($validation_rules);
+				 
+				if ($this->form_validation->run() === true){
+
+					///echo "<pre>"; print_r($_POST); exit;
+
+					if($this->email_template_model->send_custom_email()){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "email-list");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "email-list");
+					}
+				}	
+
+			}
+		}
+
+		if($to == 'customer'){
+			$to_list = $this->customer_model->get_customer();
+		}else{
+			$to_list = $this->vender_model->get_vender();
+		}
+		
+		$output_data["to_list"] = $to_list;
+		$output_data["to"] =$to;
+		$output_data['main_content'] = "admin/Email_template/email_custom";
 		$this->load->view('template/template',$output_data);	
 	}
 

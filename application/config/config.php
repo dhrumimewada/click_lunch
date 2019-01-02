@@ -526,6 +526,7 @@ $config['customer_profile_path'] = 'assets\files\customer_profile_pictures';
 $config['brochure_path'] = 'assets\files\shop_brochures';
 $config['category_photo_path'] = 'assets\files\category_photos';
 $config['cuisine_photo_path'] = 'assets\files\cuisine_photos';
+$config['delivery_dispatcher_photo_path'] = 'assets\files\delivery_dispatcher_photos';
 $config['item_photo_path'] = 'assets\files\item_photos';
 $config['custom_encryption_key'] = 'pos@123';
 $config['google_key'] = 'AIzaSyAHlBVVyjrAF616L2IMlsuFtZd58oOiRIQ';

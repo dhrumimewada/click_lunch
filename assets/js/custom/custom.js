@@ -1,5 +1,6 @@
 //Get data id in datatable 
 function get_dataid(this_element) {
+    console.log(this_element);
     if (this_element.closest("tr").hasClass("child")){
         var data_id = this_element.closest("tr").prev("tr").attr("data-id");
         

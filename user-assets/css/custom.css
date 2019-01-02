@@ -8,6 +8,9 @@
 #topnav .topbar-main .logo .logo-large{
 	height: 65px;
 }
+#sidebar-menu > ul > li > a{
+	font-size: 12.3px !important;
+}
 .menu-extras.topbar-custom ul{
 	margin-top: 0.1rem;
 }

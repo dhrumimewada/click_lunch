@@ -54,9 +54,11 @@ $is_vender = $this->auth->is_vender();
                 </li>
 
                 <li>
-                    <a href="<?php echo base_url().'vender-list'; ?>" class="waves-effect">
-                        <i class="mdi mdi-account-multiple-plus"></i><span> Restaurant Managment</span>
-                    </a>
+                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-account-multiple-plus"></i><span> Restaurant Managment <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+                    <ul class="submenu">
+                        <li><a href="<?php echo base_url().'vender-list'; ?>">List of All Restaurants </a></li>
+                        <li><a href="<?php echo base_url().'vender-perc'; ?>">Percentage of Restaurant </a></li>
+                    </ul>
                 </li>
 
                 <li>
@@ -81,7 +83,7 @@ $is_vender = $this->auth->is_vender();
                 </li>
 
                 <li>
-                    <a href="<?php echo base_url().''; ?>" class="waves-effect">
+                    <a href="<?php echo base_url().'delivery-dispatcher-list'; ?>" class="waves-effect">
                         <i class="mdi mdi-motorbike"></i><span> Delivery Dispatcher</span>
                     </a>
                 </li>

@@ -84,12 +84,6 @@
   100% { transform: rotate(360deg); }
 }
 
-
-/*data table customize*/
-.table > tbody > tr > td, .table > tfoot > tr > td, .table > thead > tr > td {
-    padding: 6px 10px;
-}
-
 .btn-outline-primary.disabled, .btn-outline-primary:disabled{
   color: #3eb7ba;
 }
@@ -211,7 +205,7 @@
   border-color: #6c757d;
 }
 .table > tbody > tr > td, .table > tfoot > tr > td, .table > thead > tr > td{
-  padding: 0.8rem 1.5rem;
+  padding: 0.5rem 1.5rem;
 }
 .topbar-name{
   text-transform: capitalize;
@@ -295,4 +289,14 @@ a:hover .topbar-name{
 }
 .ct-chart .ct-series.ct-series-b .ct-bar, .ct-chart .ct-series.ct-series-b .ct-line, .ct-chart .ct-series.ct-series-b .ct-point, .ct-chart .ct-series.ct-series-b .ct-slice-donut{
   stroke: #f05b4f !important; 
+}
+.label-perc{
+  background-color: #e9ecef;
+  font-size: 12px;
+  width: 6rem;
+  border-radius: 14px;
+  padding: .25rem .75rem;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+  text-align: center;
 }

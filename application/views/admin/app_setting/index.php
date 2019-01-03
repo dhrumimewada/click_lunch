@@ -38,8 +38,12 @@ $setting_save_link = base_url().'app-setting-update';
                                     if (isset($settings) && !empty($settings) && count($settings) > 0){
                                         foreach ($settings as $key => $value){
                                             echo '<tr scope="row"><td>'. $value['app_label'] .'</td>';
-
-                                            echo '<td><input type="textbox" name="appname_'.$value['id'].'" class="form-control" value="'.$value['app_version'].'"></td>';
+                                            if($value['app_name'] != 'maintenance_mode'){
+                                                echo '<td><input type="textbox" name="appname_'.$value['id'].'" class="form-control" value="'.$value['app_version'].'"></td>';
+                                            }else{
+                                                echo "<td></td>";
+                                            }
+                                            
 
                                             $checked = ($value['updates'] == 1)?'checked':'';
                                             echo '<td class="text-center"><input type="checkbox" id="'. $value['app_name'] .'"  name="'. $value['app_name'] .'" switch="primary" '. $checked .' value="1"/><label class="mb-0" data-on-label="Yes" data-off-label="No" for="'. $value['app_name'] .'"></label></td></tr>';

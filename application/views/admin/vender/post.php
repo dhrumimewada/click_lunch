@@ -133,6 +133,12 @@
                                             <div class="validation-error-label">
                                                 <?php echo form_error('address'); ?>
                                             </div>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('latitude'); ?>
+                                            </div>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('longitude'); ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -140,7 +146,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="city">City</label>
+                                        <label for="city" class="required">City</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -149,13 +155,16 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="text" name="city" readonly class="form-control city" id="city" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="city" class="form-control city" id="city" value="<?php echo $field_value; ?>" placeholder="Enter city">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('city'); ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="state">State</label>
+                                        <label for="state" class="required">State</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -164,7 +173,10 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="text" name="state" readonly class="form-control state" id="state" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="state" class="form-control state" id="state" value="<?php echo $field_value; ?>" placeholder="Enter state">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('state'); ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -172,7 +184,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="country">Country</label>
+                                        <label for="country" class="required">Country</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -181,13 +193,13 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="text" name="country" readonly class="form-control country" id="country" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="country" class="form-control country" id="country" value="<?php echo $field_value; ?>" placeholder="Enter country">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="zipcode">Zip Code</label>
+                                        <label for="zipcode" class="required">Zip Code</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -196,11 +208,18 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="text" name="zipcode" readonly class="form-control zipcode" id="zipcode" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="zipcode" class="form-control zipcode" id="zipcode" value="<?php echo $field_value; ?>" placeholder="Enter zipcode">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('zipcode'); ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <input type="hidden" name="latitude" id="latitude" value="">
+                            <input type="hidden" name="longitude" id="longitude" value="">
+
                             <div class="row">
                                 <div class="loader" style="display: none;"></div>
                                 <div class="col-lg-12">
@@ -259,8 +278,13 @@
       document.getElementById(component).disabled = false;
     }
 
-   console.log(place.address_components);
    if (typeof place.address_components != "undefined" || place.address_components != null){
+
+    $('#latitude').val(place.geometry.location.lat());
+    $('#longitude').val(place.geometry.location.lng());
+
+    console.log(place.address_components);
+
         for (var i = 0; i < place.address_components.length; i++) {
             for (var j = 0; j < place.address_components[i].types.length; j++){
                 if (place.address_components[i].types[j] == "postal_code") {
@@ -293,7 +317,8 @@
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        console.log(geolocation);
+
+        // console.log(geolocation);
         var circle = new google.maps.Circle({
           center: geolocation,
           radius: position.coords.accuracy

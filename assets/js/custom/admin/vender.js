@@ -36,6 +36,42 @@
                     return $.trim(value);
                 }
             },
+            city: {
+                required:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            state: {
+                required:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            country: {
+                required:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            zipcode: {
+                required:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            latitude: {
+                required:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            longitude: {
+                required:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
             profile_picture:{
                 accept: "image/jpg, image/jpeg, image/png",
                 filesize: 10
@@ -56,6 +92,24 @@
             },
             address: {
                 required: "The address field is required."
+            },
+            city: {
+                required: "The city field is required."
+            },
+            state: {
+                required: "The state field is required."
+            },
+            country: {
+                required: "The country field is required."
+            },
+            zipcode: {
+                required: "The zipcode field is required."
+            },
+            latitude: {
+                required: "The latitude field is required."
+            },
+            longitude: {
+                required: "The longitude field is required."
             },
             profile_picture:{
                 accept: "Accepted image formats: jpg, jpeg, png",

@@ -144,6 +144,9 @@ $route['logout-admin'] = 'admin/admin_login/logout';
 $route['vender-setpassword/(:any)'] = 'vender/vender_login/setpassword/$1'; 
 $route['vender-setnewpassword'] = 'vender/vender_login/setpassword'; 
 
+$route['customer-setpassword/(:any)'] = 'customer/customer_login/setpassword/$1'; 
+$route['customer-setnewpassword'] = 'customer/customer_login/setpassword';
+
 
 // Admin profile - change pw
 $route['change-password'] = 'admin/admin/change_password';  
@@ -157,7 +160,8 @@ $route['email-update'] = 'admin/email_template/index';
 
 // admin - send custom Mail
 $route['custom-email-customer'] = 'admin/email_template/custom_email/customer';
-$route['custom-email-restaurant'] = 'admin/email_template/custom_email/restaurant';
+$route['custom-email-customer-send'] = 'admin/email_template/custom_email';
+$route['custom-email-restaurant'] = 'admin/email_template/custom_email/shop';
 
 //Admin- History
 $route['transaction-history'] = 'admin/history/transaction_history'; 

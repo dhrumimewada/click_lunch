@@ -42,8 +42,8 @@ $is_vender = $this->auth->is_vender();
                 </li>
 
                 <li>
-                    <a href="#" class="waves-effect">
-                        <i class="mdi mdi-account-multiple-plus"></i><span> Customers </span>
+                    <a href="<?php echo base_url().'customer-list'; ?>" class="waves-effect">
+                        <i class="mdi mdi-account-box"></i><span> Customer Managment</span>
                     </a>
                 </li>
 
@@ -73,12 +73,6 @@ $is_vender = $this->auth->is_vender();
                 <li>
                     <a href="<?php echo base_url().'earning-report'; ?>" class="waves-effect">
                         <i class="mdi mdi-book-open"></i><span> Earning Report</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="<?php echo base_url().'customer-list'; ?>" class="waves-effect">
-                        <i class="mdi mdi-account-box"></i><span> Customer Managment</span>
                     </a>
                 </li>
 
@@ -180,11 +174,15 @@ $is_vender = $this->auth->is_vender();
                     </a>
                 </li>
 
+                <?php
+                if($is_admin){
+                    ?>
                 <li>
                     <a href="<?php echo base_url().'setup-payment'; ?>" class="waves-effect">
                         <i class="mdi mdi-credit-card-multiple"></i><span> Setup Payment Portal </span>
                     </a>
                 </li>
+            <?php }?>
                 
                 <?php } ?>
 

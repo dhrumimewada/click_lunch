@@ -26,6 +26,49 @@ class Email_template_model extends CI_Model {
 		return $return_data;
 	}
 
+	public function get_vender($id = NULL){
+		$return_data = array();
+		$this->db->select('*');
+		$this->db->from('shop');
+		if (isset($id) && !is_null($id)) {
+			$this->db->where('id', $id);
+		}
+		$this->db->where("deleted_at", NULL);
+		$this->db->where("status", 1);
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			if (isset($id) && !is_null($id)) {
+				$return_data = $sql_query->row();
+			}else{
+				$return_data = $sql_query->result_array();
+			}
+			
+		}
+		return $return_data;
+	}
+
+	public function get_customer($id = NULL){
+		$return_data = array();
+		$this->db->select('*');
+		$this->db->from('customer');
+		if (isset($id) && !is_null($id)) {
+			$this->db->where('id', $id);
+		}
+		$this->db->where("deleted_at", NULL);
+		$this->db->where("status", 1);
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			if (isset($id) && !is_null($id)) {
+				$return_data = $sql_query->row();
+			}else{
+				$return_data = $sql_query->result_array();
+			}
+			
+		}
+		return $return_data;
+	}
+
+
 	public function put() {
 
 		$this->db->trans_begin();
@@ -51,4 +94,36 @@ class Email_template_model extends CI_Model {
 
 		return $return_value;
 	}
+
+	public function send_custom_email(){
+		$return_value = FALSE;
+
+		$from = "excellentwebworld@admin.com";
+		$subject = $this->input->post("emat_email_subject");
+		$email_message_string = $this->input->post("emat_email_message");
+		$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+
+		$this->db->select('email');
+		$this->db->from($this->input->post("to_type"));
+		$this->db->where_in("id", $this->input->post("email_to"));
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$return_data = $sql_query->result_array();
+			$total_sended = 0;
+			foreach ($return_data as $key => $value) {
+				$to = $value['email'];
+				$mail = sendmail($from, $to, $subject, $message);
+				if($mail){
+					$total_sended++;
+				}
+			}
+			$this->auth->set_status_message("Total ".$total_sended. " emails sent successfully");
+			$return_value = TRUE;
+		}else{
+			$this->auth->set_error_message("Something went wrong. please try again later");
+		}
+		return $return_value;
+	}
+
+	
 }

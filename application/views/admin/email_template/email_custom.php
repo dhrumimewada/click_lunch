@@ -8,7 +8,7 @@
  </style>
  <link rel="stylesheet" href="<?php echo base_url() . 'plugins/summernote/summernote-bs4.css'; ?>">
  <?php
- $put_link = base_url().'email-save';
+ $put_link = base_url().'custom-email-customer-send';
  ?>
 <div class="content">
     <div class="container-fluid">
@@ -52,7 +52,7 @@
                                 <div class="form-group col-10">
                                     <label class="required">Email To</label>
                                     <div>
-                                        <select class="select2 form-control" data-placeholder="Select <?php echo $to; ?>" name="email_to" multiple>
+                                        <select class="select2 form-control" data-placeholder="Select <?php echo $to; ?>" name="email_to[]" multiple>
                                                 <?php 
                                                 
                                                 foreach ($to_list as $key => $value) {
@@ -66,7 +66,7 @@
                                                 ?>
                                         </select>
                                         <div class="validation-error-label">
-                                            <?php echo form_error('email_to'); ?>
+                                            <?php echo form_error('email_to[]'); ?>
                                         </div>
                                     </div>
                                 </div>

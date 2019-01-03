@@ -146,13 +146,11 @@
   border-radius: 16px;
 }
 .page-item .page-link{
-  border-radius: 15px !important;
+  border-radius: 1rem !important;
+  padding: .70rem .75rem;
 }
 .btn-bg{
   padding: .5rem 1rem;
-}
-.r-8{
-  /* border-radius: 8px; */
 }
 .btn-sm{
   font-size: 12px;
@@ -299,4 +297,11 @@ a:hover .topbar-name{
   margin-left: 0.3rem;
   margin-right: 0.3rem;
   text-align: center;
+}
+/* alert close btn*/
+.alert-dismissible .close{
+  padding: .50rem 1.25rem;
+}
+.swal2-container{
+  padding: 0 !important;
 }

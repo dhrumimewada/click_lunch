@@ -66,6 +66,12 @@ class Vender extends CI_Controller {
 					array('field' => 'email', 'label' => 'shop email', 'rules' => 'trim|required|max_length[225]|valid_email|callback_isexists'),
 					array('field' => 'vender_name', 'label' => 'owner name', 'rules' => 'trim|required|min_length[3]|callback_customAlpha'),
 					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'state', 'label' => 'state', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'country', 'label' => 'country', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'zipcode', 'label' => 'zipcode', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|required|max_length[255]'),
 				);
 
 				$this->form_validation->set_rules($validation_rules);
@@ -74,9 +80,6 @@ class Vender extends CI_Controller {
 				if ($this->form_validation->run() === true) {
 
 					$file_upload = true;
-					// echo "<pre>";
-					// print_r($_FILES);
-					// exit;
 
 					if (isset($_FILES['profile_picture']) && !empty($_FILES['profile_picture']) && strlen($_FILES['profile_picture']['name']) > 0) {
 

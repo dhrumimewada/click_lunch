@@ -17,8 +17,6 @@ class Email_template extends CI_Controller {
 			}
 		}
 		$this->load->model("email_template_model");
-		$this->load->model("vender_model");
-		$this->load->model("admin/customer_model");
 	}
 
 	public function index(){
@@ -77,17 +75,21 @@ class Email_template extends CI_Controller {
 
 		if (isset($_POST) && !empty($_POST)){
 			if (isset($_POST['submit'])){
+
 				$validation_rules = array(
+					array('field' => 'email_to[]', 'label' => 'email to', 'rules' => 'trim|required'),
 					array('field' => 'emat_email_subject', 'label' => 'email subject', 'rules' => 'trim|required'),
-					array('field' => 'emat_email_message', 'label' => 'email message', 'rules' => 'trim|required')
+					array('field' => 'emat_email_message', 'label' => 'email message', 'rules' => 'trim|required'),
+					array('field' => 'to_type', 'label' => 'email type', 'rules' => 'trim|required')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
 				 
 				if ($this->form_validation->run() === true){
-
-					///echo "<pre>"; print_r($_POST); exit;
-
+					// $abc = $this->email_template_model->send_custom_email();
+					// echo "<pre>";
+					// print_r($abc);
+					// exit;
 					if($this->email_template_model->send_custom_email()){
 						$this->session->set_flashdata($this->auth->get_messages_array());
 						redirect(base_url() . "email-list");
@@ -100,10 +102,13 @@ class Email_template extends CI_Controller {
 			}
 		}
 
+		$to_list = '';
 		if($to == 'customer'){
-			$to_list = $this->customer_model->get_customer();
+			$to_list = $this->email_template_model->get_customer();
+		}elseif($to == 'shop'){
+			$to_list = $this->email_template_model->get_vender();
 		}else{
-			$to_list = $this->vender_model->get_vender();
+
 		}
 		
 		$output_data["to_list"] = $to_list;

@@ -58,7 +58,7 @@ class Item extends CI_Controller {
 		}
 	}
 
-	public function post(){
+	public function post($type = NULL){
 
 		$this->auth->clear_messages();
 		$this->load->library('form_validation');
@@ -70,17 +70,19 @@ class Item extends CI_Controller {
 
 				$validation_rules = array(
 					
-					array('field' => 'name', 'label' => 'item name', 'rules' => 'trim|required|min_length[2]'),
-					array('field' => 'category', 'label' => 'item category', 'rules' => 'trim|required|numeric'),
-					array('field' => 'price', 'label' => 'item price', 'rules' => 'trim|required|numeric|greater_than[0]'),
-					array('field' => 'offer_price', 'label' => 'item offer price', 'rules' => 'trim|numeric|less_than['.$this->input->post("price").']'),
-					array('field' => 'quantity', 'label' => 'item quantity', 'rules' => 'trim|required|numeric|greater_than_equal_to[0]'),
+					array('field' => 'name', 'label' => 'name', 'rules' => 'trim|required|min_length[2]'),
+					array('field' => 'category', 'label' => 'category', 'rules' => 'trim|required|numeric'),
+					array('field' => 'price', 'label' => 'price', 'rules' => 'trim|required|numeric|greater_than[0]'),
+					array('field' => 'offer_price', 'label' => 'offer price', 'rules' => 'trim|numeric|less_than['.$this->input->post("price").']'),
+					array('field' => 'quantity', 'label' => 'quantity', 'rules' => 'trim|numeric|greater_than_equal_to[0]'),
 					array('field' => 'item_description', 'label' => 'short description', 'rules' => 'trim'),
 				);
 
 				$this->form_validation->set_rules($validation_rules);
 
-				 
+				 // echo "<pre>";
+				 // print_r($_POST);
+				 // exit;
 				if ($this->form_validation->run() === true) {
 
 					$file_upload = true;
@@ -129,8 +131,9 @@ class Item extends CI_Controller {
 		//$output_data['category_data'] = $this->item_model->get_active_category();
 		$output_data['variant_groups'] = $this->item_model->get_variant_groups();
 		$output_data['cuisines_data'] = get_cuisine();
+		$output_data['item_type'] = $type;
 		// echo "<pre>";
-		// print_r($data); exit;
+		// print_r($output_data); exit;
 		$output_data['main_content'] = "vender/item/post";
 		$this->load->view('template/template',$output_data);	
 	}
@@ -151,7 +154,7 @@ class Item extends CI_Controller {
 					array('field' => 'category', 'label' => 'item category', 'rules' => 'trim|required|numeric'),
 					array('field' => 'price', 'label' => 'item price', 'rules' => 'trim|required|numeric|greater_than[0]'),
 					array('field' => 'offer_price', 'label' => 'item offer price', 'rules' => 'trim|numeric|less_than['.$this->input->post("price").']'),
-					array('field' => 'quantity', 'label' => 'item quantity', 'rules' => 'trim|required|numeric|greater_than_equal_to[0]'),
+					array('field' => 'quantity', 'label' => 'item quantity', 'rules' => 'trim|numeric|greater_than_equal_to[0]'),
 					array('field' => 'item_description', 'label' => 'short description', 'rules' => 'trim'),
 				);
 

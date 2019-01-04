@@ -4,7 +4,7 @@ class Setup_payment extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (($this->auth->is_logged_in() == TRUE) && ($this->auth->is_admin() || $this->auth->is_vender())){
+		if (($this->auth->is_logged_in() == TRUE) && $this->auth->is_admin()){
 			
 		}else{
 			if($this->auth->is_logged_in() == TRUE){

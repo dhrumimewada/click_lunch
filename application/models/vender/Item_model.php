@@ -76,16 +76,6 @@ class Item_model extends CI_Model {
 			$item_picture = $modal_data['item_picture']['file_name'];
 		}
 
-		$is_combo = '0';
-		if ($this->input->post("is_combo")){
-			$is_combo = $this->input->post("is_combo");
-		}
-
-		$is_nonveg = '0';
-		if ($this->input->post("is_nonveg")) {
-			$is_nonveg = $this->input->post("is_nonveg");
-		}
-
 		if($this->auth->is_vender()){
 			$shop_id = $this->auth->get_user_id();
 		}elseif ($this->auth->is_employee()) {
@@ -94,17 +84,21 @@ class Item_model extends CI_Model {
 			$shop_id = NULL;
 		}
 
+		$is_combo = 0;
+		if($this->input->post("item_type") == 'Combo'){
+			$is_combo = 1;
+		}
+
 		$user_data = array(
 						'shop_id' => intval($shop_id),
 						'cuisine_id' => intval($this->input->post("cuisine_id")),
 						'name' => ucwords(addslashes($this->input->post("name"))),
 						'quantity' => intval($this->input->post("quantity")),
-						'is_combo' => $is_combo,
-						'is_nonveg' => $is_nonveg,
 						'price' => sprintf("%.2f", $this->input->post("price")),
 						'offer_price' => sprintf("%.2f", $this->input->post("offer_price")),
 						'item_description' => ucwords(addslashes($this->input->post("item_description"))),
 						'item_picture' => ((isset($item_picture) && !empty($item_picture)) ? $item_picture : ''),
+						'is_combo' => intval($is_combo),
 						'is_active' => 1,
 						'created_at' => date('Y-m-d H:i:s')
 					);
@@ -168,17 +162,6 @@ class Item_model extends CI_Model {
 			}
 		}
 
-
-		$is_combo = '0';
-		if ($this->input->post("is_combo")){
-			$is_combo = $this->input->post("is_combo");
-		}
-
-		$is_nonveg = '0';
-		if ($this->input->post("is_nonveg")) {
-			$is_nonveg = $this->input->post("is_nonveg");
-		}
-
 		if($this->auth->is_vender()){
 			$shop_id = $this->auth->get_user_id();
 		}elseif ($this->auth->is_employee()) {
@@ -192,8 +175,6 @@ class Item_model extends CI_Model {
 						'cuisine_id' => intval($this->input->post("cuisine_id")),
 						'name' => ucwords(addslashes($this->input->post("name"))),
 						'quantity' => intval($this->input->post("quantity")),
-						'is_combo' => $is_combo,
-						'is_nonveg' => $is_nonveg,
 						'price' => sprintf("%.2f", $this->input->post("price")),
 						'offer_price' => sprintf("%.2f", $this->input->post("offer_price")),
 						'item_description' => ucwords(addslashes($this->input->post("item_description"))),

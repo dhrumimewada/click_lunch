@@ -61,14 +61,13 @@ $edit_link = base_url().'vender-update';
                                     
                                     echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
                                     $disabled = '';
-                                    if(empty($value["password"])){
-                                        echo "<td class='text-center'><button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vender' title='Delete' data-popup='tooltip'>Delete</button></td>
-                                        </td>";
-                                    }else{
+                                    //if(empty($value["password"])){
+                                      //  echo "<td class='text-center'><button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vender' title='Delete' data-popup='tooltip'>Delete</button></td>";
+                                    //}else{
                                         echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary btn-sm waves-effect waves-light ". $disabled ."' title='Edit' data-popup='tooltip' > Edit</a>
                                         <button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vender' title='Delete' data-popup='tooltip'>Delete</button></td>
                                         </td>";
-                                    }
+                                   // }
                                     //echo "<td>".var_dump($value["password"])."</td>";
                                         
                                    

@@ -4,7 +4,7 @@ class History extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (($this->auth->is_logged_in() == TRUE) && ($this->auth->is_admin())){
+		if (($this->auth->is_logged_in() == TRUE) && ($this->auth->is_admin() || $this->auth->is_vender())){
 			
 		}else{
 			if($this->auth->is_logged_in() == TRUE){

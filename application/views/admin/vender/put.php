@@ -230,8 +230,6 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
     }
     ?>
                                             <input id="autocomplete" placeholder="Enter address or landmark" onFocus="geolocate()" class="form-control" type="text" value='<?php echo $field_value; ?>' name="address">
-                                            <input type="hidden" id="administrative_area_level_2" name="city">
-                                            <input type="hidden" id="administrative_area_level_1" name="state">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('address'); ?>
                                             </div>
@@ -250,10 +248,10 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = $temp_value;
     }
     else{
-        $field_value = $vender_detail->city;
+        $field_value = stripslashes($vender_detail->city);
     }
     ?>
-                                            <input type="text" name="city" class="form-control" id="city" placeholder="Enter city" readonly value="<?php echo $field_value; ?>">
+                                            <input type="text" name="city" class="form-control" id="city" placeholder="Enter city" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('city'); ?>
                                             </div>
@@ -272,10 +270,10 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = $temp_value;
     }
     else{
-        $field_value = $vender_detail->state;
+        $field_value = stripslashes($vender_detail->state);
     }
     ?>
-                                            <input type="text" name="state" class="form-control" id="state" placeholder="Enter state" readonly value="<?php echo $field_value; ?>">
+                                            <input type="text" name="state" class="form-control" id="state" placeholder="Enter state" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('state'); ?>
                                             </div>
@@ -283,6 +281,53 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
                                     </div>
                                 </div>
 
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="country" class="required">Country</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('country');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    else{
+        $field_value = stripslashes($vender_detail->country);
+    }
+    ?>
+                                            <input type="text" name="country" class="form-control" id="country" placeholder="Enter country" value="<?php echo $field_value; ?>">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('country'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="zipcode" class="required">Zip Code</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('zipcode');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    else{
+        $field_value = $vender_detail->zip_code;
+    }
+    ?>
+                                            <input type="text" name="zipcode" class="form-control" id="zipcode" placeholder="Enter zipcode" value="<?php echo $field_value; ?>">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('zipcode'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 mt-2 mb-1">

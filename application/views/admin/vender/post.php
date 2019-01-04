@@ -57,7 +57,10 @@
                                     </div>
                                 </div>
 
-
+                                <div class="col-lg-12 mt-2 mb-1">
+                                    <h4 class="mt-0 mb-0 header-title">Basic Info</h4>
+                                    <hr class="mt-1 mb-3">
+                                </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label class="required">Shop Name</label>
@@ -118,7 +121,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Address</label>
+                                        <label class="required">Address/Landmark</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -127,7 +130,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address">
+                                            <input id="autocomplete" placeholder="Enter your address or landmark" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address">
                                             <input type="hidden" id="administrative_area_level_2" name="city">
                                             <input type="hidden" id="administrative_area_level_1" name="state">
                                             <div class="validation-error-label">
@@ -194,6 +197,9 @@
     }
     ?>
                                             <input type="text" name="country" class="form-control country" id="country" value="<?php echo $field_value; ?>" placeholder="Enter country">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('country'); ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -219,6 +225,148 @@
 
                             <input type="hidden" name="latitude" id="latitude" value="">
                             <input type="hidden" name="longitude" id="longitude" value="">
+
+                            <div class="row">
+                                <div class="col-lg-12 mt-2 mb-1">
+                                    <h4 class="mt-0 mb-0 header-title">Contact information</h4>
+                                    <hr class="mt-1 mb-3">
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="contact_no1">Contact Number</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('contact_no1');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    ?>
+                                            <input type="text" name="contact_no1" class="form-control" id="contact_no1" placeholder="Enter contact number" value="<?php echo $field_value; ?>">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('contact_no1'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="contact_no2">Alternate Contact Number</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('contact_no2');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    ?>
+                                            <input type="text" name="contact_no2" class="form-control" id="contact_no2" placeholder="Enter alternate contact number" value="<?php echo $field_value; ?>">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('contact_no2'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12 mt-2 mb-1">
+                                    <h4 class="mt-0 mb-0 header-title">Shop Information</h4>
+                                    <hr class="mt-1 mb-3">
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="website">Shop Website</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('website');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    ?>
+                                            <input type="text" name="website" class="form-control" id="website" placeholder="Enter shop website" value='<?php echo $field_value; ?>'>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('website'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="tax_number">TAX Number/GST</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('tax_number');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    ?>
+                                            <input type="text" name="tax_number" class="form-control tax-mask" id="tax_number" placeholder="Enter TAX number" value="<?php echo $field_value; ?>">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('tax_number'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Payment</label>
+                                        <div class="d-block mt-2">
+                                            <?php
+    $field_value = '';
+    $temp_value = set_value('payment_mode[]');
+    if (isset($temp_value) && !empty($temp_value)) {
+       if (in_array("0", $temp_value)){
+            $field_value = 'checked';
+       }
+    }
+    ?>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customControlInline" value="0" name="payment_mode[]" <?php echo $field_value; ?> >
+                                                <label class="custom-control-label" for="customControlInline">Card</label>
+                                            </div>
+                                            <?php
+    $field_value = '';
+    $temp_value = set_value('payment_mode[]');
+    if (isset($temp_value) && !empty($temp_value)) {
+       if (in_array("1", $temp_value)){
+            $field_value = 'checked';
+       }
+    }
+    ?>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customControlInline1" value="1" name="payment_mode[]" <?php echo $field_value; ?> >
+                                                <label class="custom-control-label" for="customControlInline1">Apple Pay</label>
+                                            </div>
+                                            <?php
+    $field_value = '';
+    $temp_value = set_value('payment_mode[]');
+    if (isset($temp_value) && !empty($temp_value)) {
+       if (in_array("2", $temp_value)){
+            $field_value = 'checked';
+       }
+    }
+    ?>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customControlInline2" value="2" name="payment_mode[]" <?php echo $field_value; ?> >
+                                                <label class="custom-control-label" for="customControlInline2">Google Pay</label>
+                                            </div>
+                                        </div>
+                                        <div class="validation-error-label">
+                                            <?php echo form_error('payment_mode[]'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="loader" style="display: none;"></div>
@@ -249,7 +397,8 @@
 
     </div>
 </div>
-<script src="<?php echo base_url().'assets/js/custom/admin/vender.js'; ?>"></script>
+<script src="<?php echo base_url().'assets/js/custom/admin/vender_update.js'; ?>"></script>
+<script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
 
 <script>
 

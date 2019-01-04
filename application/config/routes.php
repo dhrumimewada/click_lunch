@@ -80,6 +80,9 @@ $route['item-add'] = 'vender/item/item/post';
 $route['item-update/(:any)'] = 'vender/item/item/put/$1'; 
 $route['item-update'] = 'vender/item/item/put'; 
 
+// vender Combo managment
+$route['combo-add'] = 'vender/item/item/post/Combo';
+
 // Vender category management
 $route['category-list'] = 'vender/category/category/index'; 
 $route['category-add'] = 'vender/category/category/post'; 

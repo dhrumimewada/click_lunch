@@ -32,7 +32,7 @@
                             </div>
                             <div class="text-white">
                                 <h5 class="text-uppercase mb-2">Total Orders </h5>
-                                <h3 class="mb-3"><?php echo "1000"; ?></h3>
+                                <h3 class="mb-3"><?php echo $total['total_order']; ?></h3>
                                 <span>Total added in system</span>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                             </div>
                             <div class="text-white">
                                 <h5 class="text-uppercase mb-2">Products </h5>
-                                <h3 class="mb-3"><?php echo "1000"; ?></h3>
+                                <h3 class="mb-3"><?php echo $total['total_product']; ?></h3>
                                 <span>Total added in system</span>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="text-white">
                                 <h5 class="text-uppercase mb-2">Total Earnings </h5>
-                                <h3 class="mb-3"><?php echo "$1000" ; ?></h3>
+                                <h3 class="mb-3"><?php echo $total['total_earning']; ?></h3>
                                 <span>Total added in system</span>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                             </div>
                             <div class="text-white">
                                 <h5 class="text-uppercase mb-2">Promocode</h5>
-                                <h3 class="mb-3"><?php echo "10"; ?></h3>
+                                <h3 class="mb-3"><?php echo $total['total_promocode']; ?></h3>
                                 <span>Total added in system</span>
                             </div>
                         </div>
@@ -112,35 +112,70 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Promocode</th>
-                                            <th>Status</th>
+                                            <th>Order ID</th>
+                                            <th>Type</th>
+                                            <th>Customer Name</th>
                                             <th>Amount</th>
-                                            <th>Created Date</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <?php 
-                                    if(!empty($promocode) && is_array($promocode)){
-                                        foreach ($promocode as $key => $value) {
-                                            echo "<tr><td>".$value['promocode']."</td>";
-                                            if($value['status'] == 0){
-                                                echo "<td><button class='btn btn-primary waves-effect waves-light r-8 btn-xs'>Pending</button></td>";
-                                            }elseif($value['status'] == 1){
-                                                echo "<td><button class='btn btn-primary waves-effect waves-light r-8 btn-xs'>Confirm</button></td>";
-                                            }else{
-                                                echo '<td><i class="mdi mdi-checkbox-blank-circle text-success"></i> NA</td>';
-                                            }
-                                             echo "<td>".$value['amount']."</td>";
-
-                                            $created_date_ts = strtotime($value["created_at"]);
-                                            $created_date = date("j M, Y", $created_date_ts);
-
-                                            echo "<td>".$created_date."</td></tr>";
-                                        }
-                                    }else{
-                                        echo "<tr><td>No Any promocode found</td></tr>";
-                                    }
-                                    ?>
+                                        <tr>
+                                            <td>#4562</td>
+                                            <td>Takeout</td>
+                                            <td>Mr. Green pablow</td>
+                                            <td>$12.30</td>
+                                            <td>Completed</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#4563</td>
+                                            <td>Delivery</td>
+                                            <td>Mr. Green pablow</td>
+                                            <td>$12.30</td>
+                                            <td>Cancelled</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#4564</td>
+                                            <td>Takeout</td>
+                                            <td>Mr. Green pablow</td>
+                                            <td>$12.30</td>
+                                            <td>Completed</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#4565</td>
+                                            <td>Takeout</td>
+                                            <td>Mr. Green pablow</td>
+                                            <td>$13.30</td>
+                                            <td>Completed</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#4566</td>
+                                            <td>Takeout</td>
+                                            <td>Mr. Green pablow</td>
+                                            <td>$12.30</td>
+                                            <td>Completed</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#4563</td>
+                                            <td>Delivery</td>
+                                            <td>Mr. Green pablow</td>
+                                            <td>$12.30</td>
+                                            <td>Cancelled</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#4563</td>
+                                            <td>Delivery</td>
+                                            <td>Mr. Green pablow</td>
+                                            <td>$12.30</td>
+                                            <td>Cancelled</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#4563</td>
+                                            <td>Delivery</td>
+                                            <td>Mr. Green pablow</td>
+                                            <td>$12.30</td>
+                                            <td>Cancelled</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

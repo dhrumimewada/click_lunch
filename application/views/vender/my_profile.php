@@ -95,23 +95,22 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Tagline</label>
+                                        <label class="required">Owner Name</label>
                                         <div>
                                         <?php
     $field_value = NULL;
-    $temp_value = set_value('tag_line');
+    $temp_value = set_value('vender_name');
     if (isset($temp_value) && !empty($temp_value)) {
         $field_value = $temp_value;
     }else{
-        $field_value = stripslashes($vender_detail->tag_line);
+        $field_value = stripslashes($vender_detail->vender_name);
     }
     ?>
-                                            <input type="text" name="tag_line" class="form-control" id="tag_line" placeholder="Ex: Best Express Maxican Grill" value="<?php echo $field_value; ?>">
+                                            <input type="vender_name" name="vender_name" class="form-control" id="vender_name" placeholder="Enter owner name" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
-                                                <?php echo form_error('tag_line'); ?>
+                                                <?php echo form_error('vender_name'); ?>
                                             </div>
                                         </div>
                                     </div>
@@ -146,26 +145,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
 
 
                             <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="required">Owner Name</label>
-                                        <div>
-                                        <?php
-    $field_value = NULL;
-    $temp_value = set_value('vender_name');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    }else{
-        $field_value = stripslashes($vender_detail->vender_name);
-    }
-    ?>
-                                            <input type="vender_name" name="vender_name" class="form-control" id="vender_name" placeholder="Enter owner name" value="<?php echo $field_value; ?>">
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('vender_name'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>TAX Number/GST</label>
@@ -220,7 +200,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Alternate Contact Number</label>
+                                        <label for="contact_no2">Alternate Contact Number</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -247,9 +227,9 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                     <hr class="mt-1 mb-3">
                                 </div>
 
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="required">Address/Landmark</label><i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="top" data-content="Start typing and select your google location from google suggestions. This is for the map and also for locating your business."></i>
+                                        <label for="autocomplete" class="required">Address/Landmark</label><i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="top" data-content="Start typing and select your google location from google suggestions. This is for the map and also for locating your business."></i>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -261,10 +241,72 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
     }
     ?>
                                             <input id="autocomplete" placeholder="Start typing and find your place in google map" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address">
-                                            <input type="hidden" id="administrative_area_level_2" name="city">
-                                            <input type="hidden" id="administrative_area_level_1" name="state">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('address'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="city" class="required">City</label><i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="top" data-content="City name will be get by address"></i>
+                                        <div>
+                                            <?php
+    $field_value = NULL;
+    $temp_value = set_value('city');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = stripslashes($vender_detail->city);
+    }
+    ?>
+                                            <input type="text" name="city" class="form-control" id="city" placeholder="Enter city" value="<?php echo $field_value; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="state" class="required">State</label><i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="top" data-content="State name will be get by address"></i>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('state');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = stripslashes($vender_detail->state);
+    }
+    ?>
+                                            <input type="text" name="state" class="form-control" id="state" placeholder="Enter state" value="<?php echo $field_value; ?>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="country" class="required">Country</label><i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="top" data-content="country will be get by address"></i>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('country');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    else{
+        $field_value = $vender_detail->country;
+    }
+    ?>
+                                            <input type="text" name="country" class="form-control" id="country" placeholder="Enter country" value="<?php echo $field_value; ?>" >
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('country'); ?>
                                             </div>
                                         </div>
                                     </div>
@@ -272,7 +314,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Zip Code</label><i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="top" data-content="Zip code will be get by address"></i>
+                                        <label for="zip_code" class="required">Zip Code</label><i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="top" data-content="Zip code will be get by address"></i>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -284,7 +326,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
         $field_value = $vender_detail->zip_code;
     }
     ?>
-                                            <input type="text" name="zip_code" class="form-control" id="zip_code" placeholder="Enter zip code" value="<?php echo $field_value; ?>" readonly>
+                                            <input type="text" name="zip_code" class="form-control" id="zip_code" placeholder="Enter zip code" value="<?php echo $field_value; ?>" >
                                             <div class="validation-error-label">
                                                 <?php echo form_error('zip_code'); ?>
                                             </div>
@@ -292,32 +334,6 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                     </div>
                                 </div>
 
-                            </div>
-                            <div class="row">
-
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label>City</label><i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="top" data-content="City name will be get by address"></i>
-                                        <div>
-                                        <?php
-    $field_value = $vender_detail->city;
-    ?>
-                                            <input type="text" name="city" class="form-control" id="city" placeholder="Enter city" readonly value="<?php echo $field_value; ?>">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label>State</label><i class="far fa-question-circle" data-container="body" data-toggle="popover" data-placement="top" data-content="State name will be get by address"></i>
-                                        <div>
-                                        <?php
-    $field_value = $vender_detail->state;
-    ?>
-                                            <input type="text" name="state" class="form-control" id="state" placeholder="Enter state" readonly value="<?php echo $field_value; ?>">
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="row">

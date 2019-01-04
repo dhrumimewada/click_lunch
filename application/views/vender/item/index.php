@@ -9,7 +9,8 @@ $edit_link = base_url().'item-update';
                 <div class="page-title-box">
                     <h4 class="page-title">Products</h4>
                     <div class="state-information d-none d-sm-block">
-                        <a class="btn btn-primary waves-effect waves-light btn-bg" href="<?php echo base_url().'item-add'; ?>">Add New Product</a>
+                        <a class="btn btn-primary waves-effect waves-light btn-bg mr-2" href="<?php echo base_url().'item-add'; ?>">Add New Product</a>
+                        <a class="btn btn-primary waves-effect waves-light btn-bg" href="<?php echo base_url().'combo-add'; ?>">Add New Combo</a>
                     </div>
                 </div>
                 <?php echo get_msg(); ?>
@@ -26,7 +27,6 @@ $edit_link = base_url().'item-update';
                             <tr>
                                 <th>Product Name</th>
                                 <th>Product Cuisine</th>
-                                <th>Veg/Nonveg</th>
                                 <th>Type</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
@@ -43,11 +43,11 @@ $edit_link = base_url().'item-update';
                                     $created_date_ts = strtotime($value["created_at"]);
                                     $created_date = date("j M, Y", $created_date_ts);
                                     $combo = ($value["is_combo"] == 1)?'Combo':'Single';
-                                    $veg = ($value["is_nonveg"] == 1)?'Nonveg':'Veg';
+
                                     echo '<tr data-id="' . $id . '">';
                                     echo "<td>" . stripslashes($value["name"]) . "</td>";
                                     echo "<td>" . stripslashes($value["cuisine_name"]) . "</td>";
-                                    echo "<td>" . $veg . "</td>";
+
                                     echo "<td>" . $combo . "</td>";
 
                                     if($value["offer_price"] != ''){
@@ -93,9 +93,9 @@ $edit_link = base_url().'item-update';
 <script type="text/javascript">
     var item_list = $('.item_list').DataTable({
             keys: true,
-            "order": [[7, "desc"]],
+            "order": [[6, "desc"]],
             'iDisplayLength': 10,
-            columnDefs: [{orderable: false, targets: [8]},{visible: false,targets: [7]}],
+            columnDefs: [{orderable: false, targets: [7]},{visible: false,targets: [6]}],
     });
 
     var delete_url = "<?php echo base_url().'item-delete'; ?>";

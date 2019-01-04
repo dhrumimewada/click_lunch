@@ -16,14 +16,13 @@ class Dashboard extends CI_Controller {
 				redirect(base_url() . "vender-logout");
 			}
 		}
-		$this->load->model("promocode_model");
+		$this->load->model("vender/dashboard_model");
 	}
 
 	public function vender_dashboard(){
-		$promocode_list = $this->promocode_model->get_promocode();
-
-		$output_data["promocode"] = $promocode_list;
-
+		$output_data['total'] = $this->dashboard_model->get_total();
+		// echo "<pre>";
+		// print_r($output_data); exit;
 		$output_data['main_content'] = "vender/dashboard";
 		$this->load->view('template/template',$output_data);	
 	}

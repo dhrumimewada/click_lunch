@@ -39,14 +39,14 @@
                 }
             },
             offer_price:{
-                number: true,
+                number: false,
                 lessThanPrice: "#price",
                 normalizer: function (value) {
                     return $.trim(value);
                 }
             },
             quantity:{
-                required: true,
+                required: false,
                 number: true,
                 greaterThanZeroEqualTo:true,
                 normalizer: function (value) {
@@ -97,7 +97,7 @@
             if(validate_varient()){
                 form.submit();
             }else{
-                 console.log('form false');
+                 console.log(form);
             }   
         }
     });

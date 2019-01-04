@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Minimum Order</label>
+                                        <label class="">Minimum Order</label>
                                         <div>
                                         <?php
     $field_value = NULL;

@@ -40,16 +40,22 @@ class Vender_model extends CI_Model {
 						'email' => $this->input->post("email"),
 						'vender_name' => ucwords(addslashes($this->input->post("vender_name"))),
 						'address' => addslashes($this->input->post("address")),
-						'city' => $this->input->post("city"),
-						'state' => $this->input->post("state"),
-						'country' => $this->input->post("country"),
+						'city' => addslashes($this->input->post("city")),
+						'state' => addslashes($this->input->post("state")),
+						'country' => addslashes($this->input->post("country")),
 						'zip_code' => $this->input->post("zipcode"),
 						'latitude' => $this->input->post("latitude"),
 						'longitude' => $this->input->post("longitude"),
+						'contact_no1' => $this->input->post("contact_no1"),
+						'contact_no2' => $this->input->post("contact_no2"),
+						'website' => addslashes($this->input->post("website")),
+						'tax_number' => addslashes($this->input->post("tax_number")),
+						'payment_mode' => implode (",", $this->input->post("payment_mode")),
 						'profile_picture' => ((isset($profile_picture) && !empty($profile_picture)) ? $profile_picture : ''),
 						'status' => 0,
 						'created_at' => date('Y-m-d H:i:s')
 					);
+
 		$response = $this->db->insert("shop", $user_data);
 		$user_id = $this->db->insert_id();
 
@@ -121,6 +127,10 @@ class Vender_model extends CI_Model {
 		$user_data['shop_name'] = ucwords(addslashes($this->input->post("shop_name")));
 		$user_data['vender_name'] = ucwords(addslashes($this->input->post("vender_name")));
 		$user_data['address'] = addslashes($this->input->post("address"));
+		$user_data['city'] = addslashes($this->input->post("city"));
+		$user_data['state'] = addslashes($this->input->post("state"));
+		$user_data['country'] = addslashes($this->input->post("country"));
+		$user_data['zip_code'] = $this->input->post("zip_code");
 
 		if (isset($modal_data['profile_picture']) && !empty($modal_data['profile_picture'])){
 			

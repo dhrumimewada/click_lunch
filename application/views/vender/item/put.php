@@ -163,48 +163,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group m-t-30 item">
-                                            <?php
-    $checked = '';
-    $field_value = NULL;
-    $temp_value = set_value('is_combo');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value; 
-    } else{
-        $field_value = $item_data->is_combo;
-    } 
-    if($field_value == 1){
-        $checked = 'checked';
-    }
-    
-    ?>
-                                        <span class="ml-5">
-                                        <input type="checkbox" switch="none" id="is_combo" value="1" name="is_combo" <?php echo $checked; ?> >
-                                        <label class="mb-0 mt-1" for="is_combo" data-on-label="Combo" data-off-label="Single"></label>
-                                        </span>
-                                        <?php
-    $checked = '';
-    $field_value = NULL;
-    $temp_value = set_value('is_nonveg');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    } 
-    else{
-        $field_value = $item_data->is_nonveg;
-    } 
-    if($field_value == 1){
-        $checked = 'checked';
-    }
-    ?>
-                                        <span class="ml-5">
-                                        <input type="checkbox" switch="none" id="is_nonveg" value="1" name="is_nonveg" <?php echo $checked; ?> >
-                                        <label class="mb-0 mt-1" for="is_nonveg" data-on-label="Nonveg" data-off-label="Veg"></label>
-                                        </span>
-                                    </div>
-                                </div>
-                                
-
                             </div>
 
                             <div class="row">

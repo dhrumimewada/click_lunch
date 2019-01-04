@@ -90,7 +90,7 @@ class Promocode extends CI_Controller {
 					
 					array('field' => 'promocode', 'label' => 'promocode', 'rules' => 'trim|required|min_length[3]|max_length[20]|callback_customcode|callback_isexists'),
 					array('field' => 'amount', 'label' => 'amount', 'rules' => 'trim|required|numeric|greater_than[0]|max_length[10]'),
-					array('field' => 'promo_min_order', 'label' => 'minimum order', 'rules' => 'trim|required|numeric|max_length[10]'),
+					array('field' => 'promo_min_order', 'label' => 'minimum order', 'rules' => 'trim|numeric|max_length[10]'),
 					array('field' => 'from_date', 'label' => 'from date', 'rules' => 'trim|required'),
 					 array('field' => 'to_date', 'label' => 'to date', 'rules' => 'trim|required|callback_checkfromto[' . $this->input->post("from_date") . ']'),
 					array('field' => 'to_date', 'label' => 'to date', 'rules' => 'trim|required'),
@@ -125,7 +125,7 @@ class Promocode extends CI_Controller {
 				$validation_rules = array(
 					
 					array('field' => 'promocode', 'label' => 'promocode', 'rules' => 'trim|required|min_length[3]|max_length[20]|callback_customcode|callback_isexists[' . $this->input->post("promocode_id") . ']'),
-					array('field' => 'promo_min_order', 'label' => 'minimum order', 'rules' => 'trim|required|numeric|max_length[10]'),
+					array('field' => 'promo_min_order', 'label' => 'minimum order', 'rules' => 'trim|numeric|max_length[10]'),
 					array('field' => 'amount', 'label' => 'amount', 'rules' => 'trim|required|numeric|greater_than[0]|max_length[10]'),
 					array('field' => 'from_date', 'label' => 'from date', 'rules' => 'trim|required'),
 					array('field' => 'to_date', 'label' => 'to date', 'rules' => 'trim|required|callback_checkfromto[' . $this->input->post("from_date") . ']'),

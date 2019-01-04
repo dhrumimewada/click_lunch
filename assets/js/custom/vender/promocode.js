@@ -26,7 +26,7 @@
                 }
             },
             promo_min_order:{
-                required: true,
+                required: false,
                 number: true,
                 maxlength:10,
                 normalizer: function (value) {

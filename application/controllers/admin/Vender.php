@@ -17,7 +17,6 @@ class Vender extends CI_Controller {
 			}
 		}
 		$this->load->model("vender_model");
-		//$this->load->library("email");
 	}
 
 	public function index(){
@@ -62,16 +61,20 @@ class Vender extends CI_Controller {
 			if (isset($_POST['submit'])){
 				$validation_rules = array(
 					
-					array('field' => 'shop_name', 'label' => 'shop name', 'rules' => 'trim|required|min_length[2]'),
+					array('field' => 'shop_name', 'label' => 'shop name', 'rules' => 'trim|required|max_length[50]'),
 					array('field' => 'email', 'label' => 'shop email', 'rules' => 'trim|required|max_length[225]|valid_email|callback_isexists'),
-					array('field' => 'vender_name', 'label' => 'owner name', 'rules' => 'trim|required|min_length[3]|callback_customAlpha'),
+					array('field' => 'vender_name', 'label' => 'owner name', 'rules' => 'trim|required|min_length[3]|max_length[50]|callback_customAlpha'),
 					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'state', 'label' => 'state', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'country', 'label' => 'country', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'zipcode', 'label' => 'zipcode', 'rules' => 'trim|required|max_length[255]'),
-					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|required|max_length[255]'),
-					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|max_length[255]'),
+					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|max_length[255]'),
+					array('field' => 'contact_no1', 'label' => 'contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
+					array('field' => 'contact_no2', 'label' => 'alternate contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
+					array('field' => 'website', 'label' => 'shop website', 'rules' => 'trim|valid_url'),
+					array('field' => 'tax_number', 'label' => 'TAX number', 'rules' => 'trim|callback_valid_taxno')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
@@ -139,11 +142,16 @@ class Vender extends CI_Controller {
 				$validation_rules = array(
 					
 					array('field' => 'shop_name', 'label' => 'shop name', 'rules' => 'trim|required|min_length[2]'),
-					array('field' => 'email', 'label' => 'email', 'rules' => 'trim'),
 					array('field' => 'vender_name', 'label' => 'owner name', 'rules' => 'trim|required|min_length[3]|callback_customAlpha'),
 					array('field' => 'contact_no1', 'label' => 'contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
 					array('field' => 'contact_no2', 'label' => 'alternate contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
-					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required'),
+					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'state', 'label' => 'state', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'country', 'label' => 'country', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'zipcode', 'label' => 'zipcode', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|max_length[255]'),
+					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|max_length[255]'),
 					array('field' => 'website', 'label' => 'shop website', 'rules' => 'trim|valid_url'),
 					array('field' => 'tax_number', 'label' => 'TAX number', 'rules' => 'trim|callback_valid_taxno'),
 				);

@@ -72,7 +72,7 @@ $is_vender = $this->auth->is_vender();
 
                 <li>
                     <a href="<?php echo base_url().'earning-report'; ?>" class="waves-effect">
-                        <i class="mdi mdi-book-open"></i><span> Earning Report</span>
+                        <i class="mdi mdi-book-open"></i><span> Revenue</span>
                     </a>
                 </li>
 
@@ -108,19 +108,13 @@ $is_vender = $this->auth->is_vender();
 
                 <li>
                     <a href="<?php echo base_url().'vender-profile'; ?>" class="waves-effect">
-                        <i class="mdi mdi-border-color"></i><span> Edit Restaurant </span>
+                        <i class="mdi mdi-border-color"></i><span> My Profile </span>
                     </a>
                 </li>
 
                 <li>
                     <a href="<?php echo base_url().'earning-report'; ?>" class="waves-effect">
-                        <i class="mdi mdi-file-document"></i><span> Earning Report </span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="<?php echo base_url().'item-list'; ?>" class="waves-effect">
-                        <i class="mdi mdi-food"></i><span> Products </span>
+                        <i class="mdi mdi-file-document"></i><span> Revenue </span>
                     </a>
                 </li>
 
@@ -130,11 +124,17 @@ $is_vender = $this->auth->is_vender();
                     </a>
                 </li>
 
+                <li>
+                    <a href="<?php echo base_url().'item-list'; ?>" class="waves-effect">
+                        <i class="mdi mdi-food"></i><span> Products </span>
+                    </a>
+                </li>
+
                 <?php } 
                 if($is_vender) {?>
 
                 <li>
-                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-food"></i><span> Orders <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Orders <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li><a href="#">Scheduled</a></li>
                         <li><a href="<?php echo base_url().'order-processing'; ?>">Processing</a></li>
@@ -145,7 +145,7 @@ $is_vender = $this->auth->is_vender();
 
                 <li>
                     <a href="<?php echo base_url().'inventory'; ?>" class="waves-effect">
-                        <i class="mdi mdi-book-open"></i><span> Inventory </span>
+                        <i class="mdi mdi-checkbox-multiple-marked"></i><span> Inventory </span>
                     </a>
                 </li>
 

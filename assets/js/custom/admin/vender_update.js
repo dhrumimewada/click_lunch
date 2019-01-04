@@ -21,10 +21,67 @@
                     return $.trim(value);
                 }
             },
+            email: {
+                required:true,
+                emailValidation:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
             vender_name: {
                 required:true,
                 alpha:true,
                 maxlength:50,
+                minlength:3,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            address: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            city: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            state: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            country: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            zipcode: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            latitude: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            longitude: {
+                required:true,
+                maxlength:255,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -49,15 +106,10 @@
                     return $.trim(value);
                 }
             },
-            address: {
-                required:true,
-                normalizer: function (value) {
-                    return $.trim(value);
-                }
-            },
             website: {
                 required:false,
                 valid_url:true,
+                maxlength: 2083,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -79,9 +131,42 @@
                 required: "The shop name field is required.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
+            email: {
+                required: "The shop email field is required.",
+                emailValidation: "The shop email field is invalid."
+            },
             vender_name: {
                 required: "The owner name field is required.",
                 alpha:"The owner name field contain only alphabets and space.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed"),
+                minlength: jQuery.validator.format("At least {0} characters required")
+            },
+            address: {
+                required: "The address field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            city: {
+                required: "The city field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            state: {
+                required: "The state field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            country: {
+                required: "The country field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            zipcode: {
+                required: "The zip code field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            latitude: {
+                required: "The latitude field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            longitude: {
+                required: "The longitude field is required.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
             contact_no1: {
@@ -98,12 +183,10 @@
                 minlength: jQuery.validator.format("At least {0} digit required"),
                 maxlength: jQuery.validator.format("Maximum {0} digit allowed")
             },
-            address: {
-                required: "The address field is required."
-            },
             website: {
                 required:"The website field is required.",
-                valid_url:"The website field is invalid."
+                valid_url:"The website field is invalid.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
             tax_number:{
                 valid_taxno:"The tax number field is invalid."
@@ -121,6 +204,9 @@
         }
     });
 
+    $.validator.addMethod("emailValidation", function (value, element) {
+        return this.optional(element) || /^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(value);
+    });
     $.validator.addMethod("alpha", function(value, element) {
         return this.optional(element) || value == value.match(/^[a-zA-Z][\sa-zA-Z]*/);
     });

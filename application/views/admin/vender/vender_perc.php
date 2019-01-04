@@ -42,7 +42,8 @@ $edit_link = base_url().'vender-perc-update';
                                     echo '<tr data-id="' . $id . '">';
                                     echo "<td>" . stripslashes($value["shop_name"]) . "</td>";
                                     echo "<td>" . $value["shop_code"] . "</td>";
-                                    echo "<td><label id='".$id."' class='label-perc'> " . $value["percentage"] . " %</label></td>";
+                                    $percentage = ($value["percentage"] == '')?'-':$value["percentage"].' %';
+                                    echo "<td><label id='".$id."' class='label-perc'> " . $percentage . "</label></td>";
                                     
                                     echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
 

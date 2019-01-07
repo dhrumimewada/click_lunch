@@ -22,4 +22,24 @@ $( document ).ready(function() {
             { "orderable": false, "targets": 4 }
         ]
     });
+
+    var inventory_url = base_url+ 'vender/inventory/inventory_list/';
+    $('.inventory_list').DataTable( {
+        "ajax": {
+            url : inventory_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 6 }
+        ]
+    });
+
 });

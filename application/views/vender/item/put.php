@@ -12,6 +12,7 @@
  if (isset($item_data->item_picture) && ($item_data->item_picture != '')) {
     $prof_url = base_url() . $this->config->item("item_photo_path") . '/'.$item_data->item_picture;
 }
+$item_type = ($item_data->is_combo == 1)?'Combo':'Product';
 ?>
 <div class="content">
     <div class="container-fluid">
@@ -19,7 +20,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">Update Product</h4>
+                    <h4 class="page-title">Update <?php echo $item_type; ?></h4>
                 </div>
             </div>
         </div>
@@ -39,12 +40,12 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-12 mt-2 mb-1">
-                                    <h4 class="mt-0 mb-0 header-title">Product Information</h4>
+                                    <h4 class="mt-0 mb-0 header-title"><?php echo $item_type; ?> Information</h4>
                                     <hr class="mt-1 mb-3">
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Product Name</label>
+                                        <label class="required"><?php echo $item_type; ?> Name</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -64,7 +65,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Product Cuisine</label>
+                                        <label class="required"><?php echo $item_type; ?> Cuisine</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -99,7 +100,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Product Price</label>
+                                        <label class="required"><?php echo $item_type; ?> Price</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -120,7 +121,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Product Offer Price</label>
+                                        <label class=""><?php echo $item_type; ?> Offer Price</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -145,7 +146,7 @@
                                 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Product Quantity</label>
+                                        <label class=""><?php echo $item_type; ?> Quantity</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -161,6 +162,28 @@
                                                 <?php echo form_error('quantity'); ?>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group m-t-30 item">
+                                            <?php
+    $checked = '';
+    $field_value = NULL;
+    $temp_value = set_value('inventory_status');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value; 
+    } else{
+        $field_value = $item_data->inventory_status;
+    } 
+    if($field_value == 1){
+        $checked = 'checked';
+    }
+    
+    ?>
+                                        <span class="ml-5">
+                                        <input type="checkbox" switch="none" id="inventory_status" value="1" name="inventory_status" <?php echo $checked; ?> >
+                                        <label class="mb-0 mt-1" for="inventory_status" data-on-label="Inventory" data-off-label="Off" title="Inventory"></label>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -188,7 +211,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Product Photo</label>
+                                        <label><?php echo $item_type; ?> Photo</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -212,7 +235,7 @@
 
                             <div class="row">
                                 <div class="col-lg-12 mt-2 mb-1">
-                                    <h4 class="mt-0 mb-0 header-title">Product Variants</h4>
+                                    <h4 class="mt-0 mb-0 header-title"><?php echo $item_type; ?> Variants</h4>
                                     <hr class="mt-1 mb-3">
                                 </div>
                             </div>
@@ -276,6 +299,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <input type="hidden" name="item_type" value="<?php echo $item_type; ?>">
 
                             <input type="hidden" name="item_id" value="<?php echo $item_data->id; ?>">
 

@@ -68,7 +68,7 @@ class Delivery_dispatcher extends CI_Controller {
 	    );
 	  	echo json_encode($output);
 	  	exit();
-  }
+  	}
 
 	public function customAlpha($str) {
 		if (!preg_match('/^[a-z \-]+$/i', $str)) {

@@ -111,11 +111,17 @@
 .item.small-f input[switch] + label:before{
   font-size: 10px;
 }
-#vender-profile input[switch] + label,.item input[switch] + label{
+#vender-profile input[switch] + label{
   width: 72px;
 }
-#vender-profile input[switch]:checked + label:after, .item input[switch]:checked + label:after{
+.item input[switch] + label{
+  width: 76px;
+}
+#vender-profile input[switch]:checked + label:after{
   left: 50px;
+}
+.item input[switch]:checked + label:after{
+  left: 54px;
 }
 #vender-profile .custom-control-input.validation-error-label{
   display: none;
@@ -288,7 +294,7 @@ a:hover .topbar-name{
 .ct-chart .ct-series.ct-series-b .ct-bar, .ct-chart .ct-series.ct-series-b .ct-line, .ct-chart .ct-series.ct-series-b .ct-point, .ct-chart .ct-series.ct-series-b .ct-slice-donut{
   stroke: #f05b4f !important; 
 }
-.label-perc{
+.label-perc, .label-quantity, .label-notify-stock{
   background-color: #e9ecef;
   font-size: 12px;
   width: 6rem;

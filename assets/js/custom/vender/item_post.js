@@ -66,26 +66,26 @@
         },
         messages: {
             name: {
-                required: "The product name field is required.",
+                required: "The name field is required.",
                 minlength: jQuery.validator.format("At least {0} character required")
             },
             cuisine_id: {
-                required:"The product cuisine field is required."
+                required:"The cuisine field is required."
             },
             price: {
-                required: "The product price field is required.",
-                number: "The product price field is invalid.",
-                greaterThanZero: "The product price field is invalid."
+                required: "The price field is required.",
+                number: "The price field is invalid.",
+                greaterThanZero: "The price field is invalid."
             },
             offer_price: {
-                required: "The product offer price field is required.",
-                number: "The product offer price field is invalid.",
-                lessThanPrice: "The product offer price should be less than actual price."
+                required: "The offer price field is required.",
+                number: "The offer price field is invalid.",
+                lessThanPrice: "The offer price should be less than actual price."
             },
             quantity: {
-                required: "The product quantity field is required.",
-                number: "The product quantity field is invalid.",
-                greaterThanZeroEqualTo: "The product quantity field is invalid."
+                required: "The quantity field is required.",
+                number: "The quantity field is invalid.",
+                greaterThanZeroEqualTo: "The quantity field is invalid."
             },
             item_picture:{
                 //checkold: "The item photo field is required.",

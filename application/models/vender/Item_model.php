@@ -89,6 +89,15 @@ class Item_model extends CI_Model {
 			$is_combo = 1;
 		}
 
+		$inventory_status = '0';
+		if ($this->input->post("inventory_status")) {
+			$inventory_status = $this->input->post("inventory_status");
+		}
+
+		// echo "<pre>";
+		// print_r($_POST);
+		// exit;
+
 		$user_data = array(
 						'shop_id' => intval($shop_id),
 						'cuisine_id' => intval($this->input->post("cuisine_id")),
@@ -99,6 +108,7 @@ class Item_model extends CI_Model {
 						'item_description' => ucwords(addslashes($this->input->post("item_description"))),
 						'item_picture' => ((isset($item_picture) && !empty($item_picture)) ? $item_picture : ''),
 						'is_combo' => intval($is_combo),
+						'inventory_status' => intval($inventory_status),
 						'is_active' => 1,
 						'created_at' => date('Y-m-d H:i:s')
 					);
@@ -170,6 +180,16 @@ class Item_model extends CI_Model {
 			$shop_id = NULL;
 		}
 
+		$is_combo = 0;
+		if($this->input->post("item_type") == 'Combo'){
+			$is_combo = 1;
+		}
+
+		$inventory_status = '0';
+		if ($this->input->post("inventory_status")) {
+			$inventory_status = $this->input->post("inventory_status");
+		}
+
 		$user_data2 = array(
 						'shop_id' => intval($shop_id),
 						'cuisine_id' => intval($this->input->post("cuisine_id")),
@@ -178,7 +198,8 @@ class Item_model extends CI_Model {
 						'price' => sprintf("%.2f", $this->input->post("price")),
 						'offer_price' => sprintf("%.2f", $this->input->post("offer_price")),
 						'item_description' => ucwords(addslashes($this->input->post("item_description"))),
-						//'item_picture' => ((isset($item_picture) && !empty($item_picture)) ? $item_picture : ''),
+						'is_combo' => intval($is_combo),
+						'inventory_status' => intval($inventory_status),
 						'is_active' => 1,
 						'created_at' => date('Y-m-d H:i:s')
 					);

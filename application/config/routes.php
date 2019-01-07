@@ -76,7 +76,7 @@ $route['vender-dashboard'] = 'vender/dashboard/vender_dashboard';
 $route['item-list'] = 'vender/item/item/index'; 
 $route['item-delete'] = 'vender/item/item/delete';
 $route['item-status'] = 'vender/item/item/active_deactive_item'; 
-$route['item-add'] = 'vender/item/item/post'; 
+$route['item-add'] = 'vender/item/item/post/Product'; 
 $route['item-update/(:any)'] = 'vender/item/item/put/$1'; 
 $route['item-update'] = 'vender/item/item/put'; 
 

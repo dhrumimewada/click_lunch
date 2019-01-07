@@ -5,9 +5,9 @@
      }
  </style>
  <?php
- $post_link = base_url().'item-add';
- $back = base_url().'item-list';
-    $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
+$post_link = base_url().'item-add';
+$back = base_url().'item-list';
+$prof_url = base_url() . 'assets/images/default/cuisine.jpg';
  ?>
 <div class="content">
     <div class="container-fluid">
@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">Add New Product</h4>
+                    <h4 class="page-title">Add New <?php echo $item_type; ?> </h4>
                 </div>
             </div>
         </div>
@@ -35,12 +35,12 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-12 mt-2 mb-1">
-                                    <h4 class="mt-0 mb-0 header-title">Product Information</h4>
+                                    <h4 class="mt-0 mb-0 header-title"><?php echo $item_type; ?> Information</h4>
                                     <hr class="mt-1 mb-3">
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Product Name</label>
+                                        <label class="required"><?php echo $item_type; ?> Name</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Product Cuisine</label>
+                                        <label class="required"><?php echo $item_type; ?> Cuisine</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -91,7 +91,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Product Price</label>
+                                        <label class="required"><?php echo $item_type; ?> Price</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Product Offer Price</label>
+                                        <label class=""><?php echo $item_type; ?> Offer Price</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -133,7 +133,7 @@
                                 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Product Quantity</label>
+                                        <label class=""><?php echo $item_type; ?> Quantity</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -148,43 +148,28 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>   
+
                                 <div class="col-lg-6">
                                     <div class="form-group m-t-30 item">
-                                            <?php
-    $checked = '';
-    $field_value = NULL;
-    $temp_value = set_value('is_combo');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    } 
-    if($field_value == 1){
-        $checked = 'checked';
-    }
-    ?>
-                                        <span class="ml-5">
-                                        <input type="checkbox" switch="none" id="is_combo" value="1" name="is_combo" <?php echo $checked; ?> >
-                                        <label class="mb-0 mt-1" for="is_combo" data-on-label="Combo" data-off-label="Single"></label>
-                                        </span>
                                         <?php
-    $checked = '';
+    $checked = 'checked';
     $field_value = NULL;
-    $temp_value = set_value('is_nonveg');
+    $temp_value = set_value('inventory_status');
     if (isset($temp_value) && !empty($temp_value)) {
         $field_value = $temp_value;
     } 
-    if($field_value == 1){
-        $checked = 'checked';
-    }
+    // if($field_value == NULL){
+    //     $checked = '';
+    // }
+    //var_dump($field_value);
     ?>
                                         <span class="ml-5">
-                                        <input type="checkbox" switch="none" id="is_nonveg" value="1" name="is_nonveg" <?php echo $checked; ?> >
-                                        <label class="mb-0 mt-1" for="is_nonveg" data-on-label="Nonveg" data-off-label="Veg"></label>
+                                        <input type="checkbox" switch="none" id="inventory_status" value="1" name="inventory_status" <?php echo $checked; ?> >
+                                        <label class="mb-0 mt-1" for="inventory_status" data-on-label="Inventory" data-off-label="Off" title="Inventory"></label>
                                         </span>
                                     </div>
-                                </div>
-                                
-                                
+                                </div>                             
 
                             </div>
 
@@ -211,7 +196,7 @@
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Product Photo</label>
+                                        <label><?php echo $item_type; ?> Photo</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -232,7 +217,7 @@
 
                             <div class="row">
                                 <div class="col-lg-12 mt-2 mb-1">
-                                    <h4 class="mt-0 mb-0 header-title">Product Variants</h4>
+                                    <h4 class="mt-0 mb-0 header-title"><?php echo $item_type; ?> Variants</h4>
                                     <hr class="mt-1 mb-3">
                                 </div>
                             </div>
@@ -249,6 +234,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <input type="hidden" name="item_type" value="<?php echo $item_type; ?>">
 
                             <div class="form-group m-b-0">
                                 <div>

@@ -7,7 +7,7 @@ $edit_link = base_url().'vender-perc-update';
         <div class="row">
             <div class="col-sm-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">Restaurants</h4>
+                    <h4 class="page-title">Percentage of Restaurants</h4>
                     <div class="state-information d-none d-sm-block">
                         <a class="btn btn-primary waves-effect waves-light btn-bg" href="<?php echo base_url().'vender-add'; ?>">Add New Restaurant</a>
                     </div>

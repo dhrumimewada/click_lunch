@@ -6,7 +6,7 @@ class Dashboard extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		
-		if (($this->auth->is_logged_in() == TRUE) && (($this->auth->is_vender()) || (($this->auth->is_employee()) && (is_allowed($this->auth->get_role_id(), 'profile')) ) ) ){
+		if (($this->auth->is_vender()) || (($this->auth->is_employee()) && (is_allowed($this->auth->get_role_id(), 'profile')) ) ){
 		}else{
 			if($this->auth->is_logged_in() == TRUE){
 				$this->auth->set_error_message("You are not allowed to access");
@@ -21,8 +21,6 @@ class Dashboard extends CI_Controller {
 
 	public function vender_dashboard(){
 		$output_data['total'] = $this->dashboard_model->get_total();
-		// echo "<pre>";
-		// print_r($output_data); exit;
 		$output_data['main_content'] = "vender/dashboard";
 		$this->load->view('template/template',$output_data);	
 	}

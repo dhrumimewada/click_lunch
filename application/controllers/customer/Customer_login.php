@@ -41,5 +41,31 @@ class Customer_login extends CI_Controller {
 		$output_data["id"] = $id;
 		$this->load->view('admin/customer/setpassword',$output_data);	
 	}
+
+	public function activate_account($token=''){
+		$this->db->select('activation_token');
+        $this->db->where("activation_token",$token);
+        $this->db->where("deleted_at",NULL);
+        $this->db->where("status",0);
+        $this->db->from("customer");
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+        	$data = array(
+				'status' => 1,
+				'activation_token' => ''
+				);
+			$this->db->where('activation_token',$token);
+			$this->db->update('customer', $data);
+			$return = array('status' => true);
+			echo "<h2>Your account has been activated</h2>";
+			return json_encode($return);
+        }else{
+        	$return = array('status' => false);
+        	echo "<h2>Server encounter error</h2>";
+			return json_encode($return);
+        }
+
+		
+	}
 }
 ?>

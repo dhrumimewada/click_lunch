@@ -113,7 +113,7 @@ class Email_template extends CI_Controller {
 		
 		$output_data["to_list"] = $to_list;
 		$output_data["to"] =$to;
-		$output_data['main_content'] = "admin/Email_template/email_custom";
+		$output_data['main_content'] = "admin/email_template/email_custom";
 		$this->load->view('template/template',$output_data);	
 	}
 

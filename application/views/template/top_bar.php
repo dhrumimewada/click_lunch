@@ -2,20 +2,35 @@
 $is_admin = $this->auth->is_admin();
 $is_employee = $this->auth->is_employee();
 $is_vender = $this->auth->is_vender();
+$is_dispatcher = $this->auth->is_dispatcher();
+$user_id = $this->auth->get_user_id();
+$user_data = get_loggedin_detail($user_id);
 
-$user_data = get_loggedin_detail($_SESSION['session_user']['user_id']);
 $profile_picture = 'https://bootdey.com/img/Content/avatar/avatar6.png';
 if($is_vender){
     $name =  $user_data->vender_name;
-    $profile_picture = base_url().$this->config->item("profile_path") . '/'.$user_data->profile_picture;
+    if($user_data->profile_picture != ''){
+        $profile_picture = base_url().$this->config->item("profile_path") . '/'.$user_data->profile_picture;
+    }
 }elseif($is_employee){
     $name =  $user_data->first_name.' '.$user_data->last_name;
+    if($user_data->profile_picture != ''){
+        $profile_picture = base_url().$this->config->item("profile_path") . '/'.$user_data->profile_picture;
+    }
 }elseif($is_admin){
     $name =  $user_data->username;
-    $profile_picture = base_url().$this->config->item("profile_path") . '/'.$user_data->profile_picture;
+    if($user_data->profile_picture != ''){
+        $profile_picture = base_url().$this->config->item("profile_path") . '/'.$user_data->profile_picture;
+    } 
+}elseif($is_dispatcher){
+    $name =  $user_data->full_name;
+    if($user_data->profile_picture != ''){
+        $profile_picture = base_url().$this->config->item("profile_path") . '/'.$user_data->profile_picture;
+    }
 }else{
     $name = '';
 }
+
 
 ?>
 <div class="topbar">
@@ -49,27 +64,25 @@ if($is_vender){
                             $profile_url = base_url().'my-profile';
                             $changepw_url = base_url().'change-password';
                             $logout_url = base_url().'logout-admin';
-                        }
-                        else if($is_vender){
+                        }else if($is_vender){
                             $profile_url = base_url().'vender-profile';
                             $changepw_url = base_url().'vender-change-password';
                             $logout_url = base_url().'vender-logout';
-                        }else{
+                        }elseif($is_employee){
                             $emp_profile_url = base_url().'employee-profile';
                             $changepw_url = base_url().'employee-change-password';
                             $logout_url = base_url().'employee-logout';
-                            $profile_url = base_url().'vender-profile';
+                            $profile_url = base_url().'employee-profile';
+                        }else if($is_dispatcher){
+                            $profile_url = base_url().'dispatcher-profile';
+                            $changepw_url = base_url().'dispatcher-change-password';
+                            $logout_url = base_url().'dispatcher-logout';
+                        }else{
+                            $profile_url = $changepw_url = $logout_url = $emp_profile_url = '#';
                         }
                         ?>
 
-                        <?php
-                        if($is_employee){ ?>
-                        <a class="dropdown-item" href="<?php echo $emp_profile_url; ?>"><i class="mdi mdi-account-circle m-r-5"></i> My Profile</a>
-                        <?php } ?>
-                        <?php if(($is_admin) || ($is_vender) || ( ($is_employee) && (is_allowed($this->auth->get_role_id(), 'profile')) ) )
-                        { ?>
                         <a class="dropdown-item" href="<?php echo $profile_url; ?>"><i class="mdi mdi-account-circle m-r-5"></i> Account Profile</a>
-                        <?php }?>
                         <a class="dropdown-item" href="<?php echo $changepw_url; ?>"><i class="mdi mdi-key-variant m-r-5"></i> Change Password</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item text-danger" href="<?php echo $logout_url; ?>"><i class="mdi mdi-power text-danger"></i> Logout</a>

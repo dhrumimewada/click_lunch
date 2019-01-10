@@ -25,9 +25,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                                <td>Restaurant 123</td>
-                                <td>$ 56</td>
-                                <td>Action</td>
+                               
                             </tbody>
                         </table>
 

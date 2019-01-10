@@ -27,7 +27,6 @@ $edit_link = base_url().'customer-update';
                                 <th>Full Name</th>
                                 <th>Email</th>
                                 <th>Location</th>
-                                <th>Contact Number</th>
                                 <th class='text-center'>Status</th>
                                 <th>Created Date</th>
                                 <th class='text-center'>Action</th>
@@ -42,10 +41,10 @@ $edit_link = base_url().'customer-update';
                                     $created_date = date("j M, Y", $created_date_ts);
 
                                     echo '<tr data-id="' . $id . '">';
-                                    echo "<td>" . stripslashes($value["full_name"]) . "</td>";
+                                    echo "<td>" . stripslashes($value["username"]) . "</td>";
                                     echo "<td>" . $value["email"] . "</td>";
                                     echo "<td>" . $value["address"] . "</td>";
-                                    echo "<td>" . $value["contact_no"] . "</td>";
+                                    // echo "<td>" . $value["contact_no"] . "</td>";
                                     if($value["status"] == 1){
                                         $btn_name = 'Active';
                                         $btn_class = 'btn-success';
@@ -81,9 +80,9 @@ $edit_link = base_url().'customer-update';
 <script type="text/javascript">
     var customer_list = $('.customer_list').DataTable({
             keys: true,
-            "order": [[5, "desc"]],
+            "order": [[4, "desc"]],
             'iDisplayLength': 10,
-            columnDefs: [{orderable: false, targets: [6]},{visible: false,targets: [5]}],
+            columnDefs: [{orderable: false, targets: [5]},{visible: false,targets: [4]}],
     });
 
     var delete_url = "<?php echo base_url().'customer-delete'; ?>";

@@ -27,6 +27,7 @@ class Vender_login extends CI_Controller {
 
 				if ($this->form_validation->run() === true) {
 
+
 					if($this->auth->login($this->input->post('email'), $this->input->post('password'), $this->input->post('user_type'))){
 						$this->session->set_flashdata($this->auth->get_messages_array());
 						redirect(base_url() . "vender-profile");
@@ -37,6 +38,7 @@ class Vender_login extends CI_Controller {
 				} 
 			}
 		}
+
 
 		$data = array('user_type' => 'vender');
 		$this->load->view('login', $data);

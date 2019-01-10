@@ -145,6 +145,8 @@ function get_loggedin_detail($id = NULL){
 		$table = 'shop';
 	}elseif ($CI->auth->is_employee()){
 		$table = 'employee';
+	}elseif ($CI->auth->is_dispatcher()){
+		$table = 'delivery_dispatcher';
 	}else{
 		return $return_data;
 	}
@@ -153,6 +155,7 @@ function get_loggedin_detail($id = NULL){
 	$CI->db->select('*');
 	$CI->db->from($table);
 	$CI->db->where("deleted_at", NULL);
+	$CI->db->where("id", $id);
 	$sql_query = $CI->db->get();
 	if ($sql_query->num_rows() > 0){
 		$return_data = $sql_query->row();

@@ -50,6 +50,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'Home/';
+$route['404_override'] = 'errors/page_missing';
+$route['translate_uri_dashes'] = FALSE;
+
 $route['login'] = 'admin/admin_login/login';
 
 $route['register'] = 'register';
@@ -60,10 +63,19 @@ $route['form'] = 'welcome/form_validation';
 $route['profile'] = 'welcome/profile';  
 $route['table'] = 'table/index'; 
 $route['error-page'] = 'welcome/error_page'; 
-
+$route['maintenance1'] = 'welcome/maintenance'; 
+$route['maintenance2'] = 'welcome/maintenance'; 
+$route['maintenance3'] = 'welcome/maintenance'; 
+$route['maintenance4'] = 'welcome/maintenance'; 
+$route['maintenance5'] = 'welcome/maintenance'; 
+$route['maintenance6'] = 'welcome/maintenance'; 
+$route['maintenance7'] = 'welcome/maintenance'; 
+$route['maintenance8'] = 'welcome/maintenance'; 
+$route['maintenance9'] = 'welcome/maintenance'; 
+$route['maintenance10'] = 'welcome/maintenance'; 
 
 // Vender
-$route['login-vender'] = 'vender/vender_login/login';  
+$route['login-vender'] = 'vender/vender_login/login';    
 $route['vender-profile'] = 'vender/vender_profile/my_profile';  
 $route['vender-change-password'] = 'vender/vender_profile/change_password'; 
 $route['vender-forgot-password'] = 'vender/vender_login/vender_forgot_password'; 
@@ -99,8 +111,9 @@ $route['variant-group-delete'] = 'vender/item/variant_group/delete';
 
 //Vender - Vrient group
 $route['inventory'] = 'vender/inventory/index'; 
-$route['inventory-update'] = 'vender/inventory/put'; 
+// $route['inventory-update'] = 'vender/inventory/put'; 
 $route['inventory-view'] = 'vender/inventory/view';
+$route['inventory-update'] = 'vender/inventory/put';
 
 //Vender - Orders
 $route['order-processing'] = 'vender/order/order_processing';
@@ -125,7 +138,7 @@ $route['promocode-status'] = 'promocode/promocode/active_deactive_promocode';
 
 
 //Employee
-$route['login-employee'] = 'vender/vender_login/login';  
+$route['login-employee'] = 'employee/employee_login/login';
 $route['employee-profile'] = 'employee/employee_profile/my_profile';  
 $route['employee-change-password'] = 'employee/employee_profile/change_password'; 
 // $route['employee-forgot-password'] = 'employee/employee_login/employee_forgot_password'; 
@@ -212,20 +225,27 @@ $route['cuisine-update/(:any)'] = 'admin/cuisine/put/$1';
 $route['cuisine-update'] = 'admin/cuisine/index';
 $route['cuisine-put'] = 'admin/cuisine/put';
 
-
-
-// admin - app setting
+// Admin - app setting
 $route['app-setting'] = 'appsetting/index';  
 $route['app-setting-update'] = 'appsetting/put';  
 
 // Admin - Paayment spotal
-
 $route['setup-payment'] = 'admin/setup_payment/index'; 
 
+//Dispatcher
+$route['login-dispatcher'] = 'dispatcher/dispatcher_login/login';
+$route['dispatcher-dashboard'] = 'dispatcher/dispatcher/dashboard';  
+$route['dispatcher-profile'] = 'dispatcher/dispatcher/profile';
+$route['dispatcher-change-password'] = 'dispatcher/dispatcher/change_password';
+$route['dispatcher-logout'] = 'dispatcher/dispatcher_login/logout';
 
-$route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
-
+// Delivery Boy
+$route['delivery-boy-list'] = 'dispatcher/delivery_boy/index'; 
+$route['delivery-boy-update/(:any)'] = 'dispatcher/delivery_boy/put/$1';  
+$route['delivery-boy-add'] = 'dispatcher/delivery_boy/post'; 
+$route['delivery-boy-save'] = 'dispatcher/delivery_boy/post'; 
+$route['delivery-boy-status'] = 'dispatcher/delivery_boy/active_deactive_delivery_boy';  
+$route['delivery-boy-update'] = 'dispatcher/delivery_boy/put';
 
 //--------------------------------------------------
 

@@ -27,11 +27,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                                <td>Payment Id</td>
-                                <td>Order Id</td>
-                                <td>Customer Name</td>
-                                <td>Restaurant</td>
-                                <td>Action</td>
+                                
                             </tbody>
                         </table>
 

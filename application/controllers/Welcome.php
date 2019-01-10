@@ -11,7 +11,7 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
 		$data = $this->dashboard_model->get_total();
-		//echo '<pre>'; print_r($data['shops']); exit;
+		//echo '<pre>'; print_r($data); exit;
 
 		$data['main_content'] = "main_page";
 		$this->load->view('template/template',$data);
@@ -32,5 +32,14 @@ class Welcome extends CI_Controller {
 	public function error_page(){
 		$data['main_content'] = "error_page";
 		$this->load->view('template/template',$data);
+	}
+
+	public function maintenance(){
+		if($this->auth->is_logged_in() == TRUE){
+			$data['main_content'] = "maintenance";
+			$this->load->view('template/template',$data);
+		}else{
+			redirect(base_url() . "vender-logout");
+		}
 	}
 }

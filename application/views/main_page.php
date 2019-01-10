@@ -46,7 +46,7 @@
                             </div>
                             <div class="text-white">
                                 <h5 class="text-uppercase mb-2">Product </h5>
-                                <h3 class="mb-3"><?php echo $total_shop; ?></h3>
+                                <h3 class="mb-3"><?php echo $total_item; ?></h3>
                                 <span>Total added in system</span>
                             </div>
                         </div>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="text-white">
                                 <h5 class="text-uppercase mb-2">Orders </h5>
-                                <h3 class="mb-3"><?php echo $total_cuisine; ?></h3>
+                                <h3 class="mb-3"><?php echo $total_order; ?></h3>
                                 <span>Total added in system</span>
                             </div>
                         </div>

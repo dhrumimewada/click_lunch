@@ -101,6 +101,13 @@ class Auth {
 		}
 	}
 
+	public function is_dispatcher() {
+		if ($this->CI->auth_model->is_dispatcher()) {
+			//$this->CI->auth_model->set_status_message('Not allowed to access');
+			return TRUE;
+		}
+	}
+
 	public function logout() {
 		if ($this->CI->auth_model->logout()) {
 			$this->CI->auth_model->set_status_message('You have been successfully logged out.');

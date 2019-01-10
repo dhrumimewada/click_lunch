@@ -35,6 +35,17 @@ class Vender_model extends CI_Model {
 			$profile_picture = $modal_data['profile_picture']['file_name'];
 		}
 
+
+
+		$payment_mode = '';
+		if(isset($_POST['payment_mode'])){
+			$payment_mode = implode (",", $this->input->post("payment_mode"));
+		}
+
+		// echo "<pre>";
+		// var_dump($payment_mode);
+		// exit;
+
 		$user_data = array(
 						'shop_name' => ucwords(addslashes($this->input->post("shop_name"))),
 						'email' => $this->input->post("email"),
@@ -50,7 +61,7 @@ class Vender_model extends CI_Model {
 						'contact_no2' => $this->input->post("contact_no2"),
 						'website' => addslashes($this->input->post("website")),
 						'tax_number' => addslashes($this->input->post("tax_number")),
-						'payment_mode' => implode (",", $this->input->post("payment_mode")),
+						'payment_mode' => $payment_mode,
 						'profile_picture' => ((isset($profile_picture) && !empty($profile_picture)) ? $profile_picture : ''),
 						'status' => 0,
 						'created_at' => date('Y-m-d H:i:s')
@@ -130,7 +141,7 @@ class Vender_model extends CI_Model {
 		$user_data['city'] = addslashes($this->input->post("city"));
 		$user_data['state'] = addslashes($this->input->post("state"));
 		$user_data['country'] = addslashes($this->input->post("country"));
-		$user_data['zip_code'] = $this->input->post("zip_code");
+		$user_data['zip_code'] = $this->input->post("zipcode");
 
 		if (isset($modal_data['profile_picture']) && !empty($modal_data['profile_picture'])){
 			
@@ -152,11 +163,16 @@ class Vender_model extends CI_Model {
 			}
 		}
 
+		$payment_mode = '';
+		if(isset($_POST['payment_mode'])){
+			$payment_mode = implode (",", $this->input->post("payment_mode"));
+		}
+
 		$user_data['contact_no1'] = $this->input->post("contact_no1");
 		$user_data['contact_no2'] = $this->input->post("contact_no2");
 		$user_data['website'] = addslashes($this->input->post("website"));
 		$user_data['tax_number'] = addslashes($this->input->post("tax_number"));
-		$user_data['payment_mode'] = implode (",", $this->input->post("payment_mode"));
+		$user_data['payment_mode'] = $payment_mode;
 		$user_data['updated_at'] = date('Y-m-d H:i:s');
 	
 		$this->db->where('id', $this->input->post("shop_id"));

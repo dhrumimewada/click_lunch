@@ -12,6 +12,7 @@ class Inventory_model extends CI_Model {
 		$this->db->from('item');
 		$this->db->where("deleted_at", NULL);
 		$this->db->where("is_active", 1);
+		$this->db->where("shop_id", $this->auth->get_user_id());
 		$this->db->where("inventory_status", 1);
 		if (isset($id) && !is_null($id)) {
 			$this->db->where('id', $id);

@@ -35,10 +35,10 @@ class Customer_model extends CI_Model {
 		}
 
 		$user_data = array(
-						'full_name' => ucwords(addslashes($this->input->post("full_name"))),
+						'username' => ucwords(addslashes($this->input->post("username"))),
 						'email' => $this->input->post("email"),
 						'password' => password_hash($this->input->post("password"), PASSWORD_DEFAULT),
-						'contact_no' => $this->input->post("contact_no"),
+						'mobile_number' => $this->input->post("mobile_number"),
 						'address' => addslashes($this->input->post("address")),
 						//'city' => $this->input->post("city"),
 						//'state' => $this->input->post("state"),
@@ -51,7 +51,7 @@ class Customer_model extends CI_Model {
 
 		if($response){
 			$activation_token = encrypt($user_id);
-			$email_var_data["customer_name"] = ucwords($this->input->post("full_name"));
+			$email_var_data["customer_name"] = ucwords($this->input->post("username"));
 			$email_var_data["email"] = $this->input->post("email");
 			$email_var_data["password"] = $this->input->post("password");
 			$email_var_data["recovery_link"] = base_url() . 'customer-setpassword/'. $activation_token;
@@ -95,7 +95,7 @@ class Customer_model extends CI_Model {
 		// echo '<pre>';
 		// print_r($modal_data);exit;
 
-		$user_data['full_name'] = ucwords(addslashes($this->input->post("full_name")));
+		$user_data['username'] = ucwords(addslashes($this->input->post("username")));
 		$user_data['address'] = addslashes($this->input->post("address"));
 
 		if (isset($modal_data['profile_picture']) && !empty($modal_data['profile_picture'])){
@@ -118,7 +118,7 @@ class Customer_model extends CI_Model {
 			}
 		}
 
-		$user_data['contact_no'] = $this->input->post("contact_no");
+		$user_data['mobile_number'] = $this->input->post("mobile_number");
 		$user_data['updated_at'] = date('Y-m-d H:i:s');
 	
 		$this->db->where('id', $this->input->post("customer_id"));

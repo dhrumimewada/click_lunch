@@ -9,8 +9,8 @@ class Admin_login extends CI_Controller {
 
 	public function login(){
 
-		if ($this->auth->is_logged_in() == TRUE){
-			redirect(base_url() . "admin-list");
+		if ($this->auth->is_admin() == TRUE){
+			redirect(base_url() . "dashboard");
 		}
 
 		$this->auth->clear_messages();

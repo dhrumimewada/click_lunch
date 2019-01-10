@@ -6,7 +6,7 @@ class Vender_profile extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		
-		if (($this->auth->is_logged_in() == TRUE) && (($this->auth->is_vender()) || (($this->auth->is_employee()) && (is_allowed($this->auth->get_role_id(), 'profile')) ) ) ){
+		if (($this->auth->is_vender()) || (($this->auth->is_employee()) && (is_allowed($this->auth->get_role_id(), 'profile')) ) ) {
 		}else{
 			if($this->auth->is_logged_in() == TRUE){
 				$this->auth->set_error_message("You are not allowed to access");
@@ -134,11 +134,9 @@ class Vender_profile extends CI_Controller {
 			}
 		}
 
-		if($this->auth->is_vender()){
-			$user_id = $this->auth->get_user_id();
-		}else{
-			$user_id = $this->auth->get_emp_shop_id();
-		}
+
+
+		$user_id = $this->auth->get_user_id();
 
 		$data['vender_detail'] = $this->vender_model->get_vender_detail($user_id);
 		$data['vender_cuisine_detail'] = $this->vender_model->get_vender_cuisine($user_id);

@@ -42,7 +42,7 @@ class Inventory extends CI_Controller {
 
 		foreach($inventory_list as $key => $inventory) {
 
-		       $action_str = "<label class='btn btn-outline-primary btn-sm waves-effect waves-light quantity-stock-update' title='Edit' data-popup='tooltip'> Edit</label>";
+		       $action_str = "<label class='btn btn-outline-primary btn-sm waves-effect waves-light quantity-stock-update' data-toggle='modal' data-target='#myModal' title='Edit' data-popup='tooltip' data-quantity='".$inventory['quantity']."' data-stock='".$inventory['notify_stock']."'> Edit</label>";
 
 		       $quantity_str = "<label class='label-quantity'>". $inventory['quantity']."</label>";
 		       $notify_stock_str = "<label class='label-notify-stock'>". $inventory['notify_stock']."</label>";
@@ -73,6 +73,25 @@ class Inventory extends CI_Controller {
 	    );
 	  	echo json_encode($output);
 	  	exit();
+  	}
+
+  	public function put(){
+  		$item_id = $_POST['id'];
+  		$stock = $_POST['stock'];
+  		$quantity = $_POST['quantity'];
+
+  		if (isset($item_id) && !is_null($item_id) && !empty($item_id)){
+  			$user_data = array(
+  				'quantity' => $quantity,
+  				'notify_stock' => $stock,
+  				 );
+			$this->db->where('id', $item_id);
+			$this->db->update('item', $user_data);
+			echo json_encode(array("is_success" => true));
+			return TRUE;
+  		}else{
+			return FALSE;
+		}
   	}
 
 }

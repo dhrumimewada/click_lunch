@@ -3,7 +3,7 @@
 
 <?php
 $this->load->view('template/header');
-$login_link = base_url()."login-admin";
+$login_link = "#";
 $vender_forgot_link = '#';
 
 if($user_type == 'vender'){
@@ -11,6 +11,10 @@ if($user_type == 'vender'){
     $vender_forgot_link = base_url() . "vender-forgot-password";
 }else if($user_type == 'admin'){
     $login_link = base_url() . "login-admin";
+}
+else if($user_type == 'employee'){
+    $login_link = base_url() . "login-employee";
+    $vender_forgot_link = base_url() . "vender-forgot-password";
 }else{
     $login_link = '#';
 }

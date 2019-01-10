@@ -17,7 +17,7 @@
                     return $.trim(value);
                 }
             },
-            full_name:{
+            username:{
                 required: true,
                 alpha:true,
                 minlength:3,
@@ -34,7 +34,7 @@
                 required: true,
                 equalTo: "#password"
             },
-            contact_no:{
+            mobile_number:{
                 required: true,
                 digits: true,
                 greaterThanZero:true,
@@ -62,7 +62,7 @@
                 required: "The email field is required.",
                 emailValidation: "The email field is invalid."
             },
-            full_name: {
+            username: {
                 required: "The full name field is required.",
                 alpha: "The full name field is not in the correct format.",
                 minlength: jQuery.validator.format("At least {0} characters required"),
@@ -76,7 +76,7 @@
                 required: "The confirm password field is required.",
                 equalTo: "Please enter the same password."
             },
-            contact_no: {
+            mobile_number: {
                 required: "The contact number field is required.",
                 digits: "Enter only numeric value",
                 greaterThanZero: "The contact number field is invalid.",
@@ -132,24 +132,24 @@ $( document ).ready(function() {
     });
 
 
-    var customer_url = base_url+ 'admin/customer/customer_list/';
-    $('.customer_list').DataTable( {
-        "ajax": {
-            url : customer_url,
-            type : 'GET'
-        },
-        "order":[[ 0, "desc" ]],
-        createdRow: function(row, data, dataIndex ) {
-                   $(row).attr("id",data[0]);
-              },
-        "columnDefs": [
-            {
-                "targets": [ 0 ],
-                "visible": false
-            },
-            { "orderable": false, "targets": 4 }
-        ]
-    });
+    // var customer_url = base_url+ 'admin/customer/customer_list/';
+    // $('.customer_list').DataTable( {
+    //     "ajax": {
+    //         url : customer_url,
+    //         type : 'GET'
+    //     },
+    //     "order":[[ 0, "desc" ]],
+    //     createdRow: function(row, data, dataIndex ) {
+    //                $(row).attr("id",data[0]);
+    //           },
+    //     "columnDefs": [
+    //         {
+    //             "targets": [ 0 ],
+    //             "visible": false
+    //         },
+    //         { "orderable": false, "targets": 4 }
+    //     ]
+    // });
 
  });
 

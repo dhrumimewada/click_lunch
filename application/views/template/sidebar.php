@@ -2,6 +2,24 @@
 <?php
 $is_admin = $this->auth->is_admin();
 $is_vender = $this->auth->is_vender();
+$is_employee = $this->auth->is_employee();
+$is_dispatcher = $this->auth->is_dispatcher();
+
+$user_id = $this->auth->get_user_id();
+$user_data = get_loggedin_detail($user_id);
+
+$username = '';
+if($is_admin){
+    $username = $user_data->username;
+}else if($is_vender){
+    $username = $user_data->shop_name;
+}else if($is_employee){
+    $username = $user_data->first_name.' '.$user_data->last_name;
+}else if($is_dispatcher){
+    $username = $user_data->full_name;
+}else{
+
+}
 ?>
 <div class="left side-menu">
     <div class="slimscroll-menu" id="remove-scroll">
@@ -10,8 +28,50 @@ $is_vender = $this->auth->is_vender();
         <div id="sidebar-menu">
             <!-- Left Menu Start -->
             <ul class="metismenu" id="side-menu">
-                <li class="menu-title text-center"><?php echo $_SESSION['session_user']['username']; ?></li>
+                <li class="menu-title text-center"><?php echo $username; ?></li>
                 
+                <?php if($is_dispatcher) {?>
+
+                <li>
+                    <a href="<?php echo base_url().'dispatcher-dashboard'; ?>" class="waves-effect">
+                        <i class="mdi mdi-view-dashboard"></i><span> Dashboard </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Orders <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+                    <ul class="submenu">
+                        <li><a href="<?php echo base_url().'maintenance1'; ?>">New Order</a></li>
+                        <li><a href="<?php echo base_url().'maintenance2'; ?>">Live Order</a></li>
+                        <li><a href="<?php echo base_url().'maintenance3'; ?>">Cancelled</a></li>
+                        <li><a href="<?php echo base_url().'maintenance4'; ?>">Completed</a></li>
+                        <li><a href="<?php echo base_url().'maintenance5'; ?>">See Weekly Order</a></li>
+                        <li><a href="<?php echo base_url().'maintenance6'; ?>">All Order</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="<?php echo base_url().'delivery-boy-list'; ?>" class="waves-effect">
+                        <i class="mdi mdi-truck-delivery"></i><span> Delivery Boy </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Assign Order <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+                    <ul class="submenu">
+                        <li><a href="<?php echo base_url().'maintenance7'; ?>">Single Order</a></li>
+                        <li><a href="<?php echo base_url().'maintenance8'; ?>">Multiple Order</a></li>
+                        <li><a href="<?php echo base_url().'maintenance9'; ?>">Weekly Order</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="<?php echo base_url().'maintenance10'; ?>" class="waves-effect">
+                        <i class="mdi mdi-book-open"></i><span> Reports </span>
+                    </a>
+                </li>
+
+                <?php } ?>
 
                 <?php if($is_admin) {?>
 
@@ -30,8 +90,8 @@ $is_vender = $this->auth->is_vender();
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-content-paste"></i><span> Website Management <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="#">Change Banner</a></li>
-                        <li><a href="#">Change Text</a></li>
+                        <li><a href="<?php echo base_url().'maintenance1'; ?>">Change Banner</a></li>
+                        <li><a href="<?php echo base_url().'maintenance2'; ?>">Change Text</a></li>
                     </ul>
                 </li>
 
@@ -85,9 +145,9 @@ $is_vender = $this->auth->is_vender();
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-content-paste"></i><span> All Order <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="#">Delivery</a></li>
-                        <li><a href="#">Weekly</a></li>
-                        <li><a href="#">Takeout</a></li>
+                        <li><a href="<?php echo base_url().'maintenance3'; ?>">Delivery</a></li>
+                        <li><a href="<?php echo base_url().'maintenance4'; ?>">Weekly</a></li>
+                        <li><a href="<?php echo base_url().'maintenance5'; ?>">Takeout</a></li>
                     </ul>
                 </li>
 
@@ -106,11 +166,21 @@ $is_vender = $this->auth->is_vender();
                     </a>
                 </li>
 
+                <?php
+                }
+                if(($is_vender) || (is_allowed($this->auth->get_role_id(), 'orders'))){
+                ?>
+
                 <li>
                     <a href="<?php echo base_url().'vender-profile'; ?>" class="waves-effect">
                         <i class="mdi mdi-border-color"></i><span> My Profile </span>
                     </a>
                 </li>
+
+                <?php } 
+                 if($is_vender){
+                ?>
+
 
                 <li>
                     <a href="<?php echo base_url().'earning-report'; ?>" class="waves-effect">
@@ -124,6 +194,11 @@ $is_vender = $this->auth->is_vender();
                     </a>
                 </li>
 
+                <?php
+                }
+                if(($is_vender) || (is_allowed($this->auth->get_role_id(), 'item'))) {
+                ?>
+
                 <li>
                     <a href="<?php echo base_url().'item-list'; ?>" class="waves-effect">
                         <i class="mdi mdi-food"></i><span> Products </span>
@@ -131,17 +206,22 @@ $is_vender = $this->auth->is_vender();
                 </li>
 
                 <?php } 
-                if($is_vender) {?>
+                if(($is_vender) || (is_allowed($this->auth->get_role_id(), 'orders'))) {?>
 
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Orders <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="#">Scheduled</a></li>
+                        <li><a href="<?php echo base_url().'maintenance6'; ?>">Scheduled</a></li>
                         <li><a href="<?php echo base_url().'order-processing'; ?>">Processing</a></li>
-                        <li><a href="#">Completed</a></li>
-                        <li><a href="#">Trashed</a></li>
+                        <li><a href="<?php echo base_url().'maintenance7'; ?>">Completed</a></li>
+                        <li><a href="<?php echo base_url().'maintenance8'; ?>">Trashed</a></li>
                     </ul>
                 </li>
+
+                <?php
+                }
+                if(($is_vender) || (is_allowed($this->auth->get_role_id(), 'inventory'))) {
+                ?>
 
                 <li>
                     <a href="<?php echo base_url().'inventory'; ?>" class="waves-effect">
@@ -150,6 +230,10 @@ $is_vender = $this->auth->is_vender();
                 </li>
 
                 
+                <?php
+                }
+                if($is_vender){
+                ?>
 
                 <li>
                     <a href="<?php echo base_url().'employee-list'; ?>" class="waves-effect">
@@ -158,7 +242,7 @@ $is_vender = $this->auth->is_vender();
                 </li>
 
                 <li>
-                    <a href="#" class="waves-effect">
+                    <a href="<?php echo base_url().'maintenance9'; ?>" class="waves-effect">
                         <i class="mdi mdi-currency-usd"></i><span> Payment History </span>
                     </a>
                 </li>
@@ -178,7 +262,7 @@ $is_vender = $this->auth->is_vender();
                 if($is_admin){
                     ?>
                 <li>
-                    <a href="<?php echo base_url().'setup-payment'; ?>" class="waves-effect">
+                    <a href="<?php echo base_url().'maintenance10'; ?>" class="waves-effect">
                         <i class="mdi mdi-credit-card-multiple"></i><span> Setup Payment Portal </span>
                     </a>
                 </li>

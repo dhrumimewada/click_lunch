@@ -60,7 +60,7 @@
                                                     if($field_value == $value['id']){
                                                         $selected = 'selected';
                                                     }
-                                                    $option_name = ($to == 'customer')?$value['full_name']:$value['shop_name'];
+                                                    $option_name = ($to == 'customer')?$value['username']:$value['shop_name'];
                                                     echo "<option value='".$value['id']."' ".$selected.">".$option_name."</option>";
                                                 }
                                                 ?>

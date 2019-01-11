@@ -106,7 +106,7 @@ class Vender_login extends CI_Controller {
 		$this->load->view('forgot_password', $data);
 	}
 
-	public function setpassword($id = NULL) {
+	public function setpassword($token = '') {
 		// print_r(decrypt($id));
 		// exit;
 		$this->auth->clear_messages();
@@ -136,8 +136,19 @@ class Vender_login extends CI_Controller {
 				//echo "<pre>"; print_r($_POST); exit;
 			}
 		}
-		$output_data["id"] = $id;
-		$this->load->view('admin/vender/setpassword',$output_data);	
+
+		if($token != ''){
+
+			
+			$output_data = array('token' => $token);
+			$output_data["user_type"] = 'vender';
+			$this->load->view('admin/vender/setpassword',$output_data);	
+
+		}else{
+			echo "<h2>Server encounter error</h2>";
+			exit;
+		}
+		
 	}
 
 }

@@ -14,7 +14,7 @@ if($user_type == 'vender'){
 }
 else if($user_type == 'employee'){
     $login_link = base_url() . "login-employee";
-    $vender_forgot_link = base_url() . "vender-forgot-password";
+    $vender_forgot_link = base_url() . "employee-forgot-password";
 }else{
     $login_link = '#';
 }

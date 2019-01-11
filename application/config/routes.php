@@ -141,7 +141,7 @@ $route['promocode-status'] = 'promocode/promocode/active_deactive_promocode';
 $route['login-employee'] = 'employee/employee_login/login';
 $route['employee-profile'] = 'employee/employee_profile/my_profile';  
 $route['employee-change-password'] = 'employee/employee_profile/change_password'; 
-// $route['employee-forgot-password'] = 'employee/employee_login/employee_forgot_password'; 
+$route['employee-forgot-password'] = 'employee/employee_login/employee_forgot_password'; 
 
 $route['employee-setpassword/(:any)'] = 'employee/employee_login/setpassword/$1'; 
 $route['employee-setnewpassword'] = 'employee/employee_login/setpassword'; 
@@ -252,3 +252,8 @@ $route['delivery-boy-update'] = 'dispatcher/delivery_boy/put';
 //Vender
 
 $route['home-page'] = 'user/user/index'; 
+
+// API
+$route['customer-activate/(:any)'] = 'customer/customer_login/activate_account/$1';
+$route['customer-reset-password/(:any)'] = 'customer/customer_login/reset_password/$1';
+$route['customer-reset-password'] = 'customer/customer_login/reset_password';

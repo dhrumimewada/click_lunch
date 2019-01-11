@@ -45,7 +45,7 @@ class Employee_login extends CI_Controller {
 		$this->load->view('login', $data);
 	}
 
-	public function setpassword($id = NULL) {
+	public function setpassword($token = '') {
 		$this->auth->clear_messages();
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
@@ -64,16 +64,23 @@ class Employee_login extends CI_Controller {
 				if ($this->form_validation->run() === true){
 					if($this->employee_model->set_password()){
 						$this->session->set_flashdata($this->auth->get_messages_array());
-						redirect(base_url() . "login-vender");
+						redirect(base_url() . "login-employee");
 					}else{
 						$this->session->set_flashdata($this->auth->get_messages_array());
-						redirect(base_url() . "login-vender");
+						redirect(base_url() . "login-employee");
 					}
 				}
 			}
 		}
-		$output_data["id"] = $id;
-		$this->load->view('admin/vender/setpassword',$output_data);	
+
+		if($token != ''){
+			$output_data = array('token' => $token);
+			$output_data["user_type"] = 'employee';
+			$this->load->view('admin/vender/setpassword',$output_data);	
+		}else{
+			echo "<h2>Server encounter error</h2>";
+			exit;
+		}
 	}
 
 }

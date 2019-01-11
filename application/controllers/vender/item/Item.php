@@ -129,8 +129,14 @@ class Item extends CI_Controller {
 		$output_data['variant_groups'] = $this->item_model->get_variant_groups();
 		$output_data['cuisines_data'] = get_cuisine();
 		$output_data['item_type'] = $type;
-		// echo "<pre>";
+
+
+		$item_list = $this->item_model->get_item();
+		$output_data["combo_product_data"] = $item_list;
+
+				// echo "<pre>";
 		// print_r($output_data['item_type']); exit;
+
 		$output_data['main_content'] = "vender/item/post";
 		$this->load->view('template/template',$output_data);	
 	}

@@ -72,25 +72,28 @@ class Employee_model extends CI_Model {
 		$this->db->trans_begin();
 		$return_value = FALSE;
 
-		$this->db->select('deleted_at');
+		$this->db->select('id');
 		$this->db->from('employee');
-		$this->db->where('id', decrypt($this->input->post("id")));
-		$this->db->where('deleted_at !=', NULL);
+		$this->db->where('activation_token', $this->input->post("token"));
+		$this->db->where('deleted_at', NULL);
+		$this->db->where('status', 0);
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
+
+			$user_data = array(
+						'password' => password_hash($this->input->post("password"), PASSWORD_DEFAULT),
+						'activation_token' => '',
+						'status' => '1',
+						'updated_at' => date('Y-m-d H:i:s')
+					);
+			$this->db->where("activation_token",$this->input->post("token"));
+			$this->db->update("employee", $user_data);
+				
+		}else{
 			$this->auth->set_error_message("Something went wrong! Contact admin for more.");
 			return $return_value;
 		}
-
-
-		$user_data = array(
-						'password' => password_hash($this->input->post("password"), PASSWORD_DEFAULT),
-						'status' => 1,
-						'updated_at' => date('Y-m-d H:i:s')
-					);
-		$this->db->where("id", decrypt($this->input->post("id")));
-		$this->db->update("employee", $user_data);
-
+	
 		if ($this->db->trans_status() === FALSE) {
 			$this->db->trans_rollback();
 			$this->auth->set_error_message("Error into updating data");

@@ -3,10 +3,12 @@
 
 <?php
 $this->load->view('template/header');
- if($is_employee){
+ if($user_type == 'employee'){
     $setpw_link = base_url()."employee-setnewpassword";
- }elseif ($is_vender) {
+ }elseif ($user_type == 'vender') {
     $setpw_link = base_url()."vender-setnewpassword";
+ }elseif ($user_type == 'customer') {
+    $setpw_link = base_url()."customer-reset-password";
  }else{
     $setpw_link = '#';
  }
@@ -57,7 +59,7 @@ if (isset($temp_value) && !empty($temp_value)) {
                                 </div>
                             </div>
 
-                            <input type="hidden" name="id" value="<?php echo $id; ?>">
+                            <input type="hidden" name="token" value="<?php echo $token; ?>">
 
                             <div class="form-group row m-t-20">
                                 <div class="col-12 text-center">

@@ -38,6 +38,33 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
                                     <h4 class="mt-0 mb-0 header-title"><?php echo $item_type; ?> Information</h4>
                                     <hr class="mt-1 mb-3">
                                 </div>
+                            </div>
+                            <?php
+                            if($item_type == 'Combo'){ 
+                            ?>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="required"><?php echo $item_type; ?> Products</label>
+                                        <div>
+                                            <select class="select2 form-control select2-multiple" multiple="multiple" multiple data-placeholder="Choose product that you are adding..." name="combo_products[]">
+                                                <?php 
+                                                
+                                                foreach ($combo_product_data as $key => $value) {
+                                                    $selected = '';
+                                                    echo "<option value='".$value['id']."'>".$value['name']."</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('cuisines[]'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php } ?>
+                            <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label class="required"><?php echo $item_type; ?> Name</label>

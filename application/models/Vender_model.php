@@ -98,7 +98,7 @@ class Vender_model extends CI_Model {
 
 		if($response){
 
-			$activation_token = encrypt($user_id);
+			$activation_token = bin2hex(random_bytes(20));
 			$email_var_data["vender_name"] = $this->input->post("vender_name");
 			$email_var_data["activation_link"] = base_url() . 'vender-setpassword/'. $activation_token;
 
@@ -114,6 +114,10 @@ class Vender_model extends CI_Model {
 		if(!$mail){
 			$this->auth->set_error_message("Error into sending mail");
 			return FALSE;
+		}else{
+			$token_array = array('activation_token' => $activation_token);
+			$this->db->where("id", $user_id);
+			$this->db->update("shop", $token_array);
 		}
 
 

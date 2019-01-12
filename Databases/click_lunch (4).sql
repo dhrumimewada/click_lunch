@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 11, 2019 at 01:37 PM
+-- Generation Time: Jan 12, 2019 at 08:24 AM
 -- Server version: 5.6.41
 -- PHP Version: 7.0.32
 
@@ -45,7 +45,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `email`, `password`, `profile_picture`, `username`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'admin@eww.com', '$2y$10$xZzqapv6XY78duxbimKIFuYbyu/fvJHBQfxOmywZV8tNWMQWfml.i', 'admin_1545288749.jpg', 'dhrumi', 1, '2018-10-20 04:54:29', '2018-12-20 02:22:30', NULL),
+(1, 'admin@eww.com', '$2y$10$xZzqapv6XY78duxbimKIFuYbyu/fvJHBQfxOmywZV8tNWMQWfml.i', 'admin_1545288749.jpg', 'Sunitha', 1, '2018-10-20 04:54:29', '2019-01-11 14:03:31', NULL),
 (2, 'admin@excellentwebworld.com', '$2y$10$PFOMzMbtADnwHKHu79B6i.vztg1TMQeJhrJlkorzFGkYdaSJi/Ghe', '', 'john deo', 1, '2018-10-24 13:45:49', NULL, NULL),
 (3, '6777@admin.com', '$2y$10$Sc8dnEUJ1eUmaRhOzCUoZ.F.yp9adaQh7mnwne7UMSJHcGl7cqx9u', 'admin_1547011876.jpg', 'test', 1, '2018-12-20 11:19:32', '2019-01-09 01:01:16', NULL),
 (4, 'CoolThunder@mailinator.com', '$2y$10$0xr4KB0YuGkrpDHx35ZaP..w3unC4Nnigh/Y/82IP5X7PIfrRBqu.', 'admin_1547204567.jpg', 'Miss Liby', 1, '2019-01-11 11:02:47', NULL, NULL);
@@ -124,8 +124,9 @@ INSERT INTO `cuisine` (`id`, `cuisine_name`, `cuisine_picture`, `is_active`, `cr
 (10, 'Mediterranean', 'cuisine_1541053458.jpg', 1, '2018-11-06 10:03:47', NULL, NULL),
 (11, 'British', 'cuisine_1541053458.jpg', 1, '2018-11-06 10:03:45', NULL, NULL),
 (12, 'Vegan', 'cuisine_1541053458.jpg', 1, '2018-11-06 04:57:53', '2018-11-01 01:55:30', NULL),
-(13, 'Sea Food', 'cuisine_1542024749.jpg', 1, '2018-11-23 04:59:45', '2018-11-23 00:29:45', NULL),
-(14, 'Chinese123', '', 1, '2018-11-12 12:13:27', NULL, '2018-11-12 07:43:27');
+(13, 'Sea Food', 'cuisine_1547215722.jpg', 1, '2019-01-11 15:52:20', '2019-01-11 15:28:41', NULL),
+(14, 'Chinese123', '', 1, '2018-11-12 12:13:27', NULL, '2018-11-12 07:43:27'),
+(15, 'Japanese', 'cuisine_1547217107.jpg', 1, '2019-01-11 14:33:06', NULL, '2019-01-11 14:33:06');
 
 -- --------------------------------------------------------
 
@@ -167,7 +168,7 @@ CREATE TABLE `customer` (
 
 INSERT INTO `customer` (`id`, `email`, `password`, `profile_picture`, `username`, `address`, `mobile_number`, `dob`, `zipcode`, `device_type`, `device_token`, `social_id`, `social_type`, `status`, `created_at`, `updated_at`, `deleted_at`, `gender`, `latitude`, `longitude`, `remember_token`, `activation_token`, `daily_schedule_mail`, `cut_off_notification`, `delivery_notification`) VALUES
 (6, 'DullRat@mailinator.com', '$2y$10$s5xq4SSBkVvXZow/pR6f9.mNUDyTNaonrZSsLwjTNPI27tahx3ASO', 'customer_1546514755.jpg', 'Dull Rat', 'city center 2, science city', '8866580502', '0000-00-00', '', 0, '', 0, '', 1, '2019-01-03 06:55:55', NULL, NULL, '', '', '', 'aQ==', '', 1, 1, 1),
-(25, 'PieThunder@mailinator.com', '$2y$10$TJ0cFGhfYRvD.9OSimFFAekIE4ZLFHiUi0SKaZmemq4p9fGp1m7BG', 'customer_1547014012.jpg', 'Pie Thunder', 'Dallas-Fort Worth Metropolitan Area, TX, USA', '354645654546', '0000-00-00', '', 0, '', 0, '', 1, '2019-01-09 01:35:17', '2019-01-09 01:36:52', NULL, '', '', '', '', '', 1, 1, 1);
+(25, 'PieThunder@mailinator.com', '$2y$10$TJ0cFGhfYRvD.9OSimFFAekIE4ZLFHiUi0SKaZmemq4p9fGp1m7BG', 'customer_1547014012.jpg', 'Pie Thunder', 'Dallas-Fort Worth Metropolitan Area, TX, USA', '354645654546', '0000-00-00', '', 0, '', 0, '', 1, '2019-01-09 01:35:17', '2019-01-09 01:36:52', NULL, '', '', '', '', '', 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -178,8 +179,7 @@ INSERT INTO `customer` (`id`, `email`, `password`, `profile_picture`, `username`
 CREATE TABLE `delivery_address` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
-  `address` text NOT NULL,
-  `house_no` int(11) NOT NULL,
+  `house_no` varchar(255) NOT NULL,
   `street` varchar(255) NOT NULL,
   `city` varchar(255) NOT NULL,
   `zipcode` varchar(255) NOT NULL,
@@ -190,6 +190,14 @@ CREATE TABLE `delivery_address` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `delivery_address`
+--
+
+INSERT INTO `delivery_address` (`id`, `customer_id`, `house_no`, `street`, `city`, `zipcode`, `delivery_instruction`, `address_type`, `nickname`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(2, 25, 'f33', 'sursagar tower', '', '380016', 'No inst ', '2', 'bunu', '2019-01-12 08:15:14', NULL, NULL),
+(3, 25, 'f33', 'fgf', '', '380016', 'No inst ', '2', 'bunu', '2019-01-12 08:15:14', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -254,7 +262,7 @@ INSERT INTO `delivery_dispatcher` (`id`, `email`, `password`, `profile_picture`,
 (1, 'dispatcher@gmail.com', '', '', 'dispatcher one', '', '', 2, '2019-01-02 09:31:53', '2019-01-03 02:53:35', NULL),
 (2, 'dispatcher2@gmail.com', '', '', 'dispatcher two', '', '', 2, '2019-01-03 09:31:53', NULL, '2019-01-02 06:49:34'),
 (3, 'deliverydispatcher@gmail.com', '$2y$10$5bllpD4EDDtQirrFD4Jr7u.6Osz.gQx6J.7pOr8rDvW5/CzNZErgG', 'dispatcher_1547186657.png', 'Deliverydispatcher Three', '5656657567567', 'DSS and E Middle Tpke, Manchester, CT, USA', 1, '2019-01-02 07:07:22', '2019-01-11 06:04:17', NULL),
-(4, 'deliverydispatcher4@excellentwebworld.in', '$2y$10$0F0OJoaUa/fZ73GKY784wuGWQz18vqCKOXThS6TGX9aDegu0fO7Fe', 'dispatcher_1547206327.jpg', 'Delivery Four', '43534543534', 'fffff', 1, '2019-01-02 07:09:10', '2019-01-11 11:32:07', NULL);
+(4, 'deliverydispatcher4@excellentwebworld.in', '$2y$10$0F0OJoaUa/fZ73GKY784wuGWQz18vqCKOXThS6TGX9aDegu0fO7Fe', 'dispatcher_1547206327.jpg', 'Delivery Four', '43534543534', 'fffff', 1, '2019-01-02 07:09:10', '2019-01-12 03:12:44', NULL);
 
 -- --------------------------------------------------------
 
@@ -319,7 +327,7 @@ INSERT INTO `employee` (`id`, `email`, `password`, `role`, `shop_id`, `first_nam
 (11, 'ghj@ghj.ghj', '', 2, 52, 'Gjghj', 'Toee', '', '', 0, '', '', '2018-11-12 07:30:20', NULL, '2018-11-12 03:00:20'),
 (12, 'PieRascal@mailinator.com', '$2y$10$zG.b1BXPljcFFCsQAeZ2yuGAFKQjFUPb.c7Bd7uJSdK90C/WrxUhS', 2, 52, 'Pie', 'Rasca', 'employee_1547029587.jpg', '', 1, '', '', '2019-01-09 10:28:32', '2019-01-09 05:58:32', NULL),
 (13, 'fragrant@yopmail.com', '$2y$10$9H2n2v7cI.lNp3E0JvAJoerpKhmOQxebMeWD2rnlcEETivT5B3nky', 1, 58, 'Fragrant', 'One', 'employee_1547204205.jpg', '', 1, '', '', '2019-01-11 10:57:18', NULL, NULL),
-(14, 'PieMan@mailinator.com', '$2y$10$EglDV12Ci6XZgEwIIk6PD.jxAomuzD6ke4Vl8xOEiwuU4fF/CoF3.', 2, 60, 'Employee', 'Jr', 'employee_1547208652.jpg', '', 1, '', '', '2019-01-11 12:11:35', '2019-01-11 12:11:35', NULL);
+(14, 'PieMan@mailinator.com', '$2y$10$LKdrd2NF.EQekouM6LZTuODk16IyOwzMB2W6el0Q0usX0PQF9YMGW', 2, 60, 'Employee', 'Jr', 'employee_1547208652.jpg', '', 1, '', '', '2019-01-12 06:18:08', '2019-01-12 06:18:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -526,7 +534,8 @@ INSERT INTO `promocode` (`id`, `shop_id`, `item_id`, `promocode`, `amount`, `dis
 (20, '52', 0, 'ACDF', '12.22', '0', '2018-11-15', '2018-11-24', 0, '17.12', 1, '2018-11-12 05:34:13', '2018-11-12 05:40:02', NULL),
 (21, '52', 0, 'GET577', '2', '0', '2018-11-30', '2018-12-01', 0, '496.00', 1, '2018-11-12 05:27:16', NULL, NULL),
 (22, '52', 0, 'KOP', '12.22', '0', '2018-11-15', '2018-11-24', 0, '17.12', 1, '2018-11-12 05:34:13', '2018-11-12 05:40:02', NULL),
-(23, '', 0, 'GET507', '99', '1', '2018-12-31', '2019-01-05', 0, '80', 1, '2018-12-21 02:11:06', NULL, NULL);
+(23, '', 0, 'GET507', '99', '1', '2018-12-31', '2019-01-05', 0, '80', 0, '2018-12-21 02:11:06', NULL, NULL),
+(24, '', 0, 'TEST', '101', '1', '2019-01-12', '2019-01-19', 0, '0', 1, '2019-01-12 03:21:26', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -626,7 +635,7 @@ INSERT INTO `shop` (`id`, `email`, `password`, `shop_name`, `percentage`, `vende
 (57, 'SmartDoody@mailinator.com', '$2y$10$CjPL17v5/rIGScMxRYs8x.9VT0K84Z109Z9niH80PKnJSOPcj//Oa', 'Smart Doody', '', 'Doody', 'SMA57', 'vender_1547103263.jpg', 'Hynes Convention Center (Boylston Street and Gloucester Street), Boston, MA, USA', '02199', 'Suffolk County', 'Massachusetts', 'United States', '42.3483041', '-71.08359259999997', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1, '', '', '2019-01-10 02:23:39', '2019-01-10 02:24:23', NULL),
 (58, 'vadilal@yopmail.com', '$2y$10$9H2n2v7cI.lNp3E0JvAJoerpKhmOQxebMeWD2rnlcEETivT5B3nky', 'Vadilal Eatery', '', 'Vadilal', 'VAD58', 'vender_1547204136.png', 'Ghramville Road, Myrtle Beach, SC, USA', '33598', 'Hillsborough County', 'Florida', 'United States', '33.7569751', '-78.92280299999999', 'This is test This is testThis is testThis is testThis is testThis is testThis is testThis is test This is testThis is testThis is test This is testThis is testThis is test', '7745871466', '7745871466', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', '100', '0,2', '0', '545-55-5555', 0, '', '', 1, '', '', '2019-01-11 10:50:17', NULL, NULL),
 (59, 'BusyBoy@mailinator.com', '', 'Havmore', '', 'Mr  Patel', 'HAV59', '', 'Hynes Convention Center, Boston, MA, USA', '02115', 'Suffolk County', 'Massachusetts', 'United States', '', '', '', '7745871466', '7745871466', 'www.test.com', '', '', '', '', '0,1,2', '', '777-77-7777', 0, '', '', 0, '', '', '2019-01-11 11:04:12', NULL, NULL),
-(60, 'bistro@mailinator.com', '$2y$10$.ruhfuk7Lnqk.5O3iEq9TeBybzgeKRd3kLIQZR9eFEJDe9OTokP2G', 'Cafe Bistro', '', 'Mr Ristretto', 'CAF60', 'vender_1547208493.jpg', 'FGCU South Bridge Loop Road, Fort Myers, FL, USA', '33965', 'Lee County', 'Florida', 'United States', '26.4586806', '-81.76785970000003', 'Find the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in AhmedabadFind the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in Ahmedabad Find the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in Ahmedabad', '8866541256', '8445687499', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', '', '', '100', '0,1,2', '1', '', 0, '', 'brochure_1547208593.png', 1, '', '', '2019-01-11 12:07:06', '2019-01-11 12:08:13', NULL);
+(60, 'bistro@mailinator.com', '$2y$10$LgPaANV6eu.2z8qblfoMf.qeNS8WVrfhEGBBiT8YBL6AJfVsCmGUy', 'Cafe Bistro', '', 'Mr Ristretto', 'CAF60', 'vender_1547208493.jpg', 'FGCU South Bridge Loop Road, Fort Myers, FL, USA', '33965', 'Lee County', 'Florida', 'United States', '26.4586806', '-81.76785970000003', 'Find the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in AhmedabadFind the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in Ahmedabad Find the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in Ahmedabad', '8866541256', '8445687499', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', '', '', '100.00', '0,1,2', '1.00', '', 0, '', 'brochure_1547208593.png', 1, '', '', '2019-01-11 12:07:06', '2019-01-12 06:14:25', NULL);
 
 -- --------------------------------------------------------
 
@@ -664,13 +673,13 @@ INSERT INTO `shop_availibality` (`id`, `shop_id`, `day`, `from_time`, `to_time`,
 (311, 58, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-11 10:55:36'),
 (312, 58, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-11 10:55:36'),
 (313, 58, 'Saturday', '09:00 AM', '02:00 PM', 0, 0, '2019-01-11 10:55:36'),
-(314, 60, 'Sunday', '', '', 0, 1, '2019-01-11 12:09:53'),
-(315, 60, 'Monday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-11 12:09:53'),
-(316, 60, 'Tuesday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-11 12:09:53'),
-(317, 60, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-11 12:09:53'),
-(318, 60, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-11 12:09:53'),
-(319, 60, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-11 12:09:53'),
-(320, 60, 'Saturday', '07:00 PM', '11:30 PM', 0, 0, '2019-01-11 12:09:53');
+(328, 60, 'Sunday', '', '', 0, 1, '2019-01-12 06:30:02'),
+(329, 60, 'Monday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-12 06:30:02'),
+(330, 60, 'Tuesday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-12 06:30:02'),
+(331, 60, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-12 06:30:02'),
+(332, 60, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-12 06:30:02'),
+(333, 60, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-12 06:30:02'),
+(334, 60, 'Saturday', '07:00 PM', '11:30 PM', 0, 0, '2019-01-12 06:30:02');
 
 -- --------------------------------------------------------
 
@@ -692,7 +701,7 @@ INSERT INTO `shop_cuisines` (`id`, `shop_id`, `cuisine_id`) VALUES
 (69, 52, 3),
 (70, 52, 6),
 (71, 58, 2),
-(72, 60, 3);
+(74, 60, 3);
 
 -- --------------------------------------------------------
 
@@ -764,7 +773,8 @@ INSERT INTO `variant_group` (`id`, `shop_id`, `name`, `selection`, `availability
 (9, 52, 'Wat\\\"er', 0, 0, '2018-11-12 13:47:05', NULL, '2018-11-12 09:17:05'),
 (10, 52, 'Wate\\\'r', 0, 0, '2018-11-12 13:47:07', NULL, '2018-11-12 09:17:07'),
 (11, 52, 'Gg\\\'l', 0, 0, '2018-11-12 14:05:55', NULL, '2018-11-12 09:35:55'),
-(12, 58, 'Toppings', 0, 0, '2019-01-11 11:28:30', NULL, NULL);
+(12, 58, 'Toppings', 0, 0, '2019-01-11 11:28:30', NULL, NULL),
+(13, 58, 'Vgroup', 1, 1, '2019-01-12 03:53:46', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1001,7 +1011,7 @@ ALTER TABLE `city`
 -- AUTO_INCREMENT for table `cuisine`
 --
 ALTER TABLE `cuisine`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -1013,7 +1023,7 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `delivery_address`
 --
 ALTER TABLE `delivery_address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `delivery_boy`
@@ -1085,7 +1095,7 @@ ALTER TABLE `photos`
 -- AUTO_INCREMENT for table `promocode`
 --
 ALTER TABLE `promocode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `rating`
@@ -1109,13 +1119,13 @@ ALTER TABLE `shop`
 -- AUTO_INCREMENT for table `shop_availibality`
 --
 ALTER TABLE `shop_availibality`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=321;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=335;
 
 --
 -- AUTO_INCREMENT for table `shop_cuisines`
 --
 ALTER TABLE `shop_cuisines`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT for table `shop_tags`
@@ -1139,7 +1149,7 @@ ALTER TABLE `tag`
 -- AUTO_INCREMENT for table `variant_group`
 --
 ALTER TABLE `variant_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `variant_items`

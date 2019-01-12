@@ -56,16 +56,9 @@ class Vender_login extends CI_Controller {
 		$this->db->where('deleted_at', NULL);
 		$this->db->where('status', 1);
 		$this->db->from('shop');
-		$sql_query1 = $this->db->get();
+		$sql_query = $this->db->get();
 
-		$this->db->select('email');
-		$this->db->where('email', $str);
-		$this->db->where('deleted_at', NULL);
-		$this->db->where('status', 1);
-		$this->db->from('employee');
-		$sql_query2 = $this->db->get();
-
-		if (($sql_query1->num_rows() > 0) || ($sql_query2->num_rows() > 0)) {
+		if (($sql_query->num_rows() > 0)) {
 			return TRUE;
 		} else {
 			$this->form_validation->set_message('accountexists', "Email not found.");
@@ -88,12 +81,7 @@ class Vender_login extends CI_Controller {
 
 				$this->form_validation->set_rules($validation_rules);
 				if ($this->form_validation->run() === true) {
-					$user_type = get_user_type($this->input->post('email'));
-					if($user_type == FALSE){
-						$this->session->set_flashdata('Email not found.');
-						redirect(base_url() . "vender-forgot-password");
-					}
-					if($this->auth->password_recovery($this->input->post('email'),$user_type)){
+					if($this->auth->password_recovery($this->input->post('email'),'vender')){
 						$this->session->set_flashdata($this->auth->get_messages_array());
 						redirect(base_url() . "vender-forgot-password");
 					}else{
@@ -103,7 +91,8 @@ class Vender_login extends CI_Controller {
 				} 
 			}
 		}
-		$this->load->view('forgot_password', $data);
+		$output_data["user_type"] = 'vender';
+		$this->load->view('forgot_password', $output_data);
 	}
 
 	public function setpassword($token = '') {
@@ -148,7 +137,50 @@ class Vender_login extends CI_Controller {
 			echo "<h2>Server encounter error</h2>";
 			exit;
 		}
-		
+	}
+
+	public function vender_reset_password($token = '') {
+		// print_r(decrypt($id));
+		// exit;
+		$this->auth->clear_messages();
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
+
+		if (isset($_POST) && !empty($_POST)){
+
+			if (isset($_POST['submit'])){
+
+				$validation_rules = array(
+					
+					array('field' => 'password', 'label' => 'password', 'rules' => 'trim|required|min_length[6]'),
+					array('field' => 'cpassword', 'label' => 'confirm password', 'rules' => 'trim|required|matches[password]')
+				);
+
+				$this->form_validation->set_rules($validation_rules);
+				if ($this->form_validation->run() === true){
+					if($this->vender_model->reset_password()){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "login-vender");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "login-vender");
+					}
+				}
+				//echo "<pre>"; print_r($_POST); exit;
+			}
+		}
+
+		if($token != ''){
+
+			
+			$output_data = array('token' => $token);
+			$output_data["user_type"] = 'vender';
+			$this->load->view('vender/reset_password',$output_data);	
+
+		}else{
+			echo "<h2>Server encounter error</h2>";
+			exit;
+		}
 	}
 
 }

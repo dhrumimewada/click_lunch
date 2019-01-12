@@ -147,7 +147,7 @@ class Auth {
 
 	public function password_recovery($email, $user_type) {
 		if ($this->CI->auth_model->password_recovery($email,$user_type)) {
-			$this->CI->auth_model->set_status_message('Password updated successfully.');
+			$this->CI->auth_model->set_status_message('Password recovery mail successfully sent.');
 			return TRUE;
 		}
 		$this->CI->auth_model->set_error_message('Unable to send recovery mail.');

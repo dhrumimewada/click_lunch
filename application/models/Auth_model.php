@@ -201,36 +201,12 @@ class Auth_model extends CI_Model {
 
 		$this->load->library('parser');
 
-		$this->db->select('id,email');
+		$remember_token = bin2hex(random_bytes(20));
 
 		if($user_type == 'vender'){
-			$this->db->from('shop');
+			$email_var_data["recovery_link"] = base_url() . 'vender-reset-password/'. $remember_token;
 		}elseif($user_type == 'employee'){
-			$this->db->from('employee');
-		}else{
-			$this->auth->set_error_message("User not found. Error into sending mail.");
-			return FALSE;
-		}
-		
-		$this->db->where('email', $email);
-		$this->db->where("deleted_at", NULL);
-		$this->db->where("status", 1);
-		$sql_query = $this->db->get();
-		$return_data = $sql_query->row();
-
-		if (!isset($return_data) && empty($return_data)){
-			$this->auth->set_error_message("User not found. Error into sending mail.");
-			return FALSE;
-		}
-
-
-		$activation_token = encrypt($return_data->id);
-		$email_var_data["vender_name"] = $this->input->post("vender_name");
-
-		if($user_type == 'vender'){
-			$email_var_data["recovery_link"] = base_url() . 'vender-setpassword/'. $activation_token;
-		}elseif($user_type == 'employee'){
-			$email_var_data["recovery_link"] = base_url() . 'employee-setpassword/'. $activation_token;
+			$email_var_data["recovery_link"] = base_url() . 'employee-reset-password/'. $remember_token;
 		}else{
 			$email_var_data["recovery_link"] = '';
 		}
@@ -260,6 +236,17 @@ class Auth_model extends CI_Model {
 		if(!$mail){
 			$this->auth->set_error_message("Error into sending mail");
 			return FALSE;
+		}else{
+
+			$token_array = array('remember_token' => $remember_token);
+			$this->db->where("email", $email);
+
+			if($user_type == 'vender'){
+				$this->db->update("shop", $token_array);
+			}elseif($user_type == 'employee'){
+				$this->db->update("employee", $token_array);
+			}else{
+			}
 		}
 		return TRUE;
 

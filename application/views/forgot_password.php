@@ -6,8 +6,20 @@ $this->load->view('template/header');
 $forgot_link = '#';
 $vender_login_link = '#';
 
-    $forgot_link = base_url() . "vender-forgot-password";
+
+ if($user_type == 'employee'){
+
+    $forgot_link = base_url()."employee-forgot-password";
+    $vender_login_link = base_url() . "login-employee";
+
+ }elseif ($user_type == 'vender') {
+
+    $forgot_link = base_url()."vender-forgot-password";
     $vender_login_link = base_url() . "login-vender";
+
+ }else{
+ }
+
 ?>
 
 <body>

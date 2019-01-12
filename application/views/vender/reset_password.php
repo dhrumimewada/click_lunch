@@ -4,9 +4,9 @@
 <?php
 $this->load->view('template/header');
  if($user_type == 'employee'){
-    $setpw_link = base_url()."employee-setnewpassword";
+    $setpw_link = base_url()."employee-reset-password";
  }elseif ($user_type == 'vender') {
-    $setpw_link = base_url()."vender-setnewpassword";
+    $setpw_link = base_url()."vender-reset-password";
  }elseif ($user_type == 'customer') {
     $setpw_link = base_url()."customer-reset-password";
  }else{

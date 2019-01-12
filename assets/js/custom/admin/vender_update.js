@@ -118,7 +118,7 @@
                 valid_taxno:true
             },
             'payment_mode[]': {
-                required:false
+                required:true
             },
             profile_picture:{
                 accept: "image/jpg, image/jpeg, image/png",

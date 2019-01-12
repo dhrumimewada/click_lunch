@@ -80,6 +80,7 @@ $route['vender-profile'] = 'vender/vender_profile/my_profile';
 $route['vender-change-password'] = 'vender/vender_profile/change_password'; 
 $route['vender-forgot-password'] = 'vender/vender_login/vender_forgot_password'; 
 $route['vender-reset-password/(:any)'] = 'vender/vender_login/vender_reset_password/$1'; 
+$route['vender-reset-password'] = 'vender/vender_login/vender_reset_password'; 
 $route['vender-logout'] = 'vender/vender_login/logout'; 
 
 $route['vender-dashboard'] = 'vender/dashboard/vender_dashboard';  
@@ -146,6 +147,9 @@ $route['employee-forgot-password'] = 'employee/employee_login/employee_forgot_pa
 $route['employee-setpassword/(:any)'] = 'employee/employee_login/setpassword/$1'; 
 $route['employee-setnewpassword'] = 'employee/employee_login/setpassword'; 
 
+$route['employee-reset-password/(:any)'] = 'employee/employee_login/employee_reset_password/$1'; 
+$route['employee-reset-password'] = 'employee/employee_login/employee_reset_password'; 
+
 $route['employee-logout'] = 'vender/vender_login/logout'; 
 
 
@@ -158,7 +162,7 @@ $route['login-admin'] = 'admin/admin_login/login';
 $route['logout-admin'] = 'admin/admin_login/logout';  
 
 $route['vender-setpassword/(:any)'] = 'vender/vender_login/setpassword/$1'; 
-$route['vender-setnewpassword'] = 'vender/vender_login/setpassword'; 
+$route['vender-setnewpassword'] = 'vender/vender_login/setpassword';  
 
 $route['customer-setpassword/(:any)'] = 'customer/customer_login/setpassword/$1'; 
 $route['customer-setnewpassword'] = 'customer/customer_login/setpassword';

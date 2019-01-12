@@ -1,3 +1,8 @@
+ <style type="text/css" media="screen">
+    .custom-control-input{
+        position: absolute !important;
+    } 
+ </style>
  <!-- Start content -->
  <?php
  $post_link = base_url().'vender-add';
@@ -319,7 +324,7 @@
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Payment</label>
+                                        <label for="" class="required">Payment</label>
                                         <div class="d-block mt-2">
                                             <?php
     $field_value = '';

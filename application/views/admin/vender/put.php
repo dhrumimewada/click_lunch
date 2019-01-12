@@ -1,3 +1,8 @@
+ <style type="text/css" media="screen">
+    .custom-control-input{
+        position: absolute !important;
+    } 
+ </style>
  <!-- Start content -->
  <?php
  $put_link = base_url().'vender-update/'.$id;
@@ -382,7 +387,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Payment</label>
+                                        <label for="" class="required">Payment</label>
                                         <div class="d-block mt-2">
                                             <?php
     $field_value = '';

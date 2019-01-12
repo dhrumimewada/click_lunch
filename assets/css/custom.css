@@ -311,3 +311,6 @@ a:hover .topbar-name{
 .swal2-container{
   padding: 0 !important;
 }
+.enlarged #wrapper .left.side-menu #sidebar-menu > ul > li > a:hover, .enlarged #wrapper .left.side-menu #sidebar-menu > ul > li > a:active, .enlarged #wrapper .left.side-menu #sidebar-menu > ul > li > a:focus{
+  background-color: #dee2e6;
+}

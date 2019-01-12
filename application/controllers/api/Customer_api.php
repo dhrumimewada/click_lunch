@@ -138,7 +138,7 @@ class Customer_api extends REST_Controller {
                         $path = BASE_URL().'email_template/register.html';
                         $template = file_get_contents($path);
 
-                        $activation_token = encrypt($insert_id);
+                        $activation_token = bin2hex(random_bytes(20));
                         $activate_url = base_url() . 'customer-activate/'. $activation_token;
                         $template = str_replace('##ACCOUNTACIVATIONURL##', $activate_url, $template);
 
@@ -237,6 +237,35 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
+    public function logout_post(){
+        
+        $postFields['customer_id'] = $_POST['customer_id'];
+
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+            $where = array('id' => intval($_POST['customer_id']), 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';   
+            }else{
+                $data = array('device_token' => '', 'device_type' => '0', 'latitude' => '','longitude' => '' );
+                $this->db->where('id',$_POST['customer_id']);
+                if($this->db->update('customer',$data)){
+                    $response['status'] = true;
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
     public function change_password_post(){
         $postFields['current_password'] = $_POST['current_password'];        
         $postFields['new_password'] = $_POST['new_password']; 
@@ -300,7 +329,7 @@ class Customer_api extends REST_Controller {
                 $path = BASE_URL().'email_template/reset_password.html';
                 $template = file_get_contents($path);
 
-                $remember_token = encrypt($user['id']);
+                $remember_token = bin2hex(random_bytes(20));
                 $reset_url = base_url() . 'customer-reset-password/'. $remember_token;
 
                 $template = str_replace('##RESETPWURL##', $reset_url, $template);
@@ -330,6 +359,175 @@ class Customer_api extends REST_Controller {
             
         }
         else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function myprofile_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+                $response['status'] = true;
+                $response['profile'] = $user;
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function setting_post($value=''){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $postFields['setting_name'] = $_POST['setting_name']; 
+        $postFields['status'] = $_POST['status']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $user_data = array($_POST['setting_name'] => $_POST['status'] );
+                $this->db->where('id',$_POST['customer_id']);
+                if($this->db->update('customer',$user_data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Setting updated successfully';
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            }
+            
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function my_delivery_address_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $where = array('customer_id' => $_POST['customer_id'],'deleted_at' => NULL);
+                $delivery_addresses = $this->db->get_where('delivery_address',$where)->result_array();
+
+                $response['status'] = true;
+                $response['delivery_addresses'] = $delivery_addresses;
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function add_delivery_address_post($value=''){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $postFields['house_no'] = $_POST['house_no']; 
+        $postFields['street'] = $_POST['street']; 
+        $postFields['zipcode'] = $_POST['zipcode']; 
+        $postFields['address_type'] = $_POST['address_type']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $delivery_address_data = array(
+                    'customer_id' => $_POST['customer_id'],
+                    'house_no' => $_POST['house_no'],
+                    'street' => $_POST['street'],
+                    'zipcode' => $_POST['zipcode'],
+                    'address_type' => $_POST['address_type']
+                );
+
+                if(isset($_POST['delivery_instruction'])){
+                    $delivery_address_data['delivery_instruction'] = $_POST['delivery_instruction'];
+                }
+                if(isset($_POST['nickname'])){
+                    $delivery_address_data['nickname'] = $_POST['nickname'];
+                }
+
+                if($this->db->insert('delivery_address',$delivery_address_data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Delivery address added successfully';
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            }
+            
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function delete_delivery_address_post($value=''){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $postFields['delivery_address_id'] = $_POST['delivery_address_id']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $data = array('deleted_at' => date('Y-m-d H:i:s'));
+
+                $this->db->where('customer_id',$_POST['customer_id']);
+                $this->db->where('id',$_POST['delivery_address_id']);
+
+                if($this->db->update('delivery_address',$data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Delivery address removed successfully';
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            }
+            
+        }else{
             $response['status'] = false;
             $response['message'] = $errorPost;
         }

@@ -5,7 +5,11 @@
         successClass: 'validation-valid-label',
         // Different components require proper error label placement
         errorPlacement: function(error, element) {
-                error.insertAfter(element);
+                if (element.hasClass('upload-img')) {
+                    error.appendTo(element.parent());
+                }else{
+                    error.insertAfter(element);
+                }    
                 
         },
         validClass: "validation-valid-label",
@@ -84,8 +88,9 @@
 $( document ).ready(function() {
      console.log("register");
 
-    $(document).on('click', '.mdi-camera', function(){
+    $(document).on('click', '.upload-txt, #blah', function(){
         $('#imgInp').click();
+        $('#blah').attr('src', 'https://bootdey.com/img/Content/avatar/avatar6.png');
         return false;
     });
 

@@ -60,7 +60,7 @@ class Vender_model extends CI_Model {
 						'contact_no1' => $this->input->post("contact_no1"),
 						'contact_no2' => $this->input->post("contact_no2"),
 						'website' => addslashes($this->input->post("website")),
-						'tax_number' => addslashes($this->input->post("tax_number")),
+						'tax_number' => $this->input->post("tax_number"),
 						'payment_mode' => $payment_mode,
 						'profile_picture' => ((isset($profile_picture) && !empty($profile_picture)) ? $profile_picture : ''),
 						'status' => 0,

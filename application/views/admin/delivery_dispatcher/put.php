@@ -43,25 +43,18 @@ if (isset($delivery_dispatcher_detail->profile_picture) && ($delivery_dispatcher
                 <div class="col-lg-10">
                     <div class="card m-b-20">
                         <div class="card-body">
-                            <div class="row">
 
-                                <div class="col-lg-12">
-                                    <div class=" m-b-20">
-                                        <div class=" row ">
-                                            <div class="col-lg-4">
-                                            </div>
-                                            <div class="col-lg-4 text-center">
-                                            <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar" alt="Shop Image" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'">
-                                            <i class="mdi mdi-camera"></i>
-                                            <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" />
-                                            <input type="hidden" name="old_profile_picture" value="<?php echo $delivery_dispatcher_detail->profile_picture; ?>">
-                                            </div>
-                                            <div class="col-lg-4">
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
+
+                            <div class="row m-b-20">
+                                <div class="col-12 text-center">
+                                    <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar" alt="Shop Image" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'">
+                                    <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" class="input-file upload-img"/>
+                                    <input type="hidden" name="old_profile_picture" value="<?php echo $delivery_dispatcher_detail->profile_picture; ?>">
+                                    <h4 class="mt-3"><span class="pointer upload-txt">Upload Photo</span></h4>
                                 </div>
+                            </div>
+
+                            <div class="row">
                                 <input type="hidden" name="delivery_dispatcher_id" value="<?php echo $delivery_dispatcher_detail->id; ?>">
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -108,7 +101,7 @@ if (isset($delivery_dispatcher_detail->profile_picture) && ($delivery_dispatcher
         $field_value = $delivery_dispatcher_detail->contact_no;
     }
     ?>
-                                            <input type="number" name="contact_no" class="form-control" id="contact_no" placeholder="Enter contact number" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="contact_no" class="form-control" id="contact_no" placeholder="XXX XXX XXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('contact_no'); ?>
                                             </div>
@@ -117,7 +110,7 @@ if (isset($delivery_dispatcher_detail->profile_picture) && ($delivery_dispatcher
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="">Address</label>
+                                        <label class="required" for="autocomplete">Street</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -128,16 +121,110 @@ if (isset($delivery_dispatcher_detail->profile_picture) && ($delivery_dispatcher
         $field_value = $delivery_dispatcher_detail->address;
     }
     ?>
-                                            <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address">
+                                            <input id="autocomplete" placeholder="Enter street" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address">
                                             <input type="hidden" id="administrative_area_level_2" name="city">
                                             <input type="hidden" id="administrative_area_level_1" name="state">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('address'); ?>
                                             </div>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('latitude'); ?>
+                                            </div>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('longitude'); ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="city" class="required">City</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('city');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = $delivery_dispatcher_detail->city;
+    }
+    ?>
+                                            <input type="text" name="city" class="form-control city" id="city" value="<?php echo $field_value; ?>" placeholder="Enter city">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('city'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="state" class="required">State</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('state');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = $delivery_dispatcher_detail->state;
+    }
+    ?>
+                                            <input type="text" name="state" class="form-control state" id="state" value="<?php echo $field_value; ?>" placeholder="Enter state">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('state'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="country" class="required">Country</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('country');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = $delivery_dispatcher_detail->country;
+    }
+    ?>
+                                            <input type="text" name="country" class="form-control country" id="country" value="<?php echo $field_value; ?>" placeholder="Enter country">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('country'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="zipcode" class="required">Zip Code</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('zipcode');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = $delivery_dispatcher_detail->zip_code;
+    }
+    ?>
+                                            <input type="text" name="zipcode" class="form-control zipcode" id="zipcode" value="<?php echo $field_value; ?>" placeholder="XXXXX">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('zipcode'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="latitude" id="latitude" value="<?php echo $delivery_dispatcher_detail->latitude; ?>">
+                            <input type="hidden" name="longitude" id="longitude" value="<?php echo $delivery_dispatcher_detail->longitude; ?>">
 
                             <div class="row">
                                 <div class="col-lg-12">
@@ -168,6 +255,7 @@ if (isset($delivery_dispatcher_detail->profile_picture) && ($delivery_dispatcher
     </div>
 </div>
 <script src="<?php echo base_url().'assets/js/custom/admin/delivery_dispatcher.js'; ?>"></script>
+<script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
 
 <script>
 

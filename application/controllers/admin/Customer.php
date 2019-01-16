@@ -29,6 +29,53 @@ class Customer extends CI_Controller {
 		$this->load->view('template/template',$output_data);	
 	}
 
+	public function customer_list(){
+	  	$draw = intval($this->input->get("draw"));
+	  	$start = intval($this->input->get("start"));
+	  	$length = intval($this->input->get("length"));
+
+
+	  	$customer_list = $this->customer_model->get_customer();
+
+	 	$data = array();
+	 	$action_data = '';
+	 	$edit_link = base_url().'customer-update';
+
+		foreach($customer_list as $key => $customer) {
+
+		       $action_data = "<a href='".$edit_link."/".encrypt($customer['id'])."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a>";
+
+		       if($customer["status"] == 1){
+	                $btn_name = 'Active';
+	                $btn_class = 'btn-success';
+	            }else{
+	                $btn_name = 'Deactivate';
+	                $btn_class = 'btn-deactive';
+	            }
+
+		       $status_str = "<button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_customer' status-id='" . $customer["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button>";
+
+		       $data[] = array(
+		            $customer['id'],
+		            stripslashes($customer["username"]),
+		            $customer['email'],
+		            $customer['address'],
+		            $status_str,
+		            $action_data
+		       );
+
+		}
+
+	  	$output = array(
+	       "draw" => $draw,
+	         "recordsTotal" => count($customer_list),
+	         "recordsFiltered" => count($customer_list),
+	         "data" => $data
+	    );
+	  	echo json_encode($output);
+	  	exit();
+  	}
+
 	public function customAlpha($str) {
 		if (!preg_match('/^[a-z \-]+$/i', $str)) {
 			$this->form_validation->set_message('customAlpha', 'The {field} field contain only alphabets and space.');
@@ -52,7 +99,7 @@ class Customer extends CI_Controller {
 					array('field' => 'email', 'label' => 'email', 'rules' => 'trim|required|max_length[225]|valid_email|is_unique[customer.email]'),
 					array('field' => 'password', 'label' => 'password', 'rules' => 'trim|required|min_length[6]'),
 					array('field' => 'c_password', 'label' => 'confirm password', 'rules' => 'trim|required|matches[password]'),
-					array('field' => 'mobile_number', 'label' => 'contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
+					array('field' => 'mobile_number', 'label' => 'contact number', 'rules' => 'trim|min_length[12]|max_length[12]'),
 					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]')
 				);
 
@@ -123,8 +170,10 @@ class Customer extends CI_Controller {
 				$validation_rules = array(
 					
 					array('field' => 'username', 'label' => 'full name', 'rules' => 'trim|required|min_length[3]|max_length[50]'),
-					array('field' => 'mobile_number', 'label' => 'contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
-					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]')
+					array('field' => 'mobile_number', 'label' => 'contact number', 'rules' => 'trim|min_length[12]|max_length[12]'),
+					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'dob', 'label' => 'date of birth', 'rules' => 'trim|required'),
+					array('field' => 'gender', 'label' => 'gender', 'rules' => 'trim|required')
 				);
 
 				$this->form_validation->set_rules($validation_rules);

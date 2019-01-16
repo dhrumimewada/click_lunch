@@ -26,57 +26,65 @@
 
                 <div class="col-xl-3 col-md-6">
                     <div class="card mini-stat bg-pink">
-                        <div class="card-body">
-                            <div class="mini-stat-icon">
-                                <i class="mdi mdi-home-variant float-right"></i>
-                            </div>
-                            <div class="text-white">
-                                <h5 class="text-uppercase mb-2">Restaurant </h5>
-                                <h3 class="mb-3"><?php echo $total_shop; ?></h3>
-                                <span>Total added in system</span>
-                            </div>
+                        <div class="card-body pointer">
+                            <a href="<?php echo base_url().'vender-list'; ?>">
+                                <div class="mini-stat-icon">
+                                    <i class="mdi mdi-home-variant float-right"></i>
+                                </div>
+                                <div class="text-white">
+                                    <h5 class="text-uppercase mb-2">Restaurant </h5>
+                                    <h3 class="mb-3"><?php echo $total_shop; ?></h3>
+                                    <span>Total added in system</span>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card mini-stat bg-orange">
-                        <div class="card-body">
-                            <div class="mini-stat-icon">
-                                <i class="mdi mdi-shopping float-right"></i>
-                            </div>
-                            <div class="text-white">
-                                <h5 class="text-uppercase mb-2">Product </h5>
-                                <h3 class="mb-3"><?php echo $total_item; ?></h3>
-                                <span>Total added in system</span>
-                            </div>
+                        <div class="card-body pointer">
+                            <a href="<?php echo base_url().'customer-list'; ?>">
+                                <div class="mini-stat-icon">
+                                    <i class="mdi mdi-shopping float-right"></i>
+                                </div>
+                                <div class="text-white">
+                                    <h5 class="text-uppercase mb-2">Customers </h5>
+                                    <h3 class="mb-3"><?php echo $total_customer; ?></h3>
+                                    <span>Total added in system</span>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card mini-stat bg-purple">
-                        <div class="card-body">
-                            <div class="mini-stat-icon">
-                                <i class="mdi mdi-food float-right"></i>
-                            </div>
-                            <div class="text-white">
-                                <h5 class="text-uppercase mb-2">Orders </h5>
-                                <h3 class="mb-3"><?php echo $total_order; ?></h3>
-                                <span>Total added in system</span>
-                            </div>
+                        <div class="card-body pointer">
+                            <a href="<?php echo base_url().'maintenance3'; ?>">
+                                <div class="mini-stat-icon">
+                                    <i class="mdi mdi-food float-right"></i>
+                                </div>
+                                <div class="text-white">
+                                    <h5 class="text-uppercase mb-2">Orders </h5>
+                                    <h3 class="mb-3"><?php echo $total_order; ?></h3>
+                                    <span>Total added in system</span>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card mini-stat bg-green">
-                        <div class="card-body">
-                            <div class="mini-stat-icon">
-                                <i class="mdi mdi-tag-text-outline  float-right"></i>
-                            </div>
-                            <div class="text-white">
-                                <h5 class="text-uppercase mb-2">Promocode</h5>
-                                <h3 class="mb-3"><?php echo $total_promocode; ?></h3>
-                                <span>Total added in system</span>
-                            </div>
+                        <div class="card-body pointer">
+                            <a href="<?php echo base_url().'promocode-list'; ?>">
+                                <div class="mini-stat-icon">
+                                    <i class="mdi mdi-tag-text-outline  float-right"></i>
+                                </div>
+                                <div class="text-white">
+                                    <h5 class="text-uppercase mb-2">Promocode</h5>
+                                    <h3 class="mb-3"><?php echo $total_promocode; ?></h3>
+                                    <span>Total added in system</span>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -87,8 +95,10 @@
                 <div class="col-xl-12">
                     <div class="card m-b-20">
                         <div class="card-body">
-                            <h4 class="mt-0 m-b-30 header-title">Recent Restaurants</h4>
-
+                            <span class="mt-0 m-b-30 header-title">Recent Restaurants</span>
+                            <div class="float-right d-inline-block mb-3">
+                                <a class="btn btn-primary waves-effect waves-light" href="<?php echo base_url().'vender-list'; ?>">View All</a>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-hover">
                                     <thead>
@@ -113,6 +123,8 @@
                                                 echo "<td><label class='text-center btn-deactive r-8 btn-sm'>Pending</label></td>";
                                             }elseif($value['status'] == 1){
                                                 echo "<td><label class='text-center btn-success r-8 btn-sm'>Active</label></td>";
+                                            }elseif($value['status'] == 2){
+                                                echo "<td><label class='text-center btn-danger r-8 btn-sm'>Deacivate</label></td>";
                                             }else{
                                                 echo '<td><i class="mdi mdi-checkbox-blank-circle text-success"></i> NA</td>';
                                             }

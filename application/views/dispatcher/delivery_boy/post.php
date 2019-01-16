@@ -48,7 +48,7 @@
                                             <div class="col-lg-4 text-center">
                                             <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="img-circle profile-avatar" alt="User avatar" id="blah" onerror="this.src='https://bootdey.com/img/Content/avatar/avatar3.png'" >
                                             <i class="mdi mdi-camera"></i>
-                                            <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" />
+                                            <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;"  class="input-file upload-img"/>
                                             </div>
                                             <div class="col-lg-4">
                                                 

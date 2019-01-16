@@ -43,24 +43,16 @@
                     <div class="card m-b-20">
                         <div class="card-body">
 
+                            
                             <div class="row">
-
-                                <div class="col-lg-12">
-                                    <div class=" m-b-20">
-                                        <div class=" row ">
-                                            <div class="col-lg-4">
-                                            </div>
-                                            <div class="col-lg-4 text-center">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="img-circle profile-avatar" alt="User avatar" id="blah" onerror="this.src='https://bootdey.com/img/Content/avatar/avatar3.png'" >
-                                            <i class="mdi mdi-camera"></i>
-                                            <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" />
-                                            </div>
-                                            <div class="col-lg-4">
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="col-12 text-center">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="img-circle profile-avatar" alt="User avatar" id="blah" onerror="this.src='https://bootdey.com/img/Content/avatar/avatar3.png'" >
+                                    <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" class="input-file upload-img"/>
+                                    <h4 class="mt-3"><span class="pointer upload-txt">Upload Photo</span></h4>
                                 </div>
+                            </div>
+
+                            <div class="row">
 
                                 <div class="col-lg-12 mt-2 mb-1">
                                     <h4 class="mt-0 mb-0 header-title">Basic Info</h4>
@@ -68,7 +60,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Shop Name</label>
+                                        <label class="required" for="shop_name">Restaurant Name</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -77,7 +69,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="text" name="shop_name" class="form-control" id="shop_name" placeholder="Enter shop name" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="shop_name" class="form-control" id="shop_name" placeholder="Enter restaurant name" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('shop_name'); ?>
                                             </div>
@@ -87,7 +79,7 @@
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required" >Shop Email</label>
+                                        <label class="required" >Email</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -96,7 +88,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter shop email" value="<?php echo $field_value; ?>">
+                                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter email" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('email'); ?>
                                             </div>
@@ -108,7 +100,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Owner Name</label>
+                                        <label class="required" for="vender_name">Contact Person Name</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -117,7 +109,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="text" name="vender_name" class="form-control" id="vender_name" placeholder="Enter owner name" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="vender_name" class="form-control" id="vender_name" placeholder="Enter contact person name" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('vender_name'); ?>
                                             </div>
@@ -126,7 +118,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Address/Landmark</label>
+                                        <label class="required" for="autocomplete">Street</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -135,7 +127,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input id="autocomplete" placeholder="Enter your address or landmark" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address">
+                                            <input id="autocomplete" placeholder="Enter street" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address">
                                             <input type="hidden" id="administrative_area_level_2" name="city">
                                             <input type="hidden" id="administrative_area_level_1" name="state">
                                             <div class="validation-error-label">
@@ -219,7 +211,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="text" name="zipcode" class="form-control zipcode" id="zipcode" value="<?php echo $field_value; ?>" placeholder="Enter zipcode">
+                                            <input type="text" name="zipcode" class="form-control zipcode" id="zipcode" value="<?php echo $field_value; ?>" placeholder="XXXXX">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('zipcode'); ?>
                                             </div>
@@ -248,7 +240,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="text" name="contact_no1" class="form-control" id="contact_no1" placeholder="Enter contact number" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="contact_no1" class="form-control" id="contact_no1" placeholder="XXX XXX XXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('contact_no1'); ?>
                                             </div>
@@ -267,7 +259,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="text" name="contact_no2" class="form-control" id="contact_no2" placeholder="Enter alternate contact number" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="contact_no2" class="form-control" id="contact_no2" placeholder="XXX XXX XXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('contact_no2'); ?>
                                             </div>
@@ -278,12 +270,12 @@
 
                             <div class="row">
                                 <div class="col-lg-12 mt-2 mb-1">
-                                    <h4 class="mt-0 mb-0 header-title">Shop Information</h4>
+                                    <h4 class="mt-0 mb-0 header-title">Restaurant Information</h4>
                                     <hr class="mt-1 mb-3">
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="website">Shop Website</label>
+                                        <label for="website">Restaurant Website</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -301,7 +293,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="tax_number">TAX Number/GST</label>
+                                        <label for="tax_number">TAX Id</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -310,7 +302,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="text" name="tax_number" class="form-control tax-mask" id="tax_number" placeholder="Enter TAX number" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="tax_number" class="form-control tax-mask" id="tax_number" placeholder="XXX-XX-XXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('tax_number'); ?>
                                             </div>

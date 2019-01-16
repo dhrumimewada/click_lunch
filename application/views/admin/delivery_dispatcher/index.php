@@ -103,9 +103,9 @@ $edit_link = base_url().'customer-update';
             var data_id = get_dataid($this);
         
             if($this.attr("status-id") == '1'){
-                var change_status_to = 'deactive';
-                var change_status_to1 = 'Deactived!';
-                var btn_name_replace = 'Deactive';
+                var change_status_to = 'deactivate';
+                var change_status_to1 = 'Deactivated!';
+                var btn_name_replace = 'Deactivate';
                 var btn_cls_replace = 'btn-deactive';
                 var status = '2';
             }else{

@@ -38,15 +38,10 @@
                 <div class="col-lg-10">
                     <div class="card m-b-20">
                         <div class="card-body row ">
-                            <div class="col-lg-4">
-                            </div>
-                            <div class="col-lg-4 text-center">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle profile-avatar" alt="User avatar" id="blah" onerror="this.src='https://bootdey.com/img/Content/avatar/avatar6.png'">
-                            <i class="mdi mdi-camera"></i>
-                            <input type='file' class="input-file" name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" />
-                            </div>
-                            <div class="col-lg-4">
-                                
+                            <div class="col-12 text-center">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar6.png" class="img-circle profile-avatar pointer" alt="User avatar" id="blah" onerror="this.src='https://bootdey.com/img/Content/avatar/avatar6.png'">
+                                <input type='file' class="input-file upload-img" name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" />
+                                <h4 class="mt-3 pointer upload-txt">Upload Photo</h4>
                             </div>
                             
 
@@ -56,7 +51,10 @@
                     <div class="card m-b-20">
                         <div class="card-body">
 
-                            <h4 class="mt-0 header-title">Admin info</h4>
+                            <div class="col-lg-12 mt-2 mb-1">
+                                <h4 class="row mt-0 mb-0 header-title">Admin Information</h4>
+                                <hr class="row mt-1 mb-3">
+                            </div>
                            
                                 <div class="form-group">
                                     <label class="required">Full Name</label>
@@ -132,9 +130,9 @@ if (isset($temp_value) && !empty($temp_value)) {
                                         <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light">
                                             Submit
                                         </button>
-                                        <button type="reset" class="btn btn-secondary waves-effect m-l-5">
+                                        <a href="<?php echo base_url().'admin-list'; ?>" class="btn btn-secondary waves-effect m-l-5">
                                             Cancel
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
 

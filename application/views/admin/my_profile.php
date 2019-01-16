@@ -6,7 +6,7 @@
  if (isset($user_data->profile_picture) && ($user_data->profile_picture != '')) {
     $prof_url = base_url() . $this->config->item("profile_path") . '/'.$user_data->profile_picture;
 } else {
-    $prof_url = 'https://bootdey.com/img/Content/avatar/avatar6.png';
+    $prof_url = 'https://bootdey.com/img/Content/avatar/avatar3.png';
 }
 
  ?>
@@ -45,16 +45,14 @@
                 <div class="col-lg-10">
                     <div class="card m-b-20">
                         <div class="card-body row ">
-                            <div class="col-lg-4">
+                            <div class="col-12 text-center">
+
+                                <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar pointer" alt="User avatar" id="blah"  onerror="this.src='https://bootdey.com/img/Content/avatar/avatar3.png'">
+
+                                <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" class="input-file upload-img"/>
+                                <h4 class="mt-3"><span class="pointer upload-txt">Upload Photo</span></h4>
+
                             </div>
-                            <div class="col-lg-4 text-center">
-                            <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar" alt="User avatar" id="blah">
-                            <i class="mdi mdi-camera"></i>
-                            </div>
-                            <div class="col-lg-4">
-                                <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" />
-                            </div>
-                            
 
                         </div>
                     </div>
@@ -62,10 +60,15 @@
                     <div class="card m-b-20">
                         <div class="card-body">
 
-                            <h4 class="mt-0 header-title">Update info</h4>
+                            <div class="row">
+                                <div class="col-lg-12 mt-2 mb-1">
+                                    <h4 class="mt-0 mb-0 header-title">Update Info</h4>
+                                    <hr class="mt-1 mb-3">
+                                </div>
+                            </div>
                            
                                 <div class="form-group">
-                                    <label>Full Name</label>
+                                    <label class="required" for="username">Full Name</label>
                                     <div>
                                         <?php
 $field_value = NULL;

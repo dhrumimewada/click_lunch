@@ -16,11 +16,11 @@ class Dashboard_model extends CI_Model {
 		$return_data['total_shop'] = $total_shop[0]['COUNT(id)'];
 
 		$this->db->select('COUNT(id)');
-		$this->db->from('item');
+		$this->db->from('customer');
 		$this->db->where("deleted_at", NULL);
-		$this->db->where("is_active", 1);
-		$total_item = $this->db->get()->result_array();
-		$return_data['total_item'] = $total_item[0]['COUNT(id)'];
+		$this->db->where("status", 1);
+		$total_customer = $this->db->get()->result_array();
+		$return_data['total_customer'] = $total_customer[0]['COUNT(id)'];
 
 		$this->db->select('COUNT(id)');
 		$this->db->from('orders');

@@ -78,6 +78,7 @@
 $( document ).ready(function() {
     $(document).on('click', '.mdi-camera', function(){
         $('#imgInp').click();
+        $('#blah').attr('src', 'https://bootdey.com/img/Content/avatar/avatar6.png');
         return false;
     });
 

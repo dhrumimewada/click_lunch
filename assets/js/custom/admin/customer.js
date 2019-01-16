@@ -5,7 +5,16 @@
         successClass: 'validation-valid-label',
         // Different components require proper error label placement
         errorPlacement: function(error, element) {
-                error.insertAfter(element);
+                if (element.hasClass('select2-hidden-accessible')) {
+                    error.appendTo(element.parent());
+                }else if (element.parents('div').hasClass('input-group')) {
+                    error.insertAfter(element.parent().parent());
+                }else if (element.hasClass('upload-img')) {
+                    error.appendTo(element.parent());
+                }
+                else{
+                    error.insertAfter(element);
+                }    
                 
         },
         validClass: "validation-valid-label",
@@ -36,10 +45,10 @@
             },
             mobile_number:{
                 required: true,
-                digits: true,
-                greaterThanZero:true,
-                minlength: 10,
-                maxlength: 15,
+                digits: false,
+                greaterThanZero:false,
+                minlength: 12,
+                maxlength: 12,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -50,6 +59,15 @@
                 normalizer: function (value) {
                     return $.trim(value);
                 }
+            },
+            dob:{
+                required: true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            gender:{
+                required: true
             },
             profile_picture:{
                 accept: "image/jpg, image/jpeg, image/png",
@@ -80,12 +98,18 @@
                 required: "The contact number field is required.",
                 digits: "Enter only numeric value",
                 greaterThanZero: "The contact number field is invalid.",
-                minlength: jQuery.validator.format("At least {0} digit required"),
-                maxlength: jQuery.validator.format("Maximum {0} digit allowed")
+                minlength: "At least 10 digit required",
+                maxlength: "Maximum 10 digit allowed"
             },
             address: {
                 required: "The address field is required.",
                 maxlength: jQuery.validator.format("Maximum {0} digit allowed")
+            },
+            dob: {
+                required: "The date of birth field is required."
+            },
+            gender: {
+                required: "The gender field is required."
             },
             profile_picture:{
                 accept: "Accepted image formats: jpg, jpeg, png",
@@ -111,10 +135,13 @@
     });
 
 $( document ).ready(function() {
-    $(document).on('click', '.mdi-camera', function(){
+    $(document).on('click', '.upload-txt, #blah', function(){
         $('#imgInp').click();
+        $('#blah').attr('src', 'https://bootdey.com/img/Content/avatar/avatar6.png');
         return false;
     });
+
+    $("#mobile_number").inputmask("999 999 9999",{"placeholder": ""});
 
     function readURL(input) {
         if (input.files && input.files[0]) {
@@ -131,25 +158,14 @@ $( document ).ready(function() {
         readURL(this);
     });
 
+    $('.datepicker-autoclose').datepicker({
+            format: 'dd-mm-yyyy',
+            endDate: '-18y',
+            autoclose: true,
+            todayHighlight: false
+        });
 
-    // var customer_url = base_url+ 'admin/customer/customer_list/';
-    // $('.customer_list').DataTable( {
-    //     "ajax": {
-    //         url : customer_url,
-    //         type : 'GET'
-    //     },
-    //     "order":[[ 0, "desc" ]],
-    //     createdRow: function(row, data, dataIndex ) {
-    //                $(row).attr("id",data[0]);
-    //           },
-    //     "columnDefs": [
-    //         {
-    //             "targets": [ 0 ],
-    //             "visible": false
-    //         },
-    //         { "orderable": false, "targets": 4 }
-    //     ]
-    // });
+    $(".select2").select2();
 
  });
 

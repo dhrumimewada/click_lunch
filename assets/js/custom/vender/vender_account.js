@@ -47,19 +47,19 @@
             },
             contact_no1:{
                 required: true,
-                digits: true,
-                greaterThanZero:true,
-                minlength: 10,
-                maxlength: 15,
+                digits: false,
+                greaterThanZero:false,
+                minlength: 12,
+                maxlength: 12,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
             },
             contact_no2:{
-                digits: true,
-                greaterThanZero:true,
-                minlength: 10,
-                maxlength: 15,
+                digits: false,
+                greaterThanZero:false,
+                minlength: 12,
+                maxlength: 12,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -88,7 +88,7 @@
                 }
             },
             delivery_charges:{
-                required: true,
+                required: false,
                 number: true,
                 greaterThanZeroEqualTo:true,
                 normalizer: function (value) {
@@ -135,15 +135,15 @@
         messages: {
 
             shop_name: {
-                required: "The shop title field is required.",
+                required: "The restaurant title field is required.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed.")
             },
             tag_line: {
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed.")
             },
             vender_name: {
-                required: "The owner name field is required.",
-                alpha:"The owner name field contain only alphabets and space.",
+                required: "The contact person field is required.",
+                alpha:"The contact person field contain only alphabets and space.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed.")
             },
             tax_number:{
@@ -153,14 +153,14 @@
                 required: "The contact number field is required.",
                 digits: "Enter only numeric value",
                 greaterThanZero: "The contact number field is invalid.",
-                minlength: jQuery.validator.format("At least {0} digit required"),
-                maxlength: jQuery.validator.format("Maximum {0} digit allowed.")
+                minlength: "At least 10 digit required",
+                maxlength: "Maximum 10 digit allowed"
             },
             contact_no2: {
                 digits: "Enter only numeric value",
                 greaterThanZero: "The alternate contact number field is invalid.",
-                minlength: jQuery.validator.format("At least {0} digit required"),
-                maxlength: jQuery.validator.format("Maximum {0} digit allowed.")
+                minlength: "At least 10 digit required",
+                maxlength: "Maximum 10 digit allowed"
             },
             address: {
                 required: "The address field is required."
@@ -213,7 +213,7 @@
                // console.log('true');
                 form.submit();
             }else{
-                $(".validation-availibality").append('<label class="validation-error-label" style="">The shop availability time field is invalid.</label>');
+                $(".validation-availibality").append('<label class="validation-error-label" style="">The restaurant availability time field is invalid.</label>');
             }      
            
         }
@@ -269,6 +269,9 @@ $( document ).ready(function() {
 
     $(".select2").select2();
     $(".tax-mask").inputmask({"mask": "999-99-9999"});
+
+    $("#contact_no1, #contact_no2").inputmask("999 999 9999",{"placeholder": ""});
+
     var dt = new Date();
     $.each(available_time, function(k, v) {
         $('.from_time').append($("<option>" , { text: v, value: v }));
@@ -363,41 +366,6 @@ $( document ).ready(function() {
 
  });
 
-var placeSearch, autocomplete;
-
-  var componentForm = {
-
-        administrative_area_level_2: 'long_name',
-        administrative_area_level_1: 'long_name'
-      };
-
-  function initAutocomplete() {
-    autocomplete = new google.maps.places.Autocomplete(
-       (document.getElementById('autocomplete')),
-        {types: ['geocode']});
-    autocomplete.addListener('place_changed', fillInAddress);
-  }
-
-  function fillInAddress() {
-    var place = autocomplete.getPlace();
-
-     for (var component in componentForm) {
-      document.getElementById(component).value = '';
-      document.getElementById(component).disabled = false;
-    }
-
-    //console.log(place.address_components);
-
-    for (var i = 0; i < place.address_components.length; i++) {
-      var addressType = place.address_components[i].types[0];
-      if (componentForm[addressType]) {
-        var val = place.address_components[i][componentForm[addressType]];
-        document.getElementById(addressType).value = val;
-      }
-    }
-  }
-
-
     function validate_store_time(){
         var return_val = true;
         $( ".from_time" ).each(function( index ) {
@@ -414,6 +382,62 @@ var placeSearch, autocomplete;
         return return_val;
     }
 
+ var placeSearch, autocomplete;
+
+  var componentForm = {
+
+        administrative_area_level_2: 'long_name',
+        administrative_area_level_1: 'long_name'
+      };
+
+
+
+  function initAutocomplete() {
+    autocomplete = new google.maps.places.Autocomplete(
+       (document.getElementById('autocomplete')),
+        {types: ['geocode'] , componentRestrictions: {country: "us"} });
+    autocomplete.addListener('place_changed', fillInAddress);
+  }
+
+  function fillInAddress() {
+    var place = autocomplete.getPlace();
+
+     for (var component in componentForm) {
+      document.getElementById(component).value = '';
+      document.getElementById(component).disabled = false;
+    }
+
+   if (typeof place.address_components != "undefined" || place.address_components != null){
+
+    $('#latitude').val(place.geometry.location.lat());
+    $('#longitude').val(place.geometry.location.lng());
+
+    console.log(place.address_components);
+
+        for (var i = 0; i < place.address_components.length; i++) {
+            for (var j = 0; j < place.address_components[i].types.length; j++){
+                if (place.address_components[i].types[j] == "postal_code") {
+                    $('.zipcode').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "country") {
+                    $('.country').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "administrative_area_level_1") {
+                    $('.state').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "administrative_area_level_2") {
+                    $('.city').val(place.address_components[i].long_name);
+                }
+            }
+            var addressType = place.address_components[i].types[0];
+            if (componentForm[addressType]) {
+                var val = place.address_components[i][componentForm[addressType]];
+                document.getElementById(addressType).value = val;
+            }
+        }
+    }
+  }
+
   function geolocate() {
     $('.loader').show();
     if (navigator.geolocation) {
@@ -422,6 +446,8 @@ var placeSearch, autocomplete;
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
+
+        // console.log(geolocation);
         var circle = new google.maps.Circle({
           center: geolocation,
           radius: position.coords.accuracy
@@ -431,4 +457,3 @@ var placeSearch, autocomplete;
     }
      $('.loader').hide();
   }
-

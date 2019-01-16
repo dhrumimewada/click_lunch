@@ -48,7 +48,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Promocode</label>
+                                        <label class="required" for="promocode">Promocode</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="">Minimum Order</label>
+                                        <label class="" for="promo_min_order">Minimum Order</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -88,7 +88,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="required">Amount</label>
+                                            <label class="required" for="amount">Amount</label>
                                             <div>
                                             <?php
         $field_value = NULL;
@@ -101,12 +101,14 @@
                                                 <div class="validation-error-label">
                                                     <?php echo form_error('amount'); ?>
                                                 </div>
+                                                <div class="perc-error">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="required">Type</label>
+                                            <label class="required" for="">Type</label>
                                             <div>
                                             <?php
     $checked = '';
@@ -129,7 +131,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="required">Form Date</label>
+                                            <label class="required" for="from_date">Form Date</label>
                                             <div>
                                                 <div class="input-group">
                                                     <?php
@@ -152,7 +154,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="required">To Date</label>
+                                            <label class="required" for="to_date">To Date</label>
                                             <div>
                                                 <div class="input-group">
                                                     <?php

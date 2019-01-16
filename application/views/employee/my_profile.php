@@ -50,7 +50,7 @@ if (isset($employee_detail->profile_picture) && ($employee_detail->profile_pictu
                             <i class="mdi mdi-camera"></i>
                             </div>
                             <div class="col-lg-4">
-                                <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" />
+                                <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" class="input-file upload-img"/>
                             </div>
                         </div>
                     </div>

@@ -40,6 +40,12 @@ class Delivery_dispatcher_model extends CI_Model {
 						'password' => password_hash($this->input->post("password"), PASSWORD_DEFAULT),
 						'contact_no' => $this->input->post("contact_no"),
 						'address' => addslashes($this->input->post("address")),
+						'city' => addslashes($this->input->post("city")),
+						'state' => addslashes($this->input->post("state")),
+						'country' => addslashes($this->input->post("country")),
+						'zip_code' => $this->input->post("zipcode"),
+						'latitude' => $this->input->post("latitude"),
+						'longitude' => $this->input->post("longitude"),
 						'profile_picture' => ((isset($profile_picture) && !empty($profile_picture)) ? $profile_picture : ''),
 						'status' => 1,
 						'created_at' => date('Y-m-d H:i:s')
@@ -66,6 +72,10 @@ class Delivery_dispatcher_model extends CI_Model {
 
 		$user_data['full_name'] = ucwords(addslashes($this->input->post("full_name")));
 		$user_data['address'] = addslashes($this->input->post("address"));
+		$user_data['city'] = addslashes($this->input->post("city"));
+		$user_data['state'] = addslashes($this->input->post("state"));
+		$user_data['country'] = addslashes($this->input->post("country"));
+		$user_data['zip_code'] = $this->input->post("zipcode");
 
 		if (isset($modal_data['profile_picture']) && !empty($modal_data['profile_picture'])){
 			

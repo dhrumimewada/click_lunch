@@ -25,7 +25,7 @@ $edit_link = base_url().'vender-update';
                             <thead>
                             <tr>
                                 <th>Restaurant Name</th>
-                                <th>Vender Name</th>
+                                <th>Contact Person</th>
                                 <th>Email</th>
                                 <th>Restaurant Code</th>
                                 <th class='text-center'>Status</th>
@@ -50,7 +50,7 @@ $edit_link = base_url().'vender-update';
                                         $btn_name = 'Active';
                                         $btn_class = 'btn-success';
                                     }else{
-                                        $btn_name = 'Deactive';
+                                        $btn_name = 'Deactivate';
                                         $btn_class = 'btn-deactive';
                                     }
                                     if($value["password"] == ''){
@@ -151,9 +151,9 @@ $edit_link = base_url().'vender-update';
             var data_id = get_dataid($this);
 
             if($this.attr("status-id") == '1'){
-                var change_status_to = 'deactive';
-                var change_status_to1 = 'Deactived!';
-                var btn_name_replace = 'Deactive';
+                var change_status_to = 'deactivate';
+                var change_status_to1 = 'Deactivated!';
+                var btn_name_replace = 'Deactivate';
                 var btn_cls_replace = 'btn-deactive';
                 var status = '2';
             }else{

@@ -53,7 +53,7 @@ if (isset($delivery_boy_detail->profile_picture) && ($delivery_boy_detail->profi
                                             <div class="col-lg-4 text-center">
                                             <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar" alt="Shop Image" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'">
                                             <i class="mdi mdi-camera"></i>
-                                            <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" />
+                                            <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" class="input-file upload-img"/>
                                             <input type="hidden" name="old_profile_picture" value="<?php echo $delivery_boy_detail->profile_picture; ?>">
                                             </div>
                                             <div class="col-lg-4">

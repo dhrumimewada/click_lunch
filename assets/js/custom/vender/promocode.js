@@ -38,6 +38,12 @@
                 number: true,
                 maxlength:10,
                 greaterThanZero:true,
+                validate_perc: function (element) {
+                    if($("#discount_type").is(':checked')){
+                        console.log(" checked");      
+                        return true;          
+                    }
+                },
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -73,7 +79,8 @@
                 required: "The amount field is required.",
                 number: "The amount field is invalid.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed"),
-                greaterThanZero: "The amount field is invalid."
+                greaterThanZero: "The amount field is invalid.",
+                validate_perc: "The percentage is invalid"
             },
             from_date: {
                 required: "The form date field is required."
@@ -104,6 +111,14 @@
 
   $.validator.addMethod("alphacode", function(value, element) {
         return this.optional(element) || !(/[^a-zA-Z0-9]/.test(value));
+    });
+
+  $.validator.addMethod("validate_perc", function(value, element) {
+        if(parseFloat(value) <= 100){
+            return true;
+        }else{
+            return false;
+        }
     });
 
  $( document ).ready(function() {

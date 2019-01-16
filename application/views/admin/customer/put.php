@@ -42,26 +42,20 @@ if (isset($customer_detail->profile_picture) && ($customer_detail->profile_pictu
 
                 <div class="col-lg-10">
                     <div class="card m-b-20">
+                        <div class="card-body row">
+                            <div class="col-12 text-center">
+
+                                <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar pointer" alt="Shop Image" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'">
+                                <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;"   class="input-file upload-img"/>
+                                <input type="hidden" name="old_profile_picture" value="<?php echo $customer_detail->profile_picture; ?>">
+                                <h4 class="mt-3"><span class="pointer upload-txt">Upload Photo</span></h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card m-b-20">
                         <div class="card-body">
                             <div class="row">
-
-                                <div class="col-lg-12">
-                                    <div class=" m-b-20">
-                                        <div class=" row ">
-                                            <div class="col-lg-4">
-                                            </div>
-                                            <div class="col-lg-4 text-center">
-                                            <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar" alt="Shop Image" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'">
-                                            <i class="mdi mdi-camera"></i>
-                                            <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" />
-                                            <input type="hidden" name="old_profile_picture" value="<?php echo $customer_detail->profile_picture; ?>">
-                                            </div>
-                                            <div class="col-lg-4">
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <input type="hidden" name="customer_id" value="<?php echo $customer_detail->id; ?>">
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -108,7 +102,7 @@ if (isset($customer_detail->profile_picture) && ($customer_detail->profile_pictu
         $field_value = $customer_detail->mobile_number;
     }
     ?>
-                                            <input type="number" name="mobile_number" class="form-control" id="mobile_number" placeholder="Enter contact number" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="mobile_number" class="form-control" id="mobile_number" placeholder="Enter contact number" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('mobile_number'); ?>
                                             </div>
@@ -134,6 +128,59 @@ if (isset($customer_detail->profile_picture) && ($customer_detail->profile_pictu
 
                                             <div class="validation-error-label">
                                                 <?php echo form_error('address'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="required" for="dob">Date Of Birth</label>
+                                        <div>
+                                            <div class="input-group">
+                                                <?php
+    $field_value = NULL;
+    $temp_value = set_value('dob');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $from = date('Y-m-d', strtotime($customer_detail->dob));
+        $field_value = date("d-m-Y", strtotime($from));
+    }
+    ?>
+                                                <input type="text" class="form-control datepicker-autoclose" placeholder="dd-mm-yyyy" name="dob" id="dob" autocomplete="off" value="<?php echo $field_value; ?>"> 
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('dob'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="required"><?php echo $item_type; ?> Gender</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('gender');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = $customer_detail->gender;
+    }
+    ?>
+                                            <select class="select2 form-control" data-placeholder="Select gender" name="gender">
+                                                <option selected disabled></option>
+                                                <option value="0" <?php echo ($field_value == 0)?'selected':'' ?>>Male</option>
+                                                <option value="1" <?php echo ($field_value == 1)?'selected':'' ?>>Female</option>
+                                            </select>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('gender'); ?>
                                             </div>
                                         </div>
                                     </div>
@@ -169,6 +216,7 @@ if (isset($customer_detail->profile_picture) && ($customer_detail->profile_pictu
     </div>
 </div>
 <script src="<?php echo base_url().'assets/js/custom/admin/customer.js'; ?>"></script>
+<script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
 <script>
 
   var placeSearch, autocomplete;

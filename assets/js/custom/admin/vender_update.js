@@ -8,6 +8,8 @@
             console.log("error");
             if (element.parents('div').hasClass('custom-checkbox')) {
                 error.appendTo(element.parent().parent());
+            }else if (element.hasClass('upload-img')) {
+                    error.appendTo(element.parent());
             }else{
                 error.insertAfter(element);
             }     
@@ -67,7 +69,9 @@
             },
             zipcode: {
                 required:true,
-                maxlength:255,
+                digits: true,
+                maxlength:5,
+                minlength:5,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -88,20 +92,20 @@
             },
             contact_no1:{
                 required: false,
-                digits: true,
-                greaterThanZero:true,
-                minlength: 10,
-                maxlength: 15,
+                digits: false,
+                greaterThanZero:false,
+                minlength: 12,
+                maxlength: 12,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
             },
             contact_no2:{
                 required: false,
-                digits: true,
-                greaterThanZero:true,
-                minlength: 10,
-                maxlength: 15,
+                digits: false,
+                greaterThanZero:false,
+                minlength: 12,
+                maxlength: 12,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -128,21 +132,21 @@
         messages: {
 
             shop_name: {
-                required: "The shop name field is required.",
+                required: "The restaurant name field is required.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
             email: {
-                required: "The shop email field is required.",
-                emailValidation: "The shop email field is invalid."
+                required: "The email field is required.",
+                emailValidation: "The email field is invalid."
             },
             vender_name: {
-                required: "The owner name field is required.",
-                alpha:"The owner name field contain only alphabets and space.",
+                required: "The contact person name field is required.",
+                alpha:"The contact person name field contain only alphabets and space.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed"),
                 minlength: jQuery.validator.format("At least {0} characters required")
             },
             address: {
-                required: "The address field is required.",
+                required: "The street field is required.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
             city: {
@@ -159,7 +163,9 @@
             },
             zipcode: {
                 required: "The zip code field is required.",
-                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+                digits: "Enter only numeric value",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed"),
+                minlength: jQuery.validator.format("At least {0} characters required")
             },
             latitude: {
                 required: "The latitude field is required.",
@@ -173,15 +179,15 @@
                 required: "The contact number field is required.",
                 digits: "Enter only numeric value",
                 greaterThanZero: "The contact number field is invalid.",
-                minlength: jQuery.validator.format("At least {0} digit required"),
-                maxlength: jQuery.validator.format("Maximum {0} digit allowed")
+                minlength: "At least 10 digit required",
+                maxlength: "Maximum 10 digit allowed"
             },
             contact_no2: {
                 required: "The alternate contact number field is required.",
                 digits: "Enter only numeric value",
                 greaterThanZero: "The alternate contact number field is invalid.",
-                minlength: jQuery.validator.format("At least {0} digit required"),
-                maxlength: jQuery.validator.format("Maximum {0} digit allowed")
+                minlength: "At least 10 digit required",
+                maxlength: "Maximum 10 digit allowed"
             },
             website: {
                 required:"The website field is required.",
@@ -189,7 +195,7 @@
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
             tax_number:{
-                valid_taxno:"The tax number field is invalid."
+                valid_taxno:"The tax id field is invalid."
             },
             'payment_mode[]': {
                 required: "Please select at least one payment mode."
@@ -226,12 +232,16 @@
 
 $( document ).ready(function() {
 
-    $(".tax-mask").inputmask({"mask": "999-99-9999"});
+    $(".tax-mask").inputmask("999-99-9999",{"placeholder": ""});
+    $("#contact_no1, #contact_no2").inputmask("999 999 9999",{"placeholder": ""});
+    $("#zipcode").inputmask("99999",{"placeholder": ""});
 
-    $(document).on('click', '.mdi-camera', function(){
+    $(document).on('click', '.upload-txt, #blah', function(){
         $('#imgInp').click();
+        $('#blah').attr('src', 'https://bootdey.com/img/Content/avatar/avatar6.png');
         return false;
     });
+
 
     function readURL(input) {
         if (input.files && input.files[0]) {

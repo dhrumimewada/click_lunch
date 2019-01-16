@@ -36,6 +36,34 @@ class Admin_model extends CI_Model {
 					);
 		$response = $this->db->insert("admin", $user_data);
 
+		if($response){
+			$activation_token = encrypt($user_id);
+			$email_var_data["admin_name"] = ucwords($this->input->post("username"));
+			$email_var_data["email"] = $this->input->post("email");
+			$email_var_data["password"] = $this->input->post("password");
+			$email_var_data["login_link"] = base_url() . 'login-admin';
+
+			$from = "excellentwebworld@admin.com";
+			$to = $this->input->post("email");
+			$subject = "Welcome To Click Lunch";
+
+			$this->db->select('emat_email_subject,emat_email_message');
+			$this->db->from('email_template');
+			$this->db->where('emat_email_type', 5);
+			$this->db->where("emat_is_active", 1);
+			$sql_query = $this->db->get();
+			$return_data = $sql_query->row();
+
+			if (!isset($return_data) && empty($return_data)){
+				$this->auth->set_error_message("Email template not found. Error into sending mail.");
+				return FALSE;
+			}
+
+			$email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+			$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+			$mail = sendmail($from, $to, $subject, $message);
+		}
+
 
 		if ($this->db->trans_status() === FALSE) {
 			$this->db->trans_rollback();

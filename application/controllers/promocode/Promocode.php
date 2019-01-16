@@ -36,7 +36,7 @@ class Promocode extends CI_Controller {
 		// $to_time = Carbon::createFromFormat('d-m-Y',$to)->format('Y-m-d');
 		if($from_time > $to_time){
 			$this->form_validation->set_message('checkfromto', 'The to date should be greater than from date.');
-			return FALSE;
+			//return FALSE;
 		}
 		return TRUE;			
 	}
@@ -131,9 +131,17 @@ class Promocode extends CI_Controller {
 					array('field' => 'to_date', 'label' => 'to date', 'rules' => 'trim|required|callback_checkfromto[' . $this->input->post("from_date") . ']'),
 				);
 
+
 				$this->form_validation->set_rules($validation_rules);
+
+				echo "<pre>";
+					
 				 
 				if ($this->form_validation->run() === true) {
+
+					// print_r('11');
+					// exit;
+
 					if($this->promocode_model->put()){
 						$this->session->set_flashdata($this->auth->get_messages_array());
 						redirect(base_url() . "promocode-list");
@@ -143,9 +151,10 @@ class Promocode extends CI_Controller {
 					}
 
 					
-				} 
+				}
 			}
 		}
+		
 		$output_data['promocode_data'] = $this->promocode_model->get_promocode(decrypt($id));
 		if (!isset($output_data['promocode_data']) || empty($output_data['promocode_data']) || count($output_data['promocode_data']) <= 0){
 			$this->auth->set_error_message("Promocode not found");

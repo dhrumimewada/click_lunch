@@ -97,6 +97,10 @@ class Customer_model extends CI_Model {
 
 		$user_data['username'] = ucwords(addslashes($this->input->post("username")));
 		$user_data['address'] = addslashes($this->input->post("address"));
+		$user_data['gender'] = addslashes($this->input->post("gender"));
+
+		$dob = date('Y-m-d', strtotime($this->input->post("dob")));
+		$user_data['dob'] = $dob;
 
 		if (isset($modal_data['profile_picture']) && !empty($modal_data['profile_picture'])){
 			

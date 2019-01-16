@@ -52,25 +52,16 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
                 <div class="col-lg-10">
                     <div class="card m-b-20">
                         <div class="card-body">
-                            <div class="row">
 
-                                <div class="col-lg-12">
-                                    <div class=" m-b-20">
-                                        <div class=" row ">
-                                            <div class="col-lg-4">
-                                            </div>
-                                            <div class="col-lg-4 text-center">
-                                            <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar" alt="Shop Image" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'">
-                                            <i class="mdi mdi-camera"></i>
-                                            <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" />
-                                            <input type="hidden" name="old_profile_picture" value="<?php echo $vender_detail->profile_picture; ?>">
-                                            </div>
-                                            <div class="col-lg-4">
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar" alt="Restaurant avatar" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'" >
+                                    <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" class="input-file upload-img"/>
+                                    <h4 class="mt-3 pointer upload-txt">Upload Photo</h4>
                                 </div>
+                            </div>
+
+                            <div class="row">
 
                                 <div class="col-lg-12 mt-2 mb-1">
                                     <h4 class="mt-0 mb-0 header-title">Basic Info</h4>
@@ -78,7 +69,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Shop Name</label>
+                                        <label class="required">Restaurant Name</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -100,7 +91,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Shop Email</label>
+                                        <label for="email">Email</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -124,7 +115,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Owner Name</label>
+                                        <label class="required" for="vender_name">Contact Person Name</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -135,7 +126,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = stripslashes($vender_detail->vender_name);
     }
     ?>
-                                            <input type="vender_name" name="vender_name" class="form-control" id="vender_name" placeholder="Enter owner name" value='<?php echo $field_value; ?>'>
+                                            <input type="vender_name" name="vender_name" class="form-control" id="vender_name" placeholder="Enter contact person name" value='<?php echo $field_value; ?>'>
                                             <div class="validation-error-label">
                                                 <?php echo form_error('vender_name'); ?>
                                             </div>
@@ -144,7 +135,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Shop Code</label>
+                                        <label>Code</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -155,7 +146,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = stripslashes($vender_detail->shop_code);
     }
     ?>
-                                            <input type="text" name="shop_code" class="form-control disabled" id="shop_code" placeholder="Enter shop code" readonly value="<?php echo $field_value; ?>">
+                                            <input type="text" name="shop_code" class="form-control disabled" id="shop_code" placeholder="Enter code" readonly value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('shop_code'); ?>
                                             </div>
@@ -173,7 +164,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Contact Number</label>
+                                        <label for="contact_no1">Contact Number</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -184,7 +175,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = $vender_detail->contact_no1;
     }
     ?>
-                                            <input type="text" name="contact_no1" class="form-control" id="contact_no1" placeholder="Enter contact number" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="contact_no1" class="form-control" id="contact_no1" placeholder="XXX XXX XXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('contact_no1'); ?>
                                             </div>
@@ -194,7 +185,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Alternate Contact Number</label>
+                                        <label for="contact_no2">Alternate Contact Number</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -206,7 +197,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = $vender_detail->contact_no2;
     }
     ?>
-                                            <input type="text" name="contact_no2" class="form-control" id="contact_no2" placeholder="Enter alternate contact number" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="contact_no2" class="form-control" id="contact_no2" placeholder="XXX XXX XXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('contact_no2'); ?>
                                             </div>
@@ -223,7 +214,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
 
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="required">Address/Landmark</label>
+                                        <label class="required" for="autocomplete">Street</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -234,7 +225,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = stripslashes($vender_detail->address);
     }
     ?>
-                                            <input id="autocomplete" placeholder="Enter address or landmark" onFocus="geolocate()" class="form-control" type="text" value='<?php echo $field_value; ?>' name="address">
+                                            <input id="autocomplete" placeholder="Enter street" onFocus="geolocate()" class="form-control" type="text" value='<?php echo $field_value; ?>' name="address">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('address'); ?>
                                             </div>
@@ -326,7 +317,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = $vender_detail->zip_code;
     }
     ?>
-                                            <input type="text" name="zipcode" class="form-control" id="zipcode" placeholder="Enter zipcode" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="zipcode" class="form-control" id="zipcode" placeholder="XXXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('zipcode'); ?>
                                             </div>
@@ -336,12 +327,12 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 mt-2 mb-1">
-                                    <h4 class="mt-0 mb-0 header-title">Shop Information</h4>
+                                    <h4 class="mt-0 mb-0 header-title">Restaurant Information</h4>
                                     <hr class="mt-1 mb-3">
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Shop Website</label>
+                                        <label>Restaurant Website</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -362,7 +353,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>TAX Number/GST</label>
+                                        <label for="tax_number">TAX Id</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -374,7 +365,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = $vender_detail->tax_number;
     }
     ?>
-                                            <input type="text" name="tax_number" class="form-control tax-mask" id="tax_number" placeholder="Enter TAX number" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="tax_number" class="form-control tax-mask" id="tax_number" placeholder="XXX-XX-XXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('tax_number'); ?>
                                             </div>

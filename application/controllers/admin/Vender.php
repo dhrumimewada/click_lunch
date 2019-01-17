@@ -64,7 +64,7 @@ class Vender extends CI_Controller {
 					array('field' => 'shop_name', 'label' => 'restaurant name', 'rules' => 'trim|required|max_length[50]'),
 					array('field' => 'email', 'label' => 'email', 'rules' => 'trim|required|max_length[225]|valid_email|callback_isexists'),
 					array('field' => 'vender_name', 'label' => 'contact person name', 'rules' => 'trim|required|min_length[3]|max_length[50]|callback_customAlpha'),
-					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'address', 'label' => 'street', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'state', 'label' => 'state', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'country', 'label' => 'country', 'rules' => 'trim|required|max_length[255]'),
@@ -145,7 +145,7 @@ class Vender extends CI_Controller {
 					array('field' => 'vender_name', 'label' => 'contact person name', 'rules' => 'trim|required|min_length[3]|callback_customAlpha'),
 					array('field' => 'contact_no1', 'label' => 'contact number', 'rules' => 'trim|min_length[12]|max_length[12]'),
 					array('field' => 'contact_no2', 'label' => 'alternate contact number', 'rules' => 'trim|min_length[12]|max_length[12]'),
-					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'address', 'label' => 'street', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'state', 'label' => 'state', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'country', 'label' => 'country', 'rules' => 'trim|required|max_length[255]'),
@@ -225,7 +225,7 @@ class Vender extends CI_Controller {
 		$this->db->from('shop');
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
-			$this->form_validation->set_message('isexists', "The shop email is already in use.");
+			$this->form_validation->set_message('isexists', "The restaurant email is already in use.");
 			return FALSE;
 		} else {
 			return TRUE;

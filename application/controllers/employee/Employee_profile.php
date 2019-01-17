@@ -42,7 +42,7 @@ class Employee_profile extends CI_Controller {
 
 					array('field' => 'first_name', 'label' => 'first name', 'rules' => 'trim|required|min_length[2]|max_length[20]|callback_customAlpha'),
 					array('field' => 'last_name', 'label' => 'last name', 'rules' => 'trim|required|min_length[2]|max_length[20]|callback_customAlpha'),
-					array('field' => 'contact_no', 'label' => 'contact number', 'rules' => 'trim|numeric|min_length[10]|max_length[15]|greater_than[0]')
+					array('field' => 'contact_no', 'label' => 'contact number', 'rules' => 'trim|min_length[12]|max_length[12]')
 				);
 
 				$this->form_validation->set_rules($validation_rules);

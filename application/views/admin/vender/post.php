@@ -284,7 +284,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="text" name="website" class="form-control" id="website" placeholder="Enter shop website" value='<?php echo $field_value; ?>'>
+                                            <input type="text" name="website" class="form-control" id="website" placeholder="Enter restaurant website" value='<?php echo $field_value; ?>'>
                                             <div class="validation-error-label">
                                                 <?php echo form_error('website'); ?>
                                             </div>

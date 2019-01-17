@@ -25,7 +25,21 @@
                             </tr>
                             </thead>
                             <tbody>
-                               
+                                <tr>
+                                    <td>Havmore</td>
+                                    <td>$600.25</td>
+                                    <td><a href="#" class="btn btn-outline-primary waves-effect waves-light btn-sm" title="View" data-popup="tooltip"> View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>La Pinoz</td>
+                                    <td>$900.45</td>
+                                    <td><a href="#" class="btn btn-outline-primary waves-effect waves-light btn-sm" title="View" data-popup="tooltip"> View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Dominos</td>
+                                    <td>$300.05</td>
+                                    <td><a href="#" class="btn btn-outline-primary waves-effect waves-light btn-sm" title="View" data-popup="tooltip"> View</a></td>
+                                </tr>
                             </tbody>
                         </table>
 
@@ -44,7 +58,12 @@
             "order": [[2, "desc"]],
             dom: 'Bfrtip',
             buttons: [
-                'print'
+                {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: [ 0, 1]
+                    }
+                }
             ],
             'iDisplayLength': 10
     });

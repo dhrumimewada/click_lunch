@@ -80,7 +80,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = stripslashes($vender_detail->shop_name);
     }
     ?>
-                                            <input type="text" name="shop_name" class="form-control" id="shop_name" placeholder="Enter shop name" value='<?php echo $field_value; ?>'>
+                                            <input type="text" name="shop_name" class="form-control" id="shop_name" placeholder="Enter restaurant name" value='<?php echo $field_value; ?>'>
                                             <input type="hidden" name="shop_id" value="<?php echo $vender_detail->id; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('shop_name'); ?>
@@ -103,7 +103,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = $vender_detail->email;
     }
     ?>
-                                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter shop email" value="<?php echo $field_value; ?>" readonly>
+                                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter restaurant email" value="<?php echo $field_value; ?>" readonly>
                                             <div class="validation-error-label">
                                                 <?php echo form_error('email'); ?>
                                             </div>
@@ -344,7 +344,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = stripslashes($vender_detail->website);
     }
     ?>
-                                            <input type="text" name="website" class="form-control" id="website" placeholder="Enter shop website" value='<?php echo $field_value; ?>'>
+                                            <input type="text" name="website" class="form-control" id="website" placeholder="Enter restaurant website" value='<?php echo $field_value; ?>'>
                                             <div class="validation-error-label">
                                                 <?php echo form_error('website'); ?>
                                             </div>

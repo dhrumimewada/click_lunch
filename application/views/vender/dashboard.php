@@ -27,56 +27,64 @@
                 <div class="col-xl-3 col-md-6">
                     <div class="card mini-stat bg-pink">
                         <div class="card-body">
-                            <div class="mini-stat-icon">
-                                <i class="mdi mdi-home-variant float-right"></i>
-                            </div>
-                            <div class="text-white">
-                                <h5 class="text-uppercase mb-2">Total Orders </h5>
-                                <h3 class="mb-3"><?php echo $total['total_order']; ?></h3>
-                                <span>Total added in system</span>
-                            </div>
+                            <a href="<?php echo base_url().'maintenance6'; ?>">
+                                <div class="mini-stat-icon">
+                                    <i class="mdi mdi-home-variant float-right"></i>
+                                </div>
+                                <div class="text-white">
+                                    <h5 class="text-uppercase mb-2">Total Orders </h5>
+                                    <h3 class="mb-3"><?php echo $total['total_order']; ?></h3>
+                                    <span>Total added in system</span>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card mini-stat bg-orange">
                         <div class="card-body">
-                            <div class="mini-stat-icon">
-                                <i class="mdi mdi-food float-right"></i>
-                            </div>
-                            <div class="text-white">
-                                <h5 class="text-uppercase mb-2">Products </h5>
-                                <h3 class="mb-3"><?php echo $total['total_product']; ?></h3>
-                                <span>Total added in system</span>
-                            </div>
+                            <a href="<?php echo base_url().'item-list'; ?>">
+                                <div class="mini-stat-icon">
+                                    <i class="mdi mdi-food float-right"></i>
+                                </div>
+                                <div class="text-white">
+                                    <h5 class="text-uppercase mb-2">Products </h5>
+                                    <h3 class="mb-3"><?php echo $total['total_product']; ?></h3>
+                                    <span>Total added in system</span>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card mini-stat bg-purple">
                         <div class="card-body">
-                            <div class="mini-stat-icon">
-                                <i class="mdi mdi-currency-usd float-right"></i>
-                            </div>
-                            <div class="text-white">
-                                <h5 class="text-uppercase mb-2">Total Earnings </h5>
-                                <h3 class="mb-3"><?php echo $total['total_earning']; ?></h3>
-                                <span>Total added in system</span>
-                            </div>
+                            <a href="<?php echo base_url().'earning-report'; ?>">
+                                <div class="mini-stat-icon">
+                                    <i class="mdi mdi-currency-usd float-right"></i>
+                                </div>
+                                <div class="text-white">
+                                    <h5 class="text-uppercase mb-2">Total Earnings </h5>
+                                    <h3 class="mb-3"><?php echo $total['total_earning']; ?></h3>
+                                    <span>Total added in system</span>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-3 col-md-6">
                     <div class="card mini-stat bg-green">
                         <div class="card-body">
-                            <div class="mini-stat-icon">
-                                <i class="mdi mdi-tag-text-outline  float-right"></i>
-                            </div>
-                            <div class="text-white">
-                                <h5 class="text-uppercase mb-2">Promocode</h5>
-                                <h3 class="mb-3"><?php echo $total['total_promocode']; ?></h3>
-                                <span>Total added in system</span>
-                            </div>
+                            <a href="<?php echo base_url().'promocode-list'; ?>">
+                                <div class="mini-stat-icon">
+                                    <i class="mdi mdi-tag-text-outline  float-right"></i>
+                                </div>
+                                <div class="text-white">
+                                    <h5 class="text-uppercase mb-2">Promocode</h5>
+                                    <h3 class="mb-3"><?php echo $total['total_promocode']; ?></h3>
+                                    <span>Total added in system</span>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -106,7 +114,10 @@
                 <div class="col-xl-8">
                     <div class="card m-b-20">
                         <div class="card-body">
-                            <h4 class="mt-0 m-b-30 header-title">Latest Orders</h4>
+                            <h4 class="mt-10 m-b-30 header-title d-inline-block">Latest Orders</h4>
+                            <div class="float-right d-inline-block mb-3">
+                                <a class="btn btn-primary waves-effect waves-light" href="<?php echo base_url().'maintenance6'; ?>">View All</a>
+                            </div>
 
                             <div class="table-responsive">
                                 <table class="table table-hover">

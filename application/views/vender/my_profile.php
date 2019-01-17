@@ -125,7 +125,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                         <?php
     $field_value = $vender_detail->email;
     ?>
-                                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter shop email" value="<?php echo $field_value; ?>" readonly>
+                                            <input type="email" name="email" class="form-control" id="email" placeholder="Enter email" value="<?php echo $field_value; ?>" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -136,7 +136,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                         <?php
     $field_value = stripslashes($vender_detail->shop_code);
     ?>
-                                            <input type="text" name="shop_code" class="form-control disabled" id="shop_code" placeholder="Enter shop code" readonly value="<?php echo $field_value; ?>">
+                                            <input type="text" name="shop_code" class="form-control disabled" id="shop_code" placeholder="Enter code" readonly value="<?php echo $field_value; ?>">
                                         </div>
                                     </div>
                                 </div>
@@ -160,7 +160,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
         $field_value = $vender_detail->tax_number;
     }
     ?>
-                                            <input type="text" name="tax_number" class="form-control tax-mask" id="tax_number" placeholder="Enter TAX id" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="tax_number" class="form-control tax-mask" id="tax_number" placeholder="XXX-XX-XXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('tax_number'); ?>
                                             </div>
@@ -243,13 +243,25 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                             <input id="autocomplete" placeholder="Start typing and find your place in google map" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address">
                                             <input type="hidden" id="administrative_area_level_2" name="city">
                                             <input type="hidden" id="administrative_area_level_1" name="state">
+
+                                            <input type="hidden" name="latitude" id="latitude" value="<?php echo $vender_detail->latitude ?>">
+                                            <input type="hidden" name="longitude" id="longitude" value="<?php echo $vender_detail->longitude ?>">
+
                                             <div class="validation-error-label">
                                                 <?php echo form_error('address'); ?>
+                                            </div>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('latitude'); ?>
+                                            </div>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('longitude'); ?>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            
                             
                             <div class="row">
 
@@ -328,7 +340,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
         $field_value = $vender_detail->zip_code;
     }
     ?>
-                                            <input type="text" name="zip_code" class="form-control zipcode" id="zip_code" placeholder="Enter zip code" value="<?php echo $field_value; ?>" >
+                                            <input type="text" name="zipcode" class="form-control zipcode" id="zip_code" placeholder="XXXXX" value="<?php echo $field_value; ?>" >
                                             <div class="validation-error-label">
                                                 <?php echo form_error('zip_code'); ?>
                                             </div>
@@ -669,7 +681,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
         $field_value = stripslashes($vender_detail->about);
     }
     ?>
-                                            <textarea name="about" class="form-control" id="about" placeholder="Detail description about your shop"><?php echo $field_value; ?></textarea>
+                                            <textarea name="about" class="form-control" id="about" placeholder="Detail description about your restaurant "><?php echo $field_value; ?></textarea>
                                             <div class="validation-error-label">
                                                 <?php echo form_error('about'); ?>
                                             </div>
@@ -696,6 +708,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                             <?php echo form_error('profile_picture'); ?>
                                         </div>
                                     </div>
+                                    <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar small" alt="User avatar" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'" >
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -709,8 +722,9 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
         $field_value = stripslashes($vender_detail->broacher);
     }
     ?>
-                                        <input type="file" name="broacher" class="filestyle" data-buttonname="btn-secondary" accept="application/pdf, image/*" value="">
-                                        <a href="<?php echo $brochure_url; ?>"><?php echo $field_value; ?></a>
+                                        <input type="file" name="broacher" class="filestyle" data-buttonname="btn-secondary" accept="application/pdf" value="">
+                                        <span class="text-muted d-block">Accepted file formats: pdf</span>
+                                        <a href="<?php echo $brochure_url; ?>" target="_blank"><?php echo $field_value; ?></a>
                                         <div class="validation-error-label">
                                             <?php echo form_error('broacher'); ?>
                                         </div>
@@ -721,7 +735,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar small" alt="User avatar" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'" >
+                                        <!-- <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar small" alt="User avatar" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'" > -->
                                     </div>
                                 </div>
                             </div>

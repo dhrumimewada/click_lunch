@@ -1,7 +1,7 @@
 var protocol = window.location.protocol;
 var host = window.location.host;
-var base_url = protocol+'//'+host+'/click_lunch/';
-//var base_url = protocol+'//'+host+'/';
+//var base_url = protocol+'//'+host+'/click_lunch/';
+var base_url = protocol+'//'+host+'/';
 
 $( document ).ready(function() {
 	var delivery_dispatcher_url = base_url+ 'admin/delivery_dispatcher/delivery_dispatcher_list/';

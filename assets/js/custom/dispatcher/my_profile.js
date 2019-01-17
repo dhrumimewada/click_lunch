@@ -5,8 +5,11 @@
         successClass: 'validation-valid-label',
         // Different components require proper error label placement
         errorPlacement: function(error, element) {
-                console.log("error");
-                error.insertAfter(element);
+                if (element.hasClass('upload-img')) {
+                        error.appendTo(element.parent());
+                }else{
+                    error.insertAfter(element);
+                }     
         },
         validClass: "validation-valid-label",
         rules: {
@@ -20,16 +23,61 @@
                 }
             },
             address:{
+                required: true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            city: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            state: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            country: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            zipcode: {
+                required:true,
+                digits: true,
+                maxlength:5,
+                minlength:5,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            latitude: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            longitude: {
+                required:true,
+                maxlength:255,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
             },
             contact_no:{
                 required: true,
-                digits: true,
-                greaterThanZero:true,
-                minlength: 10,
-                maxlength: 15,
+                digits: false,
+                greaterThanZero:false,
+                minlength: 12,
+                maxlength: 12,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -47,12 +95,41 @@
                 minlength: jQuery.validator.format("At least {0} characters required"),
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
+            address:{
+                required: "The street field is required."
+            },
+            city: {
+                required: "The city field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            state: {
+                required: "The state field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            country: {
+                required: "The country field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            zipcode: {
+                required: "The zip code field is required.",
+                digits: "Enter only numeric value",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed"),
+                minlength: jQuery.validator.format("At least {0} characters required")
+            },
+            latitude: {
+                required: "The latitude field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            longitude: {
+                required: "The longitude field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
             contact_no: {
                 required: "The contact number field is required.",
                 digits: "Enter only numeric value",
                 greaterThanZero: "The contact number field is invalid.",
-                minlength: jQuery.validator.format("At least {0} digit required"),
-                maxlength: jQuery.validator.format("Maximum {0} digit allowed.")
+                minlength: "At least 10 digit required",
+                maxlength: "Maximum 10 digit allowed"
             },
             profile_picture:{
                 accept: "Accepted image formats: jpg, jpeg, png",
@@ -76,11 +153,14 @@
     });
 
 $( document ).ready(function() {
-    $(document).on('click', '.mdi-camera', function(){
+
+    $(document).on('click', '.upload-txt, #blah', function(){
         $('#imgInp').click();
-        $('#blah').attr('src', 'https://bootdey.com/img/Content/avatar/avatar6.png');
         return false;
     });
+    
+    $("#contact_no").inputmask("999 999 9999",{"placeholder": ""});
+    $("#zipcode").inputmask("99999",{"placeholder": ""});
 
     function readURL(input) {
         if (input.files && input.files[0]) {

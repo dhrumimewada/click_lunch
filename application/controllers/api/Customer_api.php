@@ -388,6 +388,45 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
+    public function update_profile_post(){
+        $postFields['customer_id'] = $_POST['customer_id'];        
+        $postFields['mobile_number'] = $_POST['mobile_number']; 
+        $postFields['date_of_birth'] = $_POST['date_of_birth']; 
+        $postFields['gender'] = $_POST['gender']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost))
+        {
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $user_data = array(
+                    'mobile_number' => $_POST['mobile_number'],
+                    'dob' => $_POST['date_of_birth'],
+                    'gender' => $_POST['gender']
+                );
+                $this->db->where('id',$_POST['customer_id']);
+                if($this->db->update('customer',$user_data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Profile updated successfully';
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            } 
+        }
+        else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
     public function setting_post($value=''){
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['setting_name'] = $_POST['setting_name']; 

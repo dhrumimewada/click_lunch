@@ -30,6 +30,9 @@
     <!-- autoclose date picker -->
     <link href="<?php echo base_url() . 'plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'; ?>" rel="stylesheet">
 
+    <!-- Magnific popup -->
+    <link href="<?php echo base_url() . 'plugins/magnific-popup/magnific-popup.css'; ?>" rel="stylesheet" type="text/css">
+
     <link href="<?php echo base_url() . 'assets/css/bootstrap.min.css'; ?>" rel="stylesheet" type="text/css">
     <link href="<?php echo base_url() . 'assets/css/metismenu.min.css'; ?>" rel="stylesheet" type="text/css">
     <link href="<?php echo base_url() . 'assets/css/icons.css'; ?>" rel="stylesheet" type="text/css">
@@ -96,4 +99,7 @@
 
     <!-- moment -->
     <script src="<?php echo base_url() . 'assets/js/moment/moment.min.js'; ?>"></script>
+
+    <!-- Magnific popup -->
+    <script src="<?php echo base_url() . 'plugins/magnific-popup/jquery.magnific-popup.min.js'; ?>"></script>
 </head>

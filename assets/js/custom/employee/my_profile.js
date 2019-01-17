@@ -29,10 +29,11 @@
                 }
             },
             contact_no:{
-                digits: true,
-                greaterThanZero:true,
-                minlength: 10,
-                maxlength: 15,
+                required: true,
+                digits: false,
+                greaterThanZero:false,
+                minlength: 12,
+                maxlength: 12,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -57,10 +58,11 @@
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
             contact_no: {
+                required: "The contact number field is required.",
                 digits: "Enter only numeric value",
                 greaterThanZero: "The contact number field is invalid.",
-                minlength: jQuery.validator.format("At least {0} digit required"),
-                maxlength: jQuery.validator.format("Maximum {0} digit allowed.")
+                minlength: "At least 10 digit required",
+                maxlength: "Maximum 10 digit allowed"
             },
             profile_picture:{
                 accept: "Accepted image formats: jpg, jpeg, png",
@@ -84,11 +86,12 @@
     });
 
 $( document ).ready(function() {
-    $(document).on('click', '.mdi-camera', function(){
+    $(document).on('click', '.upload-txt, #blah', function(){
         $('#imgInp').click();
-        $('#blah').attr('src', 'https://bootdey.com/img/Content/avatar/avatar6.png');
         return false;
     });
+
+    $("#contact_no").inputmask("999 999 9999",{"placeholder": ""});
 
     function readURL(input) {
         if (input.files && input.files[0]) {

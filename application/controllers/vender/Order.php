@@ -4,7 +4,7 @@ class Order extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (($this->auth->is_logged_in() == TRUE) && ($this->auth->is_vender())){
+		if (($this->auth->is_logged_in() == TRUE) && ($this->auth->is_vender()) || (($this->auth->is_employee()) && (is_allowed($this->auth->get_role_id(), 'orders')) ) ){
 			
 		}else{
 			if($this->auth->is_logged_in() == TRUE){

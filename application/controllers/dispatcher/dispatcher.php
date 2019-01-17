@@ -47,8 +47,14 @@ class Dispatcher extends CI_Controller {
 				$validation_rules = array(
 
 					array('field' => 'full_name', 'label' => 'full name', 'rules' => 'trim|required|min_length[3]|max_length[50]|callback_customAlpha'),
-					array('field' => 'address', 'label' => 'address', 'rules' => 'trim'),
-					array('field' => 'contact_no', 'label' => 'contact number', 'rules' => 'trim|numeric|required|min_length[10]|max_length[15]|greater_than[0]')
+					array('field' => 'contact_no', 'label' => 'contact number', 'rules' => 'trim|min_length[12]|max_length[12]'),
+					array('field' => 'address', 'label' => 'street', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'state', 'label' => 'state', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'country', 'label' => 'country', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'zipcode', 'label' => 'zip code', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|max_length[255]'),
+					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|max_length[255]')
 				);
 
 				$this->form_validation->set_rules($validation_rules);

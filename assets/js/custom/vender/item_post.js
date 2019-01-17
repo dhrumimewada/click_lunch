@@ -30,6 +30,9 @@
             cuisine_id: {
                 required:true
             },
+            category_id: {
+                required:true
+            },
             price:{
                 required: true,
                 number: true,
@@ -56,7 +59,6 @@
             item_picture:{
                 accept: "image/jpg, image/jpeg, image/png",
                 filesize: 10
-                //checkold: "#old_picture"
             },
             item_description:{
                 normalizer: function (value) {
@@ -71,6 +73,9 @@
             },
             cuisine_id: {
                 required:"The cuisine field is required."
+            },
+            category_id: {
+                required:"The category field is required."
             },
             price: {
                 required: "The price field is required.",
@@ -88,7 +93,6 @@
                 greaterThanZeroEqualTo: "The quantity field is invalid."
             },
             item_picture:{
-                //checkold: "The item photo field is required.",
                 accept: "Accepted image formats: jpg, jpeg, png",
                 filesize: "File size limit executed: 10MB Maximum"
             }
@@ -122,16 +126,6 @@
         return true;
     });
 
- $.validator.addMethod("checkold", function(value, element, param) {
-        var old_picture = $(param);
-        if(old_picture.length == 0){
-            if(value == ''){
-                return false;
-            }
-        }
-        return true;
-    });
-
 $( document ).ready(function() {
     $(".select2").select2();
 
@@ -149,12 +143,28 @@ $( document ).ready(function() {
         buttonup_class: 'btn btn-primary'
     });
 
+    $('.image-popup-no-margins').magnificPopup({
+        type: 'image',
+        closeOnContentClick: true,
+        closeBtnInside: false,
+        fixedContentPos: true,
+        mainClass: 'mfp-no-margins mfp-with-zoom', // class to remove default margin from left and right side
+        image: {
+            verticalFit: true
+        },
+        zoom: {
+            enabled: true,
+            duration: 300 // don't foget to change the duration also in CSS
+        }
+    });
+
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             
             reader.onload = function (e) {
                 $('#blah').attr('src', e.target.result);
+                $(".image-popup-no-margins").attr("href", e.target.result)
             }
             reader.readAsDataURL(input.files[0]);
         }
@@ -228,7 +238,6 @@ $( document ).ready(function() {
             buttonup_class: 'btn btn-primary'
         });
     });
-
 });
 
 function validate_varient() {

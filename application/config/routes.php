@@ -219,7 +219,7 @@ $route['delivery-dispatcher-status'] = 'admin/delivery_dispatcher/active_deactiv
 $route['delivery-dispatcher-update'] = 'admin/delivery_dispatcher/put'; 
 $route['delivery-dispatcher-delete'] = 'admin/delivery_dispatcher/delete';
 
-//Admin - cushions
+//Admin - cuisine
 $route['cuisine-list'] = 'admin/cuisine/index';  
 $route['location'] = 'admin/cuisine/location';  
 $route['cuisine-delete'] = 'admin/cuisine/delete';  
@@ -228,6 +228,15 @@ $route['cuisine-add'] = 'admin/cuisine/post';
 $route['cuisine-update/(:any)'] = 'admin/cuisine/put/$1'; 
 $route['cuisine-update'] = 'admin/cuisine/index';
 $route['cuisine-put'] = 'admin/cuisine/put';
+
+//Admin - Category
+$route['category-list'] = 'admin/category/index';  
+$route['category-delete'] = 'admin/category/delete';  
+$route['category-status'] = 'admin/category/active_deactive_category';  
+$route['category-add'] = 'admin/category/post';  
+$route['category-update/(:any)'] = 'admin/category/put/$1'; 
+$route['category-update'] = 'admin/category/index';
+$route['category-put'] = 'admin/category/put';
 
 // Admin - app setting
 $route['app-setting'] = 'appsetting/index';  

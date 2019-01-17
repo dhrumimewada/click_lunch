@@ -49,6 +49,14 @@ class Vender_model extends CI_Model {
 	public function update_profile($modal_data = NULL) {
 		$this->db->trans_begin();
 		$return_value = FALSE;
+
+		if($this->auth->is_vender()){
+			$user_id = $this->auth->get_user_id();
+		}else if(($this->auth->is_employee()) && (is_allowed($this->auth->get_role_id(), 'profile')) ){
+			$user_id = $this->auth->get_emp_shop_id();
+		}else{
+			$user_id = '';
+		}
 		   
 		$from_time_selected = DateTime::createFromFormat('H:i',$this->config->item("start_time_defualt"));
 		$to_time_selected = DateTime::createFromFormat('H:i',$this->config->item("end_time_defualt"));
@@ -110,6 +118,12 @@ class Vender_model extends CI_Model {
 		$user_data['contact_no1'] = $this->input->post("contact_no1");
 		$user_data['contact_no2'] = $this->input->post("contact_no2");
 		$user_data['address'] = addslashes($this->input->post("address"));
+		$user_data['city'] = addslashes($this->input->post("city"));
+		$user_data['state'] = addslashes($this->input->post("state"));
+		$user_data['country'] = addslashes($this->input->post("country"));
+		$user_data['zip_code'] = $this->input->post("zipcode");
+		$user_data['latitude'] = $this->input->post("latitude");
+		$user_data['longitude'] = $this->input->post("longitude");
 		$user_data['website'] = addslashes($this->input->post("website"));
 		$user_data['min_order'] = $this->input->post("min_order");
 		$user_data['delivery_charges'] = $this->input->post("delivery_charges");
@@ -123,7 +137,7 @@ class Vender_model extends CI_Model {
 			$user_data['profile_picture'] = $modal_data['profile_picture']['file_name'];
 
 			$this->db->select('profile_picture');
-			$this->db->where('id', $this->auth->get_user_id());
+			$this->db->where('id', $user_id);
 			$this->db->from('shop');
 			$sql_query = $this->db->get();
 			if ($sql_query->num_rows() > 0) {
@@ -143,7 +157,7 @@ class Vender_model extends CI_Model {
 			$user_data['broacher'] = $modal_data['broacher']['file_name'];
 
 			$this->db->select('broacher');
-			$this->db->where('id', $this->auth->get_user_id());
+			$this->db->where('id', $user_id);
 			$this->db->from('shop');
 			$sql_query = $this->db->get();
 			if ($sql_query->num_rows() > 0) {
@@ -164,18 +178,18 @@ class Vender_model extends CI_Model {
 		// print_r($user_data);
 		// exit;
 	
-		$this->db->where('id', $this->auth->get_user_id());
+		$this->db->where('id', $user_id);
 		$this->db->update("shop", $user_data);
 
 		// DELETE old availability
-		$this->db->where("shop_id",$this->auth->get_user_id());
+		$this->db->where("shop_id",$user_id);
 		$this->db->delete('shop_availibality');
 
 		//Add new availability
 		foreach ($availability as $key => $value) {
 
 			$availability_data = array(
-				'shop_id' =>  $this->auth->get_user_id(),
+				'shop_id' =>  $user_id,
 				'day' =>  $key,
 				'from_time' => $value['from'],
 				'to_time' =>  $value['to'],
@@ -188,13 +202,13 @@ class Vender_model extends CI_Model {
 
 		
 		// DELETE old cuisines
-		$this->db->where("shop_id",$this->auth->get_user_id());
+		$this->db->where("shop_id",$user_id);
 		$this->db->delete('shop_cuisines');
 
 		//Add new cuisines
 		foreach ($this->input->post("cuisines") as $key => $value) {
 			$cuisines_data = array(
-		        'shop_id'=>$this->auth->get_user_id(),
+		        'shop_id'=>$user_id,
 		        'cuisine_id'=>$value
 		    );
 		    $this->db->insert('shop_cuisines',$cuisines_data);

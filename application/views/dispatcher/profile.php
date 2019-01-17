@@ -2,7 +2,7 @@
 <?php
 $put_link = base_url().'dispatcher-profile';
 
-$prof_url = 'https://bootdey.com/img/Content/avatar/avatar6.png';
+$prof_url = $prof_defualt_url = 'https://bootdey.com/img/Content/avatar/avatar6.png';
 
 if (isset($dispatcher_detail->profile_picture) && ($dispatcher_detail->profile_picture != '')) {
     $prof_url = base_url() . $this->config->item("profile_path") . '/'.$dispatcher_detail->profile_picture;
@@ -42,16 +42,16 @@ if (isset($dispatcher_detail->profile_picture) && ($dispatcher_detail->profile_p
 
                 <div class="col-lg-10">
                     <div class="card m-b-20">
-                        <div class="card-body row ">
-                            <div class="col-lg-4">
-                            </div>
-                            <div class="col-lg-4 text-center">
-                            <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar" alt="User avatar" id="blah">
-                            <i class="mdi mdi-camera"></i>
-                            </div>
-                            <div class="col-lg-4">
+                        <div class="card-body row text-center">
+
+                            <div class="col-12 text-center">
+                                <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar" alt="User avatar" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'" >
+
                                 <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" class="input-file upload-img"/>
+                                <h4 class="mt-3 pointer upload-txt">Upload Photo</h4>
+
                             </div>
+
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@ if (isset($dispatcher_detail->profile_picture) && ($dispatcher_detail->profile_p
         $field_value = stripslashes($dispatcher_detail->contact_no);
     }
     ?>
-                                            <input type="text" name="contact_no" id="contact_no" class="form-control" placeholder="Enter contact number" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="contact_no" id="contact_no" class="form-control" placeholder="XXX XXX XXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('contact_no'); ?>
                                             </div>
@@ -118,7 +118,7 @@ if (isset($dispatcher_detail->profile_picture) && ($dispatcher_detail->profile_p
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="address">Address</label>
+                                        <label for="address" class="required">Street</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -129,18 +129,112 @@ if (isset($dispatcher_detail->profile_picture) && ($dispatcher_detail->profile_p
         $field_value = stripslashes($dispatcher_detail->address);
     }
     ?>
-                                            <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address">
+                                            <input id="autocomplete" placeholder="Enter street" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address">
                                             <input type="hidden" id="administrative_area_level_2" name="city">
                                             <input type="hidden" id="administrative_area_level_1" name="state">
                                             
                                             <div class="validation-error-label">
                                                 <?php echo form_error('address'); ?>
                                             </div>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('latitude'); ?>
+                                            </div>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('longitude'); ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="city" class="required">City</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('city');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = stripslashes($dispatcher_detail->city);
+    }
+    ?>
+                                            <input type="text" name="city" class="form-control city" id="city" value="<?php echo $field_value; ?>" placeholder="Enter city">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('city'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="state" class="required">State</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('state');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = stripslashes($dispatcher_detail->state);
+    }
+    ?>
+                                            <input type="text" name="state" class="form-control state" id="state" value="<?php echo $field_value; ?>" placeholder="Enter state">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('state'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="country" class="required">Country</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('country');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = stripslashes($dispatcher_detail->country);
+    }
+    ?>
+                                            <input type="text" name="country" class="form-control country" id="country" value="<?php echo $field_value; ?>" placeholder="Enter country">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('country'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="zipcode" class="required">Zip Code</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('zipcode');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = stripslashes($dispatcher_detail->zip_code);
+    }
+    ?>
+                                            <input type="text" name="zipcode" class="form-control zipcode" id="zipcode" value="<?php echo $field_value; ?>" placeholder="XXXXX">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('zipcode'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="latitude" id="latitude" value="<?php echo $dispatcher_detail->latitude; ?>">
+                            <input type="hidden" name="longitude" id="longitude" value="<?php echo $dispatcher_detail->longitude; ?>">
 
                             <div class="form-group m-b-0">
                                 <div>
@@ -163,6 +257,7 @@ if (isset($dispatcher_detail->profile_picture) && ($dispatcher_detail->profile_p
     </div>
 </div>
 <script src="assets/js/custom/dispatcher/my_profile.js"></script>
+<script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
 <script>
 
   var placeSearch, autocomplete;

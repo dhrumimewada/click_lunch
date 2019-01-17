@@ -72,6 +72,7 @@ class Item extends CI_Controller {
 					
 					array('field' => 'name', 'label' => 'name', 'rules' => 'trim|required|min_length[2]'),
 					array('field' => 'cuisine_id', 'label' => 'cuisine', 'rules' => 'trim|required|numeric'),
+					array('field' => 'category_id', 'label' => 'category', 'rules' => 'trim|required|numeric'),
 					array('field' => 'price', 'label' => 'price', 'rules' => 'trim|required|numeric|greater_than[0]'),
 					array('field' => 'offer_price', 'label' => 'offer price', 'rules' => 'trim|numeric|less_than['.$this->input->post("price").']'),
 					array('field' => 'quantity', 'label' => 'quantity', 'rules' => 'trim|numeric|greater_than_equal_to[0]'),
@@ -128,14 +129,15 @@ class Item extends CI_Controller {
 		//$output_data['category_data'] = $this->item_model->get_active_category();
 		$output_data['variant_groups'] = $this->item_model->get_variant_groups();
 		$output_data['cuisines_data'] = get_cuisine();
+		$output_data['category_data'] = $this->config->item("product_category");
 		$output_data['item_type'] = $type;
 
 
-		$item_list = $this->item_model->get_item();
-		$output_data["combo_product_data"] = $item_list;
+		//$item_list = $this->item_model->get_item();
+		//$output_data["combo_product_data"] = $item_list;
 
-				// echo "<pre>";
-		// print_r($output_data['item_type']); exit;
+		// 		echo "<pre>";
+		// print_r($output_data['category_data']); exit;
 
 		$output_data['main_content'] = "vender/item/post";
 		$this->load->view('template/template',$output_data);	
@@ -155,6 +157,7 @@ class Item extends CI_Controller {
 					
 					array('field' => 'name', 'label' => 'item name', 'rules' => 'trim|required|min_length[2]'),
 					array('field' => 'cuisine_id', 'label' => 'cuisine', 'rules' => 'trim|required|numeric'),
+					array('field' => 'category_id', 'label' => 'category', 'rules' => 'trim|required|numeric'),
 					array('field' => 'price', 'label' => 'item price', 'rules' => 'trim|required|numeric|greater_than[0]'),
 					array('field' => 'offer_price', 'label' => 'item offer price', 'rules' => 'trim|numeric|less_than['.$this->input->post("price").']'),
 					array('field' => 'quantity', 'label' => 'item quantity', 'rules' => 'trim|numeric|greater_than_equal_to[0]'),
@@ -212,6 +215,7 @@ class Item extends CI_Controller {
 		$output_data['cuisines_data'] = get_cuisine();
 		$output_data['item_variant_data'] = $this->item_model->get_item_variants(decrypt($id));
 		$output_data['item_data'] = $this->item_model->get_item(decrypt($id));
+		$output_data['category_data'] = $this->config->item("product_category");
 		$output_data['variant_groups'] = $this->item_model->get_variant_groups();
 		
 		if (!isset($output_data['item_data']) || empty($output_data['item_data']) || count($output_data['item_data']) <= 0){

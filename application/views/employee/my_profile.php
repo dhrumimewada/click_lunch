@@ -2,7 +2,7 @@
 <?php
 $put_link = base_url().'employee-profile';
 
-$prof_url = 'https://bootdey.com/img/Content/avatar/avatar6.png';
+$prof_url = $prof_defualt_url = 'https://bootdey.com/img/Content/avatar/avatar6.png';
 
 if (isset($employee_detail->profile_picture) && ($employee_detail->profile_picture != '')) {
     $prof_url = base_url() . $this->config->item("profile_path") . '/'.$employee_detail->profile_picture;
@@ -41,17 +41,18 @@ if (isset($employee_detail->profile_picture) && ($employee_detail->profile_pictu
                 </div>
 
                 <div class="col-lg-10">
+
                     <div class="card m-b-20">
-                        <div class="card-body row ">
-                            <div class="col-lg-4">
-                            </div>
-                            <div class="col-lg-4 text-center">
-                            <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar" alt="User avatar" id="blah">
-                            <i class="mdi mdi-camera"></i>
-                            </div>
-                            <div class="col-lg-4">
+                        <div class="card-body row text-center">
+
+                            <div class="col-12 text-center">
+                                <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar" alt="User avatar" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'" >
+
                                 <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" class="input-file upload-img"/>
+                                <h4 class="mt-3 pointer upload-txt">Upload Photo</h4>
+
                             </div>
+
                         </div>
                     </div>
 
@@ -60,7 +61,7 @@ if (isset($employee_detail->profile_picture) && ($employee_detail->profile_pictu
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">First Name</label>
+                                        <label class="required" for="first_name">First Name</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -80,7 +81,7 @@ if (isset($employee_detail->profile_picture) && ($employee_detail->profile_pictu
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Last Name</label>
+                                        <label class="required" for="last_name">Last Name</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -117,7 +118,7 @@ if (isset($employee_detail->profile_picture) && ($employee_detail->profile_pictu
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Contact Number</label>
+                                        <label for="contact_no" class="required">Contact Number</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -128,7 +129,7 @@ if (isset($employee_detail->profile_picture) && ($employee_detail->profile_pictu
         $field_value = stripslashes($employee_detail->contact_no);
     }
     ?>
-                                            <input type="text" name="contact_no" class="form-control" placeholder="Enter contact number" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="contact_no" id="contact_no" class="form-control" placeholder="XXX XXX XXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('contact_no'); ?>
                                             </div>
@@ -141,7 +142,7 @@ if (isset($employee_detail->profile_picture) && ($employee_detail->profile_pictu
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Shop Name</label>
+                                        <label>Restaurant Name</label>
                                         <div>
                                         <?php 
                                         $field_value = stripslashes($employee_detail->shop_name);
@@ -186,3 +187,4 @@ if (isset($employee_detail->profile_picture) && ($employee_detail->profile_pictu
     </div>
 </div>
 <script src="assets/js/custom/employee/my_profile.js"></script>
+<script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>

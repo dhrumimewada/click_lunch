@@ -65,6 +65,10 @@ class Dispatcher_model extends CI_Model {
 		$user_data['full_name'] = ucwords(addslashes($this->input->post("full_name")));
 		$user_data['contact_no'] = $this->input->post("contact_no");
 		$user_data['address'] = $this->input->post("address");
+		$user_data['city'] = addslashes($this->input->post("city"));
+		$user_data['state'] = addslashes($this->input->post("state"));
+		$user_data['country'] = addslashes($this->input->post("country"));
+		$user_data['zip_code'] = $this->input->post("zipcode");
 		$user_data['updated_at'] = date('Y-m-d H:i:s');
 
 		if (isset($modal_data['profile_picture']) && !empty($modal_data['profile_picture'])){

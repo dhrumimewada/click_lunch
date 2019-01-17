@@ -48,7 +48,7 @@ $edit_link = base_url().'employee-update';
                                         $btn_name = 'Active';
                                         $btn_class = 'btn-success';
                                     }else{
-                                        $btn_name = 'Deactive';
+                                        $btn_name = 'Deactivate';
                                         $btn_class = 'btn-deactive';
                                     }
                                     if($value["password"] == ''){
@@ -145,14 +145,16 @@ $edit_link = base_url().'employee-update';
             var parent = $(this).parent();
 
             if($this.attr("status-id") == '1'){
-                var change_status_to = 'deactive';
-                var change_status_to1 = 'Deactived!';
-                var btn_name_replace = 'Deactive';
+                var change_status_to = 'deactivate';
+                var change_status_to1 = 'Deactivated!';
+                var btn_name_replace = 'Deactivate';
+                var btn_cls_replace = 'btn-deactive';
                 var status = '0';
             }else{
                 var change_status_to = 'active';
                 var change_status_to1 = 'Activated!';
                 var btn_name_replace = 'Active';
+                var btn_cls_replace = 'btn-success';
                 var status = '1';
             }
             if (typeof data_id != "undefined" && data_id != null){
@@ -183,7 +185,7 @@ $edit_link = base_url().'employee-update';
                                     'Employee has been '+change_status_to1,
                                     'success'
                                 )
-                                $this.replaceWith("<button type='button' class='btn btn-outline-primary waves-effect waves-light deactive_employee' status-id='" +status+ "' title='"+btn_name_replace+"' data-popup='tooltip'>" +btn_name_replace+ "</button>");
+                                $this.replaceWith("<button type='button' class='btn "+btn_cls_replace+ " waves-effect waves-light btn-sm deactive_employee' status-id='" +status+ "' title='"+btn_name_replace+"' data-popup='tooltip'>" +btn_name_replace+ "</button>");
                                 
                             } 
                         },

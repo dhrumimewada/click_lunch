@@ -100,6 +100,63 @@ $item_type = ($item_data->is_combo == 1)?'Combo':'Product';
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
+                                        <label class="required"><?php echo $item_type; ?> Category</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('category_id');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value = $item_data->category_id;
+    }
+    ?>
+                                            <select class="select2 form-control" data-placeholder="Select category" name="category_id">
+                                                <option selected disabled></option>
+                                                <?php 
+                                                
+                                                foreach ($category_data as $key => $value) {
+                                                    $selected = '';
+                                                    if($field_value == $value['key']){
+                                                        $selected = 'selected';
+                                                    }
+                                                    echo "<option value='".$value['key']."' ".$selected.">".$value['value']."</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('category_id'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group m-t-30 item">
+                                            <?php
+    $checked = '';
+    $field_value = NULL;
+    $temp_value = set_value('inventory_status');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value; 
+    } else{
+        $field_value = $item_data->inventory_status;
+    } 
+    if($field_value == 1){
+        $checked = 'checked';
+    }
+    
+    ?>
+                                        <span class="ml-5">
+                                        <input type="checkbox" switch="none" id="inventory_status" value="1" name="inventory_status" <?php echo $checked; ?> >
+                                        <label class="mb-0 mt-1" for="inventory_status" data-on-label="Inventory" data-off-label="Off" title="Inventory"></label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
                                         <label class="required"><?php echo $item_type; ?> Price</label>
                                         <div>
                                             <?php
@@ -165,51 +222,6 @@ $item_type = ($item_data->is_combo == 1)?'Combo':'Product';
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="form-group m-t-30 item">
-                                            <?php
-    $checked = '';
-    $field_value = NULL;
-    $temp_value = set_value('inventory_status');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value; 
-    } else{
-        $field_value = $item_data->inventory_status;
-    } 
-    if($field_value == 1){
-        $checked = 'checked';
-    }
-    
-    ?>
-                                        <span class="ml-5">
-                                        <input type="checkbox" switch="none" id="inventory_status" value="1" name="inventory_status" <?php echo $checked; ?> >
-                                        <label class="mb-0 mt-1" for="inventory_status" data-on-label="Inventory" data-off-label="Off" title="Inventory"></label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label>Short Description</label>
-                                        <div>
-                                            <?php
-    $field_value = NULL;
-    $temp_value = set_value('item_description');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    } else{
-        $field_value = stripslashes($item_data->item_description);
-    } 
-    ?>
-                                            <textarea name="item_description" rows="8" class="form-control" data-buttonname="btn-secondary" placeholder="Ex: Capsicum, fresh tomatoes, paneer and red paprika."><?php echo $field_value; ?></textarea>
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('item_description'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
                                     <div class="form-group">
                                         <label><?php echo $item_type; ?> Photo</label>
                                         <div>
@@ -227,7 +239,37 @@ $item_type = ($item_data->is_combo == 1)?'Combo':'Product';
                                                 <?php echo form_error('item_picture'); ?>
                                             </div>
                                         </div>
-                                        <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar small" alt="User avatar" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Short Description</label>
+                                        <div>
+                                            <?php
+    $field_value = NULL;
+    $temp_value = set_value('item_description');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    } else{
+        $field_value = stripslashes($item_data->item_description);
+    } 
+    ?>
+                                            <textarea name="item_description" rows="4" class="form-control" data-buttonname="btn-secondary" placeholder="Ex: Capsicum, fresh tomatoes, paneer and red paprika."><?php echo $field_value; ?></textarea>
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('item_description'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <a href="<?php echo $prof_url; ?>" class="image-popup-no-margins">
+                                            <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar small" alt="User avatar" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'">
+                                        </a>
                                     </div>
                                 </div>
 

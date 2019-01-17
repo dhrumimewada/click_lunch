@@ -63,7 +63,7 @@ $edit_link = base_url().'item-update';
                                         $btn_name = 'Active';
                                         $btn_class = 'btn-success';
                                     }else{
-                                        $btn_name = 'Deactive';
+                                        $btn_name = 'Deactivate';
                                         $btn_class = 'btn-deactive';
                                     }
                                     echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_item' status-id='" . $value["is_active"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
@@ -154,9 +154,9 @@ $edit_link = base_url().'item-update';
             var data_id = get_dataid($this);
 
             if($this.attr("status-id") == '1'){
-                var change_status_to = 'deactive';
-                var change_status_to1 = 'Deactived!';
-                var btn_name_replace = 'Deactive';
+                var change_status_to = 'deactivate';
+                var change_status_to1 = 'Deactivated!';
+                var btn_name_replace = 'Deactivate';
                 var btn_cls_replace = 'btn-deactive';
                 var status = '0';
             }else{

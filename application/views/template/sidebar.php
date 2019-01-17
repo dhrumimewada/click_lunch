@@ -41,7 +41,7 @@ if($is_admin){
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Orders <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="<?php echo base_url().'maintenance1'; ?>">New Order</a></li>
+                        <li><a href="<?php echo base_url().'order-processing'; ?>">New Order</a></li>
                         <li><a href="<?php echo base_url().'maintenance2'; ?>">Live Order</a></li>
                         <li><a href="<?php echo base_url().'maintenance3'; ?>">Cancelled</a></li>
                         <li><a href="<?php echo base_url().'maintenance4'; ?>">Completed</a></li>
@@ -88,6 +88,13 @@ if($is_admin){
                 </li>
 
                 <li>
+                    <a href="<?php echo base_url().'category-list'; ?>" class="waves-effect">
+                        <i class="mdi mdi-food"></i><span> Category </span>
+                    </a>
+                </li>
+
+
+                <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-content-paste"></i><span> Website Management <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li><a href="<?php echo base_url().'maintenance1'; ?>">Change Banner</a></li>
@@ -97,24 +104,24 @@ if($is_admin){
 
                 <li>
                     <a href="<?php echo base_url().'admin-list'; ?>" class="waves-effect">
-                        <i class="mdi mdi-account-multiple"></i><span> Admin Managment </span>
+                        <i class="mdi mdi-account-multiple"></i><span> Admin Management </span>
                     </a>
                 </li>
 
                 <li>
                     <a href="<?php echo base_url().'customer-list'; ?>" class="waves-effect">
-                        <i class="mdi mdi-account-box"></i><span> Customer Managment</span>
+                        <i class="mdi mdi-account-box"></i><span> Customer Management</span>
                     </a>
                 </li>
 
                 <li>
                     <a href="<?php echo base_url().'email-list'; ?>" class="waves-effect">
-                        <i class="mdi mdi-email"></i><span> Push/Email Managment</span>
+                        <i class="mdi mdi-email"></i><span> Push/Email Management</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-account-multiple-plus"></i><span> Restaurant Managment <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-account-multiple-plus"></i><span> Restaurant Management <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li><a href="<?php echo base_url().'vender-list'; ?>">List of All Restaurants </a></li>
                         <li><a href="<?php echo base_url().'vender-perc'; ?>">Percentage of Restaurant </a></li>
@@ -180,13 +187,6 @@ if($is_admin){
                 <?php } 
                  if($is_vender){
                 ?>
-
-
-                <li>
-                    <a href="<?php echo base_url().'earning-report'; ?>" class="waves-effect">
-                        <i class="mdi mdi-file-document"></i><span> Revenue </span>
-                    </a>
-                </li>
 
                 <li>
                     <a href="<?php echo base_url().'variant-group-list'; ?>" class="waves-effect">

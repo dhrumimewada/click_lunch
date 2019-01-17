@@ -30,7 +30,7 @@ class Vender_login extends CI_Controller {
 
 					if($this->auth->login($this->input->post('email'), $this->input->post('password'), $this->input->post('user_type'))){
 						$this->session->set_flashdata($this->auth->get_messages_array());
-						redirect(base_url() . "vender-profile");
+						redirect(base_url() . "vender-dashboard");
 					}else{
 						$this->session->set_flashdata($this->auth->get_messages_array());
 						redirect(base_url() . "login-vender");

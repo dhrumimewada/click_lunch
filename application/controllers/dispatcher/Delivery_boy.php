@@ -52,8 +52,14 @@ class Delivery_boy extends CI_Controller {
 					array('field' => 'email', 'label' => 'email', 'rules' => 'trim|required|max_length[225]|valid_email|is_unique[delivery_boy.email]'),
 					array('field' => 'password', 'label' => 'password', 'rules' => 'trim|required|min_length[6]'),
 					array('field' => 'c_password', 'label' => 'confirm password', 'rules' => 'trim|required|matches[password]'),
-					array('field' => 'mobile_number', 'label' => 'contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
-					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]')
+					array('field' => 'mobile_number', 'label' => 'contact number', 'rules' => 'trim|min_length[12]|max_length[12]'),
+					array('field' => 'address', 'label' => 'street', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'state', 'label' => 'state', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'country', 'label' => 'country', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'zipcode', 'label' => 'zip code', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|max_length[255]'),
+					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|max_length[255]')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
@@ -120,8 +126,14 @@ class Delivery_boy extends CI_Controller {
 				$validation_rules = array(
 					
 					array('field' => 'username', 'label' => 'full name', 'rules' => 'trim|required|min_length[3]|max_length[50]'),
-					array('field' => 'mobile_number', 'label' => 'contact number', 'rules' => 'trim|min_length[10]|max_length[15]|greater_than[0]'),
-					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required|max_length[255]')
+					array('field' => 'mobile_number', 'label' => 'contact number', 'rules' => 'trim|min_length[12]|max_length[12]'),
+					array('field' => 'address', 'label' => 'street', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'state', 'label' => 'state', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'country', 'label' => 'country', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'zipcode', 'label' => 'zip code', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|max_length[255]'),
+					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|max_length[255]')
 				);
 
 				$this->form_validation->set_rules($validation_rules);

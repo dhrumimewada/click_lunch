@@ -37,26 +37,18 @@
                 <div class="col-lg-10">
                     <div class="card m-b-20">
                         <div class="card-body">
+                            
+                            <div class="row m-b-20">
+                                <div class="col-12 text-center">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="img-circle profile-avatar" alt="User avatar" id="blah" onerror="this.src='https://bootdey.com/img/Content/avatar/avatar3.png'" >
+
+                                    <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;" class="input-file upload-img"/>
+                                    <h4 class="mt-3 pointer upload-txt">Upload Photo</h4>
+                                </div>
+                             </div>
+
 
                             <div class="row">
-
-                                <div class="col-lg-12">
-                                    <div class=" m-b-20">
-                                        <div class=" row ">
-                                            <div class="col-lg-4">
-                                            </div>
-                                            <div class="col-lg-4 text-center">
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="img-circle profile-avatar" alt="User avatar" id="blah" onerror="this.src='https://bootdey.com/img/Content/avatar/avatar3.png'" >
-                                            <i class="mdi mdi-camera"></i>
-                                            <input type='file' name="profile_picture" id="imgInp" accept="image/*" style="visibility:hidden; position: absolute;"  class="input-file upload-img"/>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -150,7 +142,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input type="mobile_number" name="mobile_number" class="form-control" id="mobile_number" placeholder="Enter contact number" value="<?php echo $field_value; ?>">
+                                            <input type="mobile_number" name="mobile_number" class="form-control" id="mobile_number" placeholder="XXX XXX XXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('mobile_number'); ?>
                                             </div>
@@ -159,7 +151,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required" for="autocomplete">Address</label>
+                                        <label class="required" for="autocomplete">Street</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -168,7 +160,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <input id="autocomplete" placeholder="Enter your address" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address" >
+                                            <input id="autocomplete" placeholder="Enter street" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address" >
                                             <input type="hidden" id="administrative_area_level_2" name="city">
                                             <input type="hidden" id="administrative_area_level_1" name="state">
                                             <div class="validation-error-label">
@@ -178,6 +170,87 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="city" class="required">City</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('city');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    ?>
+                                            <input type="text" name="city" class="form-control city" id="city" value="<?php echo $field_value; ?>" placeholder="Enter city">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('city'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="state" class="required">State</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('state');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    ?>
+                                            <input type="text" name="state" class="form-control state" id="state" value="<?php echo $field_value; ?>" placeholder="Enter state">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('state'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="country" class="required">Country</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('country');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    ?>
+                                            <input type="text" name="country" class="form-control country" id="country" value="<?php echo $field_value; ?>" placeholder="Enter country">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('country'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="zipcode" class="required">Zip Code</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('zipcode');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    ?>
+                                            <input type="text" name="zipcode" class="form-control zipcode" id="zipcode" value="<?php echo $field_value; ?>" placeholder="XXXXX">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('zipcode'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="latitude" id="latitude" value="">
+                            <input type="hidden" name="longitude" id="longitude" value="">
+
                             <div class="row">
 
                                 <div class="col-lg-12">
@@ -207,7 +280,8 @@
 
     </div>
 </div>
-<script src="<?php echo base_url().'assets/js/custom/admin/customer.js'; ?>"></script>
+<script src="<?php echo base_url().'assets/js/custom/dispatcher/delivery_boy.js'; ?>"></script>
+<script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
 <script>
 
   var placeSearch, autocomplete;

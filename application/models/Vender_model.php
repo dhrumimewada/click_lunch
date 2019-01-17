@@ -126,7 +126,7 @@ class Vender_model extends CI_Model {
 			$this->auth->set_error_message("Error into inserting data");
 		} else {
 			$this->db->trans_commit();
-			$this->auth->set_status_message("Vender added successfully");
+			$this->auth->set_status_message("Restaurant added successfully");
 			$return_value = TRUE;
 		}
 

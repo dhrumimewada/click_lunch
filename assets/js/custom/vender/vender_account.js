@@ -28,12 +28,6 @@
                     return $.trim(value);
                 }
             },
-            tag_line: {
-                maxlength:70,
-                normalizer: function (value) {
-                    return $.trim(value);
-                }
-            },
             vender_name: {
                 required:true,
                 alpha:true,
@@ -66,6 +60,50 @@
             },
             address: {
                 required:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            city: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            state: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            country: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            zipcode: {
+                required:true,
+                digits: true,
+                maxlength:5,
+                minlength:5,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            latitude: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            longitude: {
+                required:true,
+                maxlength:255,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -128,7 +166,7 @@
                 filesize: 10
             },
             broacher:{
-                accept: "image/jpg, image/jpeg, image/png, application/pdf",
+                accept: "application/pdf",
                 filesize: 10
             }
         },
@@ -138,16 +176,13 @@
                 required: "The restaurant title field is required.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed.")
             },
-            tag_line: {
-                maxlength: jQuery.validator.format("Maximum {0} characters allowed.")
-            },
             vender_name: {
                 required: "The contact person field is required.",
                 alpha:"The contact person field contain only alphabets and space.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed.")
             },
             tax_number:{
-                valid_taxno:"The tax number field is invalid."
+                valid_taxno:"The tax id field is invalid."
             },
             contact_no1: {
                 required: "The contact number field is required.",
@@ -163,7 +198,33 @@
                 maxlength: "Maximum 10 digit allowed"
             },
             address: {
-                required: "The address field is required."
+                required: "The street field is required."
+            },
+            city: {
+                required: "The city field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            state: {
+                required: "The state field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            country: {
+                required: "The country field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            zipcode: {
+                required: "The zip code field is required.",
+                digits: "Enter only numeric value",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed"),
+                minlength: jQuery.validator.format("At least {0} characters required")
+            },
+            latitude: {
+                required: "The latitude field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            longitude: {
+                required: "The longitude field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
             'cuisines[]': {
                 required: "Please select at least one cuisine."
@@ -203,7 +264,7 @@
                 filesize: "File size limit executed: 10MB Maximum"
             },
             broacher:{
-                accept: "Accepted file formats: jpg, jpeg, png, pdf",
+                accept: "Accepted file formats: pdf",
                 filesize: "File size limit executed: 10MB Maximum"
             }
         },
@@ -271,6 +332,8 @@ $( document ).ready(function() {
     $(".tax-mask").inputmask({"mask": "999-99-9999"});
 
     $("#contact_no1, #contact_no2").inputmask("999 999 9999",{"placeholder": ""});
+
+    $("#zip_code").inputmask("99999",{"placeholder": ""});
 
     var dt = new Date();
     $.each(available_time, function(k, v) {

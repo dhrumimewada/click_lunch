@@ -54,7 +54,13 @@ class Vender_profile extends CI_Controller {
 					array('field' => 'tax_number', 'label' => 'TAX number', 'rules' => 'trim|callback_valid_taxno'),
 					array('field' => 'contact_no1', 'label' => 'contact number', 'rules' => 'trim|required|min_length[12]|max_length[12]'),
 					array('field' => 'contact_no2', 'label' => 'alternate contact number', 'rules' => 'trim|min_length[12]|max_length[12]'),
-					array('field' => 'address', 'label' => 'address', 'rules' => 'trim|required'),
+					array('field' => 'address', 'label' => 'street', 'rules' => 'trim|required'),
+					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'state', 'label' => 'state', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'country', 'label' => 'country', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'zipcode', 'label' => 'zip code', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|max_length[255]'),
+					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|max_length[255]'),
 					array('field' => 'cuisines[]', 'label' => 'shop cuisines', 'rules' => 'trim|required|numeric'),
 					array('field' => 'website', 'label' => 'shop website', 'rules' => 'trim|valid_url'),
 					array('field' => 'min_order', 'label' => 'minimum order', 'rules' => 'trim|required|numeric|greater_than_equal_to[0]'),
@@ -67,6 +73,7 @@ class Vender_profile extends CI_Controller {
 				);
 
 				$this->form_validation->set_rules($validation_rules);
+
 
 				if ($this->form_validation->run() === TRUE) {
 
@@ -98,7 +105,7 @@ class Vender_profile extends CI_Controller {
 					if (isset($_FILES['broacher']) && !empty($_FILES['broacher']) && strlen($_FILES['broacher']['name']) > 0) {
 
 						$config['upload_path'] = FCPATH . $this->config->item("brochure_path");
-						$config['allowed_types'] = 'jpg|jpeg|png|pdf';
+						$config['allowed_types'] = 'pdf';
 						$config['encrypt_name'] = FALSE;
 						$config['file_name'] = 'brochure' . '_' . time();
 						$config['file_ext_tolower'] = TRUE;
@@ -115,10 +122,10 @@ class Vender_profile extends CI_Controller {
 							$file_upload_data = $this->upload->data();
 							$modal_data['broacher'] = $file_upload_data;
 						}
-
 					}
 
 					if ($file_upload){
+
 						if($this->vender_model->update_profile($modal_data)){
 							$this->session->set_flashdata($this->auth->get_messages_array());
 							redirect(base_url() . "vender-profile");
@@ -128,15 +135,18 @@ class Vender_profile extends CI_Controller {
 						}
 					}
 					
-				} 
-
-
+				}
 			}
 		}
-
-
-
-		$user_id = $this->auth->get_user_id();
+		
+		if($this->auth->is_vender()){
+			$user_id = $this->auth->get_user_id();
+		}else if(($this->auth->is_employee()) && (is_allowed($this->auth->get_role_id(), 'profile')) ){
+			$user_id = $this->auth->get_emp_shop_id();
+		}else{
+			
+		}
+		
 
 		$data['vender_detail'] = $this->vender_model->get_vender_detail($user_id);
 		$data['vender_cuisine_detail'] = $this->vender_model->get_vender_cuisine($user_id);

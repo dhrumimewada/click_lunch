@@ -293,7 +293,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="tax_number">TAX Id</label>
+                                        <label for="tax_number" class="required">TAX Id</label>
                                         <div>
                                         <?php
     $field_value = NULL;

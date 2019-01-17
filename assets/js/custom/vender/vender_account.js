@@ -37,6 +37,7 @@
                 }
             },
             tax_number: {
+                required:true,
                 valid_taxno:true
             },
             contact_no1:{
@@ -182,6 +183,7 @@
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed.")
             },
             tax_number:{
+                required: "The tax id field is required.",
                 valid_taxno:"The tax id field is invalid."
             },
             contact_no1: {

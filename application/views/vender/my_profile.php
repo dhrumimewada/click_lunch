@@ -148,7 +148,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                 
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>TAX Id</label>
+                                        <label for="tax_number" class="required">TAX Id</label>
                                         <div>
                                         <?php
     $field_value = NULL;

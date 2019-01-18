@@ -30,7 +30,7 @@ if (isset($temp_value) && !empty($temp_value)) {
     $field_value = $temp_value;
 } 
 ?>
-                                <input type="text" name="email" class="form-control" id="email" placeholder="Enter email" value="<?php echo $field_value; ?>">
+                                <input type="text" name="email" class="form-control" id="email" placeholder="Enter email" autocomplete="off" value="<?php echo $field_value; ?>">
                                 <div class="validation-error-label">
                                     <?php echo form_error('email'); ?>
                                 </div>
@@ -45,7 +45,7 @@ if (isset($temp_value) && !empty($temp_value)) {
     $field_value = $temp_value;
 } 
 ?>
-                                <input type="password" name="password" class="form-control" id="userpassword" placeholder="Enter password" value="<?php echo $field_value; ?>">
+                                <input type="password" name="password" class="form-control" id="userpassword" placeholder="Enter password" autocomplete="off" value="<?php echo $field_value; ?>">
                                 <div class="validation-error-label">
                                     <?php echo form_error('password'); ?>
                                 </div>

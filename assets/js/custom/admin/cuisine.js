@@ -17,6 +17,7 @@
             cuisine_name: {
                 required:true,
                 minlength: 2,
+                maxlength: 50,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -29,7 +30,8 @@
         messages: {
             cuisine_name: {
                 required: "The cuisine name field is required.",
-                minlength: jQuery.validator.format("At least {0} character required")
+                minlength: jQuery.validator.format("At least {0} character required"),
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
             cuisine_picture:{
                 accept: "Accepted image formats: jpg, jpeg, png",

@@ -524,6 +524,7 @@ $config['proxy_ips'] = '';
 $config['profile_path'] = 'assets\files\profile_pictures';
 $config['customer_profile_path'] = 'assets\files\customer_profile_pictures';
 $config['brochure_path'] = 'assets\files\shop_brochures';
+$config['banner_photo_path'] = 'assets\files\banners';
 $config['category_photo_path'] = 'assets\files\category_photos';
 $config['cuisine_photo_path'] = 'assets\files\cuisine_photos';
 $config['delivery_dispatcher_photo_path'] = 'assets\files\delivery_dispatcher_photos';
@@ -548,16 +549,6 @@ $config['app_setting']  = array('1' => 'customer_android_app',
 						    '3' => 'deliveryboy_android_app',
 						    '4' => 'restaurant_ipad_app',
 						    '5' => 'maintenance_mode');
-
-$config["product_category"] = array(
-	array("key" => 1, "value" => "Beverages"),
-	array("key" => 2, "value" => "Salad"),
-	array("key" => 3, "value" => "Soup"),
-	array("key" => 4, "value" => "Side Dish"),
-	array("key" => 5, "value" => "Snack"),
-	array("key" => 6, "value" => "Main Dish"),
-	array("key" => 7, "value" => "Dessert")
-);
 
 // Send mail config
 $config['protocol'] = "smtp";

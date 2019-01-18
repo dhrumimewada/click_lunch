@@ -96,14 +96,14 @@ $route['item-update'] = 'vender/item/item/put';
 // vender Combo managment
 $route['combo-add'] = 'vender/item/item/post/Combo';
 
-// Vender category management
-$route['category-list'] = 'vender/category/category/index'; 
-$route['category-add'] = 'vender/category/category/post'; 
-$route['category-update/(:any)'] = 'vender/category/category/put/$1'; 
-$route['category-update'] = 'vender/category/category/index'; 
-$route['category-put'] = 'vender/category/category/put'; 
-$route['category-delete'] = 'vender/category/category/delete';
-$route['category-status'] = 'vender/category/category/active_deactive_category';  
+// // Vender category management
+// $route['category-list'] = 'vender/category/category/index'; 
+// $route['category-add'] = 'vender/category/category/post'; 
+// $route['category-update/(:any)'] = 'vender/category/category/put/$1'; 
+// $route['category-update'] = 'vender/category/category/index'; 
+// $route['category-put'] = 'vender/category/category/put'; 
+// $route['category-delete'] = 'vender/category/category/delete';
+// $route['category-status'] = 'vender/category/category/active_deactive_category';  
 
 //Vender - Vrient group
 $route['variant-group-list'] = 'vender/item/variant_group/index'; 
@@ -237,6 +237,14 @@ $route['category-add'] = 'admin/category/post';
 $route['category-update/(:any)'] = 'admin/category/put/$1'; 
 $route['category-update'] = 'admin/category/index';
 $route['category-put'] = 'admin/category/put';
+
+//Admin - banner
+$route['banner-list'] = 'admin/banner/index'; 
+$route['banner-add'] = 'admin/banner/post'; 
+$route['banner-delete'] = 'admin/banner/delete';  
+$route['banner-update/(:any)'] = 'admin/banner/put/$1';
+$route['banner-put'] = 'admin/banner/put';
+$route['banner-status'] = 'admin/banner/active_deactive_banner'; 
 
 // Admin - app setting
 $route['app-setting'] = 'appsetting/index';  

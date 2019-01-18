@@ -164,7 +164,7 @@ $( document ).ready(function() {
             
             reader.onload = function (e) {
                 $('#blah').attr('src', e.target.result);
-                $(".image-popup-no-margins").attr("href", e.target.result)
+                $(".image-popup-no-margins").attr("href", e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
         }

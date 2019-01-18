@@ -142,33 +142,6 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                 </div>
                             </div>
 
-
-
-                            <div class="row">
-                                
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="tax_number" class="required">TAX Id</label>
-                                        <div>
-                                        <?php
-    $field_value = NULL;
-    $temp_value = set_value('tax_number');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    }
-    else{
-        $field_value = $vender_detail->tax_number;
-    }
-    ?>
-                                            <input type="text" name="tax_number" class="form-control tax-mask" id="tax_number" placeholder="XXX-XX-XXXX" value="<?php echo $field_value; ?>">
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('tax_number'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                            </div>
                             <div class="loader" style="display: none;"></div>
 
                             <div class="row">
@@ -259,6 +232,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
 
                             
@@ -442,7 +416,7 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                     <h4 class="mt-0 mb-0 header-title">Restaurant Information</h4>
                                     <hr class="mt-1 mb-3">
                                 </div>
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
                                     <div class="form-group">
                                         <label class="required">Restaurant Cuisines</label>
                                         <div>
@@ -460,6 +434,27 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                             </select>
                                             <div class="validation-error-label">
                                                 <?php echo form_error('cuisines[]'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="tax_number" class="required">TAX Id</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('tax_number');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    else{
+        $field_value = $vender_detail->tax_number;
+    }
+    ?>
+                                            <input type="text" name="tax_number" class="form-control tax-mask" id="tax_number" placeholder="XXX-XX-XXXX" value="<?php echo $field_value; ?>">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('tax_number'); ?>
                                             </div>
                                         </div>
                                     </div>
@@ -708,7 +703,9 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
                                             <?php echo form_error('profile_picture'); ?>
                                         </div>
                                     </div>
-                                    <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar small" alt="User avatar" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'" >
+                                    <a href="<?php echo $prof_url; ?>" class="image-popup-no-margins">
+                                        <img src="<?php echo $prof_url; ?>" class="img-circle profile-avatar small" alt="User avatar" id="blah" onerror="this.src='<?php echo $prof_defualt_url; ?>'" >
+                                    </a>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">

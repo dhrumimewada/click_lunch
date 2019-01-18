@@ -69,23 +69,26 @@ if (isset($temp_value) && !empty($temp_value)) {
 
                             <div class="form-group row m-t-20">
                                 <div class="col-6 m-t-5">
-                                    <div class="custom-control custom-checkbox">
+                                    <!-- <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="customControlInline">
                                         <label class="custom-control-label" for="customControlInline">Remember me</label>
-                                    </div>
+                                    </div> -->
+                                    <?php if($user_type != 'admin'){ ?>
+                                        <a href="<?php echo $vender_forgot_link; ?>" class="text-muted"><i class="mdi mdi-lock"></i> Forgot your password?</a>
+                                    <?php } ?>
                                 </div>
                                 <div class="col-6 text-right">
                                     <button class="btn btn-primary w-md waves-effect waves-light" type="submit" name="submit">Log In</button>
                                 </div>
                             </div>
 
-                            <?php if($user_type != 'admin'){ ?>
-                            <div class="form-group mb-0 row">
+                            <?php //if($user_type != 'admin'){ ?>
+                            <!-- <div class="form-group mb-0 row">
                                 <div class="col-12 m-t-10">
                                     <a href="<?php echo $vender_forgot_link; ?>" class="text-muted"><i class="mdi mdi-lock"></i> Forgot your password?</a>
                                 </div>
-                            </div>
-                            <?php } ?>
+                            </div> -->
+                            <?php //} ?>
                         </form>
                     </div>
 

@@ -17,6 +17,7 @@ class Item extends CI_Controller {
 		}
 
 		$this->load->model("vender/item_model");
+		$this->load->model("admin/category_model");
 	}
 
 	public function index(){
@@ -129,7 +130,7 @@ class Item extends CI_Controller {
 		//$output_data['category_data'] = $this->item_model->get_active_category();
 		$output_data['variant_groups'] = $this->item_model->get_variant_groups();
 		$output_data['cuisines_data'] = get_cuisine();
-		$output_data['category_data'] = $this->config->item("product_category");
+		$output_data['category_data'] = $this->category_model->get_category();
 		$output_data['item_type'] = $type;
 
 
@@ -215,7 +216,7 @@ class Item extends CI_Controller {
 		$output_data['cuisines_data'] = get_cuisine();
 		$output_data['item_variant_data'] = $this->item_model->get_item_variants(decrypt($id));
 		$output_data['item_data'] = $this->item_model->get_item(decrypt($id));
-		$output_data['category_data'] = $this->config->item("product_category");
+		$output_data['category_data'] = $this->category_model->get_category();
 		$output_data['variant_groups'] = $this->item_model->get_variant_groups();
 		
 		if (!isset($output_data['item_data']) || empty($output_data['item_data']) || count($output_data['item_data']) <= 0){

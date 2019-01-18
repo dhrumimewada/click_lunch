@@ -117,10 +117,10 @@ $item_type = ($item_data->is_combo == 1)?'Combo':'Product';
                                                 
                                                 foreach ($category_data as $key => $value) {
                                                     $selected = '';
-                                                    if($field_value == $value['key']){
+                                                    if($field_value == $value['id']){
                                                         $selected = 'selected';
                                                     }
-                                                    echo "<option value='".$value['key']."' ".$selected.">".$value['value']."</option>";
+                                                    echo "<option value='".$value['id']."' ".$selected.">".$value['category_name']."</option>";
                                                 }
                                                 ?>
                                             </select>

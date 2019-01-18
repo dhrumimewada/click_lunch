@@ -390,6 +390,7 @@ class Customer_api extends REST_Controller {
 
     public function update_profile_post(){
         $postFields['customer_id'] = $_POST['customer_id'];        
+        $postFields['username'] = $_POST['username']; 
         $postFields['mobile_number'] = $_POST['mobile_number']; 
         $postFields['date_of_birth'] = $_POST['date_of_birth']; 
         $postFields['gender'] = $_POST['gender']; 
@@ -406,6 +407,7 @@ class Customer_api extends REST_Controller {
             }else{
 
                 $user_data = array(
+                    'username' => ucwords($_POST['username']),
                     'mobile_number' => $_POST['mobile_number'],
                     'dob' => $_POST['date_of_birth'],
                     'gender' => $_POST['gender']
@@ -427,7 +429,78 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    public function setting_post($value=''){
+    public function update_profile_picture_post(){
+        $postFields['customer_id'] = $_POST['customer_id'];        
+        $postFields['image'] = $_FILES['image']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost))
+        {
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                if (isset($_FILES['image']) && !empty($_FILES['image']) && strlen($_FILES['image']['name']) > 0) {
+
+                    //save new image in folder
+                    $config['upload_path'] = FCPATH . $this->config->item("customer_profile_path");
+                    $config['allowed_types'] = 'jpg|jpeg|png';
+                    $config['encrypt_name'] = false;
+                    $config['file_name'] = 'customer' . '_' . time();
+                    $config['file_ext_tolower'] = true;
+
+                    $this->load->library('upload');
+                    $this->upload->initialize($config, true);
+
+                    if (!$this->upload->do_upload('image')) {
+                        $response['status'] = false;
+                        $response['message'] = $this->upload->display_errors();
+                    } else {
+
+                        $image_data = $this->upload->data();
+
+                        //remove old image from user folder
+                        $this->db->select('profile_picture');
+                        $this->db->where('id', intval($_POST['customer_id']));
+                        $this->db->from('customer');
+                        $sql_query = $this->db->get();
+                        if ($sql_query->num_rows() > 0) {
+                            $return_data = $sql_query->row();
+                            $image_old = $return_data->image;
+
+                            if (isset($image_old) && !empty($image_old)) {
+                                if (file_exists(FCPATH . $this->config->item("customer_profile_path") . "/" . $image_old)) {
+                                    unlink(FCPATH . $this->config->item("customer_profile_path") . "/" . $image_old);
+                                }
+                            }
+                        }
+
+                        //update image in database
+                        $data = array('profile_picture' => $image_data['file_name']);
+                        $this->db->where('id', $_POST['customer_id']);
+                        $this->db->update('customer', $data);
+
+                        $response['status'] = true;
+                        $response['message'] = 'Profile picture changed';
+                    }
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            } 
+        }
+        else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function setting_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['setting_name'] = $_POST['setting_name']; 
         $postFields['status'] = $_POST['status']; 
@@ -488,7 +561,7 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    public function add_delivery_address_post($value=''){
+    public function add_delivery_address_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['house_no'] = $_POST['house_no']; 
         $postFields['street'] = $_POST['street']; 
@@ -537,7 +610,7 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    public function delete_delivery_address_post($value=''){
+    public function delete_delivery_address_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['delivery_address_id'] = $_POST['delivery_address_id']; 
 
@@ -560,6 +633,161 @@ class Customer_api extends REST_Controller {
                 if($this->db->update('delivery_address',$data)){
                     $response['status'] = true;
                     $response['message'] = 'Delivery address removed successfully';
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            }
+            
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function my_payment_cards_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $where = array('customer_id' => $_POST['customer_id'],'deleted_at' => NULL);
+                $payment_cards = $this->db->get_where('customer_payment_card',$where)->result_array();
+
+                $response['status'] = true;
+                $response['payment_cards'] = $payment_cards;
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function add_payment_card_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $postFields['card_holder_name'] = $_POST['card_holder_name']; 
+        $postFields['card_number'] = $_POST['card_number']; 
+        $postFields['expiry_date'] = $_POST['expiry_date']; 
+        $postFields['cvv'] = $_POST['cvv']; 
+        $postFields['card_type'] = $_POST['card_type']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $payment_card_data = array(
+                    'customer_id' => $_POST['customer_id'],
+                    'card_holder_name' => $_POST['card_holder_name'],
+                    'card_number' => $_POST['card_number'],
+                    'expiry_date' => $_POST['expiry_date'],
+                    'cvv' => intval($_POST['cvv']),
+                    'card_type' => intval($_POST['card_type'])
+                );
+
+                if($this->db->insert('customer_payment_card',$payment_card_data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Card added successfully';
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            }
+            
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function edit_payment_card_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $postFields['payment_card_id'] = $_POST['payment_card_id']; 
+        $postFields['card_holder_name'] = $_POST['card_holder_name']; 
+        $postFields['card_number'] = $_POST['card_number']; 
+        $postFields['expiry_date'] = $_POST['expiry_date']; 
+        $postFields['cvv'] = $_POST['cvv']; 
+        $postFields['card_type'] = $_POST['card_type']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $data = array(
+                    'card_holder_name' => $_POST['card_holder_name'],
+                    'card_number' => $_POST['card_number'],
+                    'expiry_date' => $_POST['expiry_date'],
+                    'cvv' => intval($_POST['cvv']),
+                    'card_type' => intval($_POST['card_type']),
+                    'updated_at' => date('Y-m-d H:i:s')
+                );
+
+                $this->db->where('customer_id',$_POST['customer_id']);
+                $this->db->where('id',$_POST['payment_card_id']);
+
+                if($this->db->update('customer_payment_card',$data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Card updated successfully';
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            }
+            
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function delete_payment_card_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $postFields['payment_card_id'] = $_POST['payment_card_id']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $data = array('deleted_at' => date('Y-m-d H:i:s'));
+
+                $this->db->where('customer_id',$_POST['customer_id']);
+                $this->db->where('id',$_POST['payment_card_id']);
+
+                if($this->db->update('customer_payment_card',$data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Card removed successfully';
                 }else{
                     $response['status'] = false;
                     $response['message'] = 'Server encountered an error. please try again';

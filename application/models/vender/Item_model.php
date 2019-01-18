@@ -202,7 +202,6 @@ class Item_model extends CI_Model {
 						'item_description' => ucwords(addslashes($this->input->post("item_description"))),
 						'is_combo' => intval($is_combo),
 						'inventory_status' => intval($inventory_status),
-						'is_active' => 1,
 						'created_at' => date('Y-m-d H:i:s')
 					);
 		$user_data = array_merge($user_data1,$user_data2);

@@ -1,8 +1,8 @@
  <!-- Start content -->
  <?php
- $post_link = base_url().'cuisine-add';
- $back = base_url().'cuisine-list';
- $photo_url = base_url() . 'assets/images/default/cuisine.jpg';
+ $post_link = base_url().'category-add';
+ $back = base_url().'category-list';
+
  ?>
 <div class="content">
     <div class="container-fluid">
@@ -12,7 +12,7 @@
             </div>
             <div class="col-lg-10">
                 <div class="page-title-box">
-                    <h4 class="page-title">Add New Cuisine</h4>
+                    <h4 class="page-title">Add New Category</h4>
                 </div>
             </div>
             <div class="col-lg-1">
@@ -42,41 +42,20 @@
                         <div class="card-body">
 
                                 <div class="form-group">
-                                    <label class="required">Cuisine Name</label>
+                                    <label class="required">Category Name</label>
                                     <div>
                                     <?php
 $field_value = NULL;
-$temp_value = set_value('cuisine_name');
+$temp_value = set_value('category_name');
 if (isset($temp_value) && !empty($temp_value)) {
     $field_value = $temp_value;
 } 
 ?>
-                                        <input type="text" name="cuisine_name" class="form-control" id="cuisine_name" placeholder="Ex: Vegan" value="<?php echo $field_value; ?>">
+                                        <input type="text" name="category_name" class="form-control" id="category_name" placeholder="Ex: Side Dish" value="<?php echo $field_value; ?>">
                                         <div class="validation-error-label">
-                                            <?php echo form_error('cuisine_name'); ?>
+                                            <?php echo form_error('category_name'); ?>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Cuisine Photo</label>
-                                    <div>
-                                        <?php
-$field_value = NULL;
-$temp_value = set_value('cuisine_picture');
-if (isset($temp_value) && !empty($temp_value)) {
-    $field_value = $temp_value;
-} 
-?>
-                                        <input type="file" name="cuisine_picture" class="filestyle" data-buttonname="btn-secondary" accept="image/*" value="" id="cuisine_picture">
-                                        <div class="validation-error-label">
-                                            <?php echo form_error('cuisine_picture'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <img src="<?php echo $photo_url; ?>" class="img-circle profile-avatar small" alt="Cuisine Photo" id="blah" onerror="this.src='<?php echo $photo_url; ?>'">
                                 </div>
 
 
@@ -103,4 +82,4 @@ if (isset($temp_value) && !empty($temp_value)) {
 
     </div>
 </div>
-<script src="<?php echo base_url().'assets/js/custom/admin/cuisine.js'; ?>"></script>
+<script src="<?php echo base_url().'assets/js/custom/admin/category.js'; ?>"></script>

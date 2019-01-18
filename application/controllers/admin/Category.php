@@ -85,57 +85,20 @@ class Category extends CI_Controller {
 
 				$validation_rules = array(
 					
-					array('field' => 'category_name', 'label' => 'category name', 'rules' => 'trim|required|min_length[2]|callback_isexists')
+					array('field' => 'category_name', 'label' => 'category name', 'rules' => 'trim|required|min_length[2]|max_length[50]|callback_isexists')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
 
 				 
 				if ($this->form_validation->run() === true) {
-
-					$file_upload = true;
-					// echo "<pre>";
-					// print_r($_FILES);
-					// exit;
-
-					if (isset($_FILES['category_picture']) && !empty($_FILES['category_picture']) && strlen($_FILES['category_picture']['name']) > 0) {
-
-						$config['upload_path'] = FCPATH . $this->config->item("category_photo_path");
-						$config['allowed_types'] = 'jpg|jpeg|png';
-						$config['encrypt_name'] = false;
-						$config['file_name'] = 'category' . '_' . time();
-						$config['file_ext_tolower'] = true;
-						// $config['max_size'] = '1024';
-						// $config['min_width'] = '300';
-						// $config['max_width'] = '300';
-						// $config['min_height'] = '120';
-						// $config['max_height'] = '120';
-
-						$this->load->library('upload');
-						$this->upload->initialize($config, true);
-
-						if (!$this->upload->do_upload('category_picture')) {
-							ucfirst($this->upload->display_errors());
-							$this->auth->set_error_message(ucfirst($this->upload->display_errors()));
-							$this->session->set_flashdata($this->auth->get_messages_array());
-							$file_upload = false;
-						} else {
-							$file_upload_data = $this->upload->data();
-							$modal_data['category_picture'] = $file_upload_data;
-						}
-
-					}
-
-					if ($file_upload){
-						if($this->category_model->post($modal_data)){
-							$this->session->set_flashdata($this->auth->get_messages_array());
-							redirect(base_url() . "category-list");
-						}else{
-							$this->session->set_flashdata($this->auth->get_messages_array());
-							redirect(base_url() . "category-add");
-						}
-					}
-					
+					if($this->category_model->post()){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "category-list");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "category-add");
+					}	
 				} 
 			}
 		}
@@ -155,57 +118,20 @@ class Category extends CI_Controller {
 			if (isset($_POST['submit'])){
 				$validation_rules = array(
 					
-					array('field' => 'category_name', 'label' => 'category name', 'rules' => 'trim|required|min_length[2]|callback_isexists[' . $this->input->post("category_id") . ']')
+					array('field' => 'category_name', 'label' => 'category name', 'rules' => 'trim|required|min_length[2]|max_length[50]|callback_isexists[' . $this->input->post("category_id") . ']')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
 
 				 
 				if ($this->form_validation->run() === true) {
-
-					$file_upload = true;
-					// echo "<pre>";
-					// print_r($_POST);
-					// exit;
-
-					if (isset($_FILES['category_picture']) && !empty($_FILES['category_picture']) && strlen($_FILES['category_picture']['name']) > 0) {
-
-						$config['upload_path'] = FCPATH . $this->config->item("category_photo_path");
-						$config['allowed_types'] = 'jpg|jpeg|png';
-						$config['encrypt_name'] = false;
-						$config['file_name'] = 'category' . '_' . time();
-						$config['file_ext_tolower'] = true;
-						// $config['max_size'] = '1024';
-						// $config['min_width'] = '300';
-						// $config['max_width'] = '300';
-						// $config['min_height'] = '120';
-						// $config['max_height'] = '120';
-
-						$this->load->library('upload');
-						$this->upload->initialize($config, true);
-
-						if (!$this->upload->do_upload('category_picture')) {
-							ucfirst($this->upload->display_errors());
-							$this->auth->set_error_message(ucfirst($this->upload->display_errors()));
-							$this->session->set_flashdata($this->auth->get_messages_array());
-							$file_upload = false;
-						} else {
-							$file_upload_data = $this->upload->data();
-							$modal_data['category_picture'] = $file_upload_data;
-						}
-
-					}
-
-					if ($file_upload){
-						if($this->category_model->put($modal_data)){
-							$this->session->set_flashdata($this->auth->get_messages_array());
-							redirect(base_url() . "category-list");
-						}else{
-							$this->session->set_flashdata($this->auth->get_messages_array());
-							redirect(base_url() . "category-update/".encrypt($this->input->post("category_id")));
-						}
-					}
-					
+					if($this->category_model->put($modal_data)){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "category-list");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "category-update/".encrypt($this->input->post("category_id")));
+					}	
 				} 
 			}
 		}

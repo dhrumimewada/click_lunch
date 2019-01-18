@@ -308,6 +308,9 @@ a:hover .topbar-name{
 .alert-dismissible .close{
   padding: .50rem 1.25rem;
 }
+.alert.fade.show p{
+  margin-bottom: 0 !important;
+}
 .swal2-container{
   padding: 0 !important;
 }

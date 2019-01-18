@@ -89,7 +89,7 @@ if($is_admin){
 
                 <li>
                     <a href="<?php echo base_url().'category-list'; ?>" class="waves-effect">
-                        <i class="mdi mdi-food"></i><span> Category </span>
+                        <i class="mdi mdi-food-fork-drink"></i><span> Category </span>
                     </a>
                 </li>
 
@@ -117,6 +117,12 @@ if($is_admin){
                 <li>
                     <a href="<?php echo base_url().'email-list'; ?>" class="waves-effect">
                         <i class="mdi mdi-email"></i><span> Push/Email Management</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="<?php echo base_url().'banner-list'; ?>" class="waves-effect">
+                        <i class="mdi mdi-image-area"></i><span> Banner Management </span>
                     </a>
                 </li>
 

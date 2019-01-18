@@ -126,7 +126,6 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
     $temp_value = set_value('category_id');
     if (isset($temp_value) && !empty($temp_value)) {
         $field_value = $temp_value;
-        $selected = '';
     } 
     ?>
                                             <select class="select2 form-control" data-placeholder="Select category" name="category_id">
@@ -134,10 +133,11 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
                                                 <?php 
                                                 
                                                 foreach ($category_data as $key => $value) {
-                                                    if($field_value == $value['key']){
+                                                    $selected = '';
+                                                    if($field_value == $value['id']){
                                                         $selected = 'selected';
                                                     }
-                                                    echo "<option value='".$value['key']."' ".$selected.">".$value['value']."</option>";
+                                                    echo "<option value='".$value['id']."' ".$selected.">".$value['category_name']."</option>";
                                                 }
                                                 ?>
                                             </select>

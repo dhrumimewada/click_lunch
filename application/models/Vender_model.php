@@ -61,6 +61,7 @@ class Vender_model extends CI_Model {
 						'contact_no2' => $this->input->post("contact_no2"),
 						'website' => addslashes($this->input->post("website")),
 						'tax_number' => $this->input->post("tax_number"),
+						'delivery_charges' => $this->input->post("delivery_charges"),
 						'payment_mode' => $payment_mode,
 						'profile_picture' => ((isset($profile_picture) && !empty($profile_picture)) ? $profile_picture : ''),
 						'status' => 0,
@@ -176,6 +177,7 @@ class Vender_model extends CI_Model {
 		$user_data['contact_no2'] = $this->input->post("contact_no2");
 		$user_data['website'] = addslashes($this->input->post("website"));
 		$user_data['tax_number'] = addslashes($this->input->post("tax_number"));
+		$user_data['delivery_charges'] = $this->input->post("delivery_charges");
 		$user_data['payment_mode'] = $payment_mode;
 		$user_data['updated_at'] = date('Y-m-d H:i:s');
 	

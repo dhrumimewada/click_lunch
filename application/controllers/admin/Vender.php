@@ -74,7 +74,9 @@ class Vender extends CI_Controller {
 					array('field' => 'contact_no1', 'label' => 'contact number', 'rules' => 'trim|min_length[12]|max_length[12]'),
 					array('field' => 'contact_no2', 'label' => 'alternate contact number', 'rules' => 'trim|min_length[12]|max_length[12]'),
 					array('field' => 'website', 'label' => 'restaurant website', 'rules' => 'trim|valid_url'),
-					array('field' => 'tax_number', 'label' => 'TAX id', 'rules' => 'trim|callback_valid_taxno')
+					array('field' => 'tax_number', 'label' => 'TAX id', 'rules' => 'trim|callback_valid_taxno'),
+					array('field' => 'delivery_charges', 'label' => 'delivery charges', 'rules' => 'trim|required'),
+					array('field' => 'payment_mode[]', 'label' => 'payment', 'rules' => 'trim|required')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
@@ -154,6 +156,8 @@ class Vender extends CI_Controller {
 					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|max_length[255]'),
 					array('field' => 'website', 'label' => 'restaurant website', 'rules' => 'trim|valid_url'),
 					array('field' => 'tax_number', 'label' => 'TAX id', 'rules' => 'trim|callback_valid_taxno'),
+					array('field' => 'delivery_charges', 'label' => 'delivery charges', 'rules' => 'trim|required'),
+					array('field' => 'payment_mode[]', 'label' => 'payment', 'rules' => 'trim|required')
 				);
 
 				$this->form_validation->set_rules($validation_rules);

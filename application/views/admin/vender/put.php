@@ -2,6 +2,9 @@
     .custom-control-input{
         position: absolute !important;
     } 
+    .validation-error-label{
+        margin-top: 0;
+     }
  </style>
  <!-- Start content -->
  <?php
@@ -375,6 +378,27 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
 
                             </div>
                             <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="required">Delivery Charges</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('delivery_charges');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    else{
+        $field_value = $vender_detail->delivery_charges;
+    }
+    ?>
+                                            <input type="number" name="delivery_charges" class="form-control demo2" id="delivery_charges" placeholder="Enter delivery charges amount" value="<?php echo $field_value; ?>">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('delivery_charges'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -435,7 +459,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
                                                 <label class="custom-control-label" for="customControlInline2">Google Pay</label>
                                             </div>
                                         </div>
-                                        <div class="validation-error-label">
+                                        <div class="validation-error-label mt-1">
                                             <?php echo form_error('payment_mode[]'); ?>
                                         </div>
                                     </div>

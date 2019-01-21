@@ -10,12 +10,6 @@ class Customer_api extends REST_Controller {
 		$this->load->model("email_template_model");
 	}
 
-	public function test_get()
-	{
-		$response['status'] = false;
-		$this->response($response);
-	}
-
 	public function init_get($app_version = '',$type = ''){
 
         $postFields['app_version'] = $app_version;        
@@ -217,6 +211,7 @@ class Customer_api extends REST_Controller {
                 $this->db->update('customer',$data);
 
                 $response['status'] = true;
+                $response['profile'] = (array)$customer;
 
             	}else{
             		$response['status'] = false;
@@ -389,11 +384,7 @@ class Customer_api extends REST_Controller {
     }
 
     public function update_profile_post(){
-        $postFields['customer_id'] = $_POST['customer_id'];        
-        $postFields['username'] = $_POST['username']; 
-        $postFields['mobile_number'] = $_POST['mobile_number']; 
-        $postFields['date_of_birth'] = $_POST['date_of_birth']; 
-        $postFields['gender'] = $_POST['gender']; 
+        $postFields['customer_id'] = $_POST['customer_id'];
 
         $errorPost = $this->ValidatePostFields($postFields);
 
@@ -406,43 +397,18 @@ class Customer_api extends REST_Controller {
                 $response['message'] = 'User not found';
             }else{
 
-                $user_data = array(
-                    'username' => ucwords($_POST['username']),
-                    'mobile_number' => $_POST['mobile_number'],
-                    'dob' => $_POST['date_of_birth'],
-                    'gender' => $_POST['gender']
-                );
-                $this->db->where('id',$_POST['customer_id']);
-                if($this->db->update('customer',$user_data)){
-                    $response['status'] = true;
-                    $response['message'] = 'Profile updated successfully';
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
+                if(isset($_POST['username']) && $_POST['username'] != ""){
+                    $user_data['username'] = ucwords($_POST['username']);
                 }
-            } 
-        }
-        else{
-            $response['status'] = false;
-            $response['message'] = $errorPost;
-        }
-        $this->response($response);
-    }
-
-    public function update_profile_picture_post(){
-        $postFields['customer_id'] = $_POST['customer_id'];        
-        $postFields['image'] = $_FILES['image']; 
-
-        $errorPost = $this->ValidatePostFields($postFields);
-
-        if(empty($errorPost))
-        {
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
-            }else{
+                if(isset($_POST['mobile_number']) && $_POST['mobile_number'] != ""){
+                    $user_data['mobile_number'] = $_POST['mobile_number'];
+                }
+                if(isset($_POST['date_of_birth']) && $_POST['date_of_birth'] != ""){
+                    $user_data['dob'] = $_POST['date_of_birth'];
+                }
+                if(isset($_POST['gender']) && $_POST['gender'] != ""){
+                    $user_data['gender'] = $_POST['gender'];
+                }
 
                 if (isset($_FILES['image']) && !empty($_FILES['image']) && strlen($_FILES['image']['name']) > 0) {
 
@@ -479,14 +445,18 @@ class Customer_api extends REST_Controller {
                             }
                         }
 
-                        //update image in database
-                        $data = array('profile_picture' => $image_data['file_name']);
-                        $this->db->where('id', $_POST['customer_id']);
-                        $this->db->update('customer', $data);
-
-                        $response['status'] = true;
-                        $response['message'] = 'Profile picture changed';
+                        $user_data['profile_picture'] = $image_data['file_name'];
                     }
+                }
+
+
+
+                $user_data['updated_at'] = date('Y-m-d H:i:s');
+
+                $this->db->where('id',$_POST['customer_id']);
+                if($this->db->update('customer',$user_data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Profile updated successfully';
                 }else{
                     $response['status'] = false;
                     $response['message'] = 'Server encountered an error. please try again';
@@ -499,6 +469,77 @@ class Customer_api extends REST_Controller {
         }
         $this->response($response);
     }
+
+    // public function update_profile_picture_post(){
+    //     $postFields['customer_id'] = $_POST['customer_id'];        
+    //     $postFields['image'] = $_FILES['image']; 
+
+    //     $errorPost = $this->ValidatePostFields($postFields);
+
+    //     if(empty($errorPost))
+    //     {
+    //         $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+    //         $user = (array)$this->db->get_where('customer',$where)->row();
+    //         if(empty($user)){
+    //             $response['status'] = false;
+    //             $response['message'] = 'User not found';
+    //         }else{
+
+    //             if (isset($_FILES['image']) && !empty($_FILES['image']) && strlen($_FILES['image']['name']) > 0) {
+
+    //                 //save new image in folder
+    //                 $config['upload_path'] = FCPATH . $this->config->item("customer_profile_path");
+    //                 $config['allowed_types'] = 'jpg|jpeg|png';
+    //                 $config['encrypt_name'] = false;
+    //                 $config['file_name'] = 'customer' . '_' . time();
+    //                 $config['file_ext_tolower'] = true;
+
+    //                 $this->load->library('upload');
+    //                 $this->upload->initialize($config, true);
+
+    //                 if (!$this->upload->do_upload('image')) {
+    //                     $response['status'] = false;
+    //                     $response['message'] = $this->upload->display_errors();
+    //                 } else {
+
+    //                     $image_data = $this->upload->data();
+
+    //                     //remove old image from user folder
+    //                     $this->db->select('profile_picture');
+    //                     $this->db->where('id', intval($_POST['customer_id']));
+    //                     $this->db->from('customer');
+    //                     $sql_query = $this->db->get();
+    //                     if ($sql_query->num_rows() > 0) {
+    //                         $return_data = $sql_query->row();
+    //                         $image_old = $return_data->image;
+
+    //                         if (isset($image_old) && !empty($image_old)) {
+    //                             if (file_exists(FCPATH . $this->config->item("customer_profile_path") . "/" . $image_old)) {
+    //                                 unlink(FCPATH . $this->config->item("customer_profile_path") . "/" . $image_old);
+    //                             }
+    //                         }
+    //                     }
+
+    //                     //update image in database
+    //                     $data = array('profile_picture' => $image_data['file_name']);
+    //                     $this->db->where('id', $_POST['customer_id']);
+    //                     $this->db->update('customer', $data);
+
+    //                     $response['status'] = true;
+    //                     $response['message'] = 'Profile picture changed';
+    //                 }
+    //             }else{
+    //                 $response['status'] = false;
+    //                 $response['message'] = 'Server encountered an error. please try again';
+    //             }
+    //         } 
+    //     }
+    //     else{
+    //         $response['status'] = false;
+    //         $response['message'] = $errorPost;
+    //     }
+    //     $this->response($response);
+    // }
 
     public function setting_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
@@ -561,6 +602,22 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
+    public function popular_delivery_addresses_get(){
+
+        $where = array('popular' => '1', 'deleted_at' => NULL);
+        $delivery_address = (array)$this->db->get_where('delivery_address',$where)->result_array();
+        if(empty($delivery_address)){
+            $response['status'] = false;
+            $response['message'] = 'No any address found';
+        }else{
+
+            $response['status'] = true;
+            $response['delivery_addresses'] = $delivery_address;
+        }
+
+        $this->response($response);
+    }
+
     public function add_delivery_address_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['house_no'] = $_POST['house_no']; 
@@ -601,6 +658,67 @@ class Customer_api extends REST_Controller {
                     $response['status'] = false;
                     $response['message'] = 'Server encountered an error. please try again';
                 }
+            }
+            
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function add_polular_delivery_address_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $postFields['address_id'] = $_POST['address_id']; 
+        
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $this->db->select('*');
+                $this->db->where("id", $_POST['address_id']);
+                $this->db->from('delivery_address');
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $result = $sql_query->row();
+
+                    $data_array = array('deleted_at' => date('Y-m-d H:i:s'));
+                    $this->db->where('customer_id',$_POST['customer_id']);
+                    $this->db->where('address_type',$result->address_type);
+                    $this->db->update('delivery_address',$data_array);
+
+                    $data = array(
+                        'customer_id' => $_POST['customer_id'],
+                        'house_no' => $result->house_no,
+                        'street' => $result->street,
+                        'city' => $result->city,
+                        'zipcode' => $result->zipcode,
+                        'address_type' => $result->address_type,
+                        'delivery_instruction' => $result->delivery_instruction,
+                        'nickname' => $result->nickname
+                    );
+
+                    if($this->db->insert('delivery_address',$data)){
+
+                        $response['status'] = true;
+                        $response['message'] = 'Delivery address added successfully';
+                    }else{
+                        $response['status'] = false;
+                        $response['message'] = 'Server encountered an error. please try again';
+                    }
+
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Polular address not found';
+                }
+
             }
             
         }else{
@@ -788,6 +906,353 @@ class Customer_api extends REST_Controller {
                 if($this->db->update('customer_payment_card',$data)){
                     $response['status'] = true;
                     $response['message'] = 'Card removed successfully';
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            }
+            
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function home_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+                $latitude = $user['latitude'];
+                $longitude = $user['longitude'];
+
+                $distance = "(3956 * 2 * ASIN(SQRT( POWER(SIN((".$latitude." - latitude) * pi()/180 / 2), 2) +COS( ".$latitude." * pi()/180) * COS(longitude * pi()/180) * POWER(SIN(( ".$longitude." - longitude) * pi()/180 / 2), 2) ))) as distance";
+
+                $sql_select = array(
+                                    "id",
+                                    "shop_name",
+                                    "profile_picture",
+                                    "city",
+                                    "state",
+                                    "country",
+                                    "zip_code",
+                                    $distance
+                                );
+
+                $this->db->select($sql_select);
+                $this->db->order_by("distance", "asc");
+                $this->db->having("distance <=", 100);
+                $this->db->where("longitude !=", '');
+                $this->db->where("latitude !=", '');
+                $this->db->where("deleted_at", NULL);
+                $this->db->where("status", 1);
+
+                // if(isset($_POST['cuisine']) && $_POST['cuisine'] != ""){
+                //     $cuisine_array = explode(',', $_POST['cuisine']);
+                    
+                // }
+
+                $limit = 10; // messages per page
+                if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
+                    $start = $limit * ($_POST['page_number'] - 1);
+                    $this->db->limit($limit, $start);
+                }else{
+                    $this->db->limit($limit);
+                }
+
+                $this->db->from('shop');
+                $sql_query = $this->db->get();
+
+                //$sql_query = $this->db->query('SELECT * , (3956 * 2 * ASIN(SQRT( POWER(SIN((42.4483050 - latitude) * pi()/180 / 2), 2) +COS( 42.3483050 * pi()/180) * COS(longitude * pi()/180) * POWER(SIN(( -71.08359259999990 - longitude) * pi()/180 / 2), 2) ))) as distance from shop having distance <= 100 order by distance');
+                
+                if ($sql_query->num_rows() > 0){
+
+                    $shop_data = $sql_query->result_array();
+                    $shop_array = array_column($shop_data, 'id');
+
+                    $sql_select = array(
+                                    "t2.cuisine_name",
+                                    "t1.shop_id"
+                                );
+
+                    $this->db->select($sql_select);
+                    $this->db->where("t2.deleted_at", NULL);
+                    $this->db->where("t2.is_active", 1);
+                    $this->db->where_in("t1.shop_id", $shop_array);
+                    $this->db->from('shop_cuisines t1');
+                    $this->db->join('cuisine t2', 't1.cuisine_id = t2.id', "left join");
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $cuisine_data = $sql_query->result_array();                        
+                    }
+
+                    // Add cuisines to shop array
+                    foreach ($shop_data as $key => $value) {
+                        $shop_data[$key]['cuisine'] = array();
+
+                        foreach ($cuisine_data as $key1 => $value1) {
+                            if($value['id'] == $value1['shop_id']){
+                                array_push($shop_data[$key]['cuisine'], $value1['cuisine_name']);
+                            }
+                        }
+                    }
+
+                    $sql_select = array(
+                                    "from_time",
+                                    "to_time",
+                                    "full_day",
+                                    "is_closed",
+                                    "shop_id"
+                                );
+
+                    $this->db->select($sql_select);
+                    $this->db->where_in("shop_id", $shop_array);
+                    $this->db->where("day", date('l'));
+                    $this->db->from('shop_availibality');
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $availibality_data = $sql_query->result_array();
+
+                        // Add availibality_data to shop array
+                        foreach ($shop_data as $key => $value) {
+
+                            foreach ($availibality_data as $key1 => $value1) {
+                                if($value['id'] == $value1['shop_id']){
+                                    $shop_data[$key]['from_time'] = $value1['from_time'];
+                                    $shop_data[$key]['to_time'] = $value1['to_time'];
+                                }
+                            }
+                        }
+                    }
+
+                    $response['status'] = true;
+                    $response['shop'] = $shop_data;
+                }else{
+                    $response['status'] = false;
+                }
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function shop_post(){
+        $postFields['shop_id'] = $_POST['shop_id']; 
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
+            $shop = (array)$this->db->get_where('shop',$where)->row();
+            if(empty($shop)){
+                $response['status'] = false;
+                $response['message'] = 'Restaurant not found';
+            }else{
+
+                $cuisine_data = array();
+                $sql_select = array(
+                                    "t2.cuisine_name"
+                                );
+                $this->db->select($sql_select);
+                $this->db->where("t2.deleted_at", NULL);
+                $this->db->where("t2.is_active", 1);
+                $this->db->where("t1.shop_id", $_POST['shop_id']);
+                $this->db->from('shop_cuisines t1');
+                $this->db->join('cuisine t2', 't1.cuisine_id = t2.id', "left join");
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $cuisine_data = $sql_query->result_array();                        
+                }
+
+                $item_data = array();
+                $this->db->select('*');
+                $this->db->where("deleted_at", NULL);
+                $this->db->where("is_active", 1);
+                $this->db->where("shop_id", $_POST['shop_id']);
+                $this->db->from('item');
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $item_data = $sql_query->result_array();                        
+                }
+
+                $shop_data = array(
+                                'id' => $_POST['shop_id'],
+                                'shop_name' => $shop['shop_name'],
+                                'zip_code' => $shop['zip_code'],
+                                'city' => $shop['city'],
+                                'state' => $shop['state'],
+                                'country' => $shop['country'],
+                                'profile_picture' => $shop['profile_picture']
+                                );
+
+                $response['status'] = true;
+                $response['shop'] = $shop_data;
+                $response['cuisines'] = $cuisine_data;
+                $response['products'] = $item_data;
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function product_post(){
+        $postFields['item_id'] = $_POST['item_id']; 
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['item_id'],'is_active' => '1', 'deleted_at' => NULL);
+            $item = (array)$this->db->get_where('item',$where)->row();
+            if(empty($item)){
+                $response['status'] = false;
+                $response['message'] = 'Product not found';
+            }else{
+
+                $sql_select = array(
+                                    "name",
+                                    "price",
+                                    "variant_group_id",
+                                );
+                $variant_group_id_array = array();
+                $group = array();
+                $this->db->select('variant_group_id');
+                $this->db->group_by('variant_group_id'); 
+                $this->db->where("item_id", $_POST['item_id']);
+                $this->db->from('variant_items');
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $variant_group_id_array = $sql_query->result_array();  
+
+                    $sql_select = array(
+                                    "t2.name as group_name",
+                                    "t1.name",
+                                    "t1.price",
+                                    "t2.availability",
+                                    "t2.selection"
+                                );
+
+                    foreach ($variant_group_id_array as $key => $value)
+                    {
+                        $this->db->select($sql_select);
+                        $this->db->where("t2.deleted_at", NULL);
+                        $this->db->where("t2.id", $value['variant_group_id']);
+                        $this->db->where("t1.item_id", $_POST['item_id']);
+                        $this->db->from('variant_items t1');
+                        $this->db->join('variant_group t2', 't1.variant_group_id = t2.id', "left join");
+                        $sql_query = $this->db->get();
+                        if ($sql_query->num_rows() > 0){
+                            $variant_group = $sql_query->result_array();
+                            $group[$key]['variant_name'] = $variant_group[$key]['group_name'];
+                            $group[$key]['required'] = $variant_group[$key]['availability'];
+                            $group[$key]['multiple_selection'] = $variant_group[$key]['selection'];
+                            $group[$key]['variant_options'] = $variant_group;
+                        }
+                    }                    
+                }
+
+                $response['status'] = true;
+                $response['item'] = $item;
+                $response['variants'] = $group;
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function fetch_data_post(){    
+        $postFields['table_name'] = $_POST['table_name'];               
+            
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost))
+        {
+            if($_POST['table_name'] == 'category'){
+
+                $this->db->select('category_name');
+                $this->db->where("status", 1);
+                $this->db->where("deleted_at", NULL);
+                $this->db->from('category');
+                $sql_query = $this->db->get();
+
+                if ($sql_query->num_rows() > 0){
+                    $data = $sql_query->result_array();   
+                    $response['status'] = true;         
+                }else{
+                    $data = array();
+                    $response['status'] = false;
+                }
+
+                
+            }else if($_POST['table_name'] == 'cuisine'){
+
+                $this->db->select('cuisine_name');
+                $this->db->where("is_active", 1);
+                $this->db->where("deleted_at", NULL);
+                $this->db->from('cuisine');
+                $sql_query = $this->db->get();
+
+                if ($sql_query->num_rows() > 0){
+                    $data = $sql_query->result_array();   
+                    $response['status'] = true;         
+                }else{
+                    $data = array();
+                    $response['status'] = false;
+                }
+
+            }else{
+                $data = array();
+            }
+
+            $response['data'] = $data;
+
+        }
+        else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function favorite_shop_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $postFields['shop_id'] = $_POST['shop_id']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $favorite_data = array(
+                    'customer_id' => $_POST['customer_id'],
+                    'shop_id' => $_POST['shop_id']
+                );
+
+                if($this->db->insert('favorite',$favorite_data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Restaurant added as favorite.';
                 }else{
                     $response['status'] = false;
                     $response['message'] = 'Server encountered an error. please try again';

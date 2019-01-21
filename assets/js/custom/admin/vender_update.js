@@ -7,9 +7,11 @@
         errorPlacement: function(error, element) {
             console.log("error");
             if (element.parents('div').hasClass('custom-checkbox')) {
-                error.appendTo(element.parent().parent());
+                error.appendTo(element.parent().parent().parent());
             }else if (element.hasClass('upload-img')) {
                     error.appendTo(element.parent());
+            }else if (element.parents('div').hasClass('input-group')) {
+                error.insertAfter(element.parent().parent());
             }else{
                 error.insertAfter(element);
             }     
@@ -125,6 +127,14 @@
             'payment_mode[]': {
                 required:true
             },
+            delivery_charges:{
+                required: true,
+                number: true,
+                greaterThanZeroEqualTo:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
             profile_picture:{
                 accept: "image/jpg, image/jpeg, image/png",
                 filesize: 10
@@ -199,6 +209,11 @@
                 required: "The tax id field is required.",
                 valid_taxno:"The tax id field is invalid."
             },
+            delivery_charges: {
+                required: "The delivery charges field is required.",
+                number: "The delivery charges field is invalid.",
+                greaterThanZeroEqualTo: "The delivery charges field is invalid.",
+            },
             'payment_mode[]': {
                 required: "Please select at least one payment mode."
             },
@@ -221,6 +236,9 @@
     $.validator.addMethod("greaterThanZero", function(value, element) {
         return this.optional(element) || value > 0;
     });
+    $.validator.addMethod("greaterThanZeroEqualTo", function(value, element) {
+        return this.optional(element) || value >= 0;
+    });
     $.validator.addMethod("valid_url", function(value, element) {
         return this.optional(element) || /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/.test(value);
     });
@@ -242,6 +260,15 @@ $( document ).ready(function() {
         $('#imgInp').click();
         $('#blah').attr('src', 'https://bootdey.com/img/Content/avatar/avatar6.png');
         return false;
+    });
+
+    $(".demo2").TouchSpin({
+        forcestepdivisibility: 'none',
+        max: 1000000000,
+        decimals: 2,
+        prefix: '$',
+        buttondown_class: 'btn btn-primary',
+        buttonup_class: 'btn btn-primary'
     });
 
 

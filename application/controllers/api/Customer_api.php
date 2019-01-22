@@ -455,7 +455,12 @@ class Customer_api extends REST_Controller {
 
                 $this->db->where('id',$_POST['customer_id']);
                 if($this->db->update('customer',$user_data)){
+
+                    $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+                    $updated_user_data = (array)$this->db->get_where('customer',$where)->row();
+
                     $response['status'] = true;
+                    $response['profile'] = $updated_user_data;
                     $response['message'] = 'Profile updated successfully';
                 }else{
                     $response['status'] = false;
@@ -541,6 +546,38 @@ class Customer_api extends REST_Controller {
     //     $this->response($response);
     // }
 
+    public function my_setting_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+
+                $user_data = array($_POST['setting_name'] => $_POST['status'] );
+                $this->db->where('id',$_POST['customer_id']);
+                if($this->db->update('customer',$user_data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Setting updated successfully';
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            }
+            
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
     public function setting_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['setting_name'] = $_POST['setting_name']; 
@@ -622,6 +659,7 @@ class Customer_api extends REST_Controller {
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['house_no'] = $_POST['house_no']; 
         $postFields['street'] = $_POST['street']; 
+        $postFields['city'] = $_POST['city']; 
         $postFields['zipcode'] = $_POST['zipcode']; 
         $postFields['address_type'] = $_POST['address_type']; 
 
@@ -639,6 +677,7 @@ class Customer_api extends REST_Controller {
                 $delivery_address_data = array(
                     'customer_id' => $_POST['customer_id'],
                     'house_no' => $_POST['house_no'],
+                    'city' => $_POST['city'],
                     'street' => $_POST['street'],
                     'zipcode' => $_POST['zipcode'],
                     'address_type' => $_POST['address_type']

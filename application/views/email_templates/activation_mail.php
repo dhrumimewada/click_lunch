@@ -1,289 +1,93 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>[SUBJECT]</title>
-        <style type="text/css">
-            body {
-                padding-top: 0 !important;
-                padding-bottom: 0 !important;
-                padding-top: 0 !important;
-                padding-bottom: 0 !important;
-                margin:0 !important;
-                width: 100% !important;
-                -webkit-text-size-adjust: 100% !important;
-                -ms-text-size-adjust: 100% !important;
-                -webkit-font-smoothing: antialiased !important;
-            }
-            .tableContent img {
-                border: 0 !important;
-                display: block !important;
-                outline: none !important;
-            }
-            a{
-                color:#382F2E;
-            }
-
-            p, h1,h2,ul,ol,li,div{
-                margin:0;
-                padding:0;
-            }
-
-            h1,h2{
-                font-weight: normal;
-                background:transparent !important;
-                border:none !important;
-            }
-
-            @media only screen and (max-width:480px)
-
-            {
-
-                table[class="MainContainer"], td[class="cell"]
-                {
-                    width: 100% !important;
-                    height:auto !important;
-                }
-                td[class="specbundle"]
-                {
-                    width: 100% !important;
-                    float:left !important;
-                    font-size:13px !important;
-                    line-height:17px !important;
-                    display:block !important;
-                    padding-bottom:15px !important;
-                }
-                td[class="specbundle2"]
-                {
-                    width:80% !important;
-                    float:left !important;
-                    font-size:13px !important;
-                    line-height:17px !important;
-                    display:block !important;
-                    padding-bottom:10px !important;
-                    padding-left:10% !important;
-                    padding-right:10% !important;
-                }
-
-                td[class="spechide"]
-                {
-                    display:none !important;
-                }
-                img[class="banner"]
-                {
-                    width: 100% !important;
-                    height: auto !important;
-                }
-                td[class="left_pad"]
-                {
-                    padding-left:15px !important;
-                    padding-right:15px !important;
-                }
-
-            }
-
-            @media only screen and (max-width:540px)
-
-            {
-
-                table[class="MainContainer"], td[class="cell"]
-                {
-                    width: 100% !important;
-                    height:auto !important;
-                }
-                td[class="specbundle"]
-                {
-                    width: 100% !important;
-                    float:left !important;
-                    font-size:13px !important;
-                    line-height:17px !important;
-                    display:block !important;
-                    padding-bottom:15px !important;
-                }
-                td[class="specbundle2"]
-                {
-                    width:80% !important;
-                    float:left !important;
-                    font-size:13px !important;
-                    line-height:17px !important;
-                    display:block !important;
-                    padding-bottom:10px !important;
-                    padding-left:10% !important;
-                    padding-right:10% !important;
-                }
-
-                td[class="spechide"]
-                {
-                    display:none !important;
-                }
-                img[class="banner"]
-                {
-                    width: 100% !important;
-                    height: auto !important;
-                }
-                td[class="left_pad"]
-                {
-                    padding-left:15px !important;
-                    padding-right:15px !important;
-                }
-
-            }
-
-            .contentEditable h2.big,.contentEditable h1.big{
-                font-size: 26px !important;
-            }
-
-            .contentEditable h2.bigger,.contentEditable h1.bigger{
-                font-size: 37px !important;
-            }
-
-            td,table{
-                vertical-align: top;
-            }
-            td.middle{
-                vertical-align: middle;
-            }
-
-            a.link1{
-                font-size:13px;
-                color:#27A1E5;
-                line-height: 24px;
-                text-decoration:none;
-            }
-            a{
-                text-decoration: none;
-            }
-
-            .link2{
-                color:#ffffff;
-                border-top:10px solid #27A1E5;
-                border-bottom:10px solid #27A1E5;
-                border-left:18px solid #27A1E5;
-                border-right:18px solid #27A1E5;
-                border-radius:3px;
-                -moz-border-radius:3px;
-                -webkit-border-radius:3px;
-                background:#27A1E5;
-            }
-
-            .link3{
-                color:#555555;
-                border:1px solid #cccccc;
-                padding:10px 18px;
-                border-radius:3px;
-                -moz-border-radius:3px;
-                -webkit-border-radius:3px;
-                background:#ffffff;
-            }
-
-            .link4{
-                color:#27A1E5;
-                line-height: 24px;
-            }
-
-            h2,h1{
-                line-height: 20px;
-            }
-            p{
-                font-size: 14px;
-                line-height: 21px;
-                color:#AAAAAA;
-            }
-
-            .contentEditable li{
-
-            }
-
-            .appart p{
-
-            }
-            .bgItem{
-                background: #ffffff;
-            }
-            .bgBody{
-                background: #ffffff;
-            }
-
-            img {
-                outline:none;
-                text-decoration:none;
-                -ms-interpolation-mode: bicubic;
-                width: auto;
-                max-width: 100%;
-                clear: both;
-                display: block;
-                float: none;
-            }
-
-        </style>
-        <script type="colorScheme" class="swatch active">
-            {
-            "name":"Default",
-            "bgBody":"ffffff",
-            "link":"27A1E5",
-            "color":"AAAAAA",
-            "bgItem":"ffffff",
-            "title":"444444"
-            }
-        </script>
-    </head>
-    <body paddingwidth="0" paddingheight="0" bgcolor="#d1d3d4"  style="padding-top: 0; padding-bottom: 0; padding-top: 0; padding-bottom: 0; background-repeat: repeat; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; -webkit-font-smoothing: antialiased;" offset="0" toppadding="0" leftpadding="0">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tbody>
-            <tr>
-                <td><table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="#ffffff" style="font-family:helvetica, sans-serif;" class="MainContainer">
-
-                        <!-- =============== START HEADER =============== -->
-<tbody>
-<tr>
-<td>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tbody>
-<tr>
-<td valign="top" width="20">&nbsp;</td>
-<td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tbody>
-<tr>
-<td class="movableContentContainer">
-<div class="movableContent" style="border: 0px; padding-top: 0px; position: relative;">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tbody>
-<tr>
-    <td height="15"></td>
-</tr>
-<tr>
-    <td>
-        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tbody>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <style type="text/css">
+      a { text-decoration: none; outline: none; }
+      @media (max-width: 649px) {
+        .o_col-full { max-width: 100% !important; }
+        .o_col-half { max-width: 50% !important; }
+        .o_hide-lg { display: inline-block !important; font-size: inherit !important; max-height: none !important; line-height: inherit !important; overflow: visible !important; width: auto !important; visibility: visible !important; }
+        .o_hide-xs, .o_hide-xs.o_col_i { display: none !important; font-size: 0 !important; max-height: 0 !important; width: 0 !important; line-height: 0 !important; overflow: hidden !important; visibility: hidden !important; height: 0 !important; }
+        .o_xs-center { text-align: center !important; }
+        .o_xs-left { text-align: left !important; }
+        .o_xs-right { text-align: left !important; }
+        table.o_xs-left { margin-left: 0 !important; margin-right: auto !important; float: none !important; }
+        table.o_xs-right { margin-left: auto !important; margin-right: 0 !important; float: none !important; }
+        table.o_xs-center { margin-left: auto !important; margin-right: auto !important; float: none !important; }
+        h1.o_heading { font-size: 32px !important; line-height: 41px !important; }
+        h2.o_heading { font-size: 26px !important; line-height: 37px !important; }
+        h3.o_heading { font-size: 20px !important; line-height: 30px !important; }
+        .o_xs-py-md { padding-top: 24px !important; padding-bottom: 24px !important; }
+        .o_xs-pt-xs { padding-top: 8px !important; }
+        .o_xs-pb-xs { padding-bottom: 8px !important; }
+      }
+      @media screen {
+        @font-face {
+          font-family: 'Roboto';
+          font-style: normal;
+          font-weight: 400;
+          src: local("Roboto"), local("Roboto-Regular"), url(https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu7GxKOzY.woff2) format("woff2");
+          unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+        @font-face {
+          font-family: 'Roboto';
+          font-style: normal;
+          font-weight: 400;
+          src: local("Roboto"), local("Roboto-Regular"), url(https://fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxK.woff2) format("woff2");
+          unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+        @font-face {
+          font-family: 'Roboto';
+          font-style: normal;
+          font-weight: 700;
+          src: local("Roboto Bold"), local("Roboto-Bold"), url(https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmWUlfChc4EsA.woff2) format("woff2");
+          unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+        @font-face {
+          font-family: 'Roboto';
+          font-style: normal;
+          font-weight: 700;
+          src: local("Roboto Bold"), local("Roboto-Bold"), url(https://fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmWUlfBBc4.woff2) format("woff2");
+          unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+        .o_sans, .o_heading { font-family: "Roboto", sans-serif !important; }
+        .o_heading, strong, b { font-weight: 700 !important; }
+        a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; }
+      }
+      #canvas .o_hide, #canvas .o_hide-lg { font-size: inherit!important; max-height: none!important; width: auto!important; line-height: inherit!important; visibility: visible!important; }
+      #canvas td.o_hide, #canvas td.o_hide div { display: block!important; font-family: "Roboto", sans-serif; font-size: 16px!important; color: #000; }
+      #canvas span.o_hide-lg { display: inline-block!important; vertical-align: top;}
+      .CodeMirror { line-height: 1.4; font-size: 12px; font-family: sans-serif; }
+    </style>
+  </head>
+  <body class="o_body o_bg-light" data-bgcolor="Bg Light" style="width: 100%;margin: 0px;padding: 0px;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;background-color: #dbe5ea;">
+    <table data-module="preview-text" width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
+      <tbody>
+        <tr>
+          <td class="o_hide" align="center" style="display: none;font-size: 0;max-height: 0;width: 0;line-height: 0;overflow: hidden;mso-hide: all;visibility: hidden;">Email Summary (Hidden)</td>
+        </tr>
+      </tbody>
+    </table>
+    <table data-module="header-primary0" data-thumb="header-primary.png" width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
+      <tbody>
+        <tr>
+          <td class="o_bg-light o_px-xs o_pt-lg o_xs-pt-xs" align="center" data-bgcolor="Bg Light" style="background-color: #dbe5ea;padding-left: 8px;padding-right: 8px;padding-top: 32px;">
+            <table class="o_block" width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation" style="max-width: 632px;margin: 0 auto;">
+              <tbody>
                 <tr>
-                    <td valign="top">
-                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tbody>
-                                <tr>
-                                    <td valign="top" width="60" align="center">
-                                        <img src="<?php echo base_url().'assets/images/click-lunch.png'; ?>" alt="Logo" title="Logo" width="100" height="60" data-max-width="100">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
+                  <td class="o_bg-dark o_px o_py-md o_br-t o_sans o_text" align="center" data-bgcolor="Bg Primary" data-size="Text Default" data-min="12" data-max="20" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 16px;line-height: 24px;background-color: #242b3d;border-radius: 4px 4px 0px 0px;padding-left: 16px;padding-right: 16px;padding-top: 20px;padding-bottom: 20px;">
+                    <p style="margin-top: 0px;margin-bottom: 0px;"><a class="o_text-white" href="#" data-color="White" style="text-decoration: none;outline: none;color: #ffffff;"><img src="<?php echo base_url().'assets/images/logo-white.png'; ?>" width="136" height="30" alt="SimpleApp" style="max-width: 136px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;" data-crop="false"></a></p>
+                  </td>
                 </tr>
-            </tbody>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td height='15'></td>
-</tr>
-<tr>
-    <td ><hr style='height:1px;background:#DDDDDD;border:none;'></td>
-</tr>
-</tbody>
-</table>
-</div>
-<!-- =============== END HEADER =============== -->
-<!-- =============== START BODY =============== -->
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- =============== START BODY =============== -->
 <?php
 
 
@@ -293,76 +97,65 @@ if (isset($mail_body)) {
 
 ?>
 <!-- =============== END BODY =============== -->
-<!-- =============== START FOOTER =============== -->
 
-<div class="movableContent" style="border: 0px; padding-top: 0px; position: relative;">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tbody>
-<tr>
-    <td height="48"></td>
-</tr>
-<tr>
-    <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-            <tbody>
+    <table width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation">
+      <tbody>
+        <tr>
+          <td class="o_bg-light o_px-xs o_pb-lg o_xs-pb-xs" align="center" style="background-color: #dbe5ea;padding-left: 8px;padding-right: 8px;padding-bottom: 32px;">
+            <table class="o_block" width="100%" cellspacing="0" cellpadding="0" border="0" role="presentation" style="max-width: 632px;margin: 0 auto;">
+              <tbody>
                 <tr>
-                    <td valign="top" width="90" class="spechide">&nbsp;</td>
-                    <td><table width="100%" cellpadding="0" cellspacing="0" align="center">
-                            <tr>
-                                <td>
-                                    <div class='contentEditableContainer contentTextEditable'>
-                                        <div class='contentEditable' style='text-align: center;color:#AAAAAA;'>
-                                            <p>
-                                                &#169; 2018 Click lunch - <span class="d-none d-sm-inline-block"> Crafted by Excellent WebWorld</span>.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table></td>
-                    <td valign="top" width="90" class="spechide">&nbsp;</td>
+                  <td class="o_re o_bg-dark o_px o_pb-lg" align="center" style="font-size: 0;vertical-align: top;background-color: #242b3d;padding-left: 16px;padding-right: 16px;padding-bottom: 32px;">
+                    <div class="o_col o_col-2 o_col-full" style="display: inline-block;vertical-align: top;width: 100%;max-width: 200px;">
+                      <div style="font-size: 32px; line-height: 32px; height: 32px;">&nbsp; </div>
+                      <div class="o_px-xs o_sans o_text-xs o_center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;text-align: center;padding-left: 8px;padding-right: 8px;">
+                        <p style="margin-top: 0px;margin-bottom: 0px;"><a class="o_text-dark_light" href="#" style="text-decoration: none;outline: none;color: #a0a3ab;"><strong style="color: #a0a3ab;">Help Center</strong></a></p>
+                      </div>
+                    </div>
+                    <div class="o_col o_col-2 o_col-full" style="display: inline-block;vertical-align: top;width: 100%;max-width: 200px;">
+                      <div style="font-size: 24px; line-height: 24px; height: 24px;">&nbsp; </div>
+                      <div class="o_px-xs o_sans o_text-xs o_center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;text-align: center;padding-left: 8px;padding-right: 8px;">
+                        <p style="margin-top: 0px;margin-bottom: 0px;">
+                          <a class="o_text-dark_light" href="#" style="text-decoration: none;outline: none;color: #a0a3ab;"><img src="<?php echo base_url().'assets/images/email-images/facebook-light.png'; ?>" width="36" height="36" alt="fb" style="max-width: 36px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a><span> &nbsp;</span>
+                          <a class="o_text-dark_light" href="#" style="text-decoration: none;outline: none;color: #a0a3ab;"><img src="<?php echo base_url().'assets/images/email-images/twitter-light.png'; ?>" width="36" height="36" alt="tw" style="max-width: 36px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a><span> &nbsp;</span>
+                          <a class="o_text-dark_light" href="#" style="text-decoration: none;outline: none;color: #a0a3ab;"><img src="<?php echo base_url().'assets/images/email-images/instagram-light.png'; ?>" width="36" height="36" alt="ig" style="max-width: 36px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a><span> &nbsp;</span>
+                          <a class="o_text-dark_light" href="#" style="text-decoration: none;outline: none;color: #a0a3ab;"><img src="<?php echo base_url().'assets/images/email-images/snapchat-light.png'; ?>" width="36" height="36" alt="sc" style="max-width: 36px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="o_col o_col-2 o_col-full" style="display: inline-block;vertical-align: top;width: 100%;max-width: 200px;">
+                      <div style="font-size: 32px; line-height: 32px; height: 32px;">&nbsp; </div>
+                      <div class="o_px-xs o_sans o_text-xs o_center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;text-align: center;padding-left: 8px;padding-right: 8px;">
+                        <p style="margin-top: 0px;margin-bottom: 0px;"><a class="o_text-dark_light" href="#" style="text-decoration: none;outline: none;color: #a0a3ab;"><strong style="color: #a0a3ab;">Preferences</strong></a></p>
+                      </div>
+                    </div>
+      
+                  </td>
                 </tr>
-            </tbody>
-        </table>
-    </td>
-</tr>
-</tbody>
-</table>
-
-
-</div>
-<div class="movableContent" style="border: 0px; padding-top: 0px; position: relative;">
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tbody>
-<tr>
-    <td height="40"></td>
-</tr>
-<tr>
-    <td height='40'></td>
-</tr>
-</tbody>
-</table>
-
-<!-- =============== END FOOTER =============== -->
-</div>
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-<td valign="top" width="20">&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-
-
-</body>
+                <tr>
+                  <td class="o_bg-dark o_px-md o_pb-lg o_br-b o_sans o_text-xs o_text-dark_light" align="center" style="font-family: Helvetica, Arial, sans-serif;margin-top: 0px;margin-bottom: 0px;font-size: 14px;line-height: 21px;background-color: #242b3d;color: #a0a3ab;border-radius: 0px 0px 4px 4px;padding-left: 24px;padding-right: 24px;padding-bottom: 32px;">
+                    <p class="o_mb" style="margin-top: 0px;margin-bottom: 16px;">
+                      <a class="o_text-dark_light" href="#" style="text-decoration: none;outline: none;color: #a0a3ab;"><img src="<?php echo base_url().'assets/images/email-images/badge_appstore-light.png'; ?>" width="135" height="56" alt="AppStore" style="max-width: 135px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a>
+                      <a class="o_text-dark_light" href="#" style="text-decoration: none;outline: none;color: #a0a3ab;"><img src="<?php echo base_url().'assets/images/email-images/badge_googleplay-light.png'; ?>" width="135" height="56" alt="Google Play" style="max-width: 135px;-ms-interpolation-mode: bicubic;vertical-align: middle;border: 0;line-height: 100%;height: auto;outline: none;text-decoration: none;"></a>
+                    </p>
+                    <p class="o_mb-xs" style="margin-top: 0px;margin-bottom: 8px;">&copy;2018 Click Lunch<br>
+                      2603 Woodridge Lane, Memphis, TN 38104, USA
+                    </p>
+                    <p style="margin-top: 0px;margin-bottom: 0px;">
+                      <a class="o_text-xxs o_text-dark_light o_underline" href="#" style="text-decoration: underline;outline: none;font-size: 12px;line-height: 19px;color: #a0a3ab;">Unsubscribe</a>
+                    </p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="o_hide-xs" style="font-size: 64px; line-height: 64px; height: 64px;">&nbsp; </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    </tbody>
+    </table>
+    
+  </body>
 </html>

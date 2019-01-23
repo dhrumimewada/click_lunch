@@ -105,7 +105,7 @@ class Vender_model extends CI_Model {
 
 			$from = "excellentwebworld@admin.com";
 			$to = $this->input->post("email");
-			$subject = "Activation mail";
+			$subject = $return_data->emat_email_subject;
 
 			$email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
 			$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);

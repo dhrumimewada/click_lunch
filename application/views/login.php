@@ -73,9 +73,10 @@ if (isset($temp_value) && !empty($temp_value)) {
                                         <input type="checkbox" class="custom-control-input" id="customControlInline">
                                         <label class="custom-control-label" for="customControlInline">Remember me</label>
                                     </div> -->
-                                    <?php if($user_type != 'admin'){ ?>
+                                    <?php if($user_type != 'admin'){ 
+                                        if($user_type != 'dispatcher'){?>
                                         <a href="<?php echo $vender_forgot_link; ?>" class="text-muted"><i class="mdi mdi-lock"></i> Forgot your password?</a>
-                                    <?php } ?>
+                                    <?php } } ?>
                                 </div>
                                 <div class="col-6 text-right">
                                     <button class="btn btn-primary w-md waves-effect waves-light" type="submit" name="submit">Log In</button>

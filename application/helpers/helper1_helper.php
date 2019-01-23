@@ -43,7 +43,7 @@ function sendmail($from=NULL, $to = NULL, $subject = NULL, $message = NULL){
 
 	$CI->load->library('email', $config);
 	$CI->email->set_newline("\r\n");
-	$CI->email->from($from); // change it to yours
+	$CI->email->from($from, "Click Lunch"); // change it to yours
 	$CI->email->to($to);// change it to yours
 	$CI->email->subject($subject);
 	$CI->email->message($message);

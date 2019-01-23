@@ -59,6 +59,7 @@ class Delivery_boy_model extends CI_Model {
 			$email_var_data["email"] = $this->input->post("email");
 			$email_var_data["password"] = $this->input->post("password");
 			$email_var_data["recovery_link"] = base_url() . 'delivery-boy-setpassword/'. $activation_token;
+			$email_var_data["login_link"] = base_url() . 'login-dispatcher';
 
 			$from = "excellentwebworld@admin.com";
 			$to = $this->input->post("email");
@@ -66,7 +67,7 @@ class Delivery_boy_model extends CI_Model {
 
 			$this->db->select('emat_email_subject,emat_email_message');
 			$this->db->from('email_template');
-			$this->db->where('emat_email_type', 3);
+			$this->db->where('emat_email_type', 4);
 			$this->db->where("emat_is_active", 1);
 			$sql_query = $this->db->get();
 			$return_data = $sql_query->row();

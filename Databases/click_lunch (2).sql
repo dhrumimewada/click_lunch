@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 23, 2019 at 01:53 PM
+-- Generation Time: Jan 24, 2019 at 01:52 PM
 -- Server version: 5.6.41
 -- PHP Version: 7.0.32
 
@@ -226,10 +226,10 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`id`, `email`, `password`, `profile_picture`, `username`, `address`, `mobile_number`, `dob`, `zipcode`, `device_type`, `device_token`, `social_id`, `social_type`, `status`, `created_at`, `updated_at`, `deleted_at`, `gender`, `latitude`, `longitude`, `remember_token`, `activation_token`, `daily_schedule_mail`, `cut_off_notification`, `delivery_notification`) VALUES
-(6, 'DullRat@mailinator.com', '$2y$10$s5xq4SSBkVvXZow/pR6f9.mNUDyTNaonrZSsLwjTNPI27tahx3ASO', 'customer_1546514755.jpg', 'Dhrumi SS', 'city center 2, science city', '8866541254', '1996-02-14', '', 0, '', 0, '', 1, '2019-01-03 06:55:55', '2019-01-22 07:36:53', NULL, '1', '42.4483050', '-71.08359259999990', '', '', 1, 1, 1),
-(25, 'PieThunder@mailinator.com', '$2y$10$TJ0cFGhfYRvD.9OSimFFAekIE4ZLFHiUi0SKaZmemq4p9fGp1m7BG', 'customer_1548150942.jpg', 'Dhrumi SS', 'Dallas-Fort Worth Metropolitan Area, TX, USA', '8866541254', '1996-02-14', '', 0, '', 0, '', 1, '2019-01-09 01:35:17', '2019-01-22 09:55:42', NULL, '1', '', '', '', '', 0, 1, 1),
+(6, 'DullRat@mailinator.com', '$2y$10$s5xq4SSBkVvXZow/pR6f9.mNUDyTNaonrZSsLwjTNPI27tahx3ASO', 'customer_1546514755.jpg', 'Dhrumi SS', 'city center 2, science city', '8866541254', '1996-02-14', '', 0, '', 0, '', 1, '2019-01-03 06:55:55', '2019-01-22 07:36:53', NULL, '1', '42.34797469999999', '-71.08792840000001', '', '', 1, 1, 1),
+(25, 'PieThunder@mailinator.com', '$2y$10$TJ0cFGhfYRvD.9OSimFFAekIE4ZLFHiUi0SKaZmemq4p9fGp1m7BG', 'customer_1548150942.jpg', 'Dhrumi SS', 'Dallas-Fort Worth Metropolitan Area, TX, USA', '8866541254', '1996-02-14', '', 0, 'TestToken', 0, '', 1, '2019-01-09 01:35:17', '2019-01-22 09:55:42', NULL, '1', '0', '0', '', '', 0, 1, 1),
 (32, 'vinodkummar@yahoo.com', '$2y$10$qwBontvpGvQkgoMmf7zhKO.wZj1htnE0rUHE4bMvUOxuQ2MjPQbme', 'customer_1547811554.jpg', 'Vinodkummar', '#5,1 floor,1 main road,rama chandra pura', '900 859 9119', '2001-01-08', '', 0, '', 0, '', 1, '2019-01-14 07:22:20', '2019-01-17 10:29:52', NULL, '0', '', '', '', '', 1, 1, 1),
-(33, 'developer.eww@gmail.com', '$2y$10$hLt2sSPLqVmi7z1Uf0GSCukWJrAqyzR/K.N8VeMLAnp8bgZYLphmW', 'customer_1548152462.jpg', 'Mayur Two', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '333-222-1111', '2019-01-31', '', 0, 'cQn2Ds2K_yU:APA91bG0uQ5MvIck8lVCTyC7nkQm8TAEi3aGPR-OKYlNQRk7_QZfPcU4nD2KsY5d-yvhqeJu049arC028QjG118-jOeLPv__3RX0EZMwIYQ32vGtG4djUl8EZKKH32x7Sz8-T_jifp2B', 0, '', 1, '2019-01-21 11:40:41', '2019-01-22 10:58:07', NULL, '0', '23.072768', '72.5163478', '', '', 1, 1, 1),
+(33, 'developer.eww@gmail.com', '$2y$10$hLt2sSPLqVmi7z1Uf0GSCukWJrAqyzR/K.N8VeMLAnp8bgZYLphmW', 'customer_1548152462.jpg', 'Mayur Two', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '333-222-1111', '2019-01-31', '', 0, 'fF_DIchM8oM:APA91bFG3NBWuBbZDWlsN7MNvxQFqguwdoOkx9LAsnfW5YzS7Xspk0W6qqsu-r7VrG2p6acSlexM1NyO92dbcamQ9spAgnr6OgEse7Ib8i_UVxngNYJuECW7rFb5TR_yfxvLlDsTHFu_', 0, '', 1, '2019-01-21 11:40:41', '2019-01-22 10:58:07', NULL, '0', '23.0727643', '72.5163472', '', '', 1, 1, 1),
 (34, 'RhymePaladin@mailinator.com', '$2y$10$0LU.1X2e9RFtwmuRj7u2NeO1TlLB4UHPL3fw5PicVJVQLixo0eCT2', '', 'Paladin', '', '8866541254', '1996-02-14', '', 1, 'hjhjkhjkhjkhkj', 0, '', 0, '2019-01-23 11:37:07', NULL, NULL, '1', '13.666', '66.3333333', '', '487a25ca64324b9504fc260da580f06938197cb5', 1, 1, 1);
 
 -- --------------------------------------------------------
@@ -274,6 +274,8 @@ CREATE TABLE `delivery_address` (
   `street` varchar(255) NOT NULL,
   `city` varchar(255) NOT NULL,
   `zipcode` varchar(255) NOT NULL,
+  `latitude` varchar(255) NOT NULL,
+  `longitude` varchar(255) NOT NULL,
   `delivery_instruction` text NOT NULL,
   `address_type` varchar(1) NOT NULL COMMENT '1 - office, 2 - office buliding , 3 - home, 4 - other',
   `nickname` varchar(255) NOT NULL,
@@ -286,11 +288,16 @@ CREATE TABLE `delivery_address` (
 -- Dumping data for table `delivery_address`
 --
 
-INSERT INTO `delivery_address` (`id`, `customer_id`, `popular`, `house_no`, `street`, `city`, `zipcode`, `delivery_instruction`, `address_type`, `nickname`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(2, 25, 0, 'f33', 'sursagar tower', '', '380016', 'No inst ', '2', 'bunu', '2019-01-21 13:40:17', NULL, '2019-01-21 13:40:17'),
-(3, 0, 1, 'f3355', 'fgf', '', '380016', 'No inst ', '2', 'bunu', '2019-01-21 13:40:08', NULL, NULL),
-(5, 25, 0, 'f33', 'fgf', '', '380016', 'No inst ', '1', 'bunu', '2019-01-21 13:39:53', NULL, NULL),
-(6, 25, 0, 'f3355', 'fgf', '', '380016', 'No inst ', '2', 'bunu', '2019-01-21 13:40:17', NULL, NULL);
+INSERT INTO `delivery_address` (`id`, `customer_id`, `popular`, `house_no`, `street`, `city`, `zipcode`, `latitude`, `longitude`, `delivery_instruction`, `address_type`, `nickname`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(2, 25, 0, 'f33', 'sursagar tower', '', '380016', '', '', 'No inst ', '2', 'bunu', '2019-01-21 13:40:17', NULL, '2019-01-21 13:40:17'),
+(3, 0, 1, 'f3355', 'fgf', '', '380016', '', '', 'No inst ', '2', 'bunu', '2019-01-21 13:40:08', NULL, NULL),
+(5, 25, 0, 'f33', 'fgf', '', '380016', '', '', 'No inst ', '1', 'bunu', '2019-01-21 13:39:53', NULL, NULL),
+(6, 25, 0, 'f3355', 'fgf', '', '380016', '', '', 'No inst ', '2', 'bunu', '2019-01-21 13:40:17', NULL, NULL),
+(7, 33, 0, '20', 'kadi', 'patan', '38426', '', '', 'hey', '1', 'mayur', '2019-01-24 11:21:21', NULL, NULL),
+(8, 6, 0, 'f33', 'sursagar+tower', 'Ahmedabad', '380061', '23.0680435', '72.5307147', 'No inst ', '2', 'bunu', '2019-01-24 13:17:10', NULL, NULL),
+(9, 33, 0, 'fhdy', 'cjig', 'gjkg', '95565', '', '', 'ncfh', '4', '', '2019-01-24 13:18:31', NULL, NULL),
+(10, 33, 0, 'fjfj', 'cjjf', 'cjng', '56959', '', '', 'zv', '3', '', '2019-01-24 13:20:37', NULL, NULL),
+(11, 6, 0, 'f33', 'sursagar tower', 'Ahmedabad', '380061', '23.0680435', '72.5307147', 'No inst ', '2', 'bunu', '2019-01-24 13:39:58', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -753,7 +760,7 @@ CREATE TABLE `shop` (
 --
 
 INSERT INTO `shop` (`id`, `email`, `password`, `shop_name`, `percentage`, `vender_name`, `shop_code`, `profile_picture`, `address`, `zip_code`, `city`, `state`, `country`, `latitude`, `longitude`, `about`, `contact_no1`, `contact_no2`, `website`, `facebook_link`, `twitter_link`, `pinterest_link`, `min_order`, `delivery_charges`, `payment_mode`, `tax_number`, `device_type`, `device_token`, `broacher`, `status`, `remember_token`, `activation_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(52, 'sugar@mailinator.com', '$2y$10$2Qov5hbktXILNk8/EezJi.rakocg80gqr75xA7JIFLNVHLoLgQlvi', 'Ristretto - Behi', '10', 'Mr Ristretto', 'RIS52', 'vender_1541502113.jpg', 'Science Ciy Road, Sola, Ah', '', '0', '0', '', '', '', 'Your family will never guess that this fun twist on typical pizza uses up leftover pesto. Loaded with protein, hearty slices of this chicken pizza will fill them up fast!', '8866584541', '7745871466', 'https://www.zomato.com/ah', '', '', '', '100.00', '', '0,1,2,3', '657-57-5765', 0, '', 'brochure_1541502113.jpg', 1, '8092b2c8651f80fea4a7e4e5874a800629347b95', '', '2018-11-06 05:49:41', '2018-11-12 09:03:10', NULL),
+(52, 'sugar@mailinator.com', '$2y$10$2Qov5hbktXILNk8/EezJi.rakocg80gqr75xA7JIFLNVHLoLgQlvi', 'Ristretto - Behi', '10', 'Mr Ristretto', 'RIS52', 'vender_1541502113.jpg', 'Science Ciy Road, Sola, Ah', '', '0', '0', '', '42.3483041', '-71.08359259999997', 'Your family will never guess that this fun twist on typical pizza uses up leftover pesto. Loaded with protein, hearty slices of this chicken pizza will fill them up fast!', '8866584541', '7745871466', 'https://www.zomato.com/ah', '', '', '', '100.00', '', '0,1,2,3', '657-57-5765', 0, '', 'brochure_1541502113.jpg', 1, '', '', '2018-11-06 05:49:41', '2018-11-12 09:03:10', NULL),
 (53, 'palboy@mailinator.com', '', 'Test Shop', '10.50', 'Pal', 'TES53', 'vender_1541999590.jpg', 'Gota, Ahmedabad, Gujarat, India', '', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '', '2018-11-12 00:43:10', NULL, NULL),
 (54, 'palcakes@mailinator.com', '$2y$10$9H2n2v7cI.lNp3E0JvAJoerpKhmOQxebMeWD2rnlcEETivT5B3nky', 'Git', '8.00', 'Frl', 'GIT54', '', 'Del\\\"hi, Ind\\\"ia', '', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '', '2', '', 0, '', '', 2, '', '', '2018-11-12 09:06:52', '2018-11-23 00:41:26', NULL),
 (55, 'Cafe@eww.com', '', 'The Hytt Cafe', '10.00', 'Giop', 'THE55', '', 'Hynes Convention Center, Boston, MA, USA', '02115', 'Suffolk County', 'Massachusetts', 'United States', '42.34797469999999', '-71.08792840000001', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '', '2019-01-03 09:21:24', NULL, NULL),
@@ -831,8 +838,8 @@ CREATE TABLE `shop_cuisines` (
 
 INSERT INTO `shop_cuisines` (`id`, `shop_id`, `cuisine_id`) VALUES
 (69, 57, 3),
-(70, 57, 6),
-(74, 60, 3),
+(70, 57, 2),
+(74, 53, 3),
 (75, 62, 2);
 
 -- --------------------------------------------------------
@@ -1209,7 +1216,7 @@ ALTER TABLE `customer_payment_card`
 -- AUTO_INCREMENT for table `delivery_address`
 --
 ALTER TABLE `delivery_address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `delivery_boy`

@@ -183,8 +183,6 @@ class Customer_api extends REST_Controller {
         $postFields['password'] = $_POST['password']; 
         $postFields['device_token'] = $_POST['device_token']; 
         $postFields['device_type'] = $_POST['device_type']; 
-        $postFields['latitude'] = $_POST['latitude'];
-        $postFields['longitude'] = $_POST['longitude'];   
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
@@ -202,10 +200,13 @@ class Customer_api extends REST_Controller {
 
             		$data = array(
 	                    'device_type' => $_POST['device_type'],
-	                    'device_token' => $_POST['device_token'],
-	                    'latitude' => $_POST['latitude'],
-	                    'longitude' => $_POST['longitude']
+	                    'device_token' => $_POST['device_token']
 	                     );
+
+                    if(isset($_POST['latitude']) && $_POST['latitude'] != "" && !is_null($_POST['latitude']) && isset($_POST['longitude']) && $_POST['longitude'] != "" && !is_null($_POST['longitude'])){
+                        $data['latitude'] = $_POST['latitude'];
+                        $data['longitude'] = $_POST['longitude'];
+                    }
 
                 $this->db->where('id',$customer->id);
                 $this->db->update('customer',$data);
@@ -690,6 +691,23 @@ class Customer_api extends REST_Controller {
                     $delivery_address_data['nickname'] = $_POST['nickname'];
                 }
 
+                $house_no = str_replace(" ","+",trim($_POST['house_no']));
+                $street = str_replace(" ","+",trim($_POST['street']));
+                $city = str_replace(" ","+",trim($_POST['city']));
+                $zipcode = str_replace(" ","+",trim($_POST['zipcode']));
+
+                $address = $house_no."+".$street."+".$city."+".$zipcode;
+
+                $google_key = $this->config->item('google_key');
+                $json = file_get_contents("https://maps.google.com/maps/api/geocode/json?address=$address&key=$google_key");
+                $json = json_decode($json);
+
+                $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+                $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+
+                $delivery_address_data['latitude'] = $lat;
+                $delivery_address_data['longitude'] = $long;
+
                 if($this->db->insert('delivery_address',$delivery_address_data)){
                     $response['status'] = true;
                     $response['message'] = 'Delivery address added successfully';
@@ -697,6 +715,8 @@ class Customer_api extends REST_Controller {
                     $response['status'] = false;
                     $response['message'] = 'Server encountered an error. please try again';
                 }
+                
+                
             }
             
         }else{
@@ -970,6 +990,35 @@ class Customer_api extends REST_Controller {
                 $response['status'] = false;
                 $response['message'] = 'User not found';
             }else{
+
+                $cuisine_shops = array();
+                if(isset($_POST['cuisine']) && $_POST['cuisine'] != ""){
+                    $cuisine_data = explode(',',$_POST['cuisine']);
+
+                    $this->db->select('shop_id'); 
+                    $this->db->where_in('cuisine_id',$cuisine_data); 
+                    $this->db->group_by('shop_id'); 
+                    $this->db->from('shop_cuisines'); 
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){ 
+                        $cuisine_shops_array = $sql_query->result_array();
+                        $cuisine_shops = array_column($cuisine_shops_array, 'shop_id');
+                    }
+                }
+
+                if(isset($_POST['address_id']) && $_POST['address_id'] != "" && $_POST['address_id'] != "0"){
+
+                    $this->db->select('house_no,street,city,zipcode as address'); 
+                    $this->db->where('id',$_POST['address_id']);  
+                    $this->db->from('delivery_address'); 
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $address = $sql_query->row();
+                        $response['address'] = $address;
+                    }
+
+                }
+
                 $latitude = $user['latitude'];
                 $longitude = $user['longitude'];
 
@@ -989,15 +1038,13 @@ class Customer_api extends REST_Controller {
                 $this->db->select($sql_select);
                 $this->db->order_by("distance", "asc");
                 $this->db->having("distance <=", 100);
+                if(!empty($cuisine_shops)){
+                    $this->db->where_in("id", $cuisine_shops);
+                }
                 $this->db->where("longitude !=", '');
                 $this->db->where("latitude !=", '');
                 $this->db->where("deleted_at", NULL);
                 $this->db->where("status", 1);
-
-                // if(isset($_POST['cuisine']) && $_POST['cuisine'] != ""){
-                //     $cuisine_array = explode(',', $_POST['cuisine']);
-                    
-                // }
 
                 $limit = 10; // messages per page
                 if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
@@ -1076,6 +1123,7 @@ class Customer_api extends REST_Controller {
                     $response['shop'] = $shop_data;
                 }else{
                     $response['status'] = false;
+                    $response['message'] = 'No any restaurant found';
                 }
             }
 

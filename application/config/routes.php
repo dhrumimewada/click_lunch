@@ -246,12 +246,22 @@ $route['banner-update/(:any)'] = 'admin/banner/put/$1';
 $route['banner-put'] = 'admin/banner/put';
 $route['banner-status'] = 'admin/banner/active_deactive_banner'; 
 
+$route['highlight-list'] = 'admin/banner/highlight';
+$route['highlight-put'] = 'admin/banner/highlight_put';
+
 // Admin - app setting
 $route['app-setting'] = 'appsetting/index';  
 $route['app-setting-update'] = 'appsetting/put';  
 
 // Admin - Paayment spotal
 $route['setup-payment'] = 'admin/setup_payment/index'; 
+
+// Admin - Popular Location
+$route['popular-location-list'] = 'admin/popular_location/index';
+$route['popular-location-add'] = 'admin/popular_location/post';  
+$route['popular-location-delete'] = 'admin/popular_location/delete';
+
+
 
 //Dispatcher
 $route['login-dispatcher'] = 'dispatcher/dispatcher_login/login';

@@ -28,7 +28,7 @@ if($is_admin){
         <div id="sidebar-menu">
             <!-- Left Menu Start -->
             <ul class="metismenu" id="side-menu">
-                <li class="menu-title text-center"><?php echo $username; ?></li>
+                <!-- <li class="menu-title text-center"><?php echo $username; ?></li> -->
                 
                 <?php if($is_dispatcher) {?>
 
@@ -121,9 +121,11 @@ if($is_admin){
                 </li>
 
                 <li>
-                    <a href="<?php echo base_url().'banner-list'; ?>" class="waves-effect">
-                        <i class="mdi mdi-image-area"></i><span> Banner Management </span>
-                    </a>
+                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-image-area"></i><span> Banner Management <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+                    <ul class="submenu">
+                        <li><a href="<?php echo base_url().'banner-list'; ?>">Banners </a></li>
+                        <li><a href="<?php echo base_url().'highlight-list'; ?>">Highlights </a></li>
+                    </ul>
                 </li>
 
                 <li>
@@ -267,6 +269,11 @@ if($is_admin){
                 <?php
                 if($is_admin){
                     ?>
+                <li>
+                    <a href="<?php echo base_url().'popular-location-list'; ?>" class="waves-effect">
+                        <i class="mdi mdi-map-marker-multiple"></i><span> Popular Location </span>
+                    </a>
+                </li>
                 <li>
                     <a href="<?php echo base_url().'maintenance10'; ?>" class="waves-effect">
                         <i class="mdi mdi-credit-card-multiple"></i><span> Setup Payment Portal </span>

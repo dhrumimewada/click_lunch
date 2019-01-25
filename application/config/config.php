@@ -550,6 +550,11 @@ $config['app_setting']  = array('1' => 'customer_android_app',
 						    '4' => 'restaurant_ipad_app',
 						    '5' => 'maintenance_mode');
 
+$config['address_type']  = array('1' => 'office',
+						    '2' => 'office buliding',
+						    '3' => 'home',
+						    '4' => 'other');
+
 // Send mail config
 $config['protocol'] = "smtp";
 $config['smtp_host'] = "ssl://smtp.gmail.com";

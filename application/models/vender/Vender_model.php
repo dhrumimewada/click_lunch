@@ -171,7 +171,10 @@ class Vender_model extends CI_Model {
 			}
 		}
 
-		$user_data['payment_mode'] = implode (",", $this->input->post("payment_mode"));
+		$payment_mode = '';
+		if(isset($_POST['payment_mode'])){
+			$user_data['payment_mode'] = implode (",", $this->input->post("payment_mode"));
+		}
 
 		// echo "<pre>";
 		// print_r($user_data);

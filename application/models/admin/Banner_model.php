@@ -26,6 +26,17 @@ class Banner_model extends CI_Model {
 		return $return_data;
 	}
 
+	public function get_highlight() {
+		$return_data = array();
+		$this->db->select('*');
+		$this->db->from('highlight');
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			$return_data = $sql_query->result_array();
+		}
+		return $return_data;
+	}
+
 	public function post($modal_data = NULL) {
 		$this->db->trans_begin();
 		$return_value = FALSE;

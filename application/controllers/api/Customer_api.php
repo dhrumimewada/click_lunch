@@ -878,6 +878,10 @@ class Customer_api extends REST_Controller {
                     'card_type' => intval($_POST['card_type'])
                 );
 
+                if(isset($_POST['nickname'])){
+                    $payment_card_data['nickname'] = $_POST['nickname'];
+                }
+
                 if($this->db->insert('customer_payment_card',$payment_card_data)){
                     $response['status'] = true;
                     $response['message'] = 'Card added successfully';
@@ -922,6 +926,10 @@ class Customer_api extends REST_Controller {
                     'card_type' => intval($_POST['card_type']),
                     'updated_at' => date('Y-m-d H:i:s')
                 );
+
+                if(isset($_POST['nickname'])){
+                    $data['nickname'] = $_POST['nickname'];
+                }
 
                 $this->db->where('customer_id',$_POST['customer_id']);
                 $this->db->where('id',$_POST['payment_card_id']);
@@ -979,158 +987,165 @@ class Customer_api extends REST_Controller {
     }
 
     public function home_post(){
-        $postFields['customer_id'] = $_POST['customer_id']; 
-        $errorPost = $this->ValidatePostFields($postFields);
 
-        if(empty($errorPost)){
+        $cuisine_shops = array();
+        if(isset($_POST['cuisine']) && $_POST['cuisine'] != ""){
+            $cuisine_data = explode(',',$_POST['cuisine']);
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
+            $this->db->select('shop_id'); 
+            $this->db->where_in('cuisine_id',$cuisine_data); 
+            $this->db->group_by('shop_id'); 
+            $this->db->from('shop_cuisines'); 
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){ 
+                $cuisine_shops_array = $sql_query->result_array();
+                $cuisine_shops = array_column($cuisine_shops_array, 'shop_id');
+            }
+        }
+
+        if(isset($_POST['address_id']) && $_POST['address_id'] != "" && $_POST['address_id'] != "0"){
+
+            $this->db->select('latitude, longitude'); 
+            $this->db->where('id',$_POST['address_id']);  
+            $this->db->from('delivery_address'); 
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $address = $sql_query->row();
+                $latitude = $address->latitude;
+                $longitude = $address->longitude;
             }else{
+                $response['message'] = 'Selected delivery address not found';
+            }
+        }
 
-                $cuisine_shops = array();
-                if(isset($_POST['cuisine']) && $_POST['cuisine'] != ""){
-                    $cuisine_data = explode(',',$_POST['cuisine']);
+        $sql_select = array(
+                            "id",
+                            "shop_name",
+                            "profile_picture",
+                            "city",
+                            "state",
+                            "country",
+                            "zip_code"
+                        );
 
-                    $this->db->select('shop_id'); 
-                    $this->db->where_in('cuisine_id',$cuisine_data); 
-                    $this->db->group_by('shop_id'); 
-                    $this->db->from('shop_cuisines'); 
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){ 
-                        $cuisine_shops_array = $sql_query->result_array();
-                        $cuisine_shops = array_column($cuisine_shops_array, 'shop_id');
+        if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != ""){
+
+            $latitude = $_POST['latitude'];
+            $longitude = $_POST['longitude'];
+
+            $distance = "(3956 * 2 * ASIN(SQRT( POWER(SIN((".$latitude." - latitude) * pi()/180 / 2), 2) +COS( ".$latitude." * pi()/180) * COS(longitude * pi()/180) * POWER(SIN(( ".$longitude." - longitude) * pi()/180 / 2), 2) ))) as distance";
+            array_push($sql_select,$distance);
+
+        }else if(isset($_POST['address_id']) && $_POST['address_id'] != "" && $_POST['address_id'] != "0"){
+
+            $distance = "(3956 * 2 * ASIN(SQRT( POWER(SIN((".$latitude." - latitude) * pi()/180 / 2), 2) +COS( ".$latitude." * pi()/180) * COS(longitude * pi()/180) * POWER(SIN(( ".$longitude." - longitude) * pi()/180 / 2), 2) ))) as distance";
+            array_push($sql_select,$distance);
+
+        }else{
+
+        }
+        
+
+        $this->db->select($sql_select);
+
+        if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != ""){
+            $this->db->order_by("distance", "asc");
+            $this->db->having("distance <=", 100);
+        }else if(isset($_POST['address_id']) && $_POST['address_id'] != "" && $_POST['address_id'] != "0"){
+            $this->db->order_by("distance", "asc");
+            $this->db->having("distance <=", 100);
+        }else{
+            
+        }
+        
+        if(!empty($cuisine_shops)){
+            $this->db->where_in("id", $cuisine_shops);
+        }
+        $this->db->where("longitude !=", '');
+        $this->db->where("latitude !=", '');
+        $this->db->where("deleted_at", NULL);
+        $this->db->where("status", 1);
+
+        $limit = 10; // messages per page
+        if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
+            $start = $limit * ($_POST['page_number'] - 1);
+            $this->db->limit($limit, $start);
+        }else{
+            $this->db->limit($limit);
+        }
+
+        $this->db->from('shop');
+        $sql_query = $this->db->get();
+
+        //$sql_query = $this->db->query('SELECT * , (3956 * 2 * ASIN(SQRT( POWER(SIN((42.4483050 - latitude) * pi()/180 / 2), 2) +COS( 42.3483050 * pi()/180) * COS(longitude * pi()/180) * POWER(SIN(( -71.08359259999990 - longitude) * pi()/180 / 2), 2) ))) as distance from shop having distance <= 100 order by distance');
+        
+        if ($sql_query->num_rows() > 0){
+
+            $shop_data = $sql_query->result_array();
+            $shop_array = array_column($shop_data, 'id');
+
+            $sql_select = array(
+                            "t2.cuisine_name",
+                            "t1.shop_id"
+                        );
+
+            $this->db->select($sql_select);
+            $this->db->where("t2.deleted_at", NULL);
+            $this->db->where("t2.is_active", 1);
+            $this->db->where_in("t1.shop_id", $shop_array);
+            $this->db->from('shop_cuisines t1');
+            $this->db->join('cuisine t2', 't1.cuisine_id = t2.id', "left join");
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $cuisine_data = $sql_query->result_array();                        
+            }
+
+            // Add cuisines to shop array
+            foreach ($shop_data as $key => $value) {
+                $shop_data[$key]['cuisine'] = array();
+
+                foreach ($cuisine_data as $key1 => $value1) {
+                    if($value['id'] == $value1['shop_id']){
+                        array_push($shop_data[$key]['cuisine'], $value1['cuisine_name']);
                     }
-                }
-
-                if(isset($_POST['address_id']) && $_POST['address_id'] != "" && $_POST['address_id'] != "0"){
-
-                    $this->db->select('house_no,street,city,zipcode as address'); 
-                    $this->db->where('id',$_POST['address_id']);  
-                    $this->db->from('delivery_address'); 
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $address = $sql_query->row();
-                        $response['address'] = $address;
-                    }
-
-                }
-
-                $latitude = $user['latitude'];
-                $longitude = $user['longitude'];
-
-                $distance = "(3956 * 2 * ASIN(SQRT( POWER(SIN((".$latitude." - latitude) * pi()/180 / 2), 2) +COS( ".$latitude." * pi()/180) * COS(longitude * pi()/180) * POWER(SIN(( ".$longitude." - longitude) * pi()/180 / 2), 2) ))) as distance";
-
-                $sql_select = array(
-                                    "id",
-                                    "shop_name",
-                                    "profile_picture",
-                                    "city",
-                                    "state",
-                                    "country",
-                                    "zip_code",
-                                    $distance
-                                );
-
-                $this->db->select($sql_select);
-                $this->db->order_by("distance", "asc");
-                $this->db->having("distance <=", 100);
-                if(!empty($cuisine_shops)){
-                    $this->db->where_in("id", $cuisine_shops);
-                }
-                $this->db->where("longitude !=", '');
-                $this->db->where("latitude !=", '');
-                $this->db->where("deleted_at", NULL);
-                $this->db->where("status", 1);
-
-                $limit = 10; // messages per page
-                if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
-                    $start = $limit * ($_POST['page_number'] - 1);
-                    $this->db->limit($limit, $start);
-                }else{
-                    $this->db->limit($limit);
-                }
-
-                $this->db->from('shop');
-                $sql_query = $this->db->get();
-
-                //$sql_query = $this->db->query('SELECT * , (3956 * 2 * ASIN(SQRT( POWER(SIN((42.4483050 - latitude) * pi()/180 / 2), 2) +COS( 42.3483050 * pi()/180) * COS(longitude * pi()/180) * POWER(SIN(( -71.08359259999990 - longitude) * pi()/180 / 2), 2) ))) as distance from shop having distance <= 100 order by distance');
-                
-                if ($sql_query->num_rows() > 0){
-
-                    $shop_data = $sql_query->result_array();
-                    $shop_array = array_column($shop_data, 'id');
-
-                    $sql_select = array(
-                                    "t2.cuisine_name",
-                                    "t1.shop_id"
-                                );
-
-                    $this->db->select($sql_select);
-                    $this->db->where("t2.deleted_at", NULL);
-                    $this->db->where("t2.is_active", 1);
-                    $this->db->where_in("t1.shop_id", $shop_array);
-                    $this->db->from('shop_cuisines t1');
-                    $this->db->join('cuisine t2', 't1.cuisine_id = t2.id', "left join");
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $cuisine_data = $sql_query->result_array();                        
-                    }
-
-                    // Add cuisines to shop array
-                    foreach ($shop_data as $key => $value) {
-                        $shop_data[$key]['cuisine'] = array();
-
-                        foreach ($cuisine_data as $key1 => $value1) {
-                            if($value['id'] == $value1['shop_id']){
-                                array_push($shop_data[$key]['cuisine'], $value1['cuisine_name']);
-                            }
-                        }
-                    }
-
-                    $sql_select = array(
-                                    "from_time",
-                                    "to_time",
-                                    "full_day",
-                                    "is_closed",
-                                    "shop_id"
-                                );
-
-                    $this->db->select($sql_select);
-                    $this->db->where_in("shop_id", $shop_array);
-                    $this->db->where("day", date('l'));
-                    $this->db->from('shop_availibality');
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $availibality_data = $sql_query->result_array();
-
-                        // Add availibality_data to shop array
-                        foreach ($shop_data as $key => $value) {
-
-                            foreach ($availibality_data as $key1 => $value1) {
-                                if($value['id'] == $value1['shop_id']){
-                                    $shop_data[$key]['from_time'] = $value1['from_time'];
-                                    $shop_data[$key]['to_time'] = $value1['to_time'];
-                                }
-                            }
-                        }
-                    }
-
-                    $response['status'] = true;
-                    $response['shop'] = $shop_data;
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'No any restaurant found';
                 }
             }
 
+            $sql_select = array(
+                            "from_time",
+                            "to_time",
+                            "full_day",
+                            "is_closed",
+                            "shop_id"
+                        );
+
+            $this->db->select($sql_select);
+            $this->db->where_in("shop_id", $shop_array);
+            $this->db->where("day", date('l'));
+            $this->db->from('shop_availibality');
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $availibality_data = $sql_query->result_array();
+
+                // Add availibality_data to shop array
+                foreach ($shop_data as $key => $value) {
+
+                    foreach ($availibality_data as $key1 => $value1) {
+                        if($value['id'] == $value1['shop_id']){
+                            $shop_data[$key]['from_time'] = $value1['from_time'];
+                            $shop_data[$key]['to_time'] = $value1['to_time'];
+                        }
+                    }
+                }
+            }
+
+            $response['status'] = true;
+            $response['shop'] = $shop_data;
         }else{
             $response['status'] = false;
-            $response['message'] = $errorPost;
+            $response['message'] = 'No any restaurant found';
         }
+
         $this->response($response);
     }
 

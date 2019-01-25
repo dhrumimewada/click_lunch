@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 24, 2019 at 01:52 PM
+-- Generation Time: Jan 25, 2019 at 02:07 PM
 -- Server version: 5.6.41
 -- PHP Version: 7.0.32
 
@@ -227,9 +227,9 @@ CREATE TABLE `customer` (
 
 INSERT INTO `customer` (`id`, `email`, `password`, `profile_picture`, `username`, `address`, `mobile_number`, `dob`, `zipcode`, `device_type`, `device_token`, `social_id`, `social_type`, `status`, `created_at`, `updated_at`, `deleted_at`, `gender`, `latitude`, `longitude`, `remember_token`, `activation_token`, `daily_schedule_mail`, `cut_off_notification`, `delivery_notification`) VALUES
 (6, 'DullRat@mailinator.com', '$2y$10$s5xq4SSBkVvXZow/pR6f9.mNUDyTNaonrZSsLwjTNPI27tahx3ASO', 'customer_1546514755.jpg', 'Dhrumi SS', 'city center 2, science city', '8866541254', '1996-02-14', '', 0, '', 0, '', 1, '2019-01-03 06:55:55', '2019-01-22 07:36:53', NULL, '1', '42.34797469999999', '-71.08792840000001', '', '', 1, 1, 1),
-(25, 'PieThunder@mailinator.com', '$2y$10$TJ0cFGhfYRvD.9OSimFFAekIE4ZLFHiUi0SKaZmemq4p9fGp1m7BG', 'customer_1548150942.jpg', 'Dhrumi SS', 'Dallas-Fort Worth Metropolitan Area, TX, USA', '8866541254', '1996-02-14', '', 0, 'TestToken', 0, '', 1, '2019-01-09 01:35:17', '2019-01-22 09:55:42', NULL, '1', '0', '0', '', '', 0, 1, 1),
+(25, 'PieThunder@mailinator.com', '$2y$10$TJ0cFGhfYRvD.9OSimFFAekIE4ZLFHiUi0SKaZmemq4p9fGp1m7BG', 'customer_1548150942.jpg', 'Dhrumi SS', 'Dallas-Fort Worth Metropolitan Area, TX, USA', '8866541254', '1996-02-14', '', 0, 'adsdasddasd', 0, '', 1, '2019-01-09 01:35:17', '2019-01-22 09:55:42', NULL, '1', '121212', '1212154', 'f59c153f1b0653cd0b04228d133252259d027c74', '', 0, 1, 1),
 (32, 'vinodkummar@yahoo.com', '$2y$10$qwBontvpGvQkgoMmf7zhKO.wZj1htnE0rUHE4bMvUOxuQ2MjPQbme', 'customer_1547811554.jpg', 'Vinodkummar', '#5,1 floor,1 main road,rama chandra pura', '900 859 9119', '2001-01-08', '', 0, '', 0, '', 1, '2019-01-14 07:22:20', '2019-01-17 10:29:52', NULL, '0', '', '', '', '', 1, 1, 1),
-(33, 'developer.eww@gmail.com', '$2y$10$hLt2sSPLqVmi7z1Uf0GSCukWJrAqyzR/K.N8VeMLAnp8bgZYLphmW', 'customer_1548152462.jpg', 'Mayur Two', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '333-222-1111', '2019-01-31', '', 0, 'fF_DIchM8oM:APA91bFG3NBWuBbZDWlsN7MNvxQFqguwdoOkx9LAsnfW5YzS7Xspk0W6qqsu-r7VrG2p6acSlexM1NyO92dbcamQ9spAgnr6OgEse7Ib8i_UVxngNYJuECW7rFb5TR_yfxvLlDsTHFu_', 0, '', 1, '2019-01-21 11:40:41', '2019-01-22 10:58:07', NULL, '0', '23.0727643', '72.5163472', '', '', 1, 1, 1),
+(33, 'developer.eww@gmail.com', '$2y$10$aa.zH3/GXVhn4BNskycVWu0iRr3Xw2rYLTz1g5hdplV6Y95buGuFu', 'customer_1548152462.jpg', 'Mayur Two', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '333-222-1111', '2019-01-31', '', 0, 'fF_DIchM8oM:APA91bFG3NBWuBbZDWlsN7MNvxQFqguwdoOkx9LAsnfW5YzS7Xspk0W6qqsu-r7VrG2p6acSlexM1NyO92dbcamQ9spAgnr6OgEse7Ib8i_UVxngNYJuECW7rFb5TR_yfxvLlDsTHFu_', 0, '', 1, '2019-01-21 11:40:41', '2019-01-22 10:58:07', NULL, '0', '23.0727643', '72.5163472', 'b660c73941cee4ed06cb455cc620be5d0eb40a94', '', 1, 1, 1),
 (34, 'RhymePaladin@mailinator.com', '$2y$10$0LU.1X2e9RFtwmuRj7u2NeO1TlLB4UHPL3fw5PicVJVQLixo0eCT2', '', 'Paladin', '', '8866541254', '1996-02-14', '', 1, 'hjhjkhjkhjkhkj', 0, '', 0, '2019-01-23 11:37:07', NULL, NULL, '1', '13.666', '66.3333333', '', '487a25ca64324b9504fc260da580f06938197cb5', 1, 1, 1);
 
 -- --------------------------------------------------------
@@ -245,7 +245,8 @@ CREATE TABLE `customer_payment_card` (
   `card_number` varchar(255) NOT NULL,
   `expiry_date` varchar(255) NOT NULL,
   `cvv` int(3) NOT NULL,
-  `card_type` int(1) NOT NULL COMMENT '1 - visa, 2 - Mastercard, 3 - American Express',
+  `nickname` varchar(255) NOT NULL,
+  `card_type` int(1) NOT NULL COMMENT '1 - visa, 2 - Mastercard, 3 - American Express, 4 - Diners Club, 5 - Discover, 6 - JCB',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -255,10 +256,14 @@ CREATE TABLE `customer_payment_card` (
 -- Dumping data for table `customer_payment_card`
 --
 
-INSERT INTO `customer_payment_card` (`id`, `customer_id`, `card_holder_name`, `card_number`, `expiry_date`, `cvv`, `card_type`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 6, 'dhrumi', '4242 4242 4242 4242', '06/26', 777, 1, '2019-01-18 12:03:43', NULL, NULL),
-(2, 6, 'Sira', '4242 4242 42 42 455', '06/25', 555, 2, '2019-01-18 12:03:57', '2019-01-18 12:06:42', '2019-01-18 12:07:15'),
-(3, 6, 'juhi', '4242 4242 42 42 455', '06/25', 555, 2, '2019-01-18 12:05:53', NULL, NULL);
+INSERT INTO `customer_payment_card` (`id`, `customer_id`, `card_holder_name`, `card_number`, `expiry_date`, `cvv`, `nickname`, `card_type`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 6, 'dhrumi', '4242 4242 4242 4242', '06/26', 777, 'Dhrumi', 1, '2019-01-18 12:03:43', NULL, NULL),
+(2, 6, 'Sira', '4242 4242 42 42 455', '06/25', 555, 'Si', 2, '2019-01-18 12:03:57', '2019-01-18 12:06:42', '2019-01-18 12:07:15'),
+(3, 6, 'juhi', '4242 4242 42 42 455', '06/25', 555, 'Hi', 2, '2019-01-18 12:05:53', NULL, NULL),
+(4, 33, 'mayur', '4242 4242 4242 4242', '5/2019', 222, 'mavo', 1, '2019-01-25 07:48:24', NULL, '2019-01-25 11:16:56'),
+(5, 33, 'mayur', '6011 1111 1111 1117', '1/2021', 222, '', 5, '2019-01-25 08:01:46', NULL, NULL),
+(6, 33, 'saurav', '4242 4242 4242 4242', '1/2019', 222, 'hove', 1, '2019-01-25 12:00:18', '2019-01-25 12:09:11', NULL),
+(7, 33, 'hoho', '5105 1051 0510 5100', '1/2021', 333, 'hiii', 2, '2019-01-25 12:10:18', NULL, '2019-01-25 13:20:06');
 
 -- --------------------------------------------------------
 
@@ -289,15 +294,15 @@ CREATE TABLE `delivery_address` (
 --
 
 INSERT INTO `delivery_address` (`id`, `customer_id`, `popular`, `house_no`, `street`, `city`, `zipcode`, `latitude`, `longitude`, `delivery_instruction`, `address_type`, `nickname`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(2, 25, 0, 'f33', 'sursagar tower', '', '380016', '', '', 'No inst ', '2', 'bunu', '2019-01-21 13:40:17', NULL, '2019-01-21 13:40:17'),
-(3, 0, 1, 'f3355', 'fgf', '', '380016', '', '', 'No inst ', '2', 'bunu', '2019-01-21 13:40:08', NULL, NULL),
+(2, 25, 0, 'f33', 'sursagar tower', '', '380016', '23.0680435', '', 'No inst ', '2', 'bunu', '2019-01-25 05:48:04', NULL, '2019-01-21 13:40:17'),
 (5, 25, 0, 'f33', 'fgf', '', '380016', '', '', 'No inst ', '1', 'bunu', '2019-01-21 13:39:53', NULL, NULL),
 (6, 25, 0, 'f3355', 'fgf', '', '380016', '', '', 'No inst ', '2', 'bunu', '2019-01-21 13:40:17', NULL, NULL),
 (7, 33, 0, '20', 'kadi', 'patan', '38426', '', '', 'hey', '1', 'mayur', '2019-01-24 11:21:21', NULL, NULL),
 (8, 6, 0, 'f33', 'sursagar+tower', 'Ahmedabad', '380061', '23.0680435', '72.5307147', 'No inst ', '2', 'bunu', '2019-01-24 13:17:10', NULL, NULL),
 (9, 33, 0, 'fhdy', 'cjig', 'gjkg', '95565', '', '', 'ncfh', '4', '', '2019-01-24 13:18:31', NULL, NULL),
 (10, 33, 0, 'fjfj', 'cjjf', 'cjng', '56959', '', '', 'zv', '3', '', '2019-01-24 13:20:37', NULL, NULL),
-(11, 6, 0, 'f33', 'sursagar tower', 'Ahmedabad', '380061', '23.0680435', '72.5307147', 'No inst ', '2', 'bunu', '2019-01-24 13:39:58', NULL, NULL);
+(11, 6, 0, 'f33', 'sursagar tower', 'Ahmedabad', '380061', '23.0680435', '72.5307147', 'No inst ', '2', 'bunu', '2019-01-24 13:39:58', NULL, NULL),
+(13, 0, 1, 'Salesforce Tower', 'San Francisco', 'California', '94118', '42.3483041', '-71.08359259999997', 'San Francisco, in northern California, is a hilly city on the tip of a peninsula surrounded by the Pacific Ocean and San Francisco Bay', '1', 'Transbay Tower', '2019-01-25 14:04:20', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -470,6 +475,28 @@ CREATE TABLE `favorite` (
 
 INSERT INTO `favorite` (`id`, `customer_id`, `shop_id`, `created_at`, `deleted_at`) VALUES
 (1, 25, 52, '2019-01-21 13:48:38', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `highlight`
+--
+
+CREATE TABLE `highlight` (
+  `id` int(11) NOT NULL,
+  `txt1` text NOT NULL,
+  `txt2` text NOT NULL,
+  `txt3` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `highlight`
+--
+
+INSERT INTO `highlight` (`id`, `txt1`, `txt2`, `txt3`) VALUES
+(1, '27\r\n', 'MINUTES SAVED', 'PER FOODSBY ORDER'),
+(2, '98.3', '% LUNCHES DELIVERED', 'ACCURATELY AND ON-TIME'),
+(3, '21', 'RESTAURANT', 'OPTIONS PER WEEK (AVG.)');
 
 -- --------------------------------------------------------
 
@@ -1053,6 +1080,12 @@ ALTER TABLE `favorite`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `highlight`
+--
+ALTER TABLE `highlight`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `item`
 --
 ALTER TABLE `item`
@@ -1210,13 +1243,13 @@ ALTER TABLE `customer`
 -- AUTO_INCREMENT for table `customer_payment_card`
 --
 ALTER TABLE `customer_payment_card`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `delivery_address`
 --
 ALTER TABLE `delivery_address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `delivery_boy`
@@ -1247,6 +1280,12 @@ ALTER TABLE `employee`
 --
 ALTER TABLE `favorite`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `highlight`
+--
+ALTER TABLE `highlight`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `item`

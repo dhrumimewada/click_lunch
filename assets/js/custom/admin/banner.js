@@ -34,6 +34,9 @@
                 required:false,
                 accept: "image/jpg, image/jpeg, image/png",
                 filesize: 2
+            },
+            highlight0[]:{
+                required:true
             }
         },
         messages: {

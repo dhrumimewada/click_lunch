@@ -28,6 +28,36 @@ class Banner extends CI_Controller {
 		$this->load->view('template/template',$output_data);	
 	}
 
+	public function highlight(){
+
+		$highlight_list = $this->banner_model->get_highlight();
+
+		$output_data["highlight_list"] = $highlight_list;
+		$output_data['main_content'] = "admin/banner/highlight";
+		$this->load->view('template/template',$output_data);	
+	}
+
+	public function highlight_put(){
+		
+		$error = false;
+		$number = 0;
+		foreach ($_POST['highlight0'] as $key => $value) {
+			if(trim($value) == ''){
+				$error = true;
+				$number = $key+1;
+				break;
+			}
+		}
+		if($error == true){
+			$this->auth->set_error_message('Highlight slide '.$number.' is required');
+		}else{
+			$this->auth->set_status_message("Slider text updated successfully");	
+		}
+		$this->session->set_flashdata($this->auth->get_messages_array());
+		redirect(base_url() . "highlight-list");
+		
+	}
+
 	public function isexists($str = NULL, $id = NULL) {
 
 			$this->db->select('*');

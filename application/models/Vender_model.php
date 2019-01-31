@@ -103,7 +103,7 @@ class Vender_model extends CI_Model {
 			$email_var_data["vender_name"] = $this->input->post("vender_name");
 			$email_var_data["activation_link"] = base_url() . 'vender-setpassword/'. $activation_token;
 
-			$from = "excellentwebworld@admin.com";
+			$from = "";
 			$to = $this->input->post("email");
 			$subject = $return_data->emat_email_subject;
 

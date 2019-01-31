@@ -476,77 +476,6 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    // public function update_profile_picture_post(){
-    //     $postFields['customer_id'] = $_POST['customer_id'];        
-    //     $postFields['image'] = $_FILES['image']; 
-
-    //     $errorPost = $this->ValidatePostFields($postFields);
-
-    //     if(empty($errorPost))
-    //     {
-    //         $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-    //         $user = (array)$this->db->get_where('customer',$where)->row();
-    //         if(empty($user)){
-    //             $response['status'] = false;
-    //             $response['message'] = 'User not found';
-    //         }else{
-
-    //             if (isset($_FILES['image']) && !empty($_FILES['image']) && strlen($_FILES['image']['name']) > 0) {
-
-    //                 //save new image in folder
-    //                 $config['upload_path'] = FCPATH . $this->config->item("customer_profile_path");
-    //                 $config['allowed_types'] = 'jpg|jpeg|png';
-    //                 $config['encrypt_name'] = false;
-    //                 $config['file_name'] = 'customer' . '_' . time();
-    //                 $config['file_ext_tolower'] = true;
-
-    //                 $this->load->library('upload');
-    //                 $this->upload->initialize($config, true);
-
-    //                 if (!$this->upload->do_upload('image')) {
-    //                     $response['status'] = false;
-    //                     $response['message'] = $this->upload->display_errors();
-    //                 } else {
-
-    //                     $image_data = $this->upload->data();
-
-    //                     //remove old image from user folder
-    //                     $this->db->select('profile_picture');
-    //                     $this->db->where('id', intval($_POST['customer_id']));
-    //                     $this->db->from('customer');
-    //                     $sql_query = $this->db->get();
-    //                     if ($sql_query->num_rows() > 0) {
-    //                         $return_data = $sql_query->row();
-    //                         $image_old = $return_data->image;
-
-    //                         if (isset($image_old) && !empty($image_old)) {
-    //                             if (file_exists(FCPATH . $this->config->item("customer_profile_path") . "/" . $image_old)) {
-    //                                 unlink(FCPATH . $this->config->item("customer_profile_path") . "/" . $image_old);
-    //                             }
-    //                         }
-    //                     }
-
-    //                     //update image in database
-    //                     $data = array('profile_picture' => $image_data['file_name']);
-    //                     $this->db->where('id', $_POST['customer_id']);
-    //                     $this->db->update('customer', $data);
-
-    //                     $response['status'] = true;
-    //                     $response['message'] = 'Profile picture changed';
-    //                 }
-    //             }else{
-    //                 $response['status'] = false;
-    //                 $response['message'] = 'Server encountered an error. please try again';
-    //             }
-    //         } 
-    //     }
-    //     else{
-    //         $response['status'] = false;
-    //         $response['message'] = $errorPost;
-    //     }
-    //     $this->response($response);
-    // }
-
     public function my_setting_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
 
@@ -642,15 +571,18 @@ class Customer_api extends REST_Controller {
 
     public function popular_delivery_addresses_get(){
 
-        $where = array('popular' => '1', 'deleted_at' => NULL);
-        $delivery_address = (array)$this->db->get_where('delivery_address',$where)->result_array();
-        if(empty($delivery_address)){
-            $response['status'] = false;
-            $response['message'] = 'No any address found';
-        }else{
-
+        $this->db->select('*');
+        $this->db->where("deleted_at",NULL);
+        $this->db->where("popular",1);
+        $this->db->from("delivery_address");
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+            $delivery_address = $sql_query->result_array();
             $response['status'] = true;
             $response['delivery_addresses'] = $delivery_address;
+        }else{
+            $response['status'] = false;
+            $response['message'] = 'No any address found';
         }
 
         $this->response($response);
@@ -726,7 +658,7 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    public function add_polular_delivery_address_post(){
+    public function set_default_address_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['address_id'] = $_POST['address_id']; 
         
@@ -741,33 +673,26 @@ class Customer_api extends REST_Controller {
                 $response['message'] = 'User not found';
             }else{
 
-                $this->db->select('*');
+                $this->db->select('id');
                 $this->db->where("id", $_POST['address_id']);
+                $this->db->where("customer_id", $_POST['customer_id']);
+                $this->db->where("deleted_at", NULL);
                 $this->db->from('delivery_address');
                 $sql_query = $this->db->get();
                 if ($sql_query->num_rows() > 0){
-                    $result = $sql_query->row();
 
-                    $data_array = array('deleted_at' => date('Y-m-d H:i:s'));
+                    $old_data_array = array('default_address' => 0);
                     $this->db->where('customer_id',$_POST['customer_id']);
-                    $this->db->where('address_type',$result->address_type);
-                    $this->db->update('delivery_address',$data_array);
+                    $this->db->where('default_address',1);
+                    $this->db->update('delivery_address',$old_data_array);
 
-                    $data = array(
-                        'customer_id' => $_POST['customer_id'],
-                        'house_no' => $result->house_no,
-                        'street' => $result->street,
-                        'city' => $result->city,
-                        'zipcode' => $result->zipcode,
-                        'address_type' => $result->address_type,
-                        'delivery_instruction' => $result->delivery_instruction,
-                        'nickname' => $result->nickname
-                    );
+                    $data_array = array('default_address' => 1);
+                    $this->db->where('customer_id',$_POST['customer_id']);
+                    $this->db->where('id',$_POST['address_id']);
 
-                    if($this->db->insert('delivery_address',$data)){
-
+                    if($this->db->update('delivery_address',$data_array)){
                         $response['status'] = true;
-                        $response['message'] = 'Delivery address added successfully';
+                        $response['message'] = 'Default delivery address added successfully';
                     }else{
                         $response['status'] = false;
                         $response['message'] = 'Server encountered an error. please try again';
@@ -775,7 +700,7 @@ class Customer_api extends REST_Controller {
 
                 }else{
                     $response['status'] = false;
-                    $response['message'] = 'Polular address not found';
+                    $response['message'] = 'Address not found';
                 }
 
             }
@@ -835,9 +760,18 @@ class Customer_api extends REST_Controller {
                 $response['status'] = false;
                 $response['message'] = 'User not found';
             }else{
-
+                $payment_cards = array();
+                $this->db->select('*');
                 $where = array('customer_id' => $_POST['customer_id'],'deleted_at' => NULL);
-                $payment_cards = $this->db->get_where('customer_payment_card',$where)->result_array();
+                $this->db->where($where);
+                $this->db->from('customer_payment_card');
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $payment_cards = $sql_query->result_array();
+                    foreach ($payment_cards as $key => $value) {
+                        $payment_cards[$key]['display_number'] = substr($value['card_number'], -4);
+                    }
+                }
 
                 $response['status'] = true;
                 $response['payment_cards'] = $payment_cards;
@@ -1287,7 +1221,7 @@ class Customer_api extends REST_Controller {
         {
             if($_POST['table_name'] == 'category'){
 
-                $this->db->select('category_name');
+                $this->db->select('id,category_name');
                 $this->db->where("status", 1);
                 $this->db->where("deleted_at", NULL);
                 $this->db->from('category');
@@ -1304,7 +1238,7 @@ class Customer_api extends REST_Controller {
                 
             }else if($_POST['table_name'] == 'cuisine'){
 
-                $this->db->select('cuisine_name');
+                $this->db->select('id,cuisine_name');
                 $this->db->where("is_active", 1);
                 $this->db->where("deleted_at", NULL);
                 $this->db->from('cuisine');

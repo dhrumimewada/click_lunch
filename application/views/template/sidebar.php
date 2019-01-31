@@ -93,12 +93,11 @@ if($is_admin){
                     </a>
                 </li>
 
-
                 <li>
-                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-content-paste"></i><span> Website Management <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-image-area"></i><span> Website Management <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="<?php echo base_url().'maintenance1'; ?>">Change Banner</a></li>
-                        <li><a href="<?php echo base_url().'maintenance2'; ?>">Change Text</a></li>
+                        <li><a href="<?php echo base_url().'banner-list'; ?>">Banners </a></li>
+                        <li><a href="<?php echo base_url().'highlight-list'; ?>">Highlights </a></li>
                     </ul>
                 </li>
 
@@ -118,14 +117,6 @@ if($is_admin){
                     <a href="<?php echo base_url().'email-list'; ?>" class="waves-effect">
                         <i class="mdi mdi-email"></i><span> Push/Email Management</span>
                     </a>
-                </li>
-
-                <li>
-                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-image-area"></i><span> Banner Management <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
-                    <ul class="submenu">
-                        <li><a href="<?php echo base_url().'banner-list'; ?>">Banners </a></li>
-                        <li><a href="<?php echo base_url().'highlight-list'; ?>">Highlights </a></li>
-                    </ul>
                 </li>
 
                 <li>

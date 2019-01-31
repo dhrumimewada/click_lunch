@@ -102,14 +102,7 @@ class Email_template extends CI_Controller {
 			}
 		}
 
-		$to_list = '';
-		if($to == 'customer'){
-			$to_list = $this->email_template_model->get_customer();
-		}elseif($to == 'shop'){
-			$to_list = $this->email_template_model->get_vender();
-		}else{
-
-		}
+		$to_list = $this->email_template_model->get_table_data($to);
 		
 		$output_data["to_list"] = $to_list;
 		$output_data["to"] =$to;

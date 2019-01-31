@@ -9,6 +9,10 @@
  <link rel="stylesheet" href="<?php echo base_url() . 'plugins/summernote/summernote-bs4.css'; ?>">
  <?php
  $put_link = base_url().'custom-email-customer-send';
+ $to_table = $to;
+ if($to == 'delivery_boy'){
+    $to = 'delivery boy';
+ }
  ?>
 <div class="content">
     <div class="container-fluid">
@@ -60,7 +64,12 @@
                                                     if($field_value == $value['id']){
                                                         $selected = 'selected';
                                                     }
-                                                    $option_name = ($to == 'customer')?$value['username']:$value['shop_name'];
+                                                    if($to == 'customer' || 'delivery boy'){
+                                                        $option_name = $value['username'];
+                                                    }else {
+                                                        $option_name = $value['shop_name'];
+                                                    }
+                                                    
                                                     echo "<option value='".$value['id']."' ".$selected.">".$option_name."</option>";
                                                 }
                                                 ?>
@@ -116,7 +125,7 @@ $field_value = $temp_value;
                                 </div>
                             </div>
 
-                            <input type="hidden" name="to_type" value="<?php echo $to; ?>">
+                            <input type="hidden" name="to_type" value="<?php echo $to_table; ?>">
                        
                             
 

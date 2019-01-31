@@ -2,6 +2,7 @@
 $edit_link = base_url().'email-update';
 $to_customer_link = base_url().'custom-email-customer';
 $to_restaurant_link = base_url().'custom-email-restaurant';
+$to_deliveryboy_link = base_url().'custom-email-deliveryboy';
 ?>
 <div class="content">
     <div class="container-fluid">
@@ -18,6 +19,7 @@ $to_restaurant_link = base_url().'custom-email-restaurant';
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="<?php echo $to_customer_link; ?>">Email to Customers</a>
                                 <a class="dropdown-item" href="<?php echo $to_restaurant_link; ?>">Email to Restaurants</a>
+                                <a class="dropdown-item" href="<?php echo $to_deliveryboy_link; ?>">Email to DeliveryBoys</a>
                             </div>
                         </div>
                         <div class="btn-group ml-1 mo-mb-2">

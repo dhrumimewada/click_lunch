@@ -563,3 +563,5 @@ $config['smtp_user'] = 'developer.eww@gmail.com';
 $config['smtp_pass'] = 'Admin@123*';
 $config['charset'] = "iso-8859-1";
 $config['mailtype'] = "html";
+
+$config['from'] = "excellentwebworld@admin.com";

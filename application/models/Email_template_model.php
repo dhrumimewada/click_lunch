@@ -26,48 +26,18 @@ class Email_template_model extends CI_Model {
 		return $return_data;
 	}
 
-	public function get_vender($id = NULL){
+	public function get_table_data($table_name = NULL){
 		$return_data = array();
 		$this->db->select('*');
-		$this->db->from('shop');
-		if (isset($id) && !is_null($id)) {
-			$this->db->where('id', $id);
-		}
+		$this->db->from($table_name);
 		$this->db->where("deleted_at", NULL);
 		$this->db->where("status", 1);
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
-			if (isset($id) && !is_null($id)) {
-				$return_data = $sql_query->row();
-			}else{
-				$return_data = $sql_query->result_array();
-			}
-			
+			$return_data = $sql_query->result_array();
 		}
 		return $return_data;
 	}
-
-	public function get_customer($id = NULL){
-		$return_data = array();
-		$this->db->select('*');
-		$this->db->from('customer');
-		if (isset($id) && !is_null($id)) {
-			$this->db->where('id', $id);
-		}
-		$this->db->where("deleted_at", NULL);
-		$this->db->where("status", 1);
-		$sql_query = $this->db->get();
-		if ($sql_query->num_rows() > 0) {
-			if (isset($id) && !is_null($id)) {
-				$return_data = $sql_query->row();
-			}else{
-				$return_data = $sql_query->result_array();
-			}
-			
-		}
-		return $return_data;
-	}
-
 
 	public function put() {
 
@@ -98,10 +68,10 @@ class Email_template_model extends CI_Model {
 	public function send_custom_email(){
 		$return_value = FALSE;
 
-		$from = "excellentwebworld@admin.com";
+		$from = "";
 		$subject = $this->input->post("emat_email_subject");
 		$email_message_string = $this->input->post("emat_email_message");
-		$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+		$message = $this->load->view("email_templates/custom_mail", array("mail_body" => $email_message_string), TRUE);
 
 		$this->db->select('email');
 		$this->db->from($this->input->post("to_type"));

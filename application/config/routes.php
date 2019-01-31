@@ -182,6 +182,7 @@ $route['email-update'] = 'admin/email_template/index';
 $route['custom-email-customer'] = 'admin/email_template/custom_email/customer';
 $route['custom-email-customer-send'] = 'admin/email_template/custom_email';
 $route['custom-email-restaurant'] = 'admin/email_template/custom_email/shop';
+$route['custom-email-deliveryboy'] = 'admin/email_template/custom_email/delivery_boy';
 
 //Admin- History
 $route['transaction-history'] = 'admin/history/transaction_history'; 

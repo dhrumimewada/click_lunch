@@ -9,6 +9,8 @@ $this->load->view('template/header');
     $setpw_link = base_url()."vender-setnewpassword";
  }elseif ($user_type == 'customer') {
     $setpw_link = base_url()."customer-reset-password";
+ }elseif ($user_type == 'delivery_boy') {
+    $setpw_link = base_url()."delivery-boy-reset-password";
  }else{
     $setpw_link = '#';
  }

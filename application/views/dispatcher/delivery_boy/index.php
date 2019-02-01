@@ -26,7 +26,7 @@ $edit_link = base_url().'delivery-boy-update';
                             <tr>
                                 <th>Full Name</th>
                                 <th>Email</th>
-                                <th>Location</th>
+                                <th>Preferred City</th>
                                 <th class='text-center'>Status</th>
                                 <th>Created Date</th>
                                 <th class='text-center'>Action</th>
@@ -43,7 +43,7 @@ $edit_link = base_url().'delivery-boy-update';
                                     echo '<tr data-id="' . $id . '">';
                                     echo "<td>" . stripslashes($value["username"]) . "</td>";
                                     echo "<td>" . $value["email"] . "</td>";
-                                    echo "<td>" . stripslashes($value["address"]) . "</td>";
+                                    echo "<td>" . stripslashes($value["preferred_city"]) . "</td>";
                                     // echo "<td>" . $value["contact_no"] . "</td>";
                                     if($value["status"] == 1){
                                         $btn_name = 'Active';

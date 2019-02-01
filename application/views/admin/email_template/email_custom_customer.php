@@ -8,11 +8,7 @@
  </style>
  <link rel="stylesheet" href="<?php echo base_url() . 'plugins/summernote/summernote-bs4.css'; ?>">
  <?php
- $put_link = base_url().'custom-email-send';
- $to_table = $to;
- if($to == 'delivery_boy'){
-    $to = 'delivery boy';
- }
+ $put_link = base_url().'custom-email-customer';
  ?>
 <div class="content">
     <div class="container-fluid">
@@ -22,7 +18,7 @@
             </div>
             <div class="col-lg-10">
                 <div class="page-title-box">
-                    <h4 class="page-title">Send email to <?php echo $to; ?>(s)</h4>
+                    <h4 class="page-title">Send email to Customer(s)</h4>
                 </div>
             </div>
             <div class="col-lg-1">
@@ -53,47 +49,87 @@
 
                             
                             <div class="row">
-                                <div class="form-group col-10">
-                                    <label class="required">Email To</label>
+                                <div class="form-group col-12">
+                                    <label class="required" for="group">Group of Customers</label>
                                     <div>
                                     <?php
 $field_value = NULL;
-$temp_value = set_value('email_to[]');
+$temp_value = set_value('group');
 if (isset($temp_value) && !empty($temp_value)) {
-$field_value = $temp_value;
+    $field_value = $temp_value;
 }
 ?>
-                                        <select class="select2 form-control" data-placeholder="Select <?php echo $to; ?>" name="email_to[]" multiple>
+                                        <select class="select2 form-control" data-placeholder="Select group" name="group" id='group'>
+                                            <option selected disabled></option>
                                                 <?php 
                                                 
-                                                foreach ($to_list as $key => $value) {
+                                                foreach ($group as $key => $value) {
                                                     $selected = '';
-                                                    if($field_value == $value['id']){
+                                                    if($field_value == $key){
                                                         $selected = 'selected';
                                                     }
-                                                    if($to == 'delivery boy'){
-                                                        $option_name = $value['username'];
-                                                    }else {
-                                                        $option_name = $value['shop_name'];
-                                                    }
                                                     
-                                                    echo "<option value='".$value['id']."' ".$selected.">".$option_name."</option>";
+                                                    echo "<option value='".$key."' ".$selected.">".$value."</option>";
                                                 }
                                                 ?>
                                         </select>
                                         <div class="validation-error-label">
-                                            <?php echo form_error('email_to[]'); ?>
+                                            <?php echo form_error('group'); ?>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group col-2">
-                                    <label class="">Select All</label>
+                            </div>
+
+                            <div class="row d-none" id="shop-list">
+                                <div class="form-group col-12">
+                                    <label class="required" for="shop">Restaurant's List</label>
                                     <div>
-                                        <input type="checkbox" switch="none" id="all" value="1" name="all" <?php echo $checked; ?> >
-                                        <label class="mb-0 mt-1" for="all" data-on-label="All" data-off-label=""></label>
+                                    <?php
+$field_value = NULL;
+$temp_value = set_value('shop[]');
+if (isset($temp_value) && !empty($temp_value)) {
+    $field_value = $temp_value;
+}
+?>
+                                        <select class="select2 form-control" data-placeholder="Select restaurant" name="shop[]" id="shop" multiple>
+                                                <?php 
+                                                
+                                                foreach ($shop_list as $key => $value) {
+                                                    $selected = '';
+                                                    if($field_value == $value['id']){
+                                                        $selected = 'selected';
+                                                    }
+                                                    
+                                                    echo "<option value='".$value['id']."' ".$selected.">".$value['shop_name']."</option>";
+                                                }
+                                                ?>
+                                        </select>
+                                        <div class="validation-error-label">
+                                            <?php echo form_error('shop[]'); ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <div id="order-no" class="d-none">
+                                <div class="form-group">
+                                    <label class="required">Minimum Number of Orders</label>
+                                    <div>
+                                    <?php
+$field_value = NULL;
+$temp_value = set_value('no_of_orders');
+if (isset($temp_value) && !empty($temp_value)) {
+$field_value = $temp_value;
+}
+?>
+                                        <input type="text" name="no_of_orders" class="form-control" id="no_of_orders" placeholder="Ex: 5" value="<?php echo $field_value; ?>">
+                                        <div class="validation-error-label">
+                                            <?php echo form_error('no_of_orders'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <div class="form-group">
                                 <label class="required">Email Subject</label>
@@ -116,25 +152,21 @@ $field_value = $temp_value;
                                 <label class="required">Email Message</label>
                                 <div>
                                 <?php
-$field_value = NULL;
-$temp_value = set_value('emat_email_message');
-if (isset($temp_value) && !empty($temp_value)) {
-$field_value = $temp_value;
-} 
+// $field_value = NULL;
+// $temp_value = set_value('emat_email_message');
+// if (isset($temp_value) && !empty($temp_value)) {
+// $field_value = $temp_value;
+// } 
 ?>
                                     <input type="hidden" name="emat_email_message" class="form-control" id="emat_email_message">
                                     <div class="summernote">
-                                        <?php   echo $field_value; ?>
+                                        <?php  // echo $field_value; ?>
                                     </div>
                                     <div class="validation-error-label">
                                         <?php echo form_error('emat_email_message'); ?>
                                     </div>
                                 </div>
                             </div>
-
-                            <input type="hidden" name="to_type" value="<?php echo $to_table; ?>">
-                       
-                            
 
                             <div class="form-group m-b-0">
                                 <div>
@@ -161,36 +193,3 @@ $field_value = $temp_value;
 </div>
 <script src="<?php echo base_url() . 'plugins/summernote/summernote-bs4.min.js'; ?>"></script>
 <script src="<?php echo base_url().'assets/js/custom/admin/email_template.js'; ?>"></script>
-<script>
-
-
-    $(document).ready(function(){
-
-        $(".select2").select2();
-
-        $('.summernote').summernote({
-            height: 250,                 // set editor height
-            minHeight: null,             // set minimum height of editor
-            maxHeight: null,             // set maximum height of editor
-            focus: false                 // set focus to editable area after initializing
-        });
-
-        //$('.note-editing-area .note-editable').html();
-       // $('.note-editing-area .note-editable').append(msg);
-
-        $(document).on('submit','form',function(){
-            $('#emat_email_message').val($(".note-editing-area .note-editable").html());
-        });
-
-       $(document).on('change','#all',function(){
-
-            if($("#all").is(':checked') ){
-                $(".select2 > option").prop("selected","selected");
-                $(".select2").trigger("change");
-            }else{
-                $(".select2").val(null).trigger("change"); 
-            }
-
-        });
-    });
-</script>

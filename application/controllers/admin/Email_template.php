@@ -83,13 +83,18 @@ class Email_template extends CI_Controller {
 					array('field' => 'to_type', 'label' => 'email type', 'rules' => 'trim|required')
 				);
 
+
+				//echo "<pre>";
+					//print_r(htmlentities($_POST['emat_email_message']));
+					// $txt = htmlentities($_POST['emat_email_message']);
+					// print_r(html_entity_decode($txt));
+					// exit;
+
 				$this->form_validation->set_rules($validation_rules);
 				 
 				if ($this->form_validation->run() === true){
 					// $abc = $this->email_template_model->send_custom_email();
-					// echo "<pre>";
-					// print_r($abc);
-					// exit;
+					
 					if($this->email_template_model->send_custom_email()){
 						$this->session->set_flashdata($this->auth->get_messages_array());
 						redirect(base_url() . "email-list");
@@ -107,6 +112,83 @@ class Email_template extends CI_Controller {
 		$output_data["to_list"] = $to_list;
 		$output_data["to"] =$to;
 		$output_data['main_content'] = "admin/email_template/email_custom";
+		$this->load->view('template/template',$output_data);	
+	}
+	public function validate_shop($shops = NULL, $group_id = NULL) {
+		if($group_id == 5 && empty($shops)){
+			$this->form_validation->set_message('validate_shop', 'The restaurant field is required.');
+			return False;
+		}else {
+			return True;
+		}
+	}
+
+	public function validate_order_no($no_of_orders = NULL, $group_id = NULL) {
+		$no_of_orders = trim($no_of_orders);
+		if($group_id == 6 && $no_of_orders == ''){
+			$this->form_validation->set_message('validate_order_no', 'The minimum number of orders field is required.');
+			return False;	
+		}else if ($group_id == 6 && ! ctype_digit(strval($no_of_orders)) ){
+			$this->form_validation->set_message('validate_order_no', 'The minimum number of orders field is invalid.');
+			return False;
+		}else if($group_id == 6 && (int)$no_of_orders <= 0){
+			$this->form_validation->set_message('validate_order_no', 'The minimum number of orders field is invalid.');
+				return False;
+		}else {
+			return True;
+		}
+	}
+
+	public function custom_email_customer(){
+
+		$this->auth->clear_messages();
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
+
+		if (isset($_POST) && !empty($_POST)){
+			if (isset($_POST['submit'])){
+
+				$validation_rules = array(
+					array('field' => 'shop[]', 'label' => 'restaurant', 'rules' => 'trim|callback_validate_shop[' . $_POST['group'] . ']'),
+					array('field' => 'no_of_orders', 'label' => 'minimum number of orders', 'rules' => 'trim|callback_validate_order_no[' . $_POST['group'] . ']'),
+					array('field' => 'group', 'label' => 'group', 'rules' => 'trim|required'),
+					array('field' => 'emat_email_subject', 'label' => 'email subject', 'rules' => 'trim|required'),
+					array('field' => 'emat_email_message', 'label' => 'email message', 'rules' => 'trim|required')
+				);
+
+				//echo "<pre>";
+				//print_r($_POST['emat_email_message']);
+
+				// $abc = $this->email_template_model->send_custom_email_customer();
+				// print_r($abc);
+				// exit;
+
+				
+				$this->form_validation->set_rules($validation_rules);
+				 
+				if ($this->form_validation->run() === true){
+					
+					if($this->email_template_model->send_custom_email_customer()){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "email-list");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "email-list");
+					}
+				}
+
+			}
+		}
+
+
+		$shop_list = $this->email_template_model->get_table_data('shop');
+		$output_data["group"] = $this->config->item("group_for_admin");
+		// echo "<pre>";
+		// print_r($output_data["group"]); exit;
+		
+		$output_data["shop_list"] = $shop_list;
+		$output_data["to"] =$to;
+		$output_data['main_content'] = "admin/email_template/email_custom_customer";
 		$this->load->view('template/template',$output_data);	
 	}
 

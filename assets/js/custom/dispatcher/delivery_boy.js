@@ -60,36 +60,36 @@
                     return $.trim(value);
                 }
             },
-            city: {
-                required:true,
-                maxlength:255,
-                normalizer: function (value) {
-                    return $.trim(value);
-                }
-            },
-            state: {
-                required:true,
-                maxlength:255,
-                normalizer: function (value) {
-                    return $.trim(value);
-                }
-            },
-            country: {
-                required:true,
-                maxlength:255,
-                normalizer: function (value) {
-                    return $.trim(value);
-                }
-            },
-            zipcode: {
-                required:true,
-                digits: true,
-                maxlength:5,
-                minlength:5,
-                normalizer: function (value) {
-                    return $.trim(value);
-                }
-            },
+            // city: {
+            //     required:true,
+            //     maxlength:255,
+            //     normalizer: function (value) {
+            //         return $.trim(value);
+            //     }
+            // },
+            // state: {
+            //     required:true,
+            //     maxlength:255,
+            //     normalizer: function (value) {
+            //         return $.trim(value);
+            //     }
+            // },
+            // country: {
+            //     required:true,
+            //     maxlength:255,
+            //     normalizer: function (value) {
+            //         return $.trim(value);
+            //     }
+            // },
+            // zipcode: {
+            //     required:true,
+            //     digits: true,
+            //     maxlength:5,
+            //     minlength:5,
+            //     normalizer: function (value) {
+            //         return $.trim(value);
+            //     }
+            // },
             latitude: {
                 required:true,
                 maxlength:255,
@@ -137,7 +137,7 @@
                 maxlength: "Maximum 10 digit allowed"
             },
             address: {
-                required: "The street field is required.",
+                required: "The city field is required.",
                 maxlength: jQuery.validator.format("Maximum {0} digit allowed")
             },
             city: {

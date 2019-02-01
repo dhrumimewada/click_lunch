@@ -179,8 +179,8 @@ $route['email-save'] = 'admin/email_template/put';
 $route['email-update'] = 'admin/email_template/index';  
 
 // admin - send custom Mail
-$route['custom-email-customer'] = 'admin/email_template/custom_email/customer';
-$route['custom-email-customer-send'] = 'admin/email_template/custom_email';
+$route['custom-email-customer'] = 'admin/email_template/custom_email_customer';
+$route['custom-email-send'] = 'admin/email_template/custom_email';
 $route['custom-email-restaurant'] = 'admin/email_template/custom_email/shop';
 $route['custom-email-deliveryboy'] = 'admin/email_template/custom_email/delivery_boy';
 
@@ -289,3 +289,7 @@ $route['home-page'] = 'user/user/index';
 $route['customer-activate/(:any)'] = 'customer/customer_login/activate_account/$1';
 $route['customer-reset-password/(:any)'] = 'customer/customer_login/reset_password/$1';
 $route['customer-reset-password'] = 'customer/customer_login/reset_password';
+
+$route['delivery-boy-reset-password/(:any)'] = 'dispatcher/dispatcher_login/deliveryboy_reset_password/$1';
+$route['delivery-boy-reset-password'] = 'dispatcher/dispatcher_login/deliveryboy_reset_password';
+

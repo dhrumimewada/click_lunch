@@ -555,6 +555,14 @@ $config['address_type']  = array('1' => 'office',
 						    '3' => 'home',
 						    '4' => 'other');
 
+$config['group_for_admin']  = array('1' => 'New Customers',
+					    '2' => 'Active Customers',
+					    '3' => 'Inactive Customers',
+					    '4' => 'All Customers',
+					    '5' => 'Restaurant vise Customers',
+					    '6' => 'Number of X ordered Customers'
+						);
+
 // Send mail config
 $config['protocol'] = "smtp";
 $config['smtp_host'] = "ssl://smtp.gmail.com";

@@ -39,11 +39,11 @@ class Delivery_boy_model extends CI_Model {
 						'email' => $this->input->post("email"),
 						'password' => password_hash($this->input->post("password"), PASSWORD_DEFAULT),
 						'mobile_number' => $this->input->post("mobile_number"),
-						'address' => addslashes($this->input->post("address")),
-						'city' => addslashes($this->input->post("city")),
-						'state' => addslashes($this->input->post("state")),
-						'country' => addslashes($this->input->post("country")),
-						'zip_code' => $this->input->post("zipcode"),
+						'preferred_city' => addslashes($this->input->post("address")),
+						// 'city' => addslashes($this->input->post("city")),
+						// 'state' => addslashes($this->input->post("state")),
+						// 'country' => addslashes($this->input->post("country")),
+						// 'zip_code' => $this->input->post("zipcode"),
 						'latitude' => $this->input->post("latitude"),
 						'longitude' => $this->input->post("longitude"),
 						'profile_picture' => ((isset($profile_picture) && !empty($profile_picture)) ? $profile_picture : ''),
@@ -101,11 +101,11 @@ class Delivery_boy_model extends CI_Model {
 		// print_r($modal_data);exit;
 
 		$user_data['username'] = ucwords(addslashes($this->input->post("username")));
-		$user_data['address'] = addslashes($this->input->post("address"));
-		$user_data['city'] = addslashes($this->input->post("city"));
-		$user_data['state'] = addslashes($this->input->post("state"));
-		$user_data['country'] = addslashes($this->input->post("country"));
-		$user_data['zip_code'] = $this->input->post("zipcode");
+		$user_data['preferred_city'] = addslashes($this->input->post("address"));
+		// $user_data['city'] = addslashes($this->input->post("city"));
+		// $user_data['state'] = addslashes($this->input->post("state"));
+		// $user_data['country'] = addslashes($this->input->post("country"));
+		// $user_data['zip_code'] = $this->input->post("zipcode");
 		$user_data['latitude'] = $this->input->post("latitude");
 		$user_data['longitude'] = $this->input->post("longitude");
 

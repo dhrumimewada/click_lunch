@@ -82,5 +82,43 @@ class Dispatcher_login extends CI_Controller {
 		}
 	}
 
+	public function deliveryboy_reset_password($token=''){
+		$this->auth->clear_messages();
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
+
+		if (isset($_POST) && !empty($_POST)){
+
+			if (isset($_POST['submit'])){
+
+				$validation_rules = array(
+					
+					array('field' => 'password', 'label' => 'password', 'rules' => 'trim|required|min_length[6]'),
+					array('field' => 'cpassword', 'label' => 'confirm password', 'rules' => 'trim|required|matches[password]')
+				);
+
+				$this->form_validation->set_rules($validation_rules);
+				if ($this->form_validation->run() === true){
+					if($this->dispatcher_model->deliveryboy_set_password()){
+						echo "<h2>Your password updated successfully</h2>";
+						exit;
+					}else{
+						echo "<h2>Server encounter error</h2>";
+						exit;
+					}
+				}
+			}
+		}
+
+		if($token != ''){
+			$output_data["token"] = $token;
+			$output_data["user_type"] = 'delivery_boy';
+			$this->load->view('admin/vender/setpassword',$output_data);	
+		}else{
+			echo "<h2>Server encounter error</h2>";
+			exit;
+		}
+	}
+
 }
 ?>

@@ -112,7 +112,7 @@ if (isset($delivery_boy_detail->profile_picture) && ($delivery_boy_detail->profi
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required" class="required">Street</label>
+                                        <label class="required" class="required">Preferred City</label>
                                         <div>
                                             <?php
     $field_value = NULL;
@@ -123,7 +123,7 @@ if (isset($delivery_boy_detail->profile_picture) && ($delivery_boy_detail->profi
         $field_value = $delivery_boy_detail->address;
     }
     ?>
-                                            <input id="autocomplete" placeholder="Enter street" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address">
+                                            <input id="autocomplete" placeholder="Enter city" onFocus="geolocate()" class="form-control" type="text" value="<?php echo $field_value; ?>" name="address" autocomplete="off">
                                             <input type="hidden" id="administrative_area_level_2" name="city">
                                             <input type="hidden" id="administrative_area_level_1" name="state">
 
@@ -135,82 +135,7 @@ if (isset($delivery_boy_detail->profile_picture) && ($delivery_boy_detail->profi
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="city" class="required">City</label>
-                                        <div>
-                                        <?php
-    $field_value = NULL;
-    $temp_value = set_value('city');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    }
-    ?>
-                                            <input type="text" name="city" class="form-control city" id="city" value="<?php echo $field_value; ?>" placeholder="Enter city">
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('city'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="state" class="required">State</label>
-                                        <div>
-                                        <?php
-    $field_value = NULL;
-    $temp_value = set_value('state');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    }
-    ?>
-                                            <input type="text" name="state" class="form-control state" id="state" value="<?php echo $field_value; ?>" placeholder="Enter state">
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('state'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="country" class="required">Country</label>
-                                        <div>
-                                        <?php
-    $field_value = NULL;
-    $temp_value = set_value('country');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    }
-    ?>
-                                            <input type="text" name="country" class="form-control country" id="country" value="<?php echo $field_value; ?>" placeholder="Enter country">
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('country'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="zipcode" class="required">Zip Code</label>
-                                        <div>
-                                        <?php
-    $field_value = NULL;
-    $temp_value = set_value('zipcode');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    }
-    ?>
-                                            <input type="text" name="zipcode" class="form-control zipcode" id="zipcode" value="<?php echo $field_value; ?>" placeholder="XXXXX">
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('zipcode'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
 
                             <input type="hidden" name="latitude" id="latitude" value="">
                             <input type="hidden" name="longitude" id="longitude" value="">
@@ -260,7 +185,7 @@ if (isset($delivery_boy_detail->profile_picture) && ($delivery_boy_detail->profi
   function initAutocomplete() {
     autocomplete = new google.maps.places.Autocomplete(
        (document.getElementById('autocomplete')),
-        {types: ['geocode'] , componentRestrictions: {country: "us"} });
+        {types: ['(cities)'] , componentRestrictions: {country: "us"} });
     autocomplete.addListener('place_changed', fillInAddress);
   }
 

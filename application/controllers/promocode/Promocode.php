@@ -16,6 +16,7 @@ class Promocode extends CI_Controller {
 			}
 		}
 		$this->load->model("promocode_model");
+		$this->load->model("email_template_model");
 	}
 
 	public function index(){
@@ -69,12 +70,32 @@ class Promocode extends CI_Controller {
 			$this->db->from('promocode');
 			$sql_query = $this->db->get();
 			if ($sql_query->num_rows() > 0) {
-				$this->form_validation->set_message('isexists', "The promocode field is already exists");
+				$this->form_validation->set_message('isexists', "The promocode field is already exists.");
 				return FALSE;
 			} else {
 				return TRUE;
 			}
 	}
+
+
+	public function max_disc_validate($max_disc = NULL, $promo_min_order = NULL){
+		if(floatval($promo_min_order) > floatval($max_disc)){
+			return TRUE;
+		}else{
+			$this->form_validation->set_message('max_disc_validate', "The maximum discount should be less than minimum order amount.");
+			return FALSE;
+		}
+	}
+
+	public function min_order_validate($min_order_amount = NULL, $promo_amount = NULL){
+		if($promo_amount < $min_order_amount && $promo_amount != ''){
+			return TRUE;
+		}else{
+			$this->form_validation->set_message('min_order_validate', "The minimum order amount should be more than amount.");
+			return FALSE;
+		}
+	}
+
 
 	public function post(){
 
@@ -82,22 +103,67 @@ class Promocode extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
 
+		$is_admin = $this->auth->is_admin();
+		$is_vender = $this->auth->is_vender();
+
 		if (isset($_POST) && !empty($_POST)){
 
 			if (isset($_POST['submit'])){
 
 				$validation_rules = array(
-					
+					array('field' => 'group', 'label' => 'group', 'rules' => 'trim|required|numeric'),
 					array('field' => 'promocode', 'label' => 'promocode', 'rules' => 'trim|required|min_length[3]|max_length[20]|callback_customcode|callback_isexists'),
 					array('field' => 'amount', 'label' => 'amount', 'rules' => 'trim|required|numeric|greater_than[0]|max_length[10]'),
-					array('field' => 'promo_min_order', 'label' => 'minimum order', 'rules' => 'trim|numeric|max_length[10]'),
+					
+					array('field' => 'promo_min_order', 'label' => 'minimum order', 'rules' => 'trim|numeric|max_length[10]|callback_min_order_validate[' . $this->input->post("amount") . ']'),
+					array('field' => 'usage_limit', 'label' => 'usage limit', 'rules' => 'trim|required|is_natural_no_zero|max_length[10]'),
 					array('field' => 'from_date', 'label' => 'from date', 'rules' => 'trim|required'),
-					 array('field' => 'to_date', 'label' => 'to date', 'rules' => 'trim|required|callback_checkfromto[' . $this->input->post("from_date") . ']'),
-					array('field' => 'to_date', 'label' => 'to date', 'rules' => 'trim|required'),
+					array('field' => 'to_date', 'label' => 'to date', 'rules' => 'trim|required|callback_checkfromto[' . $this->input->post("from_date") . ']')
 				);
+
+				if($is_vender){
+
+					$promo_type_validation = array('field' => 'promo_type', 'label' => 'promocode type', 'rules' => 'trim|required|numeric');
+					array_push($validation_rules, $promo_type_validation);
+
+					if($this->input->post("promo_type") == 1){
+						$valid_product_validation = array('field' => 'applied_on_products[]', 'label' => 'promocode applied products', 'rules' => 'trim|required');
+						array_push($validation_rules, $valid_product_validation);
+					}
+
+					if($this->input->post("group") == 7){
+						$shop_validation = array('field' => 'item[]', 'label' => 'product/combo', 'rules' => 'trim|required');
+						array_push($validation_rules, $shop_validation);
+					}
+
+				}
+
+				if($this->input->post("discount_type") == 1){
+					$max_disc_validation = array('field' => 'max_disc', 'label' => 'maximum discount', 'rules' => 'trim|required|numeric|greater_than[0]|max_length[10]|callback_max_disc_validate[' . $this->input->post("promo_min_order") . ']');
+					array_push($validation_rules, $max_disc_validation);
+				}
+
+				if($this->input->post("group") == 5){
+					$shop_validation = array('field' => 'shop[]', 'label' => 'restaurant', 'rules' => 'trim|required');
+					array_push($validation_rules, $shop_validation);
+				}
+				if($this->input->post("group") == 6){
+					$shop_validation = array('field' => 'no_of_orders', 'label' => 'minimum number of orders', 'rules' => 'trim|required');
+					array_push($validation_rules, $shop_validation);
+				}
+
+				if($this->input->post("promo_min_order") != '' && $this->input->post("discount_type") == 1){
+					$max_disc_validation = array('field' => 'max_disc', 'label' => 'maximum discount', 'rules' => 'trim|numeric|required|max_length[10]|callback_max_disc_validate[' . $this->input->post("promo_min_order") . ']');
+
+					array_push($validation_rules, $max_disc_validation);
+				}
 
 				$this->form_validation->set_rules($validation_rules);
 				if ($this->form_validation->run() === true) {
+
+					echo "<pre>";
+					print_r($_POST);
+					exit;
 					if($this->promocode_model->post($modal_data)){
 						$this->session->set_flashdata($this->auth->get_messages_array());
 						redirect(base_url() . "promocode-list");
@@ -107,6 +173,19 @@ class Promocode extends CI_Controller {
 					}
 				} 
 			}
+		}
+
+		if($is_admin){
+			$output_data["group"] = $this->config->item("group_for_admin");
+			$shop_list = $this->email_template_model->get_table_data('shop');
+			$output_data["shop_list"] = $shop_list;
+			$output_data["is_admin"] = $is_admin;
+		}else{
+			$output_data["group"] = $this->config->item("group_for_shop");
+			$output_data["promo_type"] = $this->config->item("promocode_type");
+			$item_list = $this->email_template_model->get_table_data('item');
+			$output_data["item_list"] = $item_list;
+			$output_data["is_vender"] = $is_vender;
 		}
 
 		$output_data['main_content'] = "promocode/post";
@@ -119,28 +198,60 @@ class Promocode extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
 
+		$is_admin = $this->auth->is_admin();
+		$is_vender = $this->auth->is_vender();
+
 		if (isset($_POST) && !empty($_POST)){
 
 			if (isset($_POST['submit'])){
 				$validation_rules = array(
-					
+					array('field' => 'group', 'label' => 'group', 'rules' => 'trim|required|numeric'),
 					array('field' => 'promocode', 'label' => 'promocode', 'rules' => 'trim|required|min_length[3]|max_length[20]|callback_customcode|callback_isexists[' . $this->input->post("promocode_id") . ']'),
-					array('field' => 'promo_min_order', 'label' => 'minimum order', 'rules' => 'trim|numeric|max_length[10]'),
+					array('field' => 'promo_min_order', 'label' => 'minimum order', 'rules' => 'trim|numeric|max_length[10]|callback_min_order_validate[' . $this->input->post("amount") . ']'),
 					array('field' => 'amount', 'label' => 'amount', 'rules' => 'trim|required|numeric|greater_than[0]|max_length[10]'),
+					array('field' => 'usage_limit', 'label' => 'usage limit', 'rules' => 'trim|required|is_natural_no_zero|max_length[10]'),
 					array('field' => 'from_date', 'label' => 'from date', 'rules' => 'trim|required'),
-					array('field' => 'to_date', 'label' => 'to date', 'rules' => 'trim|required|callback_checkfromto[' . $this->input->post("from_date") . ']'),
+					array('field' => 'to_date', 'label' => 'to date', 'rules' => 'trim|required|callback_checkfromto[' . $this->input->post("from_date") . ']')
 				);
+
+				if($is_vender){
+					$promo_type_validation = array('field' => 'promo_type', 'label' => 'promocode type', 'rules' => 'trim|required|numeric');
+					array_push($validation_rules, $promo_type_validation);
+
+					if($this->input->post("promo_type") == 1){
+						$valid_product_validation = array('field' => 'applied_on_products[]', 'label' => 'promocode applied products', 'rules' => 'trim|required');
+						array_push($validation_rules, $valid_product_validation);
+					}
+
+					if($this->input->post("group") == 7){
+						$shop_validation = array('field' => 'item[]', 'label' => 'product/combo', 'rules' => 'trim|required');
+						array_push($validation_rules, $shop_validation);
+					}
+				}
+
+				if($this->input->post("discount_type") == 1){
+					$max_disc_validation = array('field' => 'max_disc', 'label' => 'maximum discount', 'rules' => 'trim|required|numeric|greater_than[0]|max_length[10]|callback_max_disc_validate[' . $this->input->post("promo_min_order") . ']');
+					array_push($validation_rules, $max_disc_validation);
+				}
+
+				if($this->input->post("group") == 5){
+					$shop_validation = array('field' => 'shop[]', 'label' => 'restaurant', 'rules' => 'trim|required');
+					array_push($validation_rules, $shop_validation);
+				}
+
+				if($this->input->post("group") == 6){
+					$shop_validation = array('field' => 'no_of_orders', 'label' => 'minimum number of orders', 'rules' => 'trim|required');
+					array_push($validation_rules, $shop_validation);
+				}
 
 
 				$this->form_validation->set_rules($validation_rules);
-
-				echo "<pre>";
-					
 				 
 				if ($this->form_validation->run() === true) {
 
-					// print_r('11');
-					// exit;
+					echo "<pre>";
+					print_r($_POST);
+					exit;
 
 					if($this->promocode_model->put()){
 						$this->session->set_flashdata($this->auth->get_messages_array());
@@ -156,11 +267,25 @@ class Promocode extends CI_Controller {
 		}
 		
 		$output_data['promocode_data'] = $this->promocode_model->get_promocode(decrypt($id));
-		if (!isset($output_data['promocode_data']) || empty($output_data['promocode_data']) || count($output_data['promocode_data']) <= 0){
-			$this->auth->set_error_message("Promocode not found");
-			$this->session->set_flashdata($this->auth->get_messages_array());
-			redirect(base_url() . "promocode-list");
+		// if (!isset($output_data['promocode_data']) || empty($output_data['promocode_data']) || count($output_data['promocode_data']) <= 0){
+		// 	$this->auth->set_error_message("Promocode not found");
+		// 	$this->session->set_flashdata($this->auth->get_messages_array());
+		// 	redirect(base_url() . "promocode-list");
+		// }
+
+		if($is_admin){
+			$output_data["group"] = $this->config->item("group_for_admin");
+			$shop_list = $this->email_template_model->get_table_data('shop');
+			$output_data["shop_list"] = $shop_list;
+			$output_data["is_admin"] = $is_admin;
+		}else{
+			$output_data["group"] = $this->config->item("group_for_shop");
+			$output_data["promo_type"] = $this->config->item("promocode_type");
+			$item_list = $this->email_template_model->get_table_data('item');
+			$output_data["item_list"] = $item_list;
+			$output_data["is_vender"] = $is_vender;
 		}
+
 		$output_data['main_content'] = "promocode/put";
 		$this->load->view('template/template',$output_data);	
 	}

@@ -555,12 +555,20 @@ $config['address_type']  = array('1' => 'office',
 						    '3' => 'home',
 						    '4' => 'other');
 
+$config['promocode_type']  = array('1' => 'Product based promocode', '2' => 'Order based promocode');
+
 $config['group_for_admin']  = array('1' => 'New Customers',
 					    '2' => 'Active Customers',
 					    '3' => 'Inactive Customers',
 					    '4' => 'All Customers',
 					    '5' => 'Restaurant vise Customers',
 					    '6' => 'Number of X ordered Customers'
+						);
+
+$config['group_for_shop']  = array('1' => 'New Customers',
+						'4' => 'All Customers',
+						'6' => 'Number of X ordered Customers',
+						'7' => 'Product/Combo vise Customers'
 						);
 
 // Send mail config

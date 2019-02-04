@@ -80,7 +80,7 @@ if (isset($temp_value) && !empty($temp_value)) {
                                 </div>
                             </div>
 
-                            <div class="row d-none" id="shop-list">
+                            <div class="row" id="shop-list">
                                 <div class="form-group col-12">
                                     <label class="required" for="shop">Restaurant's List</label>
                                     <div>
@@ -111,7 +111,7 @@ if (isset($temp_value) && !empty($temp_value)) {
                                 </div>
                             </div>
 
-                            <div id="order-no" class="d-none">
+                            <div id="order-no">
                                 <div class="form-group">
                                     <label class="required">Minimum Number of Orders</label>
                                     <div>

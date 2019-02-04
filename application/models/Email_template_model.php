@@ -31,7 +31,16 @@ class Email_template_model extends CI_Model {
 		$this->db->select('*');
 		$this->db->from($table_name);
 		$this->db->where("deleted_at", NULL);
-		$this->db->where("status", 1);
+		
+		if($table_name == 'item'){
+			$this->db->where("is_active", 1);
+		}else{
+			$this->db->where("status", 1);
+		}
+
+		if($this->auth->is_vender()){
+			$this->db->where("shop_id", $this->auth->get_user_id());
+		}
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
 			$return_data = $sql_query->result_array();

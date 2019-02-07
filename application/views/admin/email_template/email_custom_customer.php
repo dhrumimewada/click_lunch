@@ -8,7 +8,11 @@
  </style>
  <link rel="stylesheet" href="<?php echo base_url() . 'plugins/summernote/summernote-bs4.css'; ?>">
  <?php
- $put_link = base_url().'custom-email-customer';
+ if($is_admin){
+     $put_link = base_url().'custom-email-customer';
+ }else{
+     $put_link = base_url().'vender-custom-email-customer';
+ }
  ?>
 <div class="content">
     <div class="container-fluid">
@@ -80,7 +84,7 @@ if (isset($temp_value) && !empty($temp_value)) {
                                 </div>
                             </div>
 
-                            <div class="row" id="shop-list">
+                            <div class="row d-none" id="shop-list">
                                 <div class="form-group col-12">
                                     <label class="required" for="shop">Restaurant's List</label>
                                     <div>
@@ -111,7 +115,7 @@ if (isset($temp_value) && !empty($temp_value)) {
                                 </div>
                             </div>
 
-                            <div id="order-no">
+                            <div id="order-no" class="d-none">
                                 <div class="form-group">
                                     <label class="required">Minimum Number of Orders</label>
                                     <div>
@@ -125,6 +129,37 @@ $field_value = $temp_value;
                                         <input type="text" name="no_of_orders" class="form-control" id="no_of_orders" placeholder="Ex: 5" value="<?php echo $field_value; ?>">
                                         <div class="validation-error-label">
                                             <?php echo form_error('no_of_orders'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-none" id="item-list">
+                                <div class="form-group">
+                                    <label class="required" for="products">Product & Combo's List</label>
+                                    <div>
+                                    <?php
+$field_value = NULL;
+$temp_value = set_value('item[]');
+if (isset($temp_value) && !empty($temp_value)) {
+    $field_value = $temp_value;
+}
+?>
+                                        <select class="select2 form-control" data-placeholder="Select Product/Combo" name="item[]" id="products" multiple>
+                                                <?php 
+                                                
+                                                foreach ($item_list as $key => $value) {
+                                                    $selected = '';
+                                                    if (in_array($value['id'], array_column($promocode_products, 'product_id'))){
+                                                        $selected = 'selected';
+                                                    }
+
+                                                    echo "<option value='".$value['id']."' ".$selected.">".$value['name']."</option>";
+                                                }
+                                                ?>
+                                        </select>
+                                        <div class="validation-error-label">
+                                            <?php echo form_error('item[]'); ?>
                                         </div>
                                     </div>
                                 </div>
@@ -171,11 +206,13 @@ $field_value = $temp_value;
                             <div class="form-group m-b-0">
                                 <div>
                                     <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light">
-                                        Submit
+                                        Send
                                     </button>
+                                    <?php if($is_admin){ ?>
                                     <a href="<?php echo base_url().'email-list';  ?>" class="btn btn-secondary waves-effect m-l-5">
                                         Cancel
                                     </a>
+                                    <?php } ?>
                                 </div>
                             </div>
 

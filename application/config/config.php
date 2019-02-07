@@ -571,6 +571,11 @@ $config['group_for_shop']  = array('1' => 'New Customers',
 						'7' => 'Product/Combo vise Customers'
 						);
 
+$config['group_for_shop_email']  = array('4' => 'All Customers',
+						'6' => 'Number of X ordered Customers',
+						'7' => 'Product/Combo vise Customers'
+						);
+
 // Send mail config
 $config['protocol'] = "smtp";
 $config['smtp_host'] = "ssl://smtp.gmail.com";
@@ -581,3 +586,12 @@ $config['charset'] = "iso-8859-1";
 $config['mailtype'] = "html";
 
 $config['from'] = "excellentwebworld@admin.com";
+
+$config['header'] = 'Click Lunch';
+
+$config['site_name'] = "Click Lunch";
+$config['site_email'] = "support@clicklunch.com";
+$config['copyrights'] =  '&#9400; 2019 Click Lunch';
+$config['email_template_logo'] = '<img width="100" alt="logo" src="'.$config['base_url'].'assets/images/logo-white.png"/>';
+$config['website_assest'] = $config['base_url'].'/web-assets/';
+

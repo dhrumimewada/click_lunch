@@ -109,6 +109,34 @@
                     return $.trim(value);
                 }
             },
+            delivery_morning_from:{
+                required: true
+            },
+            delivery_morning_to:{
+                required: true,
+                validate_hour_to_time:"#delivery_morning_from"
+            },
+            delivery_evening_from:{
+                required: true
+            },
+            delivery_evening_to:{
+                required: true,
+                validate_hour_to_time:"#delivery_evening_from"
+            },
+            order_morning_from:{
+                required: true
+            },
+            order_morning_to:{
+                required: true,
+                validate_hour_to_time:"#order_morning_from"
+            },
+            order_evening_from:{
+                required: true
+            },
+            order_evening_to:{
+                required: true,
+                validate_hour_to_time:"#order_evening_from"
+            },
             'cuisines[]': {
                 required:true
             },
@@ -224,6 +252,34 @@
                 required: "The latitude field is required.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
+            delivery_morning_from:{
+                required: "The morning from time field is required."
+            },
+            delivery_morning_to:{
+                required: "The morning to time field is required.",
+                validate_hour_to_time: "To time should be more than from time"
+            },
+            delivery_evening_from:{
+                required: "The evening from time field is required."
+            },
+            delivery_evening_to:{
+                required: "The evening to time field is required.",
+                validate_hour_to_time: "To time should be more than from time"
+            },
+            order_morning_from:{
+                required: "The morning from time field is required."
+            },
+            order_morning_to:{
+                required: "The morning to time field is required.",
+                validate_hour_to_time: "To time should be more than from time"
+            },
+            order_evening_from:{
+                required: "The evening from time field is required."
+            },
+            order_evening_to:{
+                required: "The evening to time field is required.",
+                validate_hour_to_time: "To time should be more than from time"
+            },
             longitude: {
                 required: "The longitude field is required.",
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
@@ -303,6 +359,15 @@
         return this.optional(element) || ((element.files[0].size/1024)/1024 <= param);
     });
 
+    $.validator.addMethod("validate_hour_to_time", function(value, element,param) {
+        
+        var from_t = $(param).val();
+        var hour_from = '01/01/2011 '+from_t.toString();
+        var hour_to = '01/01/2011 '+value.toString();
+
+        return (Date.parse(hour_to) > Date.parse(hour_from));
+    });
+
 $( document ).ready(function() {
 
     function readURL(input) {
@@ -358,6 +423,39 @@ $( document ).ready(function() {
         $('.from_time').append($("<option>" , { text: v, value: v }));
         $('.to_time').append($("<option>" , { text: v, value: v }));
     });
+
+    $.each(available_time, function(k, v) {
+        $('.hours_from_time').append($("<option>" , { text: v, value: v }));
+        $('.hours_to_time').append($("<option>" , { text: v, value: v }));
+    });
+
+    // Hours Order- Start
+    var order_morning_from_option = order_morning_from.toString();
+    var order_morning_to_option = order_morning_to.toString();
+
+    $('#order_morning_from option[value="'+order_morning_from_option+'"]').attr('selected', 'selected');
+    $('#order_morning_to option[value="'+order_morning_to_option+'"]').attr('selected', 'selected');
+
+    var order_evening_from_option = order_evening_from.toString();
+    var order_evening_to_option = order_evening_to.toString();
+
+    $('#order_evening_from option[value="'+order_evening_from_option+'"]').attr('selected', 'selected');
+    $('#order_evening_to option[value="'+order_evening_to_option+'"]').attr('selected', 'selected');
+    // hours Order - End
+
+    // Hours Delivery- Start
+    var delivery_morning_from_option = delivery_morning_from.toString();
+    var delivery_morning_to_option = delivery_morning_to.toString();
+
+    $('#delivery_morning_from option[value="'+delivery_morning_from_option+'"]').attr('selected', 'selected');
+    $('#delivery_morning_to option[value="'+delivery_morning_to_option+'"]').attr('selected', 'selected');
+
+    var delivery_evening_from_option = delivery_evening_from.toString();
+    var delivery_evening_to_option = delivery_evening_to.toString();
+
+    $('#delivery_evening_from option[value="'+delivery_evening_from_option+'"]').attr('selected', 'selected');
+    $('#delivery_evening_to option[value="'+delivery_evening_to_option+'"]').attr('selected', 'selected');
+    // hours Delivery - End
 
     var from_time_option = from_time_selected.toString();
     var to_time_option = to_time_selected.toString();

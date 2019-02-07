@@ -46,6 +46,18 @@ class Vender_model extends CI_Model {
 		return $return_data;
 	}
 
+	public function get_shop_hour($id = NULL){
+		$return_data = array();
+		$this->db->select('*');
+		$this->db->where("shop_id", $id);
+		$this->db->from('shop_hours');
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			$return_data = $sql_query->result_array();
+		}
+		return $return_data;
+	}
+
 	public function update_profile($modal_data = NULL) {
 		$this->db->trans_begin();
 		$return_value = FALSE;
@@ -63,20 +75,49 @@ class Vender_model extends CI_Model {
 
 		$availability = array();
 		 
-		// echo '<pre>';
-		 // print_r($_POST);
-		 // exit;
+		$this->db->where('shop_id',$user_id);
+		$this->db->delete('shop_hours');
 
-		  foreach ($this->config->item("days") as $key => $value){
-		  	
-			
-		  // print_r($key. "  ". $value. "  ");
-		  // 	print_r($_POST[$value]);
+		$shop_hours_array = array();
 
+		$order_morning = array('shop_id' => $user_id,
+							'order_delivery' => 1,
+							'morning_evening' => 1,
+							'from_time' => $this->input->post("order_morning_from"),
+							'to_time' => $this->input->post("order_morning_to")
+							);
+		$order_evening = array('shop_id' => $user_id,
+							'order_delivery' => 1,
+							'morning_evening' => 2,
+							'from_time' => $this->input->post("order_evening_from"),
+							'to_time' => $this->input->post("order_evening_to")
+							);
+
+		$delivery_morning = array('shop_id' => $user_id,
+							'order_delivery' => 2,
+							'morning_evening' => 1,
+							'from_time' => $this->input->post("delivery_morning_from"),
+							'to_time' => $this->input->post("delivery_morning_to")
+							);
+		$delivery_evening = array('shop_id' => $user_id,
+							'order_delivery' =>2,
+							'morning_evening' => 2,
+							'from_time' => $this->input->post("delivery_evening_from"),
+							'to_time' => $this->input->post("delivery_evening_to")
+							);
+
+		array_push($shop_hours_array, $order_morning);
+		array_push($shop_hours_array, $order_evening);
+		array_push($shop_hours_array, $delivery_morning);
+		array_push($shop_hours_array, $delivery_evening);
+
+		$this->db->insert_batch('shop_hours', $shop_hours_array); 
+
+		foreach ($this->config->item("days") as $key => $value){
+		  
 		  	if (!empty($_POST[$value]) && sizeof($_POST[$value]) != 0){
 		  		// If not closed
-		  		//echo $value;
-		  		//print_r($_POST[$value]);
+
 			  	if($_POST[$value][0] == 'fullday'){
 			  		// If full day open
 			  		//echo 'full day';
@@ -86,31 +127,22 @@ class Vender_model extends CI_Model {
 			  		$availability[$value]['to'] = '';
 			  	}else{
 			  		// If custom time open
-			  		//print_r($_POST[$value]);
-			  		//echo 'custom';
 			  		$availability[$value]['full_day'] = '0';
 			  		$availability[$value]['closed'] = '0';
-
-			  		// $from_time = DateTime::createFromFormat('h:i A',$_POST[$value][0]);
-			  		// $to_time = DateTime::createFromFormat('h:i A',$_POST[$value][1]);
 
 			  		$availability[$value]['from'] = date('h:i A', strtotime($_POST[$value][0]));
 			  		$availability[$value]['to'] = date('h:i A', strtotime($_POST[$value][1]));
 			  	}
 		  	}else{
 		  		// echo 'closed';
-		  		// echo $value;
-		  		// print_r($_POST[$value]);
 		  		// If closed
 		  		$availability[$value]['full_day'] = '0';
 		  		$availability[$value]['closed'] = '1';
 		  		$availability[$value]['from'] = '';
 		  		$availability[$value]['to'] = '';
-
 		  	}
 		  	
-		  }
-		  //exit;
+		}
 
 		$user_data['shop_name'] = ucwords(addslashes($this->input->post("shop_name")));
 		$user_data['vender_name'] = ucwords(addslashes($this->input->post("vender_name")));

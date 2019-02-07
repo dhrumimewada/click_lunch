@@ -55,6 +55,8 @@
     $temp_value = set_value('group');
     if (isset($temp_value) && !empty($temp_value)) {
         $field_value = $temp_value;
+    }else{
+        $field_value = intval($promocode_data->group_type);
     }
     ?>
                                             <select class="select2 form-control" data-placeholder="Select group" name="group" id='group'>
@@ -97,7 +99,7 @@
                                                         // if($field_value == $value['id']){
                                                         //     $selected = 'selected';
                                                         // }
-                                                        if (in_array($value['id'], array_column($shops, 'id'))){
+                                                        if (in_array($value['id'], array_column($promocode_shops, 'shop_id'))){
                                                             $selected = 'selected';
                                                         }
                                                         
@@ -122,7 +124,7 @@
     if (isset($temp_value) && !empty($temp_value)) {
     $field_value = $temp_value;
     }else{
-        $field_value = intval($promocode_data->no_of_orders);
+        $field_value = intval($promocode_data->min_no_of_orders);
     }
     ?>
                                             <input type="text" name="no_of_orders" class="form-control demo3" id="no_of_orders" placeholder="Ex: 5" value="<?php echo $field_value; ?>">
@@ -144,12 +146,12 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <select class="select2 form-control" data-placeholder="Select restaurant" name="item[]" id="products" multiple>
+                                            <select class="select2 form-control" data-placeholder="Select Product/Combo" name="item[]" id="products" multiple>
                                                     <?php 
                                                     
                                                     foreach ($item_list as $key => $value) {
                                                         $selected = '';
-                                                        if($field_value == $value['id']){
+                                                        if (in_array($value['id'], array_column($promocode_products, 'product_id'))){
                                                             $selected = 'selected';
                                                         }
 
@@ -196,7 +198,7 @@
     if (isset($temp_value) && !empty($temp_value)) {
         $field_value = $temp_value;
     } else{
-            $field_value = floatval($promocode_data->promo_min_order);
+            $field_value = floatval($promocode_data->promo_min_order_amount);
         }
     ?>
                                             <input type="number" name="promo_min_order" class="form-control demo2" id="promo_min_order" placeholder="Ex: 100.00" value="<?php echo $field_value; ?>" >
@@ -212,7 +214,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required" for="amount">Amount</label>
+                                        <label class="required" for="amount">Discount Amount</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -220,7 +222,7 @@
     if (isset($temp_value) && !empty($temp_value)) {
         $field_value = $temp_value;
     }else{
-        $field_value = floatval($promocode_data->amount);
+        $field_value = $promocode_data->amount;
     }
     ?>
                                             <div class="input-group">
@@ -291,6 +293,8 @@ if($field_value == 1){
     $temp_value = set_value('promo_type');
     if (isset($temp_value) && !empty($temp_value)) {
         $field_value = $temp_value;
+    }else{
+        $field_value = intval($promocode_data->promo_type);
     }
     ?>
                                             <select class="select2 form-control" data-placeholder="Select promocode type" name="promo_type" id='promo_type'>
@@ -339,11 +343,11 @@ if($field_value == 1){
                             </div>
 
                             <?php
-                            if(!$is_admin){ ?>
+                            if(!$is_admin && $promocode_data->promo_type == 1){ ?>
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="required" for="products">Product's List</label>
+                                        <label class="required" for="products">Promocode Applied On These Products/Combos</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -360,11 +364,11 @@ if($field_value == 1){
                                                         // if($field_value == $value['id']){
                                                         //     $selected = 'selected';
                                                         // }
-                                                        if (in_array($value['id'], array_column($items, 'id'))){
+                                                        if (in_array($value['id'], array_column($promocode_valid_product, 'product_id'))){
                                                             $selected = 'selected';
                                                         }
                                                         
-                                                        echo "<option value='".$value['id']."' ".$selected.">".$value['item_name']."</option>";
+                                                        echo "<option value='".$value['id']."' ".$selected.">".$value['name']."</option>";
                                                     }
                                                     ?>
                                             </select>

@@ -50,6 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'Home/';
+//$route['default_controller'] = 'web/welcome';
 $route['404_override'] = 'errors/page_missing';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -285,6 +286,9 @@ $route['delivery-boy-update'] = 'dispatcher/delivery_boy/put';
 
 $route['home-page'] = 'user/user/index'; 
 
+// vender - push - email
+$route['vender-custom-email-customer'] = 'vender/email_push/custom_email_customer';
+
 // API
 $route['customer-activate/(:any)'] = 'customer/customer_login/activate_account/$1';
 $route['customer-reset-password/(:any)'] = 'customer/customer_login/reset_password/$1';
@@ -292,4 +296,10 @@ $route['customer-reset-password'] = 'customer/customer_login/reset_password';
 
 $route['delivery-boy-reset-password/(:any)'] = 'dispatcher/dispatcher_login/deliveryboy_reset_password/$1';
 $route['delivery-boy-reset-password'] = 'dispatcher/dispatcher_login/deliveryboy_reset_password';
+
+
+// Front
+$route['welcome'] = 'web/welcome';
+$route['restaurant/(:any)'] = 'web/welcome/shop/$1';
+$route['subscribe'] = 'web/welcome/subscribe';
 

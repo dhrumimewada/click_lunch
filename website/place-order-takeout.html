@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Place Order Takeout</title>
+       <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Muli:200,300,400,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-grid.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+   
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+
+    <link rel="stylesheet" type="text/css" href="css/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="css/owl.theme.default.css">
+
+    
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/popper.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <!-- <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script> -->
+    <script type="text/javascript" src="js/bootstrap-input-spinner.js"></script>
+    <script type="text/javascript" src="js/owl.carousel.js"></script>
+    <script type="text/javascript" src="js/custom.js"></script>
+
+    <!-- datetime picker -->
+    <script src="js/timepicki.js"></script>
+    <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="css/timepicki.css">
+    <script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
+       <link rel="stylesheet" type="text/css" href="css/datepicker.min.css">
+
+
+
+</head>
+
+    <body>
+
+        <!-- Navigation Bar-->
+        <header id="topnav" class="home-header">
+            <div class="container"> 
+                <div class="header-bar"> 
+                    <nav class="navbar navbar-expand-lg navbar-light header-box">
+                        <div class="header-app">
+                            <a class="navbar-brand logo" href="index.html"><img src="http://13.58.201.178/assets/images/click-lunch.png" alt="" class="logo-large"></a>
+                            <a href="get-the-app.html">Get the App</a>
+                        </div>                      
+                      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                        <span class="navbar-toggler-icon"></span>
+                        <span class="navbar-toggler-icon"></span>
+                      </button>
+
+                        <div class="collapse navbar-collapse header-menu" id="navbarSupportedContent">
+                          <ul class="navbar-nav ">
+                            <li class="dropdown notification-list active">
+                                <a class="nav-link waves-effect" href="index.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase active">Home</strong>
+                                </a>       
+                            </li>
+                             <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="delivery.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">Delivery</strong>
+                                </a>       
+                            </li>                  
+                            <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="takeout-restaurant.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">Takeout</strong>
+                                </a>       
+                            </li>
+                            <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="restaurant-partner-form.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">Restaurant Partner</strong>
+                                </a>       
+                            </li>
+                            <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="faq.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">FAQ</strong>
+                                </a>       
+                            </li>
+                           <!--  <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="favourites.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">Favourites</strong>
+                                </a>       
+                            </li>
+                            <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="weekly-planner.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">Weekly Planner</strong>
+                                </a>       
+                            </li>  -->                       
+                                                        
+                          <!--   <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="restaurant-partner-form.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">restaurant partners</strong>
+                                </a>       
+                            </li>
+                            <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="change-location.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">delivery Locations</strong>
+                                </a>       
+                            </li> -->
+                            <li class="dropdown notification-list">
+                                <a class="dropdown-item drop-down-icon" href="javascript:void(0)" data-toggle="modal" data-target="#loginFormModal">
+                                    <strong class="text-uppercase">Login</strong>
+                                </a>       
+                            </li>
+                            <li class="dropdown notification-list">
+                                <a class="dropdown-item drop-down-icon" href="javascript:void(0)" data-toggle="modal" data-target="#registerFormModal">
+                                    <strong class="text-uppercase">Create an Account</strong>
+                                </a>       
+                            </li>
+                        
+                            </ul>                            
+                        </div>
+                    </nav>
+                    <div class="header-link-box">
+                        <div class="header-link notification-list">
+                            <div class="dropdown notification-list nav-pro-img">
+                                <a class="dropdown-toggle nav-link arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="user" class="rounded-circle">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                                
+                                     <nav class="navbar drop-list">
+                                      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                                        <span class="navbar-toggler-icon"></span>
+                                      </button>
+                                    
+                                      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                                        <ul class="navbar-nav">                                         
+                                          <li class="nav-item dropdown drop-down-icon profile-submenu sub-list">                                            
+                                            <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                             <img src="images/My-Profile.png">
+                                             <span>My Profile</span></a>
+
+                                            <div class="dropdown-menu  drop-box" aria-labelledby="navbarDropdownMenuLink">
+                                                <a class="dropdown-item" href="profile.html"><i class="mdi mdi-account-circle m-r-5"></i> Contact Information</a>
+                                                <a class="dropdown-item" href="add-card.html"><i class="mdi mdi-account-circle m-r-5"></i> Payment Methods</a>                                                
+                                            </div>
+                                          </li> 
+
+                                            <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="order-history.html">
+                                                        <img src="images/Order-History.png">
+                                                        <span>Order History</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                            <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="favourites.html">
+                                                        <img src="images/favorite-heart-button.png">
+                                                        <span>Favourites</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                            <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="weekly-planner.html">
+                                                        <img src="images/calendar-weekly.png">
+                                                        <span>Weekly Planner</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                             <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="order-history.html">
+                                                        <img src="images/Group-Order.png">
+                                                        <span>Group Order</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                             <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="delivery-address.html">
+                                                        <img src="images/Change-Location.png">
+                                                        <span>Change Location</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                             <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="delivery-address.html">
+                                                        <img src="images/About-US.png">
+                                                        <span>About Us</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                   
+                                    
+                                        </ul>
+                                      </div>
+                                    </nav>
+                                    
+                                </div>                                                                    
+                            </div>
+                        </div>                            
+                        <div class="header-link notification-list last-div">
+                            <a class="nav-link waves-effect p-0" href="checkout.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                <img src="images/Cart.png" />
+                            </a>       
+                        </div>              
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- End Navigation Bar-->
+
+<div id="content">
+	<div class="place-order-wrapper grey-bg">
+		<div class="container">
+			<div class="place-order-block white-bg">
+				<div class="coupon-delivery">
+					<h3 class="text-with-border-right">Coupon & Delivery</h3>
+					<div class="row m-0">
+						<div class="col-md-6 text-center coupon-and-offers">
+							<form class="coupon-form d-flex align-items-center" id="coupon">
+								<input type="text" name="coupon-code" class="form-control" id="couponCode" placeholder="Enter a coupon code">
+								<input type="submit" name="check-coupon" value="Apply" class="check-coupon-btn red-btn">
+							</form>
+							<a href="#offer-pop" class="view-offers" data-toggle="modal">View Offers</a>
+						</div>
+						<div class="col-md-6">
+                            <div class="delivery-address d-flex justify-content-around">
+                                <div class="form-check deliver-now">
+                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption1" value="now" checked>
+                                    <label class="form-check-label" for="deliverOption1">Takeout</label>
+                                </div>
+                                <div class="form-check deliver-later">
+                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption2" value="later">
+                                    <label class="form-check-label" for="deliverOption2">Takeout Later</label>
+                                </div>
+                            </div>
+                            <div class="select-time">   
+                                <label for="input_starttime">Select Pickup Time</label>                        
+                                <input type="text" name="timepicker" class="time_element" placeholder="00:00" />
+                                </div>
+                                <div class="select-instead">
+                                    <div class="md-form text-center">
+                                       <a href="place-order.html">Deliver Instead</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+					</div>
+                    <div class="confirm-order">
+                    <h3 class="text-with-border-right">Confirm Your Order</h3>
+                    <form name="payment-method" class="payment-method" id="paymentMethod">
+                        <div class="row m-0">
+                            <div class="col-md-6">
+                                <div class="confirm-order-detail">
+                                    <div class="header row m-0">
+                                        <div class="header-title col-7 col-md-7 p-0">Item</div>
+                                        <div class="header-title qty-txt col-2 col-md-2 p-0">Qty</div>
+                                        <div class="header-title rate-txt col-3 col-md-3 p-0">Total</div>
+                                        
+                                    </div>
+                                    <div class="confirm-order-detail-box">                                       
+                                        <div class="confirm-order-list">
+                                            <div class="row m-0">
+                                                <div class="order-product-title col-7 col-md-7 p-0">Blue Cheese Dressing</div>
+                                                <div class="order-product-qty col-2 text-right col-md-2 p-0">1</div>
+                                                <div class="order-product-price col-3 text-right col-md-3 p-0">$ 60.25</div>                                                
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="order-product-title col-7 col-md-7 p-0">Mint Raita</div>
+                                                <div class="order-product-qty col-2 text-right col-md-2 p-0">3</div>
+                                                <div class="order-product-price col-3 text-right col-md-3 p-0">$ 10.10</div>                                                
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="order-product-title col-7 col-md-7 p-0">Ice Cream Cake</div>
+                                                <div class="order-product-qty col-2 text-right col-md-2 p-0">1</div>
+                                                <div class="order-product-price col-3 text-right col-md-3 p-0">$ 20.25</div>                                                
+                                            </div>
+                                            <div class="row m-0">
+                                                <div class="order-product-title col-7 col-md-7 p-0">Lobster Roll</div>
+                                                <div class="order-product-qty col-2 text-right col-md-2 p-0">2</div>
+                                                <div class="order-product-price col-3 text-right col-md-3 p-0">$ 10</div>                                                
+                                            </div>
+                                        </div>
+                                       <div class="confirm-order-final-list">
+                                    
+                                        <div class="row m-0">
+                                            <div class="order-product-title col-9 col-md-9 p-0">Sub Total</div>
+                                            <div class="order-product-price col-3 text-right col-md-3 p-0">$ 100.60</div>
+                                        </div>
+                                        <div class="row m-0">
+                                            <div class="order-product-title col-9 col-md-9 p-0">Delivery Fee</div>
+                                            <div class="order-product-price col-3 text-right col-md-3 p-0">$ 5.00</div>
+                                        </div>
+                                        <div class="row m-0">
+                                            <div class="order-product-title col-9 col-md-9 p-0">TAX</div>
+                                            <div class="order-product-price col-3 text-right col-md-3 p-0">+ $ 20</div>
+                                        </div>
+                                        <div class="row m-0">
+                                            <div class="order-product-title col-9 col-md-9 p-0">Service Charges</div>
+                                            <div class="order-product-price col-3 text-right col-md-3 p-0"><span>$20</span><span>00</span></div>
+                                        </div>
+                                       </div>
+                                    </div>
+                                    <div class="total-amount">
+                                        <div class="row m-0">
+                                            <div class="order-product-total-amount-title col-9 col-md-9 p-0">Total Amount</div>
+                                            <div class="order-product-total-amount col-3 col-md-3 p-0">$ 326.8</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="payment-mode">
+                                    <h4>Select Mode of Payment</h4>
+                                    <div class="payment-mode-detail">
+                                        <div class="form-check row m-0 apple-pay p-0">
+                                            <div class="col-md-10 p-0"><img src="images/apple-play.png" /></div>
+                                            <input class="form-check-input col-md-2 p-0" type="radio" name="pay" id="applepay" value="applepay">
+                                            <label class="form-check-label" for="applepay"></label>
+                                        </div>
+
+                                        <div class="form-check row m-0 google-pay p-0">
+                                            <div class="col-md-10 p-0"><img src="images/google-play.png" /></div>
+                                            <input class="form-check-input col-md-2 p-0" type="radio" name="pay" id="googlepay" value="googlepay">
+                                            <label class="form-check-label" for="googlepay"></label>
+                                        </div>
+                                        <!-- <div class="debit-card card-payment">
+                                            <a class="debit-card-collapse" data-toggle="collapse" href="#debitCard" role="button" aria-expanded="false" aria-controls="debitCard">Debit Card</a>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="collapse multi-collapse" id="debitCard">
+                                                        <div class="card card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer laanderson cred nesciunt sapiente ea proident.</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="credit-card card-payment">
+                                            <div class="credit-card-collapse">Credit Card / Debit Card</div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="collapse multi-collapse show" id="creditCard">
+                                                        <div class="card card-body">
+                                                            <div class="row m-0 card-option">
+                                                                <div class="card-logo col-md-2"><img src="images/visa-logo.png" /></div>
+                                                                <div class="card-detail col-md-8">
+                                                                    <div class="card-text">Visa Classic</div>
+                                                                    <div class="card-number">XXXX XXXX XXXX 3459</div>
+                                                                </div>
+                                                                <div class="form-check col-md-2">
+                                                                    <input class="form-check-input" type="radio" name="pay" id="visacard" value="visa" checked>
+                                                                    <label class="form-check-label" for="visacard"></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row m-0 card-option">
+                                                                <div class="card-logo col-md-2"><img src="images/master-card.png" /></div>
+                                                                <div class="card-detail col-md-8">
+                                                                    <div class="card-text">Master Card</div>
+                                                                    <div class="card-number">XXXX XXXX XXXX 5489</div>
+                                                                </div>
+                                                                <div class="form-check col-md-2">
+                                                                    <input class="form-check-input" type="radio" name="pay" id="mastercard" value="master">
+                                                                    <label class="form-check-label" for="mastercard"></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row m-0">
+                                            <div class="add-new-card-popup">
+                                                <a href="javascript:void(0)" data-toggle="modal" data-target="#addCardModal">Add New Credit Card / Debit Card</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions d-flex justify-content-between">
+                            <input type="button" name="backtocart" class="white-btn backtocart-btn" id="backtocart" value="Back to cart" onclick="location.href='cart.html';">
+                            <input type="button" name="placeorder" class="small-red-btn placeorder-btn" id="placeorder" value="Place order" data-toggle="modal" data-target="#orderSuccessful">
+                        </div>
+                    </form>
+                </div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="d-flex justify-content-center">
+			<div class="mail-subscription-block">
+				<div class="mail-subscription-custom-text text-center"><p>Be the lucky winner to get FREE meals for one week. <br> We are also offer you latest deal in your inbox</p></div>
+				<form class="mail-subscription d-flex align-items-center" id="mailSubscription">
+					<input type="email" name="email" class="form-control" id="mailSubscriptionId" placeholder="Enter your e-mail address here" />
+					<input type="submit" name="subscribe" value="Subscribe" class="subscribe-btn red-btn" />
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<footer>
+	<div class="d-flex justify-content-center align-items-center pt-4 pb-4">
+		<div class="footer-content">
+			<div class="footer-menu">
+				<ul>
+                    <li><a href="contact-us.html">Contact Us</a></li>
+                    <li><a href="restaurant-partner-form.html">Restaurant Partners</a></li>
+                    <li><a href="terms-of-service.html">Terms of Service</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                </ul>
+			</div>
+			<div class="copyright text-center">
+				<span>&copy; 2018 - www.<a href="">ClickLunch</a>.com. All rights reserved</span>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<!-- Add New Credit Card Modal -->
+<div class="modal fade modal-with-logo" id="addCardModal" tabindex="-1" role="dialog" aria-labelledby="addCardModalLabelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content pt-4 pb-4">
+            <div class="modal-header justify-content-center position-relative">
+                <img src="images/click-lunch-logo-white.png" width="130" />
+            </div>
+            <div class="modal-body add-card-block">
+                <form id="add-card-form" name="add-card">
+                    <div class="row white-bg modalform ml-0 mr-0">
+                        <div class="form-group col-md-12">
+                            <label for="cardHolderName">Card Holder Name</label>
+                            <input type="text" class="form-control" id="cardHolderName" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="nickName">Nick Name</label>
+                            <input type="text" class="form-control" id="nickName" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="text" class="form-control" id="cardNumber" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="cvv">CVV</label>
+                            <input type="text" class="form-control" id="cvv" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Select Card Type</label>
+                            <div class="select-card row m-0">
+                                <div class="form-check col-md-4">
+                                    <input class="form-check-input" type="radio" name="card" id="selectCard1" value="visa" checked>
+                                    <label class="form-check-label visa" for="selectCard1"></label>
+                                </div>
+                                <div class="form-check col-md-4">
+                                    <input class="form-check-input" type="radio" name="card" id="selectCard2" value="mastercard">
+                                    <label class="form-check-label master-card" for="selectCard2"></label>
+                                </div>
+                                <div class="form-check col-md-4">
+                                    <input class="form-check-input" type="radio" name="card" id="selectCard3" value="americanexpress">
+                                    <label class="form-check-label american-express" for="selectCard3"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 p-0 text-center">
+                            <button type="submit" name="filterbtn" class="filter-btn transparent-btn" id="filterbtn"><img src="images/popup-checked.png"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Order Successful Modal  -->
+<div class="modal fade pop-form" id="orderSuccessful" tabindex="-1" role="dialog" aria-labelledby="orderSuccessful" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="pop-img">
+            <img src="images/click-lunch-logo-white.png">
+        </div>
+       
+      </div>
+      <div class="modal-body text-center">
+            <div class="successful-img">
+                <img src="images/payment-successful.png">
+            </div>
+            <div class="successful-txt">
+                <h6>your order successfull</h6>
+                <p>estimated delivery time:- 1hours 05 minutes</p>              
+            </div>
+      </div>
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close"  onclick="location.href = 'order-detail.html';">
+          <span aria-hidden="true" class="close-btn"><img src="images/popup-checked.png"></span>
+        </button>
+    </div>
+  </div>
+</div>
+
+ <!-- forgot-password model -->
+    <div class="modal fade" id="forgotFormModal" tabindex="-1" role="dialog" aria-labelledby="loginFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content pt-sm-4 pb-sm-4 border-0">
+                <div class="modal-header justify-content-center position-relative">
+                    <h5 class="modal-title" id="loginFormModalLabel">Forgot Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="faq-inner forgot-inner">                  
+                       <form class="forgot-form" id="forgot-form">
+                        <div class="row">
+                            <div class="col-sm-9">
+                                <div class="form-group">                                          
+                                    <input type="email" class="form-control" id="email" placeholder="E-mail">
+                                </div>
+                            </div>
+                        </div>                               
+                        <div class="row">                                   
+                            <div class="col-sm-6 forgot-btn">
+                                <input type="submit" name="register" class="register red-btn" id="pass-submit-btn" value="Submit">
+                            </div>
+                        </div>                            
+                       
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginFormModal" tabindex="-1" role="dialog" aria-labelledby="loginFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content pt-sm-4 pb-sm-4">
+                <div class="modal-header justify-content-center position-relative">
+                    <h5 class="modal-title" id="loginFormModalLabel">Log in</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="login-form" id="login-form">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="loginUsername">Username</label>
+                                    <input type="text" class="form-control" id="username">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="loginPassword">Password</label>
+                                    <input type="password" class="form-control" id="password">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="register-form-direction">
+                                    <div class="register-form-link">No account? <a id="dialog-register" href="javascript:void(0)" data-toggle="modal" data-target="#registerFormModal">Register</a></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="forgot-password d-flex align-items-center justify-content-between">
+                                    <a  id="dialog-forgot" href="javascript:void(0)" data-toggle="modal" data-target="#forgotFormModal">Forgot password?</a>
+                                    <input type="submit" name="login" class="login red-btn" id="login-btn" value="Log in">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row signin-custom-text justify-content-center">
+                            <span>or sign in with</span>
+                        </div>
+                        <div class="signin-with-social-account row">
+                            <div class="col-sm-6">
+                                <a href="https://accounts.Facebook.com/" class="facebook-account blue-btn">Facebook</a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="https://accounts.google.com/signin" class="google-account orange-btn">Google</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Register Modal -->
+<div class="modal fade" id="registerFormModal" tabindex="-1" role="dialog" aria-labelledby="registerFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content pt-4 pb-4">
+            <div class="modal-header justify-content-center position-relative">
+                <h5 class="modal-title" id="registerFormModalLabel">Register</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="register-form" id="register-form">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerUsername">Username</label>
+                                <input type="text" class="form-control" id="username">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerEmail">E-mail</label>
+                                <input type="email" class="form-control" id="email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerPassword">Password</label>
+                                <input type="password" class="form-control" id="password">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerConfirmPassword">Confirm Password</label>
+                                <input type="password" class="form-control" id="confpassword">
+                            </div>
+                        </div>
+                    </div>
+                     <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="userdob">Date Of Birth</label>
+                                <input type="text"  class="form-control" id="userdob" value="01/30/2019" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerConfirmPassword">Phone Number</label>
+                                <input type="Phone" class="form-control" id="confpassword">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="acceptTerms">
+                                <label class="form-check-label grey" for="acceptTerms">I agree to the Terms of Use and to receive emails.</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="submit" name="register" class="register red-btn" id="register-btn" value="Register">
+                        </div>
+                    </div>
+                    <div class="row signin-custom-text justify-content-center">
+                        <span>or join with</span>
+                    </div>
+                    <div class="signin-with-social-account row">
+                        <div class="col-sm-6">
+                            <a href="https://accounts.Facebook.com/" class="facebook-account blue-btn">Facebook</a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a href="https://accounts.google.com/signin" class="google-account orange-btn">Google</a>
+                        </div>
+                    </div>
+                    <div class="already-have-account text-center mt-4">
+                        <span class="grey">I already have an account <a id="dialog-login" href="javascript:void(0)" data-toggle="modal" data-target="#loginFormModal" class="font-weight-bold">Login</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- view offer -->
+<div class="modal fade pop-form" id="offer-pop" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content offer-pop-box">
+        <div class="pop-img">
+            <img src="images/click-lunch-logo-white.png">
+        </div>
+      <div class="modal-body no-padding">
+            <div class="pop-add-form">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="pop-form-title"><h4>Offers</h4>
+                        </div>
+                    </div>                              
+                </div>
+                <div class="select-promocode">                 
+                    <div class="select-promocode-box">
+                        <div class="offer-list">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="filteritem1">SHOPHOME25</label>                                                             
+                                        <span>Use Promocode SHOPHOME25 To Get 25% Cashback* On Total Order Value (Max Cashback Rs.5000).</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 close">
+                                    <input type="button" class="close offer-btn  float-right" data-dismiss="modal" aria-label="Close"  value="Apply">  
+                                </div>
+                            </div>
+                        </div> 
+                         <div class="offer-list">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="filteritem1">SHOPHOME25</label>                                                             
+                                        <span>Use Promocode SHOPHOME25 To Get 25% Cashback* On Total Order Value (Max Cashback Rs.5000).</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 close">
+                                    <input type="button" class="close offer-btn  float-right" data-dismiss="modal" aria-label="Close"  value="Apply">  
+                                </div>
+                            </div>
+                        </div> 
+                         <div class="offer-list">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="filteritem1">SHOPHOME25</label>                                                             
+                                        <span>Use Promocode SHOPHOME25 To Get 25% Cashback* On Total Order Value (Max Cashback Rs.5000).</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 close">
+                                    <input type="button" class="close offer-btn  float-right" data-dismiss="modal" aria-label="Close"  value="Apply">  
+                                </div>
+                            </div>
+                        </div> 
+                         <div class="offer-list">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="filteritem1">SHOPHOME25</label>                                                             
+                                        <span>Use Promocode SHOPHOME25 To Get 25% Cashback* On Total Order Value (Max Cashback Rs.5000).</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 close">
+                                    <input type="button" class="close offer-btn  float-right" data-dismiss="modal" aria-label="Close"  value="Apply">  
+                                </div>
+                            </div>
+                        </div> 
+                         <div class="offer-list">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="filteritem1">SHOPHOME25</label>                                                             
+                                        <span>Use Promocode SHOPHOME25 To Get 25% Cashback* On Total Order Value (Max Cashback Rs.5000).</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 close">
+                                    <input type="button" class="close offer-btn  float-right" data-dismiss="modal" aria-label="Close"  value="Apply">  
+                                </div>
+                            </div>
+                        </div> 
+                         <div class="offer-list">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="filteritem1">SHOPHOME25</label>                                                             
+                                        <span>Use Promocode SHOPHOME25 To Get 25% Cashback* On Total Order Value (Max Cashback Rs.5000).</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 close">
+                                    <input type="button" class="close offer-btn  float-right" data-dismiss="modal" aria-label="Close"  value="Apply">  
+                                </div>
+                            </div>
+                        </div> 
+                         <div class="offer-list">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="filteritem1">SHOPHOME25</label>                                                             
+                                        <span>Use Promocode SHOPHOME25 To Get 25% Cashback* On Total Order Value (Max Cashback Rs.5000).</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 close">
+                                    <input type="button" class="close offer-btn  float-right" data-dismiss="modal" aria-label="Close"  value="Apply">  
+                                </div>
+                            </div>
+                        </div> 
+                         <div class="offer-list">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="filteritem1">SHOPHOME25</label>                                                             
+                                        <span>Use Promocode SHOPHOME25 To Get 25% Cashback* On Total Order Value (Max Cashback Rs.5000).</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 close">
+                                    <input type="button" class="close offer-btn  float-right" data-dismiss="modal" aria-label="Close"  value="Apply">  
+                                </div>
+                            </div>
+                        </div>   
+                                      
+                    </div>
+                </div>
+                
+            </div>
+      </div>
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="close-btn"><img src="images/popup-checked.png"></span>
+        </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
+
+<script type="text/javascript">
+	$("input[type='number']").inputSpinner();
+	// $('#input_starttime').pickatime({});
+</script>

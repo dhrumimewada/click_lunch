@@ -216,4 +216,21 @@ function get_customer_by_shop($shops = array()){
 	
 	return $return_data;
 }
+
+function get_data_by_filter($table_name = NULL, $select = array(), $where= array()){
+	$return_data = array();
+
+	$CI = &get_instance();
+	$CI->db->select($select);
+	$CI->db->from($table_name);
+	if (isset($where) && !empty($where)) {
+		$CI->db->where($where);
+	}
+	$sql_query = $CI->db->get();
+	if ($sql_query->num_rows() > 0){
+		$return_data = $sql_query->result_array();
+	}
+	
+	return $return_data;
+}
 ?>

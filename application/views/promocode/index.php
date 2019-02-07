@@ -106,7 +106,7 @@ $edit_link = base_url().'promocode-update';
 
     $(document).ready(function () {
 
-         $(document).on('click',".delete_promocode", function(){
+        $(document).on('click',".delete_promocode", function(){
 
             $this = $(this);
             var data_id = get_dataid($this);

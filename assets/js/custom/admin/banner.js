@@ -17,7 +17,7 @@
             title: {
                 required:true,
                 minlength: 2,
-                maxlength: 50,
+                maxlength: 100,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -25,7 +25,7 @@
             sub_title: {
                 required:true,
                 minlength: 2,
-                maxlength: 50,
+                maxlength: 100,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -33,10 +33,7 @@
             banner_picture:{
                 required:false,
                 accept: "image/jpg, image/jpeg, image/png",
-                filesize: 2
-            },
-            highlight0[]:{
-                required:true
+                filesize: 10
             }
         },
         messages: {

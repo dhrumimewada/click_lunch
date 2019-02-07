@@ -93,7 +93,8 @@ class Email_template extends CI_Controller {
 				$this->form_validation->set_rules($validation_rules);
 				 
 				if ($this->form_validation->run() === true){
-					// $abc = $this->email_template_model->send_custom_email();
+					 // $abc = $this->email_template_model->send_custom_email();
+					 // exit;
 					
 					if($this->email_template_model->send_custom_email()){
 						$this->session->set_flashdata($this->auth->get_messages_array());

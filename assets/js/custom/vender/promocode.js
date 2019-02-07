@@ -1,4 +1,4 @@
- var validator = $(".form-validate1").validate({
+ var validator = $(".form-validate").validate({
 
         ignore: 'input[type=hidden], .select2-search__field', // ignore hidden fields
         errorClass: 'validation-error-label',
@@ -29,7 +29,7 @@
                     return $.trim(value);
                 },
                 digits: true,
-                greaterThanZero: true,
+                greaterThanZero: false,
                 validate_no_of_orders:true
             },
             'item[]': {
@@ -57,10 +57,8 @@
                 number: true,
                 maxlength:10,
                 validate_min_order: function (element) {
-                    if($("#discount_type").is(':checked')){   
-                        return false;          
-                    }else{
-                        return true;    
+                    if(!$("#discount_type").is(':checked')){   
+                        return true;          
                     }
                 },
                 normalizer: function (value) {
@@ -73,8 +71,7 @@
                 maxlength:10,
                 greaterThanZero:true,
                 validate_perc: function (element) {
-                    if($("#discount_type").is(':checked')){
-                        console.log(" checked");      
+                    if($("#discount_type").is(':checked')){     
                         return true;          
                     }
                 },
@@ -87,8 +84,7 @@
             },
             'applied_on_products[]':{
                 validate_applied_on_products: function (element) {
-                    if($("#promo_type").val() == 1){
-                        console.log(" checked2");      
+                    if($("#promo_type").val() == 1){    
                         return true;          
                     }
                 }
@@ -256,8 +252,7 @@
     });
 
   $.validator.addMethod("validate_min_order", function(value, element) {
-        console.log(value);
-        if($('#amount').val() > value && $('#amount').val() != ''){
+        if(!$('#discount_type').is(':checked') && parseFloat($('#amount').val()) > parseFloat(value) && $('#amount').val() != ''){
             return false;
         }else{
             return true;

@@ -1,0 +1,533 @@
+@media only screen and (min-width: 991px) {
+#topnav {
+    background: #ffffff;
+    height: 143px;
+    display: flex;
+
+    align-items: center;
+}
+#topnav > .container {
+	height: inherit;
+}
+.home-header nav.navbar.navbar-expand-lg.navbar-light.header-box {
+    margin: 0 -10px;
+    padding: 0;
+    height: inherit;
+}
+.home-header a.navbar-brand.logo {
+	height: inherit;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+.home-header div#navbarSupportedContent {
+    justify-content: flex-end;
+    height: inherit;
+}
+.home-header div#navbarSupportedContent .navbar-nav {
+	height: inherit;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.home-header li.dropdown.notification-list {
+	height: inherit;
+}
+.navbar-light .navbar-nav .nav-link {
+	height: inherit;
+}
+.home-header strong.text-uppercase {
+	height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0;
+    text-transform: none !important;
+}
+.header-bar {height: inherit;}
+
+}
+
+/*.caption-1 { font-size: 68px;}	*/
+
+
+@media only screen and (max-width: 1600px){
+
+.carousel-caption {
+    left: unset;
+    left: 52%;
+    text-align: left;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50%;
+    padding: 0 200px 0 0;
+}
+.caption-2{ font-size: 20px; }
+.caption-1 {
+    font-size: 50px;}
+
+}
+@media only screen and (max-width: 1199px) {
+.product-description .quantity .input-group {width: 115px;}
+.product-description .add-quantity .red-btn {width: 128px; font-size: 13px;}
+.carousel-indicators {overflow: auto;}
+.add-card-block .card-details .card-expiry-date {font-size: 12px;}
+.add-card-block .card-details .card-number {font-size: 18px;}
+.payment-method [type="radio"]:checked + label, .payment-method [type="radio"]:not(:checked) + label {padding-left: 60px;}
+.payment-method .card-body [type="radio"]:checked + label, .payment-method .card-body [type="radio"]:not(:checked) + label {padding-left: 45px;}
+.confirm-order-detail .total-amount .order-product-total-amount-title {font-size: 20px;}
+.confirm-order-detail .total-amount .order-product-total-amount {font-size: 15px; min-width: 57px;}
+.carousel-caption {width: 450px; padding: 0;}
+.caption-2 {font-size: 18px;}
+.caption-1 {font-size: 25px;}
+
+/*sani 11-01-19 home-page*/
+.home-header a.dropdown-toggle.nav-link.arrow-none.waves-effect.nav-user {
+    padding: 0 15px 0 5px;
+    margin: 0 0 0 8px;
+}
+.nav-pro-img::before {
+ 
+    top: 5px;
+    right: 7px;
+    
+}
+.home-header li.dropdown.notification-list {  margin-right: 20px;}
+.header-link-box {
+    margin-top: 0;
+}
+.home-header a.navbar-brand.logo img {  height: 75px;}
+
+.home-header .header-bar{ justify-content: flex-start; }
+
+
+.caption-1 {  font-size: 55px;}
+.delivery{ 	margin: 4px; }
+.dropdown-toggle::before { top: 5px; right: 3px;}
+#topnav > .container{ padding: 	0; }
+.home-banner .carousel {
+    height: 550px;
+}
+.carousel-caption { width: 400px; left: 53%; top:44%;}
+.caption-1 { font-size: 40px;}
+.home-banner input.search-btn.float-right{ font-size: 12px; }
+.search-div .search-txt { background-position: 10px 12px; padding-left: 35px; }
+.caption-1 {
+    font-size: 48px;
+}
+.caption-2 {
+    font-size: 30px;
+}
+.search-btn{     font-size: 15px; }
+.carousel-caption{ left: unset;
+    left: 53%;
+   
+    width: 400px; }
+    .social-links{ right: 20px; }
+
+
+
+
+
+
+}
+@media only screen and (max-width: 1024px) {
+	.social-links ul li {
+    list-style: none;
+    margin: 40px 0;
+}
+.product-description .quantity .input-group {width: 115px;}
+.product-description .add-quantity .red-btn {width: 128px; font-size: 13px;}
+.carousel-indicators {overflow: auto;}
+.add-card-block .card-details .card-expiry-date {font-size: 12px;}
+.add-card-block .card-details .card-number {font-size: 18px;}
+.payment-method [type="radio"]:checked + label, .payment-method [type="radio"]:not(:checked) + label {padding-left: 60px;}
+.payment-method .card-body [type="radio"]:checked + label, .payment-method .card-body [type="radio"]:not(:checked) + label {padding-left: 45px;}
+.confirm-order-detail .total-amount .order-product-total-amount-title {font-size: 20px;}
+.confirm-order-detail .total-amount .order-product-total-amount {font-size: 15px; min-width: 57px;}
+
+.caption-2 {font-size: 18px;}
+.caption-1 {   font-size: 34px;}
+
+
+/*sani 11-01-19 home-page*/
+
+.header-bar{ justify-content: flex-start; }
+
+.home-header strong.text-uppercase { font-size: 12px;}
+
+.home-header a.navbar-brand.logo img { height: 80px;}
+.home-header li.dropdown.notification-list { margin-right: 12px;}
+.home-header a.dropdown-toggle.nav-link.arrow-none.waves-effect.nav-user { padding: 0 5px 0 5px; margin: 0 5px 0 5px;}
+
+.carousel-caption {width: 400px;    left: 53%; bottom: 0;}
+
+.social-links{ right: 25px; }
+
+.home-banner .carousel{ height:500px; }
+.search-div { font-size: 12px; position: static; transform: none; width: 100%; display: block;}
+.search-div .search-txt{     position: static; max-width: 100%; display: block; font-size: 18px;}
+.home-banner input.search-btn { font-size: 16px; position: static; transform: none;}
+.home-banner input.search-btn.float-right { margin-top: 10px; text-align: center; padding: 0 10px; max-width: 200px;}
+
+
+
+
+}
+
+@media only screen and (max-width: 991px) {
+.restaurant-details h3 {font-size: 22px;}
+.restaurant-details .address, .restaurant-details .phone-number, .restaurant-details .delivery, .restaurant-details .order-by, .restaurant-details .food-types, .restaurant-details .timing > div, .rating-block .distance {font-size: 16px;}
+.restaurant-details .food-types img {width: 25px;}
+.restaurant-details .rating img {width: 18px;}
+.restaurants-food-list {text-align: center;}
+.food-wrapper {width: 100%;}
+.product-description .quantity .input-group {width: 110px;}
+.product-description .add-quantity .red-btn {width: 105px; font-size: 10px;}
+.cart-wrapper .product-detail {padding: 26px 20px 40px;}
+.carousel-indicators {overflow: auto;     bottom: 0px;}
+.additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-quantity .input-group {width: 70px;}
+.additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-quantity .input-group button {min-width: 20px !important; height: 20px;}
+.additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-quantity .input-group button strong {font-size: 21px;}
+.additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-quantity .input-group .form-control {height: 20px; font-size: 20px;}
+.additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-price {font-size: 16px;}
+.additional-recommendation-list .additional-recommendation .rec-product-name {font-size: 18px;}
+.text-with-border-right {font-size: 20px;}
+.select-delivery-address-block .delivery-address span {font-size: 13px;}
+.select-delivery-address-block .delivery-address label {font-size: 13px;}
+.additional-recommendation-list .additional-recommendation .additional-rec-detail {padding: 10px 15px 20px;}
+.favourites-order-list .reorder-block {padding: 0;}
+.add-card-block .card-details .col-md-1 {display: none;}
+.add-card-block .card-details .card-number {font-size: 16px;}
+.add-card-block .card-details {padding: 0; text-align: center;}
+.add-card-block #add-card-form .form-group > label {font-size: 18px;}
+.add-card-block .select-card .form-check {max-width: 70px; margin-right: 5px;}
+.add-card-block .select-card .form-check .form-check-label {width: 62px; height: 48px;}
+.add-card-block .select-card .form-check [type="radio"]:checked + label, .add-card-block .select-card .form-check [type="radio"]:not(:checked) + label {background-size: 50px auto !important;}
+.payment-mode h4 {font-size: 18px;}
+.confirm-order-detail .header .header-title {font-size: 18px;}
+.confirm-order-final-list {padding: 20px 15px;}
+.confirm-order-detail .order-product-title {font-size: 13px;}
+.confirm-order-detail .order-product-price {font-size: 13px;}
+.confirm-order-detail .total-amount > .row {padding: 0 15px;}
+.confirm-order-detail .total-amount .order-product-total-amount-title {font-size: 16px;}
+.confirm-order-detail .total-amount .order-product-total-amount {font-size: 12px; min-width: 57px;}
+.payment-method [type="radio"]:checked + label, .payment-method [type="radio"]:not(:checked) + label {padding-left: 40px;}
+.credit-card.card-payment .card-detail {padding: 0;}
+.credit-card.card-payment .card.card-body > .row {display: block;}
+.payment-method .card-body [type="radio"]:checked + label, .payment-method .card-body [type="radio"]:not(:checked) + label {padding-left: 10px;}
+.credit-card.card-payment .card-option {padding: 22px 0 35px;}
+.add-new-card-popup a {font-size: 15px;}
+.add-new-card-popup a:after {width: 20px; height: 20px;}
+.coupon-delivery .coupon-and-offers:after {right: -18px;}
+.carousel-caption {width: 200px;}
+.caption-2 {font-size: 16px;}
+.caption-1 {font-size: 20px;}
+.search-div.row input {
+    margin-bottom: 0px;
+   
+}
+.search-div .search-txt{ font-size: 15px; background-position: 15px 7px;     padding-left: 45px;}
+
+
+/*sani order-detail*/
+.top-heading{ margin-bottom: 30px; }
+.order-list-right{  padding-right: 20px; }
+.restarant-name h6{ font-size: 22px; margin: 10px 0 30px; }
+.order-item table{ margin-top: 20px; }
+.order-item th{ font-size: 18px; }
+.order-list-right{ padding-right: 20px;	 }
+.order-detail{ padding: 20px; }
+.order-top-title { padding: 25px; margin: 0 0 30px;}
+.order-item td{ font-size: 18px; }
+.delivery-restaurant-day ul{ padding-right: 50px; padding-left: 0;}
+.mail-subscription-block .mail-subscription { width: auto;}
+.delivery-address {margin-top: 10px;}
+.navbar-toggler { display: block;}
+.collapse:not(.show){ display: none; }
+
+.header-bar { display: block;}
+.header-menu ul li a strong, .menu-extras.topbar-custom ul li a strong{ padding-top: 3px; }
+.home-header strong.text-uppercase { font-size: 14px;}
+.home-header li.dropdown.notification-list { margin: 15px 0 0 0;}
+.header-link-box { position: absolute; right: 90px; top: 60px;}
+div#navbarSupportedContent { margin: 30px 0 20px; padding: 0 15px;}
+.home-header .header-bar{ position: relative; }
+.dropdown-menu.dropdown-menu-right.profile-dropdown.show { top: 40px !important;}
+.carousel-caption { width: 300px;  top: 50%;  transform: translateY(-50%);}
+.caption-1{ font-size: 35px;     margin-bottom: 15px;}
+.social-links ul li {  margin: 12px 0;}
+.social-links{right: 20px;}
+.home-header nav.navbar.navbar-expand-lg.navbar-light.header-box { margin: 0; }
+
+.navbar-toggler-icon { background-size: 100% auto; width: 25px; height: 23px;}
+.navbar-light .navbar-toggler { border: 0; background: #ff0000; padding: 5px 10px;}
+.navbar-light .navbar-toggler-icon { background: none; background-size: 100%; width: 25px; height: 2px; background-color: #fff; display: block; margin: 5px 0;}
+.home-banner .carousel { height: 400px;}
+.search-div , .search-div.row input{ height: 40px; }
+ .app-row-new img.mr-3 {
+    margin: 0px 15px 15px 0 !important;
+}
+
+
+
+
+
+}
+
+@media only screen and (max-width: 767px) {
+#loginFormModal .modal-dialog .modal-body, #registerFormModal .modal-dialog .modal-body {padding: 1rem 15px;}
+.modal form .form-group {margin-bottom: 15px;}
+.modal .forgot-password a {margin-bottom: 15px; display: block;}
+.login-form .register-form-direction, .register-form .register-form-direction {height: 40px;}
+.signin-with-social-account .blue-btn {margin-bottom: 20px;}
+.signin-custom-text {margin: 25px 0;}
+.register-form .form-check {margin-bottom: 15px;}
+.mail-subscription-block .mail-subscription {width: 100%;}
+.restaurant-details {position: static; padding: 22px; border-radius: 0;}
+.restaurant-details h3 {font-size: 22px;}
+.restaurant-details .address, .restaurant-details .phone-number, .restaurant-details .delivery, .restaurant-details .order-by, .restaurant-details .food-types, .restaurant-details .timing > div, .rating-block .distance {font-size: 16px;}
+.restaurant-details .food-types img {width: 25px;}
+.restaurant-details .rating img {width: 18px;}
+.restaurant-detail-banner {margin-bottom: 40px;}
+.restaurants-food-list {text-align: center;}
+.food-wrapper {width: 100%;}
+.cart-wrapper .product-detail {padding: 26px 20px 40px; margin-bottom: 20px;}
+.product-detail .categories {font-size: 18px;}
+.product-description h3 {font-size: 20px; margin-bottom: 5px;}
+.product-description .price {font-size: 20px; margin-bottom: 5px;}
+.product-description .product-ratings {margin-bottom: 20px;}
+.product-description .quantity .input-group {width: 115px;}
+.product-description .add-quantity .red-btn {width: 128px; font-size: 13px;}
+.carousel-indicators {overflow: auto;}
+.text-with-border-right {font-size: 18px; width: 100%; text-align: center;}
+.text-with-border-right:after {content: none;}
+.additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-quantity .input-group {width: 82px;}
+.additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-quantity .input-group button {min-width: 20px !important; height: 20px;}
+.additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-quantity .input-group button strong {font-size: 21px;}
+.additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-quantity .input-group .form-control {height: 20px; font-size: 20px;}
+.additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-price {font-size: 18px;}
+.additional-recommendation-list .additional-recommendation .rec-product-name {font-size: 18px;}
+.additional-recommendation-list .additional-recommendation {width: 245px; margin: 0px auto 30px;}
+.checkout-wrapper .checkout-block {padding: 30px 15px 40px;}
+.select-delivery-address-block .delivery-address {width: 235px; margin: 0 auto 20px;}
+.checkout-block .form-actions {display: block !important; text-align: center;}
+.checkout-block .form-actions .continue-shopping-btn {margin-bottom: 15px;}
+.favourites-order-list .site-logo {margin-bottom: 20px;}
+.favourites-order-list .favourites-order-detail {margin-bottom: 20px;}
+.favourites-order-list .reorder-block {padding: 0;}
+.favourites-order-list .favourites-order {margin-bottom: 25px !important;}
+.profile-block .submit-buttons {display: block !important; text-align: center;}
+.profile-block .resetpass.white-btn {margin-right: 0; min-width: 200px; font-size: 18px; margin: 0 auto 20px;}
+.profile-block .save.small-red-btn {min-width: 200px; font-size: 18px; margin: 0 auto;}
+.profile-block .gender .form-check {margin-bottom: 15px;}
+.add-card-block .card-list {border-right: 0; padding-right: 0;}
+.add-card-block.white-bg {padding: 30px 0 40px;}
+.add-card-block .card-details {display: block !important; padding: 15px 0 0; text-align: center;}
+.add-card-block .card-details .card-number {font-size: 16px;}
+.add-card-block .select-card .form-check {max-width: 70px; margin-right: 5px;}
+.add-card-block .select-card .form-check .form-check-label {width: 62px; height: 48px;}
+.add-card-block .select-card .form-check [type="radio"]:checked + label, .add-card-block .select-card .form-check [type="radio"]:not(:checked) + label {background-size: 50px auto !important;}
+.payment-method .form-actions {display: block !important; text-align: center;}
+.payment-method .form-actions .backtocart-btn {margin-bottom: 20px;}
+.place-order-block.white-bg {padding: 30px 0 40px;}
+.view-offers {margin-bottom: 20px; display: inline-block;}
+.payment-mode h4 {font-size: 18px;}
+.confirm-order-detail .header .header-title {font-size: 18px;}
+.confirm-order-final-list {padding: 20px 15px;}
+.confirm-order-detail .order-product-title {font-size: 13px;}
+.confirm-order-detail .order-product-price {font-size: 13px;}
+.confirm-order-detail .total-amount > .row {padding: 0 15px;}
+.confirm-order-detail .total-amount .order-product-total-amount-title {font-size: 16px;}
+.confirm-order-detail .total-amount .order-product-total-amount {font-size: 12px; min-width: 57px;}
+.payment-method [type="radio"]:checked + label, .payment-method [type="radio"]:not(:checked) + label {padding-left: 0;}
+.credit-card.card-payment .card-detail {padding: 0;}
+.payment-method .card-body [type="radio"]:checked + label, .payment-method .card-body [type="radio"]:not(:checked) + label {padding-left: 10px;}
+.credit-card.card-payment .card-option {padding: 22px 0 35px;}
+.add-new-card-popup a {font-size: 15px;}
+.add-new-card-popup a:after {width: 20px; height: 20px;}
+.add-new-address-block .form-check {margin-right: 8px;}
+.address-edit {position: absolute; top: 50%; right: 5px; transform: translateY(-50%);}
+#address-pop .add-new-address-block > .row {display: block; text-align: left;}
+.coupon-delivery .coupon-and-offers:after {content: none;}
+.delivery-address-block {padding: 20px 10px;}
+
+
+.topbar-main > .container {display: block !important;}
+.menu-extras ul li {display: block;}
+.navbar-toggler {  color: rgba(0,0,0,.5);  border-color: rgba(0,0,0,.1);}
+.topbar-main .logo {float: left;}
+.topbar-main .navbar-toggler {float: right; margin: 40px 0;}
+.navbar-toggler-icon {background-image: url('../images/menu.svg'); background-size: 100%; }
+.navbar-collapse {clear: both;}
+.dropdown-menu.dropdown-menu-right.profile-dropdown {transform: none !important;}
+.offer-title2.mt-5 {position: relative;}
+#offers .fliter {right: -2rem; top: -11px;}
+
+/*sani order-detail*/
+.order-top-title p { font-size: 16px;}
+.order-item tr { margin: 0 0 5px;}    
+.capcha-img { margin: 20px 0;}
+.restarant-name h6{ margin: 10px 0 20px; }
+.order-top-title { padding: 20px;}    
+.order-list-right{ border-right: none; }
+
+.collapse:not(.show) {display: none;}
+.navbar-toggler {display: block;}
+
+.social-links.social-lins-mobile {display: block;}
+.social-links {display: none;}
+
+.social-links { top: 50%; right: 50px; transform: translateY(-50%);}
+.social-links ul li { margin: 50px 0;}
+.container.content-form h3 {font-size: 36px;}
+.carousel-indicators{     bottom: -10px; }
+.stats-number {
+    font-size: 60px;
+    font-weight: 600;
+}
+
+.stats-first-line {
+    font-size: 34px;
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+.stats-second-line {
+    font-size: 29px;
+    margin-top: 0;
+    line-height: 1;
+}
+.card-body.bg-cyan .p-5 {
+    padding: 20px 0 50px 30px !important;
+}
+     .full-slider {
+ 
+    width: 100% !important;
+}
+.carousel-control-prev-icon{ display: none; }
+.carousel-control-next-icon{ display: none; }
+a.carousel-control-next{ display: none; }
+a.carousel-control-prev { display: none; }
+
+
+#testimonial-slider .owl-nav {
+    display: none;
+}
+.get-app .app-row-new img.mr-3 {
+    margin: 0px 0 15px 0 !important;
+}
+.notification-list .navbar-toggler{ border: transparent; }
+
+
+
+}
+
+@media only screen and (max-width: 575px) {
+.modal .forgot-password {display: block !important;}
+.modal .forgot-password .red-btn {width: 100%;}
+
+/*sani order-detail*/
+.order-top-title{ box-shadow: none;padding: 0;     }
+.order-detail { padding: 20px 15px 20px;}
+.order-top-right{ float: none;display: block; }
+.order-top-title strong { font-size: 18px;}
+.top-heading { margin-bottom: 20px;}	
+.order-item td { font-size: 16px;}
+.capcha-img { margin: 0;}
+.order-item th { font-size: 16px;}
+
+.header-link-box {
+    right: 90px;
+    top: 42px;
+}
+.home-header nav.navbar.navbar-expand-lg.navbar-light.header-box {
+    margin: 0;
+    padding: 20px 15px;
+}
+.social-links ul li { margin: 12px 0;}
+.offer-title.text-center h2 b {  font-size: 27px;}
+.container.content-form h3 {font-size: 28px;}
+
+.restaurant-details .delivery{ float: none;  margin: 15px auto 0;  display: block; width: 140px }
+.Pickup-check.delivery label.form-check-label{ display: block; }
+a#dropdownMenuLink{ display: block;    text-align: left; }
+.dropdown.delivery.review-star .form-control{     background-position: 94% 10px !important; }
+select#order-price{ padding-left: 25px; }
+.dropdown.delivery.review-star label.review-icon {  right: inherit;  left: 90px;}
+.home-header a.navbar-brand.logo img {
+    height: 50px;
+}
+.restaurant-details .delivery {
+    margin: 0px 0 0 0;
+}
+
+
+.restaurant-details .delivery, .restaurant-details .order-by {
+    font-size: 14px;
+}
+.list-filter-detail .delivery {
+    width: 240px;
+    display: block;
+    float: none;
+    margin: 0 auto 10px;
+}
+.offer-title2 label.label1.mr-3 {
+    padding: 5px 10px !important;
+    margin-right: 5px !important;
+}
+.offer-title2 label.label2.mr-3.active {
+    padding: 5px 10px !important;
+    margin: 0px 36px 0 0 !important;
+}
+#offers .fliter {
+    right: -15px !important;
+    top: 0px;
+    padding: 0;
+}
+#offers .fliter img {
+        width: 30px;
+}
+
+
+.offer-title2.mt-5 .text-center{ text-align: center; }
+.card-body.bg-cyan .justify-content-center { display: block !important ; text-align: left;
+}
+.partners-header.mb-5 {
+    padding: 0 !important;
+}
+.get-app .app-row-new img.mr-3 {
+    margin: 0 15px 15px 0 !important;
+}
+
+
+ .offer-title2.mt-5 #offers .fliter{ right: -25px !important; }
+ .offer-title2.mt-5 #offers label {
+    padding: 5px 10px 5px !important;
+    margin: 0 !important;
+    text-align: left;}
+     .offer-title2.mt-5 #offers .text-center{ text-align: left !important; }
+
+.home-banner     .carousel {
+    height: auto;
+}
+
+.bg-cyan {
+    background-color: #518c90;
+    padding: 20px 20px 50px !important;
+}
+.bg-cyan .carousel-indicators {
+    bottom: -50px;
+    overflow: unset;
+}
+.faq-title h3{ font-size: 22px;
+    margin: 0 0 0 10px; }
+.faq-title{     margin: 25px 0; }
+
+.white-bg{ padding: 30px 15px 40px; }
+
+.faq-inner button.btn.btn-link{ font-size: 14px; }
+
+
+
+}

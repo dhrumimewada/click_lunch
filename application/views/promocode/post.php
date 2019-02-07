@@ -139,7 +139,7 @@
         $field_value = $temp_value;
     }
     ?>
-                                            <select class="select2 form-control" data-placeholder="Select restaurant" name="item[]" id="products" multiple>
+                                            <select class="select2 form-control" data-placeholder="Select Product/Combo" name="item[]" id="products" multiple>
                                                     <?php 
                                                     
                                                     foreach ($item_list as $key => $value) {
@@ -203,7 +203,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required" for="amount">Amount</label>
+                                        <label class="required" for="amount">Discount Amount</label>
                                         <div>
                                         <?php
     $field_value = NULL;

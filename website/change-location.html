@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Delivery Address Form</title>
+	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1">
+  	<link href="https://fonts.googleapis.com/css?family=Muli:200,300,400,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-grid.min.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+   
+    <link rel="stylesheet" type="text/css" href="css/custom.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+
+    <link rel="stylesheet" type="text/css" href="css/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="css/owl.theme.default.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/popper.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script> -->
+    <script type="text/javascript" src="js/bootstrap-input-spinner.js"></script>
+    <script type="text/javascript" src="js/owl.carousel.js"></script>
+    <script type="text/javascript" src="js/custom.js"></script>
+
+      <!-- datetime picker -->
+    <script src="js/timepicki.js"></script>
+    <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="css/timepicki.css">
+    <script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/datepicker.min.css">
+    
+</head>
+
+    <body>
+
+        <!-- Navigation Bar-->
+        <header id="topnav" class="home-header">
+            <div class="container"> 
+                <div class="header-bar"> 
+                    <nav class="navbar navbar-expand-lg navbar-light header-box">
+                        <div class="header-app">
+                            <a class="navbar-brand logo" href="index.html"><img src="http://13.58.201.178/assets/images/click-lunch.png" alt="" class="logo-large"></a>
+                            <a href="get-the-app.html">Get the App</a>
+                        </div>                      
+                      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                        <span class="navbar-toggler-icon"></span>
+                        <span class="navbar-toggler-icon"></span>
+                      </button>
+
+                        <div class="collapse navbar-collapse header-menu" id="navbarSupportedContent">
+                          <ul class="navbar-nav ">
+                            <li class="dropdown notification-list active">
+                                <a class="nav-link waves-effect" href="index.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase active">Home</strong>
+                                </a>       
+                            </li>
+                             <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="delivery.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">Delivery</strong>
+                                </a>       
+                            </li>                  
+                            <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="takeout-restaurant.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">Takeout</strong>
+                                </a>       
+                            </li>
+                            <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="restaurant-partner-form.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">Restaurant Partner</strong>
+                                </a>       
+                            </li>
+                            <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="faq.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">FAQ</strong>
+                                </a>       
+                            </li>
+                           <!--  <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="favourites.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">Favourites</strong>
+                                </a>       
+                            </li>
+                            <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="weekly-planner.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">Weekly Planner</strong>
+                                </a>       
+                            </li>  -->                       
+                                                        
+                          <!--   <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="restaurant-partner-form.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">restaurant partners</strong>
+                                </a>       
+                            </li>
+                            <li class="dropdown notification-list">
+                                <a class="nav-link waves-effect" href="change-location.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <strong class="text-uppercase">delivery Locations</strong>
+                                </a>       
+                            </li> -->
+                            <li class="dropdown notification-list">
+                                <a class="dropdown-item drop-down-icon" href="javascript:void(0)" data-toggle="modal" data-target="#loginFormModal">
+                                    <strong class="text-uppercase">Login</strong>
+                                </a>       
+                            </li>
+                            <li class="dropdown notification-list">
+                                <a class="dropdown-item drop-down-icon" href="javascript:void(0)" data-toggle="modal" data-target="#registerFormModal">
+                                    <strong class="text-uppercase">Create an Account</strong>
+                                </a>       
+                            </li>
+                        
+                            </ul>                            
+                        </div>
+                    </nav>
+                    <div class="header-link-box">
+                        <div class="header-link notification-list">
+                            <div class="dropdown notification-list nav-pro-img">
+                                <a class="dropdown-toggle nav-link arrow-none waves-effect nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="user" class="rounded-circle">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                                
+                                     <nav class="navbar drop-list">
+                                      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                                        <span class="navbar-toggler-icon"></span>
+                                      </button>
+                                    
+                                      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                                        <ul class="navbar-nav">                                         
+                                          <li class="nav-item dropdown drop-down-icon profile-submenu sub-list">                                            
+                                            <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                             <img src="images/My-Profile.png">
+                                             <span>My Profile</span></a>
+
+                                            <div class="dropdown-menu  drop-box" aria-labelledby="navbarDropdownMenuLink">
+                                                <a class="dropdown-item" href="profile.html"><i class="mdi mdi-account-circle m-r-5"></i> Contact Information</a>
+                                                <a class="dropdown-item" href="add-card.html"><i class="mdi mdi-account-circle m-r-5"></i> Payment Methods</a>                                                
+                                            </div>
+                                          </li> 
+
+                                            <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="order-history.html">
+                                                        <img src="images/Order-History.png">
+                                                        <span>Order History</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                            <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="favourites.html">
+                                                        <img src="images/favorite-heart-button.png">
+                                                        <span>Favourites</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                            <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="weekly-planner.html">
+                                                        <img src="images/calendar-weekly.png">
+                                                        <span>Weekly Planner</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                             <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="order-history.html">
+                                                        <img src="images/Group-Order.png">
+                                                        <span>Group Order</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                             <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="delivery-address.html">
+                                                        <img src="images/Change-Location.png">
+                                                        <span>Change Location</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                             <li class="nav-item dropdown drop-down-icon">
+                                                <div class="sub-list">
+                                                    <a class="dropdown-item drop-down-icon" href="delivery-address.html">
+                                                        <img src="images/About-US.png">
+                                                        <span>About Us</span>
+                                                    </a>
+                                                </div>                                               
+                                            </li>
+                                   
+                                    
+                                        </ul>
+                                      </div>
+                                    </nav>
+                                    
+                                </div>                                                                    
+                            </div>
+                        </div>                            
+                        <div class="header-link notification-list last-div">
+                            <a class="nav-link waves-effect p-0" href="checkout.html" role="button" aria-haspopup="false" aria-expanded="false">
+                                <img src="images/Cart.png" />
+                            </a>       
+                        </div>              
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- End Navigation Bar-->
+
+<!-- start form -->
+
+<div id="content">
+	<div class="grey-bg">
+		<div class="form-content">
+    		<div class="container content-form p-4 pl-5 pr-5 pb-4">
+        		<form class="submit-form mt-5 delivery-address-form">
+        			<div class="row">
+			            <div class="col-md-12 form-border">
+			                <div class="form-group">
+			                    <input type="text" class="form-control input-border" placeholder="House/ Office Number " value="" />
+			                </div>
+			            </div>
+			            <div class="col-md-6 form-border">
+			                <div class="form-group">
+			                    <input type="text" class="form-control input-border" placeholder="Street/ Locality " value="" />
+			                </div>
+			            </div>
+			            <div class="col-md-6 form-border">
+			                <div class="form-group">
+			                    <input type="text" class="form-control input-border" placeholder="City" value="" />
+			                </div>
+			            </div>
+			            <div class="col-md-6 form-border">
+			                <div class="form-group">
+			                    <input type="text" class="form-control input-border" placeholder="Zip Code" value="" />
+			                </div>
+			            </div>
+			            <div class="col-md-6 form-border">
+			                <div class="form-group">
+			                    <input type="text" class="form-control input-border" placeholder="Any delivery instruction" value="" />
+			                </div>
+			            </div>
+            			<div class="col-md-12 add-new-address-block">
+            				<label>Address Type</label>
+            				<div class="form-check form-check-inline">
+				  				<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked>
+				  				<label class="form-check-label" for="inlineRadio1">Office</label>
+			  				</div>
+			  
+						  <div class="form-check form-check-inline">
+			  					<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+			 					<label class="form-check-label" for="inlineRadio2">Home</label>
+						  </div>
+						  <div class="form-check form-check-inline">
+			  					<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option2">
+			 					<label class="form-check-label" for="inlineRadio3">Other</label>
+						  </div>
+            			</div>
+		 				<div class="col-md-12 d-flex justify-content-center mt-5 mb-5">
+		 					<button type="button" class="small-red-btn" data-toggle="modal" data-target="#thankyou">Save</button>
+		 				</div>
+		 			</div>
+				</form>
+ 				<div class="col-md-12 d-flex justify-content-center mt-5 mb-5">
+ 					<a href="index.html" class="white-btn">BACK TO HOME</a>
+ 				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="d-flex justify-content-center">
+			<div class="mail-subscription-block">
+				<div class="mail-subscription-custom-text text-center"><p>Be the lucky winner to get FREE meals for one week. <br> We are also offer you latest deal in your inbox</p></div>
+				<form class="mail-subscription d-flex align-items-center" id="mailSubscription">
+					<input type="email" name="email" class="form-control" id="mailSubscriptionId" placeholder="Enter your e-mail address here" />
+					<input type="submit" name="subscribe" value="Subscribe" class="subscribe-btn red-btn" />
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--end of form  -->
+
+<footer>
+	<div class="d-flex justify-content-center align-items-center pt-4 pb-4">
+		<div class="footer-content">
+			<div class="footer-menu">
+				 <ul>
+                    <li><a href="contact-us.html">Contact Us</a></li>
+                    <li><a href="restaurant-partner-form.html">Restaurant Partners</a></li>
+                    <li><a href="terms-of-service.html">Terms of Service</a></li>
+                    <li><a href="faq.html">FAQ</a></li>
+                </ul>
+			</div>
+			<div class="copyright text-center">
+				<span>&copy; 2018 - www.<a href="">ClickLunch</a>.com. All rights reserved</span>
+			</div>
+		</div>
+	</div>
+</footer>
+<div class="modal fade pop-form" id="thankyou" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content thank-u-pop">
+        <div class="pop-img">
+        	<img src="images/click-lunch-logo-white.png">
+        </div>
+      <div class="modal-body col-sm-12 d-flex justify-content-center align-items-center">
+     		<div class="successful-txt">
+     			<h6>thank you</h6>
+     			<p>for add new delivery address.</p>     			
+     		</div>
+      </div>
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="close-btn"><img src="images/popup-checked.png"></span>
+        </button>
+    </div>
+  </div>
+</div>
+
+ <!-- forgot-password model -->
+    <div class="modal fade" id="forgotFormModal" tabindex="-1" role="dialog" aria-labelledby="loginFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content pt-sm-4 pb-sm-4 border-0">
+                <div class="modal-header justify-content-center position-relative">
+                    <h5 class="modal-title" id="loginFormModalLabel">Forgot Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="faq-inner forgot-inner">                  
+                       <form class="forgot-form" id="forgot-form">
+                        <div class="row">
+                            <div class="col-sm-9">
+                                <div class="form-group">                                          
+                                    <input type="email" class="form-control" id="email" placeholder="E-mail">
+                                </div>
+                            </div>
+                        </div>                               
+                        <div class="row">                                   
+                            <div class="col-sm-6 forgot-btn">
+                                <input type="submit" name="register" class="register red-btn" id="pass-submit-btn" value="Submit">
+                            </div>
+                        </div>                            
+                       
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginFormModal" tabindex="-1" role="dialog" aria-labelledby="loginFormModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content pt-sm-4 pb-sm-4">
+                <div class="modal-header justify-content-center position-relative">
+                    <h5 class="modal-title" id="loginFormModalLabel">Log in</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="login-form" id="login-form">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="loginUsername">Username</label>
+                                    <input type="text" class="form-control" id="username">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="loginPassword">Password</label>
+                                    <input type="password" class="form-control" id="password">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="register-form-direction">
+                                    <div class="register-form-link">No account? <a id="dialog-register" href="javascript:void(0)" data-toggle="modal" data-target="#registerFormModal">Register</a></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="forgot-password d-flex align-items-center justify-content-between">
+                                    <a  id="dialog-forgot" href="javascript:void(0)" data-toggle="modal" data-target="#forgotFormModal">Forgot password?</a>
+                                    <input type="submit" name="login" class="login red-btn" id="login-btn" value="Log in">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row signin-custom-text justify-content-center">
+                            <span>or sign in with</span>
+                        </div>
+                        <div class="signin-with-social-account row">
+                            <div class="col-sm-6">
+                                <a href="https://accounts.Facebook.com/" class="facebook-account blue-btn">Facebook</a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="https://accounts.google.com/signin" class="google-account orange-btn">Google</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Register Modal -->
+<div class="modal fade" id="registerFormModal" tabindex="-1" role="dialog" aria-labelledby="registerFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content pt-4 pb-4">
+            <div class="modal-header justify-content-center position-relative">
+                <h5 class="modal-title" id="registerFormModalLabel">Register</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="register-form" id="register-form">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerUsername">Username</label>
+                                <input type="text" class="form-control" id="username">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerEmail">E-mail</label>
+                                <input type="email" class="form-control" id="email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerPassword">Password</label>
+                                <input type="password" class="form-control" id="password">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerConfirmPassword">Confirm Password</label>
+                                <input type="password" class="form-control" id="confpassword">
+                            </div>
+                        </div>
+                    </div>
+                     <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="userdob">Date Of Birth</label>
+                                <input type="text"  class="form-control" id="userdob" value="01/30/2019" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerConfirmPassword">Phone Number</label>
+                                <input type="Phone" class="form-control" id="confpassword">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="acceptTerms">
+                                <label class="form-check-label grey" for="acceptTerms">I agree to the Terms of Use and to receive emails.</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="submit" name="register" class="register red-btn" id="register-btn" value="Register">
+                        </div>
+                    </div>
+                    <div class="row signin-custom-text justify-content-center">
+                        <span>or join with</span>
+                    </div>
+                    <div class="signin-with-social-account row">
+                        <div class="col-sm-6">
+                            <a href="https://accounts.Facebook.com/" class="facebook-account blue-btn">Facebook</a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a href="https://accounts.google.com/signin" class="google-account orange-btn">Google</a>
+                        </div>
+                    </div>
+                    <div class="already-have-account text-center mt-4">
+                        <span class="grey">I already have an account <a id="dialog-login" href="javascript:void(0)" data-toggle="modal" data-target="#loginFormModal" class="font-weight-bold">Login</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+	$("input[type='number']").inputSpinner();
+</script>

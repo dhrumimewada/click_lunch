@@ -88,14 +88,12 @@ class Email_template_model extends CI_Model {
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0){
 			$return_data = $sql_query->result_array();
-			$total_sended = 0;
-			foreach ($return_data as $key => $value) {
-				$to = $value['email'];
-				$mail = sendmail($from, $to, $subject, $message);
-				if($mail){
-					$total_sended++;
-				}
-			}
+
+			$emails = array_column($return_data, 'email');
+			$email_data = implode(',', $emails);
+			$total_sended = count($emails);
+			$mail = sendmail($from, $email_data, $subject, $message);
+
 			$this->auth->set_status_message("Total ".$total_sended. " emails sent successfully");
 			$return_value = TRUE;
 		}else{
@@ -129,18 +127,17 @@ class Email_template_model extends CI_Model {
 		}
 
 		if(is_array($customer_list) && !empty($customer_list)){
-			foreach ($customer_list as $key => $value) {
-				$to = $value['email'];
-				$mail = sendmail($from, $to, $subject, $message);
-				if($mail){
-					$total_sended++;
-				}
-			}
+
+			$emails = array_column($customer_list, 'email');
+			$email_data = implode(',', $emails);
+			$total_sended = count($emails);
+			$mail = sendmail($from, $email_data, $subject, $message);
+			
 			$this->auth->set_status_message("Total ".$total_sended. " emails sent successfully");
 			$return_value = TRUE;
 		}else{
 			//$this->auth->set_error_message("Something went wrong. please try again later");
-			$this->auth->set_error_message("please try again later");
+			$this->auth->set_error_message("Under Devlopment");
 		}
 		return $return_value;
 		

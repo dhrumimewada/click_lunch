@@ -26,6 +26,9 @@
             'email_to[]': {
                 required:true
             },
+            'item[]': {
+                validate_items:true
+            },
             'shop[]': {
                 validate_shop:true
             },
@@ -48,6 +51,9 @@
             },
             'email_to[]': {
                 required: "Please select at least one option."
+            },
+            'item[]': {
+                validate_items: "Please select at least one product/combo."
             },
             'shop[]': {
                 validate_shop: "Please select at least one restaurant."
@@ -72,6 +78,15 @@
 
  $.validator.addMethod("validate_shop", function(value, element) {
         if($('#group').val() == 5 && value == ''){
+            return false;
+        }else{
+            return true;
+        }
+
+    }); 
+
+ $.validator.addMethod("validate_items", function(value, element) {
+        if($('#group').val() == 7 && value == ''){
             return false;
         }else{
             return true;
@@ -129,15 +144,22 @@
 
         });
 
-       if($('#group').val() == 5){
+        if($('#group').val() == 5){
             $('#order-no').addClass("d-none");
             $('#shop-list').removeClass("d-none");
+            $('#item-list').removeClass("d-none");
         }
         if($('#group').val() == 6){
             
             $('#order-no').removeClass("d-none");
             $('#shop-list').addClass("d-none");
-        }   
+            $('#item-list').addClass("d-none");
+        }
+        if($('#group').val() == 7){
+            $('#order-no').addClass("d-none");
+            $('#shop-list').addClass("d-none");
+            $('#item-list').removeClass("d-none");
+        }  
 
        $(document).on('change','#group',function(){
 
@@ -148,13 +170,22 @@
 
                 $('#order-no').addClass("d-none");
                 $('#shop-list').removeClass("d-none");
+                $('#item-list').addClass("d-none");
                 $(".select2").select2();
             }
             if($(this).val() == 6){
                 
                 $('#order-no').removeClass("d-none");
                 $('#shop-list').addClass("d-none");
-            }   
+                $('#item-list').addClass("d-none");
+            } 
+            if($(this).val() == 7){
+                
+                $('#item-list').removeClass("d-none");
+                $('#shop-list').addClass("d-none");
+                $('#order-no').addClass("d-none");
+                $(".select2").select2();
+            }    
        });
 
     });

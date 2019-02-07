@@ -61,6 +61,16 @@ class Vender_profile extends CI_Controller {
 					array('field' => 'zipcode', 'label' => 'zip code', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|max_length[255]'),
 					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|max_length[255]'),
+
+					array('field' => 'delivery_morning_from', 'label' => 'from time', 'rules' => 'trim|required'),
+					array('field' => 'delivery_morning_to', 'label' => 'to time', 'rules' => 'trim|required'),
+					array('field' => 'delivery_evening_from', 'label' => 'from time', 'rules' => 'trim|required'),
+					array('field' => 'delivery_evening_to', 'label' => 'to time', 'rules' => 'trim|required'),
+					array('field' => 'order_morning_from', 'label' => 'from time', 'rules' => 'trim|required'),
+					array('field' => 'order_morning_to', 'label' => 'to time', 'rules' => 'trim|required'),
+					array('field' => 'order_evening_from', 'label' => 'from time', 'rules' => 'trim|required'),
+					array('field' => 'order_evening_to', 'label' => 'to time', 'rules' => 'trim|required'),
+
 					array('field' => 'cuisines[]', 'label' => 'shop cuisines', 'rules' => 'trim|required|numeric'),
 					array('field' => 'website', 'label' => 'shop website', 'rules' => 'trim|valid_url'),
 					array('field' => 'min_order', 'label' => 'minimum order', 'rules' => 'trim|required|numeric|greater_than_equal_to[0]'),
@@ -124,7 +134,10 @@ class Vender_profile extends CI_Controller {
 					}
 
 					if ($file_upload){
-
+						// $abc = $this->vender_model->update_profile($modal_data);
+						// echo "<pre>";
+						// print_r($abc);
+						// exit;
 						if($this->vender_model->update_profile($modal_data)){
 							$this->session->set_flashdata($this->auth->get_messages_array());
 							redirect(base_url() . "vender-profile");
@@ -150,8 +163,35 @@ class Vender_profile extends CI_Controller {
 		$data['vender_detail'] = $this->vender_model->get_vender_detail($user_id);
 		$data['vender_cuisine_detail'] = $this->vender_model->get_vender_cuisine($user_id);
 		$data['shop_availibality'] = $this->vender_model->get_shop_availibality($user_id);
+		$shop_hour = $this->vender_model->get_shop_hour($user_id);
+
+		$order = array();
+		$delivery = array();
+		foreach ($shop_hour as $key => $value) {
+			if($value['order_delivery'] == 1){
+				if($value['morning_evening'] == 1){
+					$order['morning']['from'] = $value['from_time'];
+					$order['morning']['to'] = $value['to_time'];
+				}else{
+					$order['evening']['from'] = $value['from_time'];
+					$order['evening']['to'] = $value['to_time'];
+				}
+			}else{
+				if($value['morning_evening'] == 1){
+					$delivery['morning']['from'] = $value['from_time'];
+					$delivery['morning']['to'] = $value['to_time'];
+				}else{
+					$delivery['evening']['from'] = $value['from_time'];
+					$delivery['evening']['to'] = $value['to_time'];
+				}
+			}
+		}
+
+		$data['order'] = $order;
+		$data['delivery'] = $delivery;
 		$data['cuisines_data'] = get_cuisine();
 		$data['main_content'] = "vender/my_profile";
+
 		$this->load->view('template/template',$data);
 	}
 

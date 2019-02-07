@@ -115,8 +115,8 @@ class Banner extends CI_Controller {
 
 				$validation_rules = array(
 					
-					array('field' => 'title', 'label' => 'title', 'rules' => 'trim|required|min_length[2]|max_length[50]'),
-					array('field' => 'sub_title', 'label' => 'subtitle', 'rules' => 'trim|required|min_length[2]|max_length[50]')
+					array('field' => 'title', 'label' => 'title', 'rules' => 'trim|required|min_length[2]|max_length[100]'),
+					array('field' => 'sub_title', 'label' => 'subtitle', 'rules' => 'trim|required|min_length[2]|max_length[100]')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
@@ -186,8 +186,8 @@ class Banner extends CI_Controller {
 			if (isset($_POST['submit'])){
 				$validation_rules = array(
 					
-					array('field' => 'title', 'label' => 'title', 'rules' => 'trim|required|min_length[2]|max_length[50]'),
-					array('field' => 'sub_title', 'label' => 'subtitle', 'rules' => 'trim|required|min_length[2]|max_length[50]')
+					array('field' => 'title', 'label' => 'title', 'rules' => 'trim|required|min_length[2]|max_length[100]'),
+					array('field' => 'sub_title', 'label' => 'subtitle', 'rules' => 'trim|required|min_length[2]|max_length[100]')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
@@ -242,11 +242,11 @@ class Banner extends CI_Controller {
 			}
 		}
 		$output_data['banner_data'] = $this->banner_model->get_banner(decrypt($id));
-		if (!isset($output_data['banner_data']) || empty($output_data['banner_data']) || count($output_data['banner_data']) <= 0){
-			$this->auth->set_error_message("Banner data not found");
-			$this->session->set_flashdata($this->auth->get_messages_array());
-			redirect(base_url() . "banner-list");
-		}
+		// if (!isset($output_data['banner_data']) || empty($output_data['banner_data']) || count($output_data['banner_data']) <= 0){
+		// 	$this->auth->set_error_message("Banner data not found");
+		// 	$this->session->set_flashdata($this->auth->get_messages_array());
+		// 	redirect(base_url() . "banner-list");
+		// }
 		$output_data['main_content'] = "admin/banner/put";
 		$this->load->view('template/template',$output_data);	
 	}

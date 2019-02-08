@@ -380,7 +380,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Delivery Charges</label>
+                                        <label class="required">Delivery Charges Per Mile</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -389,7 +389,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = $temp_value;
     }
     else{
-        $field_value = $vender_detail->delivery_charges;
+        $field_value = $vender_detail->delivery_charges_per_mile;
     }
     ?>
                                             <input type="number" name="delivery_charges" class="form-control demo2" id="delivery_charges" placeholder="Enter delivery charges amount" value="<?php echo $field_value; ?>">

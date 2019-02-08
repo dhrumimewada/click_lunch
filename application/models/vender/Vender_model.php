@@ -80,19 +80,6 @@ class Vender_model extends CI_Model {
 
 		$shop_hours_array = array();
 
-		$order_morning = array('shop_id' => $user_id,
-							'order_delivery' => 1,
-							'morning_evening' => 1,
-							'from_time' => $this->input->post("order_morning_from"),
-							'to_time' => $this->input->post("order_morning_to")
-							);
-		$order_evening = array('shop_id' => $user_id,
-							'order_delivery' => 1,
-							'morning_evening' => 2,
-							'from_time' => $this->input->post("order_evening_from"),
-							'to_time' => $this->input->post("order_evening_to")
-							);
-
 		$delivery_morning = array('shop_id' => $user_id,
 							'order_delivery' => 2,
 							'morning_evening' => 1,
@@ -106,8 +93,6 @@ class Vender_model extends CI_Model {
 							'to_time' => $this->input->post("delivery_evening_to")
 							);
 
-		array_push($shop_hours_array, $order_morning);
-		array_push($shop_hours_array, $order_evening);
 		array_push($shop_hours_array, $delivery_morning);
 		array_push($shop_hours_array, $delivery_evening);
 
@@ -162,6 +147,9 @@ class Vender_model extends CI_Model {
 		$user_data['twitter_link'] = addslashes($this->input->post("twitter_link"));
 		$user_data['pinterest_link'] = addslashes($this->input->post("pinterest_link"));
 		$user_data['about'] = addslashes($this->input->post("about"));
+
+		$user_data['order_by_time'] = $this->input->post("order_by_time");
+		$user_data['delivery_time'] = $this->input->post("delivery_time");
 
 		if (isset($modal_data['profile_picture']) && !empty($modal_data['profile_picture'])){
 			

@@ -1,9 +1,9 @@
  <!-- Start content -->
- <style type="text/css">
-     .bootstrap-touchspin .validation-error-label{
+<style type="text/css">
+    .bootstrap-touchspin .validation-error-label{
         margin-top: 0;
-     }
- </style>
+    }
+</style>
  <?php
  $put_link = base_url().'item-update';
  $back = base_url().'item-list';
@@ -55,8 +55,13 @@ $item_type = ($item_data->is_combo == 1)?'Combo':'Product';
     }else{
         $field_value = stripslashes($item_data->name);
     }
+    if($item_type == 'Combo'){
+        $placeholder = 'Ex: Indian Thali';  
+    }else{
+        $placeholder = 'Ex: Pan Cake';  
+    }
     ?>
-                                            <input type="text" name="name" class="form-control" id="name" placeholder="Enter item name" value='<?php echo $field_value; ?>'>
+                                            <input type="text" name="name" class="form-control" id="name" placeholder="<?php echo $placeholder; ?>" value='<?php echo $field_value; ?>'>
                                             <div class="validation-error-label">
                                                 <?php echo form_error('name'); ?>
                                             </div>
@@ -167,8 +172,13 @@ $item_type = ($item_data->is_combo == 1)?'Combo':'Product';
     } else{
         $field_value = $item_data->price;
     }
+    if($item_type == 'Combo'){
+        $placeholder = 'Enter combo price';
+    }else{
+        $placeholder = 'Enter product price';
+    }
     ?>
-                                            <input type="text" name="price" class="form-control demo2" placeholder="Enter item price" value="<?php echo $field_value; ?>" id="price">
+                                            <input type="text" name="price" class="form-control demo2" placeholder="<?php echo $placeholder; ?>" value="<?php echo $field_value; ?>" id="price">
 
                                             <div class="validation-error-label">
                                                 <?php echo form_error('price'); ?>
@@ -189,7 +199,7 @@ $item_type = ($item_data->is_combo == 1)?'Combo':'Product';
         $field_value = $item_data->offer_price;
     }
     ?>
-                                            <input type="text" name="offer_price" class="form-control demo2" id="offer_price" placeholder="Enter item offer price" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="offer_price" class="form-control demo2" id="offer_price" placeholder="Enter offer price" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('offer_price'); ?>
                                             </div>
@@ -257,8 +267,13 @@ $item_type = ($item_data->is_combo == 1)?'Combo':'Product';
     } else{
         $field_value = stripslashes($item_data->item_description);
     } 
+    if($item_type == 'Combo'){
+        $placeholder = 'Ex: Small katoris (bowls) full of dishes of rice, dal, sabzi, curries and curd.';  
+    }else{
+        $placeholder = 'Ex: Capsicum, fresh tomatoes, paneer and red paprika.';  
+    }
     ?>
-                                            <textarea name="item_description" rows="4" class="form-control" data-buttonname="btn-secondary" placeholder="Ex: Capsicum, fresh tomatoes, paneer and red paprika."><?php echo $field_value; ?></textarea>
+                                            <textarea name="item_description" rows="4" class="form-control" data-buttonname="btn-secondary" placeholder="<?php echo $placeholder; ?>"><?php echo $field_value; ?></textarea>
                                             <div class="validation-error-label">
                                                 <?php echo form_error('item_description'); ?>
                                             </div>

@@ -420,6 +420,7 @@ li.dropdown.notification-list.last-div:before{
 .restaurant .card-img-top{
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
+    object-fit: cover;
 }
 .validation-error-label {
     margin-top: 5px;
@@ -463,4 +464,10 @@ li.dropdown.notification-list.last-div:before{
     background-color:#ff0000;
     opacity:1;filter:"alpha(opacity=100)";
     -ms-filter:"alpha(opacity=100)";
+}
+.cut-text { 
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  width: auto; 
+  white-space: nowrap;
 }

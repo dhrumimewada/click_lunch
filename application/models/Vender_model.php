@@ -42,12 +42,21 @@ class Vender_model extends CI_Model {
 			$payment_mode = implode (",", $this->input->post("payment_mode"));
 		}
 
-		// echo "<pre>";
-		// var_dump($payment_mode);
-		// exit;
+		$shop_name = preg_replace("/[^a-zA-Z ]/", "", strtolower($this->input->post("shop_name")));
+		$name_array =  explode(" ",$shop_name);
+		$short_name_array = array();
+
+		foreach($name_array as $key => $value){
+		    $value1 = trim($value);
+		    if($value1 != ''){
+		        $short_name_array[$key] = $value1;
+		    }
+		}
+		$short_name = implode("-",$short_name_array);
 
 		$user_data = array(
 						'shop_name' => ucwords(addslashes($this->input->post("shop_name"))),
+						'short_name' => $short_name,
 						'email' => $this->input->post("email"),
 						'vender_name' => ucwords(addslashes($this->input->post("vender_name"))),
 						'address' => addslashes($this->input->post("address")),
@@ -61,7 +70,7 @@ class Vender_model extends CI_Model {
 						'contact_no2' => $this->input->post("contact_no2"),
 						'website' => addslashes($this->input->post("website")),
 						'tax_number' => $this->input->post("tax_number"),
-						'delivery_charges' => $this->input->post("delivery_charges"),
+						'delivery_charges_per_mile' => $this->input->post("delivery_charges"),
 						'payment_mode' => $payment_mode,
 						'profile_picture' => ((isset($profile_picture) && !empty($profile_picture)) ? $profile_picture : ''),
 						'status' => 0,
@@ -139,8 +148,20 @@ class Vender_model extends CI_Model {
 		$return_value = FALSE;
 		// echo '<pre>';
 		// print_r($modal_data);exit;
+		$shop_name = preg_replace("/[^a-zA-Z ]/", "", strtolower($this->input->post("shop_name")));
+		$name_array =  explode(" ",$shop_name);
+		$short_name_array = array();
+
+		foreach($name_array as $key => $value){
+		    $value1 = trim($value);
+		    if($value1 != ''){
+		        $short_name_array[$key] = $value1;
+		    }
+		}
+		$short_name = implode("-",$short_name_array);
 
 		$user_data['shop_name'] = ucwords(addslashes($this->input->post("shop_name")));
+		$user_data['short_name'] = $short_name;
 		$user_data['vender_name'] = ucwords(addslashes($this->input->post("vender_name")));
 		$user_data['address'] = addslashes($this->input->post("address"));
 		$user_data['city'] = addslashes($this->input->post("city"));
@@ -177,7 +198,7 @@ class Vender_model extends CI_Model {
 		$user_data['contact_no2'] = $this->input->post("contact_no2");
 		$user_data['website'] = addslashes($this->input->post("website"));
 		$user_data['tax_number'] = addslashes($this->input->post("tax_number"));
-		$user_data['delivery_charges'] = $this->input->post("delivery_charges");
+		$user_data['delivery_charges_per_mile'] = $this->input->post("delivery_charges");
 		$user_data['payment_mode'] = $payment_mode;
 		$user_data['updated_at'] = date('Y-m-d H:i:s');
 	

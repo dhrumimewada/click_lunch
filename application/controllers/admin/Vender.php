@@ -258,6 +258,58 @@ class Vender extends CI_Controller {
 			$user_data = array('deleted_at' => date('Y-m-d H:i:s') );
 			$this->db->where('id', $id);
 			$this->db->update('shop', $user_data);
+
+			$this->db->where('shop_id', $id);
+			$this->db->update('favorite', $user_data);
+
+			$this->db->where('shop_id', $id);
+			$this->db->update('item', $user_data);
+
+			$this->db->where('shop_id', $id);
+			$this->db->update('orders', $user_data);
+
+			$this->db->where('shop_id', $id);
+			$this->db->update('promocode', $user_data);
+
+			$this->db->where('shop_id', $id);
+			$this->db->update('promocode_products', $user_data);
+
+			$this->db->where('shop_id', $id);
+			$this->db->update('promocode_shops', $user_data);
+
+			$this->db->where('shop_id', $id);
+			$this->db->update('promocode_valid_product', $user_data);
+
+			$this->db->where('shop_id', $id);
+			$this->db->update('rating', $user_data);
+
+			$this->db->where('shop_id', $id);
+			$this->db->update('shop_availibality', $user_data);
+
+			$this->db->where('shop_id', $id);
+			$this->db->delete('shop_cuisines');
+
+			$this->db->where('shop_id', $id);
+			$this->db->delete('shop_hours');
+
+			$this->db->select('id');
+			$this->db->from('variant_group');
+			$this->db->where('shop_id', $id);
+			$sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0){
+				
+				$return_data = $sql_query->result_array();
+				$variant_group_array = array_column($return_data, 'id');
+				$variant_group_list = explode(',',$variant_group_array);
+
+				$this->db->where_in('variant_group_id', $variant_group_list);
+				$this->db->delete('variant_items');
+
+				$this->db->where('shop_id', $id);
+				$this->db->update('variant_group', $user_data);
+
+			}
+
 			echo json_encode(array("is_success" => true));
 			return TRUE;
 		}else{

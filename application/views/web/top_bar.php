@@ -32,7 +32,7 @@
                     </li>
                     <li class="dropdown notification-list">
                         <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>web/home/restaurant_partner" role="button" aria-haspopup="false" aria-expanded="false">
-                            <strong class="text-uppercase">Restaurant Partner</strong>
+                            <strong class="text-uppercase">Restaurant Partners</strong>
                         </a>       
                     </li>
                     <li class="dropdown notification-list">

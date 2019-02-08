@@ -33,7 +33,7 @@ class Welcome extends CI_Controller {
 		$shop = $this->welcome_model->get_shops($id);
 		$output_data["shop"] = $shop[0];
 
-		$select = array('name','price','offer_price','item_picture');
+		$select = array('id','name','price','offer_price','item_picture');
 		$where = array('shop_id' => decrypt($id) ,'deleted_at' => NULL, 'is_active' => 1, 'quantity !=' => 0 );
 		$output_data["item"] = get_data_by_filter('item',$select,$where);
 
@@ -41,6 +41,19 @@ class Welcome extends CI_Controller {
 		// print_r($output_data["item"]); exit;
 
 		$output_data['main_content'] = 'restaurant_detail';
+		$this->load->view('web/template',$output_data);
+	}
+
+	public function item($id = NULL){
+
+		$item = $this->welcome_model->get_item_data(decrypt($id));
+		$output_data["item"] = $item;
+
+		// echo "<pre>";
+		// print_r($item); exit;
+
+
+		$output_data['main_content'] = 'item_detail';
 		$this->load->view('web/template',$output_data);
 	}
 

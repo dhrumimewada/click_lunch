@@ -318,7 +318,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Delivery Charges</label>
+                                        <label class="required">Delivery Charges Per Mile</label>
                                         <div>
                                         <?php
     $field_value = NULL;

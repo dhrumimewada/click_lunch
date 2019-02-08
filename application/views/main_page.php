@@ -120,7 +120,7 @@
                                             }
                                             echo "<tr><td><img src='".$shop_img."' class='thumb-sm img-fit rounded-circle mr-2'>".$value['shop_name']."</td>";
                                             if($value['status'] == 0){
-                                                echo "<td><label class='text-center btn-deactive r-8 btn-sm'>Pending</label></td>";
+                                                echo "<td><label class='text-center btn-deactive r-8 btn-sm' disabled>Pending</label></td>";
                                             }elseif($value['status'] == 1){
                                                 echo "<td><label class='text-center btn-success r-8 btn-sm'>Active</label></td>";
                                             }elseif($value['status'] == 2){

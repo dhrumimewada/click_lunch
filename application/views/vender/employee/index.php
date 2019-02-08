@@ -52,7 +52,7 @@ $edit_link = base_url().'employee-update';
                                         $btn_class = 'btn-deactive';
                                     }
                                     if($value["password"] == ''){
-                                        echo "<td class='text-center'><button type='button' class='btn btn-sm btn-yellow waves-effect waves-light pending' title='Pending' data-popup='tooltip'>Pending</button></td>";
+                                        echo "<td class='text-center'><button type='button' class='btn btn-sm btn-yellow waves-effect waves-light pending' title='Pending' data-popup='tooltip' disabled>Pending</button></td>";
                                     }else{
                                         echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_employee' status-id='" . $value["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
                                     }

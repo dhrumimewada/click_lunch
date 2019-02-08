@@ -10,12 +10,12 @@ if (isset($shop['profile_picture']) && ($shop['profile_picture'] != '')) {
 	<div class="restaurant-detail-banner position-relative">
 		<img src="<?php echo $photo_url; ?>" class="w-100 shop-h" />
 		<div class="restaurant-details">
-			<h3><?php echo $shop['shop_name'] ?></h3>
-			<div class="address mb-1"><?php echo $shop['address'] ?></div>
-			<div class="phone-number mb-1">+1-<?php echo ' '.$shop['contact_no1'] ?></div>
+			<h3><?php echo stripcslashes($shop['shop_name']); ?></h3>
+			<div class="address mb-1"><?php echo stripcslashes($shop['address']); ?></div>
+			<div class="phone-number mb-1">+1-<?php echo ' '.$shop['contact_no1']; ?></div>
 			<div class="d-flex mb-1">
-				<div class="delivery">Delivery 11:40 AM</div>
-				<div class="order-by">Order By 10:00 AM</div>
+				<div class="delivery">Delivery <?php echo $shop['delivery_time'] ?></div>
+				<div class="order-by">Order By <?php echo $shop['order_by_time'] ?></div>
 			</div>
 			<div class="food-types mb-1"><img src="<?php echo $assets; ?>images/tray.png" /> <?php echo $shop['cuisine'] ?></div>
 			<div class="timing d-flex mb-1">
@@ -52,7 +52,7 @@ if (isset($shop['profile_picture']) && ($shop['profile_picture'] != '')) {
 				?>
 				<div class="col-sm-6 col-md-6 col-lg-4">
 					<div class="food-wrapper">
-						<a href="<?php echo $photo_url; ?>" class="food-image position-relative">
+						<a href="<?php echo BASE_URL().'product/'.encrypt($value['id']); ?>" class="food-image position-relative">
 							<img src="<?php echo $photo_url; ?>" width="371" height="312" />
 							<div class="view-details">View Details</div>
 						</a>

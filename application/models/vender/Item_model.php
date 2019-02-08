@@ -24,8 +24,8 @@ class Item_model extends CI_Model {
 		}
 
 		$this->db->where("t1.deleted_at", NULL);
-		$this->db->where("t2.deleted_at", NULL);
-		$this->db->where("t2.is_active", 1);
+		//$this->db->where("t2.deleted_at", NULL);
+		//$this->db->where("t2.is_active", 1);
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
 			if (isset($id) && !is_null($id)) {
@@ -141,7 +141,7 @@ class Item_model extends CI_Model {
 			$this->auth->set_error_message("Error into inserting data");
 		} else {
 			$this->db->trans_commit();
-			$this->auth->set_status_message("Item added successfully");
+			$this->auth->set_status_message("Product added successfully");
 			$return_value = TRUE;
 		}
 
@@ -237,7 +237,7 @@ class Item_model extends CI_Model {
 			$this->auth->set_error_message("Error into updating data");
 		} else {
 			$this->db->trans_commit();
-			$this->auth->set_status_message("Item updated successfully");
+			$this->auth->set_status_message("Product updated successfully");
 			$return_value = TRUE;
 		}
 

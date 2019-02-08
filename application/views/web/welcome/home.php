@@ -239,8 +239,8 @@ if(isset($banner_list) && !empty($banner_list)){
                     </div>
                     <div class="card-body restaurant-body">
                         <a href="<?php echo BASE_URL().'restaurant/'.encrypt($value['id']); ?>">
-                            <div class="card-title txt-red font-md text-center">
-                                <?php echo $value['shop_name']; ?>
+                            <div class="card-title txt-red font-md text-center cut-text">
+                                <?php echo stripcslashes($value['shop_name']); ?>
                             </div>
                             <b>
                                 <div class="d-inline-block txt-black font-small">Delivery 11:40 PM</div>
@@ -249,7 +249,7 @@ if(isset($banner_list) && !empty($banner_list)){
                             <?php
                             if(isset($value['cuisine']) && $value['cuisine'] != ''){
                             ?>
-                            <div class="position-relative txt-black font-14 pl-4 cusion">
+                            <div class="position-relative txt-black font-14 pl-4 cusion cut-text">
                                 <?php echo $value['cuisine']; ?>
                             </div>
                             <?php

@@ -7,7 +7,7 @@ class Welcome_model extends CI_Model {
 
 	public function get_shops($id = NULL){
 		$return_data = array();
-		$this->db->select('t1.id,t1.shop_name,t1.profile_picture, t1.contact_no1,CONCAT(t1.city, ", ", t1.zip_code, ", ", t1.state) as address');
+		$this->db->select('t1.id,t1.shop_name,t1.profile_picture,t1.order_by_time,t1.delivery_time, t1.contact_no1,CONCAT(t1.city, ", ", t1.zip_code, ", ", t1.state) as address');
 		$this->db->from('shop t1');
 		$this->db->join('shop_cuisines t2', 't1.id = t2.shop_id','right');
 		$this->db->where("t1.deleted_at", NULL);
@@ -37,6 +37,55 @@ class Welcome_model extends CI_Model {
 			}
 		}
 		return $return_data;
+	}
+
+	public function get_item_data($id = NULL){
+		$return_data = array();
+		$result = array();
+
+		$sql_select = array('t1.id','t1.shop_id','t1.name','t1.quantity','t1.price','t1.offer_price','t1.item_description','t1.item_picture','t1.is_combo','t2.category_name');
+		$this->db->select($sql_select);
+		$this->db->from('item t1');
+		$this->db->where("t1.id", $id);
+		$this->db->join('category t2', 't1.category_id = t2.id','left');
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$return_data = (array)$sql_query->row();
+			$result['item_data'] = $return_data;
+
+				$sql_select = array('id','variant_group_id','name','price');
+				$this->db->select($sql_select);
+				$this->db->from('variant_items');
+				$this->db->where("item_id", $return_data['id']);
+				$sql_query = $this->db->get();
+				if ($sql_query->num_rows() > 0){
+					$item_data = $sql_query->result_array();
+					$group_array = array_column($item_data, 'variant_group_id');
+
+					$sql_select = array('id','name','selection','availability');
+					$this->db->select($sql_select);
+					$this->db->from('variant_group');
+					$this->db->where_in("id", $group_array);
+					$sql_query = $this->db->get();
+					if ($sql_query->num_rows() > 0){
+						$group_data = $sql_query->result_array();
+
+						foreach ($group_data as $key => $value) {
+							$group_data[$key]['items'] = array();
+
+							foreach ($item_data as $key1 => $value1) {
+								if($value1['variant_group_id'] == $value['id']){
+									$group_data[$key]['items'][] = $item_data[$key1];
+								}
+							}
+						}
+						$result['group_data'] = $group_data;
+					}
+				}
+
+		}
+
+		return $result;
 	}
 
 	public function subscribe(){

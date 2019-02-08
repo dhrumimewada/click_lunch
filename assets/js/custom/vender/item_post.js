@@ -255,7 +255,7 @@ function validate_varient() {
         }
     });
     $('[name*="variant_price[]"]').each(function (){
-        if(($(this).val().trim() == '') || (Number($(this).val()) <= 0)){
+        if(($(this).val().trim() == '') || (Number($(this).val()) < 0)){
             $(this).parent().parent().after('<label class="validation-error-label">The variant price field is required.</label>');
             flag = false;
         }

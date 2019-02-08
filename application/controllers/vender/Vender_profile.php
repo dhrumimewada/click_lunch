@@ -66,10 +66,9 @@ class Vender_profile extends CI_Controller {
 					array('field' => 'delivery_morning_to', 'label' => 'to time', 'rules' => 'trim|required'),
 					array('field' => 'delivery_evening_from', 'label' => 'from time', 'rules' => 'trim|required'),
 					array('field' => 'delivery_evening_to', 'label' => 'to time', 'rules' => 'trim|required'),
-					array('field' => 'order_morning_from', 'label' => 'from time', 'rules' => 'trim|required'),
-					array('field' => 'order_morning_to', 'label' => 'to time', 'rules' => 'trim|required'),
-					array('field' => 'order_evening_from', 'label' => 'from time', 'rules' => 'trim|required'),
-					array('field' => 'order_evening_to', 'label' => 'to time', 'rules' => 'trim|required'),
+
+					array('field' => 'delivery_time', 'label' => 'delivery time', 'rules' => 'trim|required'),
+					array('field' => 'order_by_time', 'label' => 'order by time', 'rules' => 'trim|required'),
 
 					array('field' => 'cuisines[]', 'label' => 'shop cuisines', 'rules' => 'trim|required|numeric'),
 					array('field' => 'website', 'label' => 'shop website', 'rules' => 'trim|valid_url'),
@@ -165,32 +164,25 @@ class Vender_profile extends CI_Controller {
 		$data['shop_availibality'] = $this->vender_model->get_shop_availibality($user_id);
 		$shop_hour = $this->vender_model->get_shop_hour($user_id);
 
-		$order = array();
+
 		$delivery = array();
 		foreach ($shop_hour as $key => $value) {
-			if($value['order_delivery'] == 1){
-				if($value['morning_evening'] == 1){
-					$order['morning']['from'] = $value['from_time'];
-					$order['morning']['to'] = $value['to_time'];
-				}else{
-					$order['evening']['from'] = $value['from_time'];
-					$order['evening']['to'] = $value['to_time'];
-				}
+			if($value['morning_evening'] == 1){
+				$delivery['morning']['from'] = $value['from_time'];
+				$delivery['morning']['to'] = $value['to_time'];
 			}else{
-				if($value['morning_evening'] == 1){
-					$delivery['morning']['from'] = $value['from_time'];
-					$delivery['morning']['to'] = $value['to_time'];
-				}else{
-					$delivery['evening']['from'] = $value['from_time'];
-					$delivery['evening']['to'] = $value['to_time'];
-				}
+				$delivery['evening']['from'] = $value['from_time'];
+				$delivery['evening']['to'] = $value['to_time'];
 			}
 		}
 
-		$data['order'] = $order;
 		$data['delivery'] = $delivery;
 		$data['cuisines_data'] = get_cuisine();
 		$data['main_content'] = "vender/my_profile";
+
+		// echo "<pre>";
+		// print_r($data['vender_detail']);
+		// exit;
 
 		$this->load->view('template/template',$data);
 	}

@@ -123,19 +123,12 @@
                 required: true,
                 validate_hour_to_time:"#delivery_evening_from"
             },
-            order_morning_from:{
+            order_by_time:{
                 required: true
             },
-            order_morning_to:{
+            delivery_time:{
                 required: true,
-                validate_hour_to_time:"#order_morning_from"
-            },
-            order_evening_from:{
-                required: true
-            },
-            order_evening_to:{
-                required: true,
-                validate_hour_to_time:"#order_evening_from"
+                validate_hour_to_time:"#order_by_time"
             },
             'cuisines[]': {
                 required:true
@@ -266,19 +259,12 @@
                 required: "The evening to time field is required.",
                 validate_hour_to_time: "To time should be more than from time"
             },
-            order_morning_from:{
-                required: "The morning from time field is required."
+            order_by_time:{
+                required: "The order by time field is required."
             },
-            order_morning_to:{
-                required: "The morning to time field is required.",
-                validate_hour_to_time: "To time should be more than from time"
-            },
-            order_evening_from:{
-                required: "The evening from time field is required."
-            },
-            order_evening_to:{
-                required: "The evening to time field is required.",
-                validate_hour_to_time: "To time should be more than from time"
+            delivery_time:{
+                required: "The delivery time field is required.",
+                validate_hour_to_time: "Delivery time should be more than order by time"
             },
             longitude: {
                 required: "The longitude field is required.",
@@ -429,20 +415,6 @@ $( document ).ready(function() {
         $('.hours_to_time').append($("<option>" , { text: v, value: v }));
     });
 
-    // Hours Order- Start
-    var order_morning_from_option = order_morning_from.toString();
-    var order_morning_to_option = order_morning_to.toString();
-
-    $('#order_morning_from option[value="'+order_morning_from_option+'"]').attr('selected', 'selected');
-    $('#order_morning_to option[value="'+order_morning_to_option+'"]').attr('selected', 'selected');
-
-    var order_evening_from_option = order_evening_from.toString();
-    var order_evening_to_option = order_evening_to.toString();
-
-    $('#order_evening_from option[value="'+order_evening_from_option+'"]').attr('selected', 'selected');
-    $('#order_evening_to option[value="'+order_evening_to_option+'"]').attr('selected', 'selected');
-    // hours Order - End
-
     // Hours Delivery- Start
     var delivery_morning_from_option = delivery_morning_from.toString();
     var delivery_morning_to_option = delivery_morning_to.toString();
@@ -457,11 +429,21 @@ $( document ).ready(function() {
     $('#delivery_evening_to option[value="'+delivery_evening_to_option+'"]').attr('selected', 'selected');
     // hours Delivery - End
 
+    // Delivery - Order by hours - start
+    var delivery_time_option = delivery_time.toString();
+    var order_by_time_option = order_by_time.toString();
+
+    $('#delivery_time option[value="'+delivery_time_option+'"]').attr('selected', 'selected');
+    $('#order_by_time option[value="'+order_by_time_option+'"]').attr('selected', 'selected');
+    // Delivery - Order by - End
+
+    // Shop working Hours - start
     var from_time_option = from_time_selected.toString();
     var to_time_option = to_time_selected.toString();
 
     $('.from_time option[value="'+from_time_option+'"]').attr('selected', 'selected');
     $('.to_time option[value="'+to_time_option+'"]').attr('selected', 'selected');
+    // Shop working Hours - start
 
     //select from-to time as DB stored
     $.each(shop_availibality, function(k, v) {

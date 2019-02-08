@@ -1,9 +1,8 @@
- <!-- Start content -->
- <style type="text/css">
-     .bootstrap-touchspin .validation-error-label{
+<style type="text/css">
+    .bootstrap-touchspin .validation-error-label{
         margin-top: 0;
-     }
- </style>
+    }
+</style>
  <?php
 $post_link = base_url().'item-add';
 $back = base_url().'item-list';
@@ -39,32 +38,6 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
                                     <hr class="mt-1 mb-3">
                                 </div>
                             </div>
-                            <?php
-                           // if($item_type == 'Combo'){ 
-                            ?>
-                            <!-- <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="required"><?php //echo $item_type; ?> Products</label>
-                                        <div>
-                                            <select class="select2 form-control select2-multiple" multiple="multiple" multiple data-placeholder="Choose product that you are adding..." name="combo_products[]">
-                                                <?php 
-                                                
-                                                // foreach ($combo_product_data as $key => $value) {
-                                                //     $selected = '';
-                                                //     echo "<option value='".$value['id']."'>".$value['name']."</option>";
-                                                // }
-                                                ?>
-                                            </select>
-                                            <div class="validation-error-label">
-                                                <?php //echo form_error('cuisines[]'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <?php //} ?>
-
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -76,8 +49,13 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
     if (isset($temp_value) && !empty($temp_value)) {
         $field_value = $temp_value;
     } 
+    if($item_type == 'Combo'){
+        $placeholder = 'Ex: Indian Thali';  
+    }else{
+        $placeholder = 'Ex: Pan Cake';  
+    }
     ?>
-                                            <input type="text" name="name" class="form-control" id="name" placeholder="Ex: Pan Cake" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="name" class="form-control" id="name" placeholder="<?php echo $placeholder; ?>" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('name'); ?>
                                             </div>
@@ -177,8 +155,13 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
     if (isset($temp_value) && !empty($temp_value)) {
         $field_value = $temp_value;
     } 
+    if($item_type == 'Combo'){
+        $placeholder = 'Enter combo price';
+    }else{
+        $placeholder = 'Enter product price';
+    }
     ?>
-                                            <input type="text" name="price" class="form-control demo2" placeholder="Enter item price" value="<?php echo $field_value; ?>" id="price">
+                                            <input type="text" name="price" class="form-control demo2" placeholder="<?php echo $placeholder; ?>" value="<?php echo $field_value; ?>" id="price">
 
                                             <div class="validation-error-label">
                                                 <?php echo form_error('price'); ?>
@@ -197,7 +180,7 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
         $field_value = $temp_value;
     } 
     ?>
-                                            <input type="text" name="offer_price" class="form-control demo2" id="offer_price" placeholder="Enter item offer price" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="offer_price" class="form-control demo2" id="offer_price" placeholder="Enter offer price" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('offer_price'); ?>
                                             </div>
@@ -261,8 +244,13 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
     if (isset($temp_value) && !empty($temp_value)) {
         $field_value = $temp_value;
     } 
+    if($item_type == 'Combo'){
+        $placeholder = 'Ex: Small katoris (bowls) full of dishes of rice, dal, sabzi, curries and curd.';  
+    }else{
+        $placeholder = 'Ex: Capsicum, fresh tomatoes, paneer and red paprika.';  
+    }
     ?>
-                                            <textarea name="item_description" rows="4" class="form-control" data-buttonname="btn-secondary" placeholder="Ex: Capsicum, fresh tomatoes, paneer and red paprika."><?php echo $field_value; ?></textarea>
+                                            <textarea name="item_description" rows="4" class="form-control" data-buttonname="btn-secondary" placeholder="<?php echo $placeholder; ?>"><?php echo $field_value; ?></textarea>
                                             <div class="validation-error-label">
                                                 <?php echo form_error('item_description'); ?>
                                             </div>

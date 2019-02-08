@@ -48,7 +48,7 @@ button:focus {outline: 0;}
 .restaurants-food .results {color: #777777; position: relative; margin-bottom: 60px;}
 .restaurants-food .results:after {content: ""; height: 4px; width: 100%; display: inline-block; border-top: 1px solid #777; border-bottom: 1px solid #777;}
 .food-wrapper {display: inline-block; margin-bottom: 40px;}
-.food-wrapper .food-image {display: block;}
+.food-wrapper .food-image {display: block; object-fit: cover;}
 .food-wrapper:hover .food-image .view-details {opacity: 1; z-index: 1;}
 .food-wrapper:hover .food-image:after {opacity: 1;}
 .food-wrapper .food-image:after {content: ""; height: 100%; width: 100%; position: absolute; left: 0; top: 0; background-color: rgba(0,0,0,0.2); opacity: 0;}

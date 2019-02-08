@@ -39,12 +39,6 @@ if (isset($vender_detail->broacher) && ($vender_detail->broacher != '')) {
     }
 }
 
-$order_morning_from = $order['morning']['from'];
-$order_morning_to = $order['morning']['to'];
-
-$order_evening_from = $order['evening']['from'];
-$order_evening_to = $order['evening']['to'];
-
 $delivery_morning_from = $delivery['morning']['from'];
 $delivery_morning_to = $delivery['morning']['to'];
 
@@ -476,54 +470,25 @@ $delivery_evening_to = $delivery['evening']['to'];
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-12 mt-2 mb-1">
-                                    <h4 class="mt-0 mb-0 header-title">Restaurant Order By Hours</h4>
-                                    <hr class="mt-1 mb-3">
-                                </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required" for="order_morning_from">Morning From Time</label>
-                                        <select class="select2 form-control hours_from_time" name="order_morning_from" id="order_morning_from">
+                                        <label class="required" for="delivery_time">Delivery</label>
+                                        <select class="select2 form-control hours_to_time" name="delivery_time" id="delivery_time">
                                             <option disabled selected>Select Time</option>
                                         </select>
                                         <div class="validation-error-label">
-                                            <?php echo form_error('order_morning_from'); ?>
-                                        </div>
-                                        <div class="validation-error-label">
-                                            <?php echo form_error('zip_code'); ?>
+                                            <?php echo form_error('delivery_time'); ?>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required" for="order_morning_to">Morning To Time</label>
-                                        <select class="select2 form-control hours_to_time" data-placeholder="To Time" name="order_morning_to" id="order_morning_to">
+                                        <label class="required" for="order_by_time">Order By</label>
+                                        <select class="select2 form-control hours_from_time" name="order_by_time" id="order_by_time">
                                             <option disabled selected>Select Time</option>
                                         </select>
                                         <div class="validation-error-label">
-                                            <?php echo form_error('order_morning_to'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="required" for="order_evening_from">Evening From Time</label>
-                                        <select class="select2 form-control hours_from_time" name="order_evening_from" id="order_evening_from">
-                                            <option disabled selected>Select Time</option>
-                                        </select>
-                                        <div class="validation-error-label">
-                                            <?php echo form_error('order_evening_from'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="required" for="order_evening_to">Evening To Time</label>
-                                        <select class="select2 form-control hours_to_time" name="order_evening_to" id="order_evening_to">
-                                            <option disabled selected>Select Time</option>
-                                        </select>
-                                        <div class="validation-error-label">
-                                            <?php echo form_error('order_evening_to'); ?>
+                                            <?php echo form_error('order_by_time'); ?>
                                         </div>
                                     </div>
                                 </div>
@@ -893,14 +858,12 @@ $google_key = $this->config->item("google_key");
     var from_time_selected = '<?php echo $from_time_selected; ?>';
     var to_time_selected = '<?php echo $to_time_selected; ?>';
 
-    var order_morning_from = '<?php echo $order_morning_from; ?>';
-    var order_morning_to = '<?php echo $order_morning_to; ?>';
-    var order_evening_from = '<?php echo $order_evening_from; ?>';
-    var order_evening_to = '<?php echo $order_evening_to; ?>';
-
     var delivery_morning_from = '<?php echo $delivery_morning_from; ?>';
     var delivery_morning_to = '<?php echo $delivery_morning_to; ?>';
     var delivery_evening_from = '<?php echo $delivery_evening_from; ?>';
     var delivery_evening_to = '<?php echo $delivery_evening_to; ?>';
-    //console.log(shop_availibality);
+
+    var delivery_time = '<?php echo $vender_detail->delivery_time; ?>';
+    var order_by_time = '<?php echo $vender_detail->order_by_time; ?>';
+
 </script>

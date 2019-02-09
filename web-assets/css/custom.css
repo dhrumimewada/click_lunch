@@ -471,3 +471,35 @@ li.dropdown.notification-list.last-div:before{
   width: auto; 
   white-space: nowrap;
 }
+.bg-gray2{
+    background-color: #7d7b7b;
+}
+.object-cover{
+    object-fit: cover;
+}
+.max-h-item{
+    max-height: 450px;
+}
+
+/* Scroll */
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px #bbbdbf; 
+  border-radius: 3px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #bbbdbf; 
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}

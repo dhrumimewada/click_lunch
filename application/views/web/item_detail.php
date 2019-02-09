@@ -1,48 +1,40 @@
 <?php
+$photo_url = base_url() . 'assets/images/default/cuisine.jpg';
+if (isset($item['item_data']['item_picture']) && ($item['item_data']['item_picture'] != '')) {
+    if (file_exists($this->config->item("item_photo_path") . '/'.$item['item_data']['item_picture'])){
+        $photo_url = base_url() . $this->config->item("item_photo_path") . '/'.$item['item_data']['item_picture'];
+    }
+}
 ?>
+<style type="text/css" media="screen">
+	del{
+		color: #ef7a6d;
+	}
+</style>
 <div id="content">
 	<div class="cart-wrapper">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-9">
 					<div class="product-detail">
-						<div class="categories">Categories: Italian, Special</div>
+						<div class="categories">Category: <?php echo $item['item_data']['category_name']; ?></div>
 						<div class="row">
 							<div class="col-md-6">
-								<div class="product-image-slider">
-									<div id="productSlider" class="carousel slide" data-ride="carousel">
-										<div class="carousel-inner">
-											<div class="carousel-item active">
-												<img class="d-block w-100" src="<?php echo $assets; ?>images/main-dish.png" alt="First slide">
-											</div>
-											<div class="carousel-item">
-												<img class="d-block w-100" src="<?php echo $assets; ?>images/main-dish.png" alt="Second slide">
-											</div>
-											<div class="carousel-item">
-												<img class="d-block w-100" src="<?php echo $assets; ?>images/main-dish.png" alt="Third slide">
-											</div>
-											<div class="carousel-item">
-												<img class="d-block w-100" src="<?php echo $assets; ?>images/main-dish.png" alt="Fourth slide">
-											</div>
-											<div class="carousel-item">
-												<img class="d-block w-100" src="<?php echo $assets; ?>images/main-dish.png" alt="Fifth slide">
-											</div>
-										</div>
-										<ol class="carousel-indicators">
-											<li data-target="#productSlider" data-slide-to="0" class="active"><img src="<?php echo $assets; ?>images/sub-dish.png" /></li>
-											<li data-target="#productSlider" data-slide-to="1"><img src="<?php echo $assets; ?>images/sub-dish.png" /></li>
-											<li data-target="#productSlider" data-slide-to="2"><img src="<?php echo $assets; ?>images/sub-dish.png" /></li>
-											<li data-target="#productSlider" data-slide-to="3"><img src="<?php echo $assets; ?>images/sub-dish.png" /></li>
-											<li data-target="#productSlider" data-slide-to="4"><img src="<?php echo $assets; ?>images/sub-dish.png" /></li>
-										</ol>
-									</div>
-								</div>
+								<img class="d-block w-100 h-100 max-h-item object-cover" src="<?php echo $photo_url; ?>" alt="First slide">
 							</div>
 							<div class="col-md-6">
 								<form action="checkout.html">
 								<div class="product-description">
-									<h3>Fresh Mushrooms</h3>
-									<div class="price">$ 12.99</div>
+									<h3><?php echo $item['item_data']['name']; ?></h3>
+									<div class="price">
+										<?php
+										if($item['item_data']['offer_price'] != ''){
+											echo "<del>$ ".$item['item_data']['price']."</del>&nbsp;&nbsp;$ ".$item['item_data']['offer_price'];
+										}else{
+											echo "$ ".$item['item_data']['price'];
+										}
+										?>
+									</div>
 									<!-- <div class="product-ratings">
 										<img src="<?php echo $assets; ?>images/selected-star.png" width="15" />
 										<img src="<?php echo $assets; ?>images/selected-star.png" width="15" />
@@ -50,46 +42,60 @@
 										<img src="<?php echo $assets; ?>images/grey-star.png" width="15" />
 										<img src="<?php echo $assets; ?>images/grey-star.png" width="15" />
 									</div> -->
-									<div class="about-product">
-										<p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure</p>
+									<div class="about-product item-desc-overflow">
+										<p><?php echo $item['item_data']['item_description']; ?></p>
 									</div>
-									<div class="add-toppings">
-										<div class="add-toppings-text">Add Toppings <span>(Choose up to 3)</span></div>
-										<table class="table">
-											<tbody>
+									<div class="toppings-div mb-2">
+										<?php
+										foreach ($item['group_data'] as $key => $value) {
+										?>
+
+										<div class="add-toppings">
+											<div class="add-toppings-text">
+												<?php
+												echo $value['name']; 
+												if($value['selection'] == 1){
+													$varient_count = count($value['items']);
+													$selection_txt = '(Choose up to '.$varient_count.')';
+												}else{
+													$selection_txt = "(Select one of any)";
+												}
+												?>
+												<span><?php echo $selection_txt; ?></span>
+											</div>
+
+											<?php
+											if(is_array($value['items']) && !empty($value['items'])){
+											?>
+											<table class="table">
+												<?php
+												foreach ($value['items'] as $key1 => $value1) {
+												?>
 												<tr>
 													<td>
 														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="toppings1" id="chille" value="option1">
-															<label class="form-check-label" for="chille">Chille</label>
+															<input class="form-check-input" type="checkbox" name="<?php echo $value1['id']; ?>" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['name']; ?>">
+															<label class="form-check-label" for="<?php echo $value1['id']; ?>"><?php echo ucfirst($value1['name']); ?></label>
 														</div>
 													</td>
-													<td>+$5.00</td>
+													<td>+$<?php echo $value1['price']; ?></td>
 												</tr>
-												<tr>
-													<td>
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="toppings2" id="anchovies" value="option2" checked>
-															<label class="form-check-label" for="anchovies">Anchovies</label>
-														</div>
-													</td>
-													<td>+$2.00</td>
-												</tr>
-												<tr>
-													<td>
-														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="toppings3" id="rockt" value="option3">
-															<label class="form-check-label" for="rockt">Rockt</label>
-														</div>
-													</td>
-													<td>+$3.00</td>
-												</tr>
-											</tbody>
-										</table>
+												<?php
+												}
+												?>
+											</table>
+											<?php
+											}
+											?>
+										</div>
+
+										<?php
+										}
+										?>
 									</div>
 									<div class="add-quantity">
 										<div class="quantity">
-											<input type="number" value="1" min="1" max="99" step="1" readonly />
+											<input type="number" value="1" min="1" max="500" step="1" readonly />
 											<input type="submit" name="add-to-cart" id="add-to-cart" class="red-btn" value="Add To Cart">
 										</div>
 									</div>
@@ -186,17 +192,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-	<div class="container">
-		<div class="d-flex justify-content-center">
-			<div class="mail-subscription-block">
-				<div class="mail-subscription-custom-text text-center"><p>Be the lucky winner to get FREE meals for one week. <br> We are also offer you latest deal in your inbox</p></div>
-				<form class="mail-subscription d-flex align-items-center" id="mailSubscription">
-					<input type="email" name="email" class="form-control" id="mailSubscriptionId" placeholder="Enter your e-mail address here" />
-					<input type="submit" name="subscribe" value="Subscribe" class="subscribe-btn red-btn" />
-				</form>
 			</div>
 		</div>
 	</div>

@@ -238,7 +238,7 @@ if(isset($banner_list) && !empty($banner_list)){
                         <div class="rating txt2 txt-red">4.2</div>
                     </div>
                     <div class="card-body restaurant-body">
-                        <a href="<?php echo BASE_URL().'restaurant/'.encrypt($value['id']); ?>">
+                        <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>">
                             <div class="card-title txt-red font-md text-center cut-text">
                                 <?php echo stripcslashes($value['shop_name']); ?>
                             </div>

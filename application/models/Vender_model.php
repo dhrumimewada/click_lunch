@@ -54,6 +54,15 @@ class Vender_model extends CI_Model {
 		}
 		$short_name = implode("-",$short_name_array);
 
+		$this->db->select('short_name');
+		$this->db->from('shop');
+		$this->db->where("short_name LIKE '$short_name%'");
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$exists_data = $sql_query->num_rows();
+			$short_name = $short_name."-".$exists_data;
+		}
+
 		$user_data = array(
 						'shop_name' => ucwords(addslashes($this->input->post("shop_name"))),
 						'short_name' => $short_name,
@@ -159,6 +168,16 @@ class Vender_model extends CI_Model {
 		    }
 		}
 		$short_name = implode("-",$short_name_array);
+
+		$this->db->select('short_name');
+		$this->db->from('shop');
+		$this->db->where("short_name LIKE '$short_name%'");
+		$this->db->where("id !=",$this->input->post("shop_id"));
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$exists_data = $sql_query->num_rows();
+			$short_name = $short_name."-".$exists_data;
+		}
 
 		$user_data['shop_name'] = ucwords(addslashes($this->input->post("shop_name")));
 		$user_data['short_name'] = $short_name;

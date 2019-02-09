@@ -91,7 +91,7 @@ button:focus {outline: 0;}
 .product-description .price {color: #dd3421; font-size: 28px; font-weight: 600; margin-bottom: 18px;}
 .product-description .product-ratings {margin-bottom: 30px;}
 .product-description .table td {border: 0; padding: 0 0 15px 0;}
-.product-description .add-toppings {margin-bottom: 50px;}
+.product-description .add-toppings {margin-bottom: 15px;}
 .product-description .add-toppings-text {margin-bottom: 20px; font-size: 16px; font-weight: 700;}
 .product-description .add-toppings-text span {font-size: 10px; color: #777;}
 .product-description .form-check-label {font-size: 15px; font-weight: 700;}
@@ -951,4 +951,11 @@ div#accordion2 { margin: 0 0 50px;}
 }
 .card a.faq-link {
     color: #5384b7;
+}
+
+.pointer{
+    cursor: pointer;
+}
+html {
+  scroll-behavior: smooth;
 }

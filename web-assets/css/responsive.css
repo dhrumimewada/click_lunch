@@ -45,7 +45,8 @@
     text-transform: none !important;
 }
 .header-bar {height: inherit;}
-
+.item-desc-overflow{max-height: 80px; overflow: hidden; overflow-y: auto;}
+.toppings-div{max-height: 250px; overflow: hidden; overflow-y: auto;}
 }
 
 /*.caption-1 { font-size: 68px;}	*/
@@ -418,7 +419,6 @@ a.carousel-control-prev { display: none; }
     margin: 0px 0 15px 0 !important;
 }
 .notification-list .navbar-toggler{ border: transparent; }
-
 
 
 }

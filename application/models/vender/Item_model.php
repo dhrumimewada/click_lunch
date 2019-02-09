@@ -98,11 +98,33 @@ class Item_model extends CI_Model {
 		// print_r($_POST);
 		// exit;
 
+		$item_name = preg_replace("/[^a-zA-Z ]/", "", strtolower($this->input->post("name")));
+		$name_array =  explode(" ",$item_name);
+		$short_name_array = array();
+
+		foreach($name_array as $key => $value){
+		    $value1 = trim($value);
+		    if($value1 != ''){
+		        $short_name_array[$key] = $value1;
+		    }
+		}
+		$short_name = implode("-",$short_name_array);
+
+		$this->db->select('short_name');
+		$this->db->from('item');
+		$this->db->where("short_name LIKE '$short_name%'");
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$exists_data = $sql_query->num_rows();
+			$short_name = $short_name."-".$exists_data;
+		}
+
 		$user_data = array(
 						'shop_id' => intval($shop_id),
 						'cuisine_id' => intval($this->input->post("cuisine_id")),
 						'category_id' => intval($this->input->post("category_id")),
 						'name' => ucwords(addslashes($this->input->post("name"))),
+						'short_name' => $short_name,
 						'quantity' => intval($this->input->post("quantity")),
 						'price' => sprintf("%.2f", $this->input->post("price")),
 						'offer_price' => sprintf("%.2f", $this->input->post("offer_price")),
@@ -191,11 +213,34 @@ class Item_model extends CI_Model {
 			$inventory_status = $this->input->post("inventory_status");
 		}
 
+		$item_name = preg_replace("/[^a-zA-Z ]/", "", strtolower($this->input->post("name")));
+		$name_array =  explode(" ",$item_name);
+		$short_name_array = array();
+
+		foreach($name_array as $key => $value){
+		    $value1 = trim($value);
+		    if($value1 != ''){
+		        $short_name_array[$key] = $value1;
+		    }
+		}
+		$short_name = implode("-",$short_name_array);
+
+		$this->db->select('short_name');
+		$this->db->from('item');
+		$this->db->where("id !=",$this->input->post("item_id"));
+		$this->db->where("short_name LIKE '$short_name%'");
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$exists_data = $sql_query->num_rows();
+			$short_name = $short_name."-".$exists_data;
+		}
+
 		$user_data2 = array(
 						'shop_id' => intval($shop_id),
 						'cuisine_id' => intval($this->input->post("cuisine_id")),
 						'category_id' => intval($this->input->post("category_id")),
 						'name' => ucwords(addslashes($this->input->post("name"))),
+						'short_name' => $short_name,
 						'quantity' => intval($this->input->post("quantity")),
 						'price' => sprintf("%.2f", $this->input->post("price")),
 						'offer_price' => sprintf("%.2f", $this->input->post("offer_price")),

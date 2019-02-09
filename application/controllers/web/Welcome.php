@@ -29,24 +29,24 @@ class Welcome extends CI_Controller {
 		$this->load->view('web/template',$output_data);
 	}
 
-	public function shop($id = NULL){
-		$shop = $this->welcome_model->get_shops($id);
+	public function shop($short_name = NULL){
+		$shop = $this->welcome_model->get_shops($short_name);
 		$output_data["shop"] = $shop[0];
 
-		$select = array('id','name','price','offer_price','item_picture');
-		$where = array('shop_id' => decrypt($id) ,'deleted_at' => NULL, 'is_active' => 1, 'quantity !=' => 0 );
+		$select = array('id','name','short_name','price','offer_price','item_picture');
+		$where = array('shop_id' => $shop[0]['id'] ,'deleted_at' => NULL, 'is_active' => 1, 'quantity !=' => 0 );
 		$output_data["item"] = get_data_by_filter('item',$select,$where);
 
 		// echo "<pre>";
-		// print_r($output_data["item"]); exit;
+		// print_r($output_data["shop"]); exit;
 
 		$output_data['main_content'] = 'restaurant_detail';
 		$this->load->view('web/template',$output_data);
 	}
 
-	public function item($id = NULL){
+	public function item($short_name = NULL){
 
-		$item = $this->welcome_model->get_item_data(decrypt($id));
+		$item = $this->welcome_model->get_item_data($short_name);
 		$output_data["item"] = $item;
 
 		// echo "<pre>";
@@ -63,6 +63,12 @@ class Welcome extends CI_Controller {
 		}
 	}
 
+	public function faq(){
+
+		$output_data['main_content'] = 'faq';
+		$this->load->view('web/template',$output_data);
+	}
+
 	public function weekly_planner()
 	{
 		$this->load->view('web/weekly-planner');
@@ -71,11 +77,6 @@ class Welcome extends CI_Controller {
 	public function takeout_restaurant()
 	{
 		$this->load->view('web/takeout-restaurant');
-	}
-
-	public function faq()
-	{
-		$this->load->view('web/faq');
 	}
 
 	public function profile()

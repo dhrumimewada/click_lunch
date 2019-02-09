@@ -5,16 +5,16 @@ class Welcome_model extends CI_Model {
 		parent::__construct();
 	}
 
-	public function get_shops($id = NULL){
+	public function get_shops($short_name = NULL){
 		$return_data = array();
-		$this->db->select('t1.id,t1.shop_name,t1.profile_picture,t1.order_by_time,t1.delivery_time, t1.contact_no1,CONCAT(t1.city, ", ", t1.zip_code, ", ", t1.state) as address');
+		$this->db->select('t1.id,t1.shop_name,t1.short_name,t1.profile_picture,t1.order_by_time,t1.delivery_time, t1.contact_no1,CONCAT(t1.city, ", ", t1.zip_code, ", ", t1.state) as address');
 		$this->db->from('shop t1');
 		$this->db->join('shop_cuisines t2', 't1.id = t2.shop_id','right');
 		$this->db->where("t1.deleted_at", NULL);
 		$this->db->group_by('t2.shop_id');
 		$this->db->where("t1.status", 1);
-		if (isset($id) && !is_null($id)) {
-			$this->db->where('t1.id', decrypt($id));
+		if (isset($short_name) && !is_null($short_name)) {
+			$this->db->where('t1.short_name',$short_name);
 		}
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
@@ -39,14 +39,14 @@ class Welcome_model extends CI_Model {
 		return $return_data;
 	}
 
-	public function get_item_data($id = NULL){
+	public function get_item_data($short_name = NULL){
 		$return_data = array();
 		$result = array();
 
-		$sql_select = array('t1.id','t1.shop_id','t1.name','t1.quantity','t1.price','t1.offer_price','t1.item_description','t1.item_picture','t1.is_combo','t2.category_name');
+		$sql_select = array('t1.id','t1.shop_id','t1.name','t1.short_name','t1.quantity','t1.price','t1.offer_price','t1.item_description','t1.item_picture','t1.is_combo','t2.category_name');
 		$this->db->select($sql_select);
 		$this->db->from('item t1');
-		$this->db->where("t1.id", $id);
+		$this->db->where("t1.short_name", $short_name);
 		$this->db->join('category t2', 't1.category_id = t2.id','left');
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0){

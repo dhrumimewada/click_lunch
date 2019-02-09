@@ -52,7 +52,7 @@ if (isset($shop['profile_picture']) && ($shop['profile_picture'] != '')) {
 				?>
 				<div class="col-sm-6 col-md-6 col-lg-4">
 					<div class="food-wrapper">
-						<a href="<?php echo BASE_URL().'product/'.encrypt($value['id']); ?>" class="food-image position-relative">
+						<a href="<?php echo BASE_URL().'product/'.$value['short_name']; ?>" class="food-image position-relative">
 							<img src="<?php echo $photo_url; ?>" width="371" height="312" />
 							<div class="view-details">View Details</div>
 						</a>

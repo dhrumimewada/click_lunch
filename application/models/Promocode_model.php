@@ -82,6 +82,20 @@ class Promocode_model extends CI_Model {
 			$user_data['promo_type'] = $_POST['promo_type'];
 		}
 
+		if(intval($this->input->post("discount_type")) == 1){
+			$discount = $user_data['amount']."%";
+			$max_cashback = "(Max Cashback Rs.".$_POST['max_disc'].")";
+		}else{
+			$discount = "flat $".$user_data['amount'];
+			$max_cashback = '';
+		}
+		if($_POST['promo_type'] == 1){
+			$promo_type = "Product(s)";
+		}else{
+			$promo_type = "Order";
+		}
+		$user_data['description'] = "Use Promocode ".strtoupper($this->input->post("promocode"))." To Get ".$discount." Cashback* On Total ".$promo_type." Value ".$max_cashback;
+
 		$this->db->insert("promocode", $user_data);
 		$insert_id = $this->db->insert_id();
 
@@ -176,7 +190,6 @@ class Promocode_model extends CI_Model {
 						'group_type' => intval($this->input->post("group")),
 						'promocode' => strtoupper($this->input->post("promocode")),
 						'amount' => number_format((float)$this->input->post("amount"), 2, '.', ''),
-						'promo_min_order_amount' => number_format((float)$this->input->post("promo_min_order"), 2, '.', ''),
 						'discount_type' => intval($this->input->post("discount_type")),
 						'usage_limit' => intval($this->input->post("usage_limit")),
 						'from_date' => $from_date,
@@ -195,6 +208,12 @@ class Promocode_model extends CI_Model {
 			return FALSE;
 		}
 
+		if(isset($_POST['promo_min_order']) && $_POST['promo_min_order'] != ''){
+			$user_data['promo_min_order_amount'] = number_format((float)$this->input->post("promo_min_order"), 2, '.', '');
+		}else{
+			$user_data['promo_min_order_amount'] = '';
+		}
+
 		if(isset($_POST['no_of_orders']) && $_POST['no_of_orders'] != '' && $this->input->post("group") == 6){
 			$user_data['min_no_of_orders'] = $_POST['no_of_orders'];
 		}
@@ -206,8 +225,26 @@ class Promocode_model extends CI_Model {
 		if(isset($_POST['promo_type']) && $_POST['promo_type'] != '' && ($is_vender || $is_employee)){
 			$user_data['promo_type'] = $_POST['promo_type'];
 		}
+
+		if(intval($this->input->post("discount_type")) == 1){
+			$discount = $user_data['amount']."%";
+			$max_cashback = "(Max Discount $".$_POST['max_disc'].")";
+		}else{
+			$discount = "Flat $".$user_data['amount'];
+			$max_cashback = '';
+		}
+		if($_POST['promo_type'] == 1){
+			$promo_type = "Product(s)";
+		}else{
+			$promo_type = "Order";
+		}
+		$user_data['description'] = "Use Promocode ".strtoupper($this->input->post("promocode"))." To Get ".$discount." Discount* On Total ".$promo_type." Value ".$max_cashback;
 	
 		$this->db->where('id', $this->input->post("promocode_id"));
+
+		// echo "<pre>";
+		// print_r($user_data);
+		// exit;
 		$this->db->update("promocode", $user_data);
 
 		$insert_id = $this->input->post("promocode_id");

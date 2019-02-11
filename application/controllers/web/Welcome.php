@@ -50,11 +50,17 @@ class Welcome extends CI_Controller {
 		$output_data["item"] = $item;
 
 		// echo "<pre>";
-		// print_r($item); exit;
+		// print_r($item['group_data']); exit;
 
 
 		$output_data['main_content'] = 'item_detail';
 		$this->load->view('web/template',$output_data);
+	}
+
+	public function cart(){
+		echo "<pre>";
+		print_r($_POST);
+		exit;
 	}
 
 	public function subscribe(){
@@ -128,12 +134,6 @@ class Welcome extends CI_Controller {
 	{
 
 		$this->load->view('web/place-order-takeout');
-	}
-
-	public function cart()
-	{
-
-		$this->load->view('web/cart');
 	}
 
 	public function change_location()

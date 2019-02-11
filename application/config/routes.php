@@ -302,6 +302,7 @@ $route['delivery-boy-reset-password'] = 'dispatcher/dispatcher_login/deliveryboy
 $route['welcome'] = 'web/welcome';
 $route['restaurant/(:any)'] = 'web/welcome/shop/$1';
 $route['product/(:any)'] = 'web/welcome/item/$1';
+$route['add-to-cart'] = 'web/cart/cart_add';
 $route['subscribe'] = 'web/welcome/subscribe';
 $route['faq'] = 'web/welcome/faq';
 

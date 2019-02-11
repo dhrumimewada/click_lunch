@@ -50,27 +50,27 @@ class Promocode extends CI_Controller {
 		return TRUE;
 	}
 
-	public function isexists($str = NULL, $id = NULL) {
+	public function isexists($str = NULL, $id) {
 
 			$this->db->select('*');
 			if ($id != '') {
 				$this->db->where_not_in('id', $id);
 			}
-			if(!$this->auth->is_admin()){
-				if($this->auth->is_vender()){
-					$this->db->where('shop_id', intval($this->auth->get_user_id()));
-				}else{
-					$this->db->where('shop_id', intval($this->auth->get_emp_shop_id()));
-				}
-			}else{
-				$this->db->where('shop_id','');
-			}
+			// if(!$this->auth->is_admin()){
+			// 	if($this->auth->is_vender()){
+			// 		$this->db->where('shop_id', intval($this->auth->get_user_id()));
+			// 	}else{
+			// 		$this->db->where('shop_id', intval($this->auth->get_emp_shop_id()));
+			// 	}
+			// }else{
+			// 	$this->db->where('shop_id','');
+			// }
 			$this->db->where('promocode', $str);
 			$this->db->where('deleted_at', NULL);
 			$this->db->from('promocode');
 			$sql_query = $this->db->get();
 			if ($sql_query->num_rows() > 0) {
-				$this->form_validation->set_message('isexists', "The promocode field is already exists.");
+				$this->form_validation->set_message('isexists', "The promocode field is already exists.".$id."11");
 				return FALSE;
 			} else {
 				return TRUE;
@@ -79,7 +79,7 @@ class Promocode extends CI_Controller {
 
 
 	public function max_disc_validate($max_disc = NULL, $promo_min_order = NULL){
-		if(floatval($promo_min_order) > floatval($max_disc)){
+		if((floatval($promo_min_order) > floatval($max_disc)) || ($promo_min_order == '') ){
 			return TRUE;
 		}else{
 			$this->form_validation->set_message('max_disc_validate', "The maximum discount should be less than minimum order amount.");
@@ -88,7 +88,7 @@ class Promocode extends CI_Controller {
 	}
 
 	public function min_order_validate($min_order_amount = NULL, $promo_amount = NULL){
-		if($promo_amount < $min_order_amount && $promo_amount != ''){
+		if(($promo_amount < $min_order_amount && $promo_amount != '') || ($min_order_amount == '') ){
 			return TRUE;
 		}else{
 			$this->form_validation->set_message('min_order_validate', "The minimum order amount should be more than amount.");
@@ -254,7 +254,8 @@ class Promocode extends CI_Controller {
 				$this->form_validation->set_rules($validation_rules);
 				 
 				if ($this->form_validation->run() === true) {
-
+					// $abc = $this->promocode_model->put();
+					// exit;
 					if($this->promocode_model->put()){
 						$this->session->set_flashdata($this->auth->get_messages_array());
 						redirect(base_url() . "promocode-list");

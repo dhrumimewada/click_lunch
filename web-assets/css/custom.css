@@ -477,10 +477,6 @@ li.dropdown.notification-list.last-div:before{
 .object-cover{
     object-fit: cover;
 }
-.max-h-item{
-    max-height: 450px;
-}
-
 /* Scroll */
 /* width */
 ::-webkit-scrollbar {

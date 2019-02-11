@@ -197,9 +197,11 @@
     $temp_value = set_value('promo_min_order');
     if (isset($temp_value) && !empty($temp_value)) {
         $field_value = $temp_value;
-    } else{
+    }else{
+        if($promocode_data->promo_min_order_amount != ''){
             $field_value = floatval($promocode_data->promo_min_order_amount);
         }
+    }
     ?>
                                             <input type="number" name="promo_min_order" class="form-control demo2" id="promo_min_order" placeholder="Ex: 100.00" value="<?php echo $field_value; ?>" >
                                             <div class="validation-error-label">
@@ -436,7 +438,17 @@ if($field_value == 1){
                                 </div>
                             </div>
 
-                            <input type="hidden" name="promocode_id" value="<?php echo $promocode_data->id; ?>">
+                            <?php
+    $field_value = NULL;
+    $temp_value = set_value('promocode_id');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }else{
+        $field_value =$promocode_data->id;
+    }
+    ?>
+
+                            <input type="hidden" name="promocode_id" value="<?php echo $field_value; ?>">
 
                             <div class="form-group m-b-0">
                                 <div>

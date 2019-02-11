@@ -5,6 +5,8 @@ if (isset($item['item_data']['item_picture']) && ($item['item_data']['item_pictu
         $photo_url = base_url() . $this->config->item("item_photo_path") . '/'.$item['item_data']['item_picture'];
     }
 }
+$add_to_cart_link = base_url()."add-to-cart";
+//$add_to_cart_link = "#";
 ?>
 <style type="text/css" media="screen">
 	del{
@@ -20,10 +22,10 @@ if (isset($item['item_data']['item_picture']) && ($item['item_data']['item_pictu
 						<div class="categories">Category: <?php echo $item['item_data']['category_name']; ?></div>
 						<div class="row">
 							<div class="col-md-6">
-								<img class="d-block w-100 h-100 max-h-item object-cover" src="<?php echo $photo_url; ?>" alt="First slide">
+								<img class="d-block w-100 item-photo object-cover" src="<?php echo $photo_url; ?>" alt="First slide">
 							</div>
 							<div class="col-md-6">
-								<form action="checkout.html">
+								<form action="<?php echo $add_to_cart_link; ?>" method="post">
 								<div class="product-description">
 									<h3><?php echo $item['item_data']['name']; ?></h3>
 									<div class="price">
@@ -74,8 +76,13 @@ if (isset($item['item_data']['item_picture']) && ($item['item_data']['item_pictu
 												<tr>
 													<td>
 														<div class="form-check">
-															<input class="form-check-input" type="checkbox" name="<?php echo $value1['id']; ?>" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['name']; ?>">
-															<label class="form-check-label" for="<?php echo $value1['id']; ?>"><?php echo ucfirst($value1['name']); ?></label>
+															<?php if($value['selection'] == 1){ ?>
+																<input class="form-check-input" type="checkbox" name="<?php echo $value['id']; ?>[]" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['id']; ?>">
+																<label class="form-check-label" for="<?php echo $value1['id']; ?>"><?php echo ucfirst($value1['name']); ?></label>
+															<?php } else{ ?>
+																<input class="form-check-input" type="radio" name="<?php echo $value['id']; ?>" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['id']; ?>">
+																<label class="form-check-label" for="<?php echo $value1['id']; ?>"><?php echo ucfirst($value1['name']); ?></label>
+															<?php }?>
 														</div>
 													</td>
 													<td>+$<?php echo $value1['price']; ?></td>

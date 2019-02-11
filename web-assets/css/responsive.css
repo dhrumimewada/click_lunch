@@ -46,7 +46,7 @@
 }
 .header-bar {height: inherit;}
 .item-desc-overflow{max-height: 80px; overflow: hidden; overflow-y: auto;}
-.toppings-div{max-height: 250px; overflow: hidden; overflow-y: auto;}
+.toppings-div{max-height: 250px; overflow: hidden; overflow-y: auto;min-height: 220px;}
 }
 
 /*.caption-1 { font-size: 68px;}	*/
@@ -186,6 +186,7 @@
 .product-description .quantity .input-group {width: 110px;}
 .product-description .add-quantity .red-btn {width: 105px; font-size: 10px;}
 .cart-wrapper .product-detail {padding: 26px 20px 40px;}
+.cart-wrapper .product-detail .item-photo{height: 200px;}
 .carousel-indicators {overflow: auto;     bottom: 0px;}
 .additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-quantity .input-group {width: 70px;}
 .additional-recommendation-list .additional-recommendation .rec-product-desc .rec-product-quantity .input-group button {min-width: 20px !important; height: 20px;}

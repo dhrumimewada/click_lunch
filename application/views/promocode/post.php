@@ -187,7 +187,7 @@
     $field_value = NULL;
     $temp_value = set_value('promo_min_order');
     if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = floatval($temp_value);
+        $field_value = $temp_value;
     } 
     ?>
                                             <input type="number" name="promo_min_order" class="form-control demo2" id="promo_min_order" placeholder="Ex: 100.00" value="<?php echo $field_value; ?>" >

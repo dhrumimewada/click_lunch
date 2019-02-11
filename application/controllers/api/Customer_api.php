@@ -4,13 +4,13 @@ require APPPATH . '/libraries/REST_Controller.php';
 error_reporting(1);
 
 class Customer_api extends REST_Controller {
-	public function __construct() {
-		parent::__construct();
-		header('Access-Control-Allow-Origin: *');  
-		$this->load->model("email_template_model");
-	}
+    public function __construct() {
+        parent::__construct();
+        header('Access-Control-Allow-Origin: *');  
+        $this->load->model("email_template_model");
+    }
 
-	public function init_get($app_version = '',$type = ''){
+    public function init_get($app_version = '',$type = ''){
 
         $postFields['app_version'] = $app_version;        
         $postFields['type'] = $type;               
@@ -52,7 +52,7 @@ class Customer_api extends REST_Controller {
     }
 
     public function register_post(){
-    	$postFields['username'] = $_POST['username'];        
+        $postFields['username'] = $_POST['username'];        
         $postFields['email'] = $_POST['email'];        
         $postFields['password'] = $_POST['password']; 
         $postFields['mobile_number'] = $_POST['mobile_number']; 
@@ -66,69 +66,69 @@ class Customer_api extends REST_Controller {
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
 
-        	$this->db->select('*');
+            $this->db->select('*');
             $this->db->where("email",$_POST['email']);
             $this->db->where("deleted_at",NULL);
             $this->db->from("customer");
             $sql_query = $this->db->get();
             if ($sql_query->num_rows() > 0){
 
-            	$response['status'] = false;
-            	$response['message'] = 'Email id is already in use';
+                $response['status'] = false;
+                $response['message'] = 'Email id is already in use';
 
             }else{
 
-            	$social_user_exists = array();
+                $social_user_exists = array();
                 if(isset($_POST['social_id']) && $_POST['social_id'] != "" && isset($_POST['social_type']) && $_POST['social_type'] != "0" && !is_null($_POST['social_id']) && !is_null($_POST['social_type'])){
 
-                	$this->db->select('id');
-            		$this->db->where("social_id",$_POST['social_id']);
-            		$this->db->where("social_type",$_POST['social_type']);
-            		$this->db->from("customer");
-            		$sql_query = $this->db->get();
-            		if ($sql_query->num_rows() > 0){
-            			$social_user_exists = $sql_query->result_array();
-            		}
+                    $this->db->select('id');
+                    $this->db->where("social_id",$_POST['social_id']);
+                    $this->db->where("social_type",$_POST['social_type']);
+                    $this->db->from("customer");
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $social_user_exists = $sql_query->result_array();
+                    }
                 }
 
                 if(empty($social_user_exists)){
 
-                	$google_api_key = $this->config->item("google_key");
-	                $geocodeFromLatLong = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?latlng='.$_POST['latitude'].','.$_POST['longitude'].'&key='.$google_api_key);
-	                $output = json_decode($geocodeFromLatLong);
-	                $status = $output->status;
+                    $google_api_key = $this->config->item("google_key");
+                    $geocodeFromLatLong = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?latlng='.$_POST['latitude'].','.$_POST['longitude'].'&key='.$google_api_key);
+                    $output = json_decode($geocodeFromLatLong);
+                    $status = $output->status;
 
-	                $address = ($status=="OK")?$output->results[1]->formatted_address:'';
+                    $address = ($status=="OK")?$output->results[1]->formatted_address:'';
 
-	                $user = array( 
-	                        'username' => $_POST['username'], 
-	                        'email'=> $_POST['email'], 
-	                        'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
-	                        'device_token'=> $_POST['device_token'], 
-	                        'device_type'=> $_POST['device_type'], 
-	                        'mobile_number'=> $_POST['mobile_number'],
-	                        'latitude'=> $_POST['latitude'],
-	                        'longitude'=> $_POST['longitude'],
-	                        'gender'=> $_POST['gender'],
-	                        'dob'=> $_POST['date_of_birth'],
-	                        'address'=> $address
-	                    );
+                    $user = array( 
+                            'username' => $_POST['username'], 
+                            'email'=> $_POST['email'], 
+                            'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+                            'device_token'=> $_POST['device_token'], 
+                            'device_type'=> $_POST['device_type'], 
+                            'mobile_number'=> $_POST['mobile_number'],
+                            'latitude'=> $_POST['latitude'],
+                            'longitude'=> $_POST['longitude'],
+                            'gender'=> $_POST['gender'],
+                            'dob'=> $_POST['date_of_birth'],
+                            'address'=> $address
+                        );
 
-	                if(isset($_POST['social_id']) && $_POST['social_id'] != "" && isset($_POST['social_type']) && $_POST['social_type'] != "0" && !is_null($_POST['social_id']) && !is_null($_POST['social_type'])){
+                    if(isset($_POST['social_id']) && $_POST['social_id'] != "" && isset($_POST['social_type']) && $_POST['social_type'] != "0" && !is_null($_POST['social_id']) && !is_null($_POST['social_type'])){
 
-	                	$user['social_id'] = $_POST['social_id'];
-	                	$user['social_type'] = $_POST['social_type'];
-	                }
+                        $user['social_id'] = $_POST['social_id'];
+                        $user['social_type'] = $_POST['social_type'];
+                    }
 
-	                $this->db->insert('customer', $user);
-	                $insert_id = $this->db->insert_id();
+                    $this->db->insert('customer', $user);
+                    $insert_id = $this->db->insert_id();
 
-	                if($insert_id){
+                    if($insert_id){
 
-	                	//Send activation mail
+                        //Send activation mail
 
-		                $to =  array($_POST['email']);
-		                $subject = 'Activate Your '.$this->config->item('site_name').' Account';
+                        $to =  array($_POST['email']);
+                        $subject = 'Activate Your '.$this->config->item('site_name').' Account';
                         $path = BASE_URL().'email_template/register.html';
                         $template = file_get_contents($path);
 
@@ -140,34 +140,34 @@ class Customer_api extends REST_Controller {
 
                         $mail = $this->send_mail($to,$subject,$template);
 
-		                if($mail){
+                        if($mail){
 
-		                	$update_data = array('activation_token' => $activation_token);
-		                	$this->db->where('id', $insert_id);
-		                	$this->db->update('customer', $update_data);
+                            $update_data = array('activation_token' => $activation_token);
+                            $this->db->where('id', $insert_id);
+                            $this->db->update('customer', $update_data);
 
-		                	$response['status'] = true;
-		                	$response['message'] = 'Account activation mail is sent on your email address';
+                            $response['status'] = true;
+                            $response['message'] = 'Account activation mail is sent on your email address';
 
-		                 }else{
+                         }else{
 
-		                 	$response['status'] = false;
-                         	$response['message'] = 'Error into sending mail. please try again later';
+                            $response['status'] = false;
+                            $response['message'] = 'Error into sending mail. please try again later';
 
-		                 }
+                         }
 
-	                }else{
-	                    $response['status'] = false;
-	                    $response['message'] = 'Error into register. please try again later';
-	                }
+                    }else{
+                        $response['status'] = false;
+                        $response['message'] = 'Error into register. please try again later';
+                    }
 
                 }else{
-                	$response['status'] = false;
+                    $response['status'] = false;
                     $response['message'] = 'This social account already used buy another account.';
                 }
             }
 
-        	$response['status'] = true;
+            $response['status'] = true;
 
         }else{
             $response['status'] = false;
@@ -178,7 +178,7 @@ class Customer_api extends REST_Controller {
     }
 
     public function login_post(){
-    	      
+              
         $postFields['email'] = $_POST['email'];        
         $postFields['password'] = $_POST['password']; 
         $postFields['device_token'] = $_POST['device_token']; 
@@ -187,7 +187,7 @@ class Customer_api extends REST_Controller {
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
 
-        	$this->db->select('*');
+            $this->db->select('*');
             $this->db->where("email",$_POST['email']);
             $this->db->where("password !=",'');
             $this->db->where("deleted_at",NULL);
@@ -195,13 +195,13 @@ class Customer_api extends REST_Controller {
             $this->db->from("customer");
             $sql_query = $this->db->get();
             if ($sql_query->num_rows() > 0){
-            	$customer = $sql_query->row();
-            	if (password_verify($_POST['password'],$customer->password)){
+                $customer = $sql_query->row();
+                if (password_verify($_POST['password'],$customer->password)){
 
-            		$data = array(
-	                    'device_type' => $_POST['device_type'],
-	                    'device_token' => $_POST['device_token']
-	                     );
+                    $data = array(
+                        'device_type' => $_POST['device_type'],
+                        'device_token' => $_POST['device_token']
+                         );
 
                     if(isset($_POST['latitude']) && $_POST['latitude'] != "" && !is_null($_POST['latitude']) && isset($_POST['longitude']) && $_POST['longitude'] != "" && !is_null($_POST['longitude'])){
                         $data['latitude'] = $_POST['latitude'];
@@ -214,15 +214,15 @@ class Customer_api extends REST_Controller {
                 $response['status'] = true;
                 $response['profile'] = (array)$customer;
 
-            	}else{
-            		$response['status'] = false;
-            		$response['message'] = 'The password that you have entered is incorrect';
-            	}
-            	
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'The password that you have entered is incorrect';
+                }
+                
 
             }else{
-            	$response['status'] = false;
-            	$response['message'] = 'User does not exists';
+                $response['status'] = false;
+                $response['message'] = 'User does not exists';
             }
 
         }else{
@@ -272,33 +272,33 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost))
         {
-        	$this->db->select('password');
-	        $this->db->where("deleted_at",NULL);
-	        $this->db->where("status",1);
-	        $this->db->where("id",$_POST['customer_id']);
-	        $this->db->from("customer");
-	        $sql_query = $this->db->get();
-	        if ($sql_query->num_rows() > 0){
-	        	$data = $sql_query->row();
-	        	if (!password_verify($_POST['current_password'], $data->password)){
-	        		$response['status'] = false;
-                	$response['message'] = 'Your current password is incorrect';
-                	$response['password'] = $data->password;
-           	 	}else{
-           	 		$user_data = array('password' => password_hash($_POST['new_password'], PASSWORD_DEFAULT) );
-                	$this->db->where('id',$_POST['customer_id']);
-                	if($this->db->update('customer',$user_data)){
-	                    $response['status'] = true;
-	                    $response['message'] = 'Password changed successfully';
-	                }else{
-	                    $response['status'] = false;
-	                    $response['message'] = 'Server encountered an error. please try again';
-	                }
-           	 	}
-	        }else{
-	        	$response['status'] = false;
+            $this->db->select('password');
+            $this->db->where("deleted_at",NULL);
+            $this->db->where("status",1);
+            $this->db->where("id",$_POST['customer_id']);
+            $this->db->from("customer");
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $data = $sql_query->row();
+                if (!password_verify($_POST['current_password'], $data->password)){
+                    $response['status'] = false;
+                    $response['message'] = 'Your current password is incorrect';
+                    $response['password'] = $data->password;
+                }else{
+                    $user_data = array('password' => password_hash($_POST['new_password'], PASSWORD_DEFAULT) );
+                    $this->db->where('id',$_POST['customer_id']);
+                    if($this->db->update('customer',$user_data)){
+                        $response['status'] = true;
+                        $response['message'] = 'Password changed successfully';
+                    }else{
+                        $response['status'] = false;
+                        $response['message'] = 'Server encountered an error. please try again';
+                    }
+                }
+            }else{
+                $response['status'] = false;
                 $response['message'] = 'User not found';
-	        }  
+            }  
         }
         else{
             $response['status'] = false;
@@ -337,17 +337,17 @@ class Customer_api extends REST_Controller {
 
                 if($mail){
 
-                	$update_data = array('remember_token' => $remember_token);
-                	$this->db->where('id', $user['id']);
-                	$this->db->update('customer', $update_data);
+                    $update_data = array('remember_token' => $remember_token);
+                    $this->db->where('id', $user['id']);
+                    $this->db->update('customer', $update_data);
 
-                	$response['status'] = true;
-                	$response['message'] = 'Reset Password mail is sent on this email address';
+                    $response['status'] = true;
+                    $response['message'] = 'Reset Password mail is sent on this email address';
 
                  }else{
 
-                 	$response['status'] = false;
-                 	$response['message'] = 'Error into sending mail. please try again later';
+                    $response['status'] = false;
+                    $response['message'] = 'Error into sending mail. please try again later';
 
                  }
 
@@ -957,6 +957,8 @@ class Customer_api extends REST_Controller {
                             "shop_name",
                             "profile_picture",
                             "city",
+                            "delivery_time",
+                            "order_by_time",
                             "state",
                             "country",
                             "zip_code"
@@ -1122,6 +1124,17 @@ class Customer_api extends REST_Controller {
                     $item_data = $sql_query->result_array();                        
                 }
 
+                $availibality = array();
+                $this->db->select('from_time,to_time,full_day,is_closed');
+                $this->db->where("shop_id",$_POST['shop_id']);
+                $this->db->where("day",date('l'));
+                $this->db->where("shop_id", $_POST['shop_id']);
+                $this->db->from('shop_availibality');
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $availibality = $sql_query->result_array();
+                }
+
                 $shop_data = array(
                                 'id' => $_POST['shop_id'],
                                 'shop_name' => $shop['shop_name'],
@@ -1129,11 +1142,20 @@ class Customer_api extends REST_Controller {
                                 'city' => $shop['city'],
                                 'state' => $shop['state'],
                                 'country' => $shop['country'],
-                                'profile_picture' => $shop['profile_picture']
+                                'delivery_time' => $shop['delivery_time'],
+                                'order_by_time' => $shop['order_by_time']
                                 );
+
+                $picture = array('profile_picture' => $shop['profile_picture']);
+                $picture2 = array('profile_picture' => $shop['profile_picture']);
+                $shop_pictures_data = array();
+                array_push($shop_pictures_data, $picture);
+                array_push($shop_pictures_data, $picture2);
 
                 $response['status'] = true;
                 $response['shop'] = $shop_data;
+                $response['shop_pictures'] = $shop_pictures_data;
+                $response['shop_hours'] = $availibality;
                 $response['cuisines'] = $cuisine_data;
                 $response['products'] = $item_data;
             }
@@ -1174,6 +1196,7 @@ class Customer_api extends REST_Controller {
                     $variant_group_id_array = $sql_query->result_array();  
 
                     $sql_select = array(
+                                    "t1.id as variant_id",
                                     "t2.name as group_name",
                                     "t1.name",
                                     "t1.price",
@@ -1192,6 +1215,7 @@ class Customer_api extends REST_Controller {
                         $sql_query = $this->db->get();
                         if ($sql_query->num_rows() > 0){
                             $variant_group = $sql_query->result_array();
+                            $group[$key]['variant_id'] = $variant_group[$key]['variant_id'];
                             $group[$key]['variant_name'] = $variant_group[$key]['group_name'];
                             $group[$key]['required'] = $variant_group[$key]['availability'];
                             $group[$key]['multiple_selection'] = $variant_group[$key]['selection'];
@@ -1266,9 +1290,11 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    public function favorite_shop_post(){
+    public function fetch_promocode_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['shop_id'] = $_POST['shop_id']; 
+        $postFields['total_amount'] = $_POST['total_amount']; 
+        $postFields['products'] = $_POST['products']; 
 
         $errorPost = $this->ValidatePostFields($postFields);
 
@@ -1281,17 +1307,253 @@ class Customer_api extends REST_Controller {
                 $response['message'] = 'User not found';
             }else{
 
-                $favorite_data = array(
-                    'customer_id' => $_POST['customer_id'],
-                    'shop_id' => $_POST['shop_id']
-                );
-
-                if($this->db->insert('favorite',$favorite_data)){
-                    $response['status'] = true;
-                    $response['message'] = 'Restaurant added as favorite.';
-                }else{
+                $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
+                $shop = (array)$this->db->get_where('shop',$where)->row();
+                if(empty($shop)){
                     $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
+                    $response['message'] = 'Restaurant not found';
+                }else{
+                    $today = date('Y-m-d');
+                    $products_array = explode(',',$_POST['products']);
+                    $valid_promocodes = array();
+
+                    // Get All customer promocode - GROUP 4
+                    $this->db->select('*'); 
+
+                    $this->db->group_start();
+                        $this->db->where('shop_id',$_POST['shop_id']);  
+                        $this->db->where('group_type',4);  
+                    $this->db->group_end();
+
+                    $this->db->or_group_start();
+                        $this->db->where('shop_id','');  
+                        $this->db->where('group_type',4);  
+                    $this->db->group_end();
+
+                    $this->db->group_start();
+                        $this->db->where('from_date <=', $today);
+                        $this->db->where('to_date >=', $today);
+                    $this->db->group_end();
+
+                    $this->db->where('status',1);  
+                    $this->db->where('deleted_at',NULL);  
+                    $this->db->from('promocode'); 
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $all_customer_promocode = $sql_query->result_array();
+                        foreach ($all_customer_promocode as $key => $value) {
+                            if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
+                                unset($all_customer_promocode[$key]);
+                            }else{
+                                // if product based promocode added by shop
+                                if(($value['shop_id'] != '') && ($value['promo_type'] == 1)){
+                                    $this->db->select('product_id'); 
+                                    $this->db->where('promocode_id',$value['id']);  
+                                    $this->db->where_in('product_id',$products_array);  
+                                    $this->db->from('promocode_valid_product'); 
+                                    $sql_query = $this->db->get();
+                                    if ($sql_query->num_rows() <= 0){
+                                        unset($all_customer_promocode[$key]);
+                                    }
+                                }
+                            }
+                        }
+                        foreach ($all_customer_promocode as $key => $value){
+                            array_push($valid_promocodes, $all_customer_promocode[$key]);
+                        }
+                    }
+
+                    // Get promocode ( added by admin for group of shops) GROUP 5
+                    $this->db->select('t2.*'); 
+                    $this->db->where('t1.shop_id',$_POST['shop_id']);  
+                    $this->db->where('t2.group_type',5);  
+                    $this->db->from('promocode_shops t1');
+                    $this->db->join('promocode t2', 't1.promocode_id = t2.id', "right join");
+
+                    $this->db->group_start();
+                        $this->db->where('t2.from_date <=', $today);
+                        $this->db->where('t2.to_date >=', $today);
+                    $this->db->group_end();
+
+                    $this->db->where('t2.status',1);  
+                    $this->db->where('t2.shop_id','');  
+                    $this->db->where('t2.deleted_at',NULL);  
+
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $group_of_shops_promocode = $sql_query->result_array();
+                        foreach ($group_of_shops_promocode as $key => $value) {
+                            if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
+                                unset($group_of_shops_promocode[$key]);
+                            }
+                        }
+                        foreach ($group_of_shops_promocode as $key => $value){
+                            array_push($valid_promocodes, $group_of_shops_promocode[$key]);
+                        }
+                    }
+
+                    // Get customer total completed order
+                    $where = array('customer_id' => $_POST['customer_id'], 'order_status' => 1);
+                    $select = array('id');
+                    $table = 'orders';
+                    $customer_total_orders_array = get_data_by_filter($table,$select, $where);
+                    $customer_total_orders = count($customer_total_orders_array);
+                    $X_ordered_promocode = array();
+
+                    // Get promocode ( Number of X ordered Customers - order based) GROUP 6 (Admin)
+                    $this->db->select('*'); 
+                    $this->db->where('shop_id','');  
+                    $this->db->where('group_type',6);  
+
+                    $this->db->group_start();
+                        $this->db->where('from_date <=', $today);
+                        $this->db->where('to_date >=', $today);
+                    $this->db->group_end();
+
+                    $this->db->where('min_no_of_orders <=', $customer_total_orders);  
+                    $this->db->where('status',1);  
+                    $this->db->where('deleted_at',NULL);  
+                    $this->db->from('promocode'); 
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $X_ordered_promocode = $sql_query->result_array();
+                        foreach ($X_ordered_promocode as $key => $value) {
+                            if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
+                                unset($X_ordered_promocode[$key]);
+                            }
+                        }
+                        foreach ($X_ordered_promocode as $key => $value){
+                            array_push($valid_promocodes, $X_ordered_promocode[$key]);
+                        }
+                    }
+
+                    // If no any ordered from any shop - promocode by admin - GROUP 1
+                    $new_customer_for_admin_promocode = array();
+                    if($customer_total_orders <= 0){
+                        $this->db->select('*'); 
+                        $this->db->where('shop_id','');  
+                        $this->db->where('group_type',1);  
+
+                        $this->db->group_start();
+                            $this->db->where('from_date <=', $today);
+                            $this->db->where('to_date >=', $today);
+                        $this->db->group_end();
+
+                        $this->db->where('status',1);  
+                        $this->db->where('deleted_at',NULL);  
+                        $this->db->from('promocode'); 
+                        $sql_query = $this->db->get();
+                        if ($sql_query->num_rows() > 0){
+                            $new_customer_for_admin_promocode = $sql_query->result_array();
+                            foreach ($new_customer_for_admin_promocode as $key => $value) {
+                                if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
+                                    unset($new_customer_for_admin_promocode[$key]);
+                                }
+                            }
+                            foreach ($new_customer_for_admin_promocode as $key => $value){
+                                array_push($valid_promocodes, $new_customer_for_admin_promocode[$key]);
+                            }
+                        }
+                    }
+
+                    // Get customer total completed order for this shop
+                    $where = array('customer_id' => $_POST['customer_id'],'shop_id' => $_POST['shop_id'], 'order_status' => 1);
+                    $select = array('id');
+                    $table = 'orders';
+                    $customer_total_shop_orders_array = get_data_by_filter($table,$select, $where);
+                    $customer_total_shop_orders = count($customer_total_shop_orders_array);
+                    $X_shop_ordered_promocode = array();
+
+                    // Get promocode ( Number of X ordered Customers - order based) GROUP 6 (shop)
+                    $this->db->select('*'); 
+                    $this->db->where('shop_id',$_POST['shop_id']);  
+                    $this->db->where('group_type',6);  
+
+                    $this->db->group_start();
+                        $this->db->where('from_date <=', $today);
+                        $this->db->where('to_date >=', $today);
+                    $this->db->group_end();
+
+                    $this->db->where('min_no_of_orders <=', $customer_total_shop_orders);  
+                    $this->db->where('status',1);  
+                    $this->db->where('deleted_at',NULL);  
+                    $this->db->from('promocode'); 
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $X_shop_ordered_promocode = $sql_query->result_array();
+
+                        foreach ($X_shop_ordered_promocode as $key => $value) {
+                            if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
+                                unset($X_shop_ordered_promocode[$key]);
+                            }else{
+
+                                // if product based promocode
+                                if($value['promo_type'] == 1){
+                                    $this->db->select('product_id'); 
+                                    $this->db->where('promocode_id',$value['id']);  
+                                    $this->db->where_in('product_id',$products_array);  
+                                    $this->db->from('promocode_valid_product'); 
+                                    $sql_query = $this->db->get();
+                                    if ($sql_query->num_rows() <= 0){
+                                        unset($X_shop_ordered_promocode[$key]);
+                                    }
+                                }
+                            }
+                        }
+                        foreach ($X_shop_ordered_promocode as $key => $value){
+                            array_push($valid_promocodes, $X_shop_ordered_promocode[$key]);
+                        }
+                    }
+
+                    // If no any ordered from this shop - promocode by shop - GROUP 1
+                    $new_customer_for_shop_promocode = array();
+                    if($customer_total_shop_orders <= 0){
+                        $this->db->select('*'); 
+                        $this->db->where('shop_id',$_POST['shop_id']);  
+                        $this->db->where('group_type',1);  
+
+                        $this->db->group_start();
+                            $this->db->where('from_date <=', $today);
+                            $this->db->where('to_date >=', $today);
+                        $this->db->group_end();
+
+                        $this->db->where('status',1);  
+                        $this->db->where('deleted_at',NULL);  
+                        $this->db->from('promocode'); 
+                        $sql_query = $this->db->get();
+                        if ($sql_query->num_rows() > 0){
+                            $new_customer_for_shop_promocode = $sql_query->result_array();
+                            foreach ($new_customer_for_shop_promocode as $key => $value) {
+                                if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
+                                    unset($new_customer_for_shop_promocode[$key]);
+                                }else{
+
+                                    // if product based promocode
+                                    if($value['promo_type'] == 1){
+                                        $this->db->select('product_id'); 
+                                        $this->db->where('promocode_id',$value['id']);  
+                                        $this->db->where_in('product_id',$products_array);  
+                                        $this->db->from('promocode_valid_product'); 
+                                        $sql_query = $this->db->get();
+                                        if ($sql_query->num_rows() <= 0){
+                                            unset($new_customer_for_shop_promocode[$key]);
+                                        }
+                                    }
+
+                                }
+                            }
+                            foreach ($new_customer_for_shop_promocode as $key => $value){
+                                array_push($valid_promocodes, $new_customer_for_shop_promocode[$key]);
+                            }
+                        }
+                    }
+
+                    // GROUP 7 PROMOCODES ARE PENDING - waiting for order
+
+                    //$response['promocode_all_customer'] = $all_customer_promocode;
+                    //$response['group_of_shops_promocode'] = $group_of_shops_promocode;
+                    $response['valid_promocodes'] = $valid_promocodes;
+                    $response['status'] = true;
                 }
             }
             
@@ -1314,9 +1576,9 @@ class Customer_api extends REST_Controller {
 
     public function send_mail($to,$subject,$message){
 
-    	$from = '"Click Lunch" <excellentwebworld@admin.com>';
+        $from = '"Click Lunch" <excellentwebworld@admin.com>';
 
-    	$config['protocol'] = $this->config->item("protocol");
+        $config['protocol'] = $this->config->item("protocol");
         $config['smtp_host'] = $this->config->item("smtp_host");
         $config['smtp_port'] = $this->config->item("smtp_port");
         $config['smtp_user'] = $this->config->item("smtp_user");
@@ -1333,9 +1595,9 @@ class Customer_api extends REST_Controller {
         $this->email->subject($subject); 
         $this->email->message($message);
         if($this->email->send()){
-        	return TRUE;
+            return TRUE;
         }else{
-        	return FALSE;
+            return FALSE;
         }
         //echo $this->email->print_debugger();exit;
     }

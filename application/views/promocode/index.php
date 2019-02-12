@@ -24,63 +24,18 @@ $edit_link = base_url().'promocode-update';
                         <table class="table table-hover dt-responsive nowrap promocode_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
+                                <th>Id</th>
                                 <th>Promocode</th>
+                                <th>Promocode By</th>
                                 <th>Amount</th>
                                 <th>Type</th>
                                 <th>From</th>
                                 <th>To</th>
                                 <th class='text-center'>Status</th>
-                                <th>Created Date</th>
                                 <th class='text-center'>Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <?php
-                            if (isset($promocode_list) && !empty($promocode_list) && count($promocode_list) > 0){
-                                foreach ($promocode_list as $key => $value){
-                                    $id = $value["id"];
-                                    $created_date_ts = strtotime($value["created_at"]);
-                                    $created_date = date("j M, Y", $created_date_ts);
-                                    echo '<tr data-id="' . $id . '">';
-                                    echo "<td>" . stripslashes($value["promocode"]) . "</td>";
-
-                                    if($value["discount_type"] == 1){
-                                        $discount_type = 'Percentage';
-                                    }else{
-                                        $discount_type = 'Flat';
-                                    }
-
-                                    echo "<td>" . $value["amount"] . "</td>";
-                                    echo "<td>" . $discount_type . "</td>";
-
-                                    $from_date_ts = strtotime($value["from_date"]);
-                                    $from_date = date("j M, Y", $from_date_ts);
-                                    echo "<td data-order='" . $from_date_ts . "'>" . $from_date . "</td>";
-
-                                    $to_date_ts = strtotime($value["to_date"]);
-                                    $to_date = date("j M, Y", $to_date_ts);
-                                    echo "<td data-order='" . $to_date_ts . "'>" . $to_date . "</td>";
-
-                                    
-                                    if($value["status"] == 1){
-                                        $btn_name = 'Active';
-                                        $btn_class = 'btn-success';
-                                    }else{
-                                        $btn_name = 'Deactivate';
-                                        $btn_class = 'btn-deactive';
-                                    }
-                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_promocode' status-id='" . $value["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
-                                    
-                                    
-                                    echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
- 
-                                    echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary btn-sm waves-effect waves-light title='Edit' data-popup='tooltip' > Edit</a>
-                                        <button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_promocode' title='Delete' data-popup='tooltip'>Delete</button></td>
-                                        </td>";
-                                    echo '</tr>';
-                                }
-                            }
-                            ?>
                             </tbody>
                         </table>
 
@@ -92,14 +47,15 @@ $edit_link = base_url().'promocode-update';
     </div> <!-- container-fluid -->
 
 </div> <!-- content -->
+<script src="<?php echo base_url() . 'assets/js/custom/dynamic_datatable.js'; ?>"></script>
 <script src="<?php echo base_url() . 'assets/js/custom/custom.js'; ?>"></script>
 <script type="text/javascript">
-    var promocode_list = $('.promocode_list').DataTable({
-            keys: true,
-            "order": [[6, "desc"]],
-            'iDisplayLength': 10,
-            columnDefs: [{orderable: false, targets: [7]},{visible: false,targets: [6]}],
-    });
+    // var promocode_list = $('.promocode_list').DataTable({
+    //         keys: true,
+    //         "order": [[6, "desc"]],
+    //         'iDisplayLength': 10,
+    //         columnDefs: [{orderable: false, targets: [7]},{visible: false,targets: [6]}],
+    // });
 
     var delete_url = "<?php echo base_url().'promocode-delete'; ?>";
     var status_url = "<?php echo base_url().'promocode-status'; ?>";

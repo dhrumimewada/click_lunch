@@ -562,7 +562,8 @@ $config['group_for_admin']  = array('1' => 'New Customers',
 					    // '3' => 'Inactive Customers',
 					    '4' => 'All Customers',
 					    '5' => 'Restaurant vise Customers',
-					    '6' => 'Number of X ordered Customers'
+					    '6' => 'Number of X ordered Customers',
+					    '7' => 'Product/Combo vise Customers'
 						);
 
 $config['group_for_shop']  = array('1' => 'New Customers',
@@ -575,6 +576,8 @@ $config['group_for_shop_email']  = array('4' => 'All Customers',
 						'6' => 'Number of X ordered Customers',
 						'7' => 'Product/Combo vise Customers'
 						);
+
+$config['card_type'] = array('1' => 'Visa', '2' => 'Mastercard', '3' => 'American Express', '4' => 'Diners Club', '5' => 'Discover', '6' => 'JCB', '7' => 'Other');
 
 // Send mail config
 $config['protocol'] = "smtp";

@@ -138,6 +138,7 @@ $route['promocode-update/(:any)'] = 'promocode/promocode/put/$1';
 $route['promocode-update'] = 'promocode/promocode/index';
 $route['promocode-status'] = 'promocode/promocode/active_deactive_promocode'; 
 
+$route['get-products'] = 'promocode/promocode/get_products_by_shop';
 
 //Employee
 $route['login-employee'] = 'employee/employee_login/login';

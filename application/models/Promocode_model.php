@@ -8,21 +8,24 @@ class Promocode_model extends CI_Model {
 
 	public function get_promocode($id = NULL){
 		$return_data = array();
-		$this->db->select('*');
-		$this->db->from('promocode');
+
+		$sql_select = array('t1.*','t2.shop_name');
+		$this->db->select($sql_select);
+		$this->db->from('promocode t1');
 		if (isset($id) && !is_null($id)) {
-			$this->db->where('id', $id);
+			$this->db->where('t1.id', $id);
 		}
 		if($this->auth->is_admin()){
-			$this->db->where("shop_id",'');
+			//$this->db->where("shop_id",'');
 		}elseif($this->auth->is_vender()){
-			$this->db->where("shop_id",$this->auth->get_user_id());
+			$this->db->where("t1.shop_id",$this->auth->get_user_id());
 		}elseif ($this->auth->is_employee()) {
-			$this->db->where("shop_id",$this->auth->get_emp_shop_id());
+			$this->db->where("t1.shop_id",$this->auth->get_emp_shop_id());
 		}else{
 		}
 
-		$this->db->where("deleted_at", NULL);
+		$this->db->join('shop t2', 't1.shop_id = t2.id','left');
+		$this->db->where("t1.deleted_at", NULL);
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
 			if (isset($id) && !is_null($id)) {
@@ -60,7 +63,12 @@ class Promocode_model extends CI_Model {
 					);
 
 		if($is_admin){
-			$user_data['shop_id'] = '';
+			if($this->input->post("group") == 7){
+				$user_data['shop_id'] = $_POST['shop'][0];
+			}else{
+				$user_data['shop_id'] = '';
+			}
+			
 		}elseif($is_vender){
 			$user_data['shop_id'] = intval($this->auth->get_user_id());
 		}elseif ($is_employee) {
@@ -139,13 +147,15 @@ class Promocode_model extends CI_Model {
 				}
 			}
 
-			if(isset($_POST['item']) && is_array($_POST['item']) && !empty($_POST['item']) && $this->input->post("group") == 7 && ($is_vender || $is_employee)){
+			if(isset($_POST['item']) && is_array($_POST['item']) && !empty($_POST['item']) && $this->input->post("group") == 7){
 				$promocode_products = array();
 
 				if($is_vender){
 					$shop_id = intval($this->auth->get_user_id());
 				}elseif($is_employee) {
 					$shop_id = intval($this->auth->get_emp_shop_id());
+				}elseif($is_admin) {
+					$shop_id = $_POST['shop'][0];
 				}else{
 					$shop_id = '';
 				}
@@ -198,7 +208,11 @@ class Promocode_model extends CI_Model {
 					);
 		
 		if($is_admin){
-			$user_data['shop_id'] = '';
+			if($this->input->post("group") == 7){
+				$user_data['shop_id'] = $_POST['shop'][0];
+			}else{
+				$user_data['shop_id'] = '';
+			}
 		}elseif($is_vender){
 			$user_data['shop_id'] = intval($this->auth->get_user_id());
 		}elseif ($is_employee) {
@@ -305,13 +319,15 @@ class Promocode_model extends CI_Model {
 				}
 			}
 
-			if(isset($_POST['item']) && is_array($_POST['item']) && !empty($_POST['item']) && $this->input->post("group") == 7 && ($is_vender || $is_employee)){
+			if(isset($_POST['item']) && is_array($_POST['item']) && !empty($_POST['item']) && $this->input->post("group") == 7){
 				$promocode_products = array();
 
 				if($is_vender){
 					$shop_id = intval($this->auth->get_user_id());
 				}elseif($is_employee) {
 					$shop_id = intval($this->auth->get_emp_shop_id());
+				}elseif($is_admin) {
+					$shop_id = $_POST['shop'][0];
 				}else{
 					$shop_id = '';
 				}

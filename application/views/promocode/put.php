@@ -135,7 +135,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-6 d-none" id="item-list">
+                                <div class="col-lg-12 d-none" id="item-list">
                                     <div class="form-group">
                                         <label class="required" for="products">Product & Combo's List</label>
                                         <div>
@@ -474,3 +474,8 @@ if($field_value == 1){
     </div>
 </div>
 <script src="<?php echo base_url().'assets/js/custom/vender/promocode.js'; ?>"></script>
+<script type="text/javascript" charset="utf-8" async defer>
+    var is_admin = '<?php echo $is_admin; ?>';
+    var is_vender = '<?php echo $is_vender; ?>';
+    var get_product_url = '<?php echo base_url().'get-products'; ?>';
+</script>

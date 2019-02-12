@@ -234,4 +234,57 @@ function get_data_by_filter($table_name = NULL, $select = array(), $where= array
 	return $return_data;
 }
 
+function validate_card($number = NULL){
+	$return_value = FALSE;
+
+	if($number != '' && isset($number)){
+
+		$number=preg_replace('/\D/', '', $number);
+	    $number_length=strlen($number);
+	    $parity=$number_length % 2;
+
+	    $total = 0;
+	    for($i= 0; $i<$number_length; $i++){
+	        $digit=$number[$i];
+	        if ($i % 2 == $parity){
+	        	$digit*=2;
+	          	if($digit > 9){
+	            	$digit -= 9;
+	          	}
+	        }
+	        $total+=$digit;
+	    }
+	    $return_value = ($total % 10 == 0) ? TRUE : FALSE;
+	}
+
+	return $return_value;
+}
+
+function get_card_type($str, $format = 'string'){
+    if (empty($str)){
+        return false;
+    }
+
+    $matchingPatterns = [
+        'Visa' => '/^4[0-9]{12}(?:[0-9]{3})?$/',
+        'Mastercard' => '/^5[1-5][0-9]{14}$/',
+        'American Express' => '/^3[47][0-9]{13}$/',
+        'Diners Club' => '/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/',
+        'Discover' => '/^6(?:011|5[0-9]{2})[0-9]{12}$/',
+        'JCB' => '/^(?:2131|1800|35\d{3})\d{11}$/',
+        'Other' => '/^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/'
+    ];
+
+    $ctr = 1;
+    $type = 'Other';
+    foreach ($matchingPatterns as $key => $pattern) {
+        if (preg_match($pattern, $str)) {
+             $type = $key ;
+             break;
+        }
+        $ctr++;
+    }
+    return $type;
+}
+
 ?>

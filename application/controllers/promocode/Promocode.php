@@ -21,12 +21,74 @@ class Promocode extends CI_Controller {
 
 	public function index(){
 
-		$promocode_list = $this->promocode_model->get_promocode();
-		//echo '<pre>'; print_r($_SESSION); exit;
-		$output_data["promocode_list"] = $promocode_list;
 		$output_data['main_content'] = "promocode/index";
 		$this->load->view('template/template',$output_data);	
 	}
+
+	public function promocode_list(){
+	  	$draw = intval($this->input->get("draw"));
+	  	$start = intval($this->input->get("start"));
+	  	$length = intval($this->input->get("length"));
+
+
+	  	$promocode_list = $this->promocode_model->get_promocode();
+
+	 	$data = array();
+	 	$action_data = '';
+	 	$edit_link = base_url().'promocode-update';
+
+		foreach($promocode_list as $key => $promocode) {
+
+		       	$action_data = "<a href='".$edit_link."/".encrypt($promocode['id'])."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a><button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_promocode' title='Delete' data-popup='tooltip'>Delete</button></td>";
+
+		       	if($promocode["status"] == 1){
+	                $btn_name = 'Active';
+	                $btn_class = 'btn-success';
+	            }else{
+	                $btn_name = 'Deactivate';
+	                $btn_class = 'btn-deactive';
+	            }
+
+		       	$status_str = "<button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_promocode' status-id='" . $promocode["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button>";
+
+
+		       	if($promocode["discount_type"] == 1){
+                    $discount_type = 'Percentage';
+                }else{
+                    $discount_type = 'Flat';
+                }
+
+                $from_date_ts = strtotime($promocode["from_date"]);
+                $from_date = date("j M, Y", $from_date_ts);
+
+                $to_date_ts = strtotime($promocode["to_date"]);
+                $to_date = date("j M, Y", $to_date_ts);
+
+                $added_by = ($promocode['shop_id'] == '')?'Admin':$promocode['shop_name'];
+
+		       	$data[] = array(
+		            $promocode['id'],
+		            $promocode["promocode"],
+		            $added_by,
+		            $promocode['amount'],
+		            $discount_type,
+		            $promocode["from_date"],
+		            $promocode["to_date"],
+		            $status_str,
+		            $action_data
+		       	);
+
+		}
+
+	  	$output = array(
+	       "draw" => $draw,
+	         "recordsTotal" => count($promocode_list),
+	         "recordsFiltered" => count($promocode_list),
+	         "data" => $data
+	    );
+	  	echo json_encode($output);
+	  	exit();
+  	}
 
 	public function checkfromto($to = NULL, $from = NULL) {
 
@@ -56,21 +118,12 @@ class Promocode extends CI_Controller {
 			if ($id != '') {
 				$this->db->where_not_in('id', $id);
 			}
-			// if(!$this->auth->is_admin()){
-			// 	if($this->auth->is_vender()){
-			// 		$this->db->where('shop_id', intval($this->auth->get_user_id()));
-			// 	}else{
-			// 		$this->db->where('shop_id', intval($this->auth->get_emp_shop_id()));
-			// 	}
-			// }else{
-			// 	$this->db->where('shop_id','');
-			// }
 			$this->db->where('promocode', $str);
 			$this->db->where('deleted_at', NULL);
 			$this->db->from('promocode');
 			$sql_query = $this->db->get();
 			if ($sql_query->num_rows() > 0) {
-				$this->form_validation->set_message('isexists', "The promocode field is already exists.".$id."11");
+				$this->form_validation->set_message('isexists', "The promocode field is already exists.");
 				return FALSE;
 			} else {
 				return TRUE;
@@ -158,7 +211,7 @@ class Promocode extends CI_Controller {
 
 					// $abc = $this->promocode_model->post();
 					// echo "<pre>";
-					// print_r($abc);
+					// print_r($_POST);
 					// exit; 
 
 					if($this->promocode_model->post()){
@@ -278,12 +331,16 @@ class Promocode extends CI_Controller {
 			$output_data['promocode_shops'] = get_data_by_filter('promocode_shops',$select,$where);
 		}
 
-		if($promocode_data->group_type == 7 && ($is_vender || $is_employee)){
+		if($promocode_data->group_type == 7){
 
 			if($is_vender){
 				$shop_id = intval($this->auth->get_user_id());
-			}else{
+			}else if($is_employee){
 				$shop_id = intval($this->auth->get_emp_shop_id());
+			}else if($is_admin){
+				$shop_id = intval($promocode_data->shop_id);
+			}else{
+
 			}
 
 			$where = array('shop_id' => $shop_id, 'promocode_id' => $promocode_data->id);
@@ -311,10 +368,7 @@ class Promocode extends CI_Controller {
 		// 	redirect(base_url() . "promocode-list");
 		// }
 
-		// echo "<pre>";
-		// print_r($output_data);
-		// exit;
-
+		
 		if($is_admin){
 			$output_data["group"] = $this->config->item("group_for_admin");
 			$shop_list = $this->email_template_model->get_table_data('shop');
@@ -323,13 +377,14 @@ class Promocode extends CI_Controller {
 		}elseif($is_vender || $is_employee){
 			$output_data["group"] = $this->config->item("group_for_shop");
 			$output_data["promo_type"] = $this->config->item("promocode_type");
-			$item_list = $this->email_template_model->get_table_data('item');
-			$output_data["item_list"] = $item_list;
 			$output_data["is_vender"] = $is_vender;
 		}else{
 			$this->auth->set_error_message("User not found");
 			return FALSE;
 		}
+
+		$item_list = $this->email_template_model->get_table_data('item');
+		$output_data["item_list"] = $item_list;
 
 		// echo "<pre>";
 		// print_r($output_data);
@@ -364,6 +419,20 @@ class Promocode extends CI_Controller {
 		}else{
 			return FALSE;
 		}
+	}
+
+	public function get_products_by_shop(){
+		$table_name = 'item';
+		$select = array('id','name');
+		$where = array('shop_id' => $_POST['id'], 'is_active' => 1, 'deleted_at' => NULL);
+		$product_data = get_data_by_filter($table_name, $select, $where);
+		if(is_array($product_data) && !empty($product_data)){
+			echo json_encode($product_data);
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+		
 	}
 }
 ?>

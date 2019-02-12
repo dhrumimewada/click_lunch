@@ -321,10 +321,23 @@
         $('#item-list').addClass("d-none");
     }   
     if($('#group').val() == 7){
-        
-        $('#item-list').removeClass("d-none");
-        $('#shop-list').addClass("d-none");
-        $('#order-no').addClass("d-none");
+        if(is_vender){
+            $('#item-list').removeClass("d-none");
+            $('#shop-list').addClass("d-none");
+            $('#order-no').addClass("d-none");
+        }else if(is_admin){
+            //console.log($('#group').val());
+            $('#shop').removeAttr('multiple');
+            $('#shop-list').removeClass("d-none");
+            $(".select2").select2();
+            $('#order-no').addClass("d-none");
+            $('#item-list').removeClass("d-none");
+            console.log("111");
+            // var selected_shop = $('#shop').val();
+            // set_products(selected_shop);
+        }else{
+            
+        }
     }   
 
     $(document).on('change','#group',function(){
@@ -345,12 +358,58 @@
             $('#shop-list').addClass("d-none");
         }   
         if($(this).val() == 7){
-            
-            $('#item-list').removeClass("d-none");
-            $('#order-no').addClass("d-none");
-            $('#shop-list').addClass("d-none");
+            if(is_vender){
+                $('#item-list').removeClass("d-none");
+                $('#order-no').addClass("d-none");
+                $('#shop-list').addClass("d-none");
+                
+            }else if(is_admin){
+                $('#shop').removeAttr('multiple');
+                $('#shop-list').removeClass("d-none");
+                $(".select2").select2();
+                $('#order-no').addClass("d-none");
+                $('#item-list').addClass("d-none");
+            }else{
+
+            }
         }   
    });
+
+    if(is_admin){
+        $(document).on('change','#shop',function(){
+            var selected_shop = $(this).val();
+            set_products(selected_shop);
+            
+        });
+    }
+
+    function set_products(selected_shop) {
+        if (typeof selected_shop != "undefined" && selected_shop != null && selected_shop.length > 0){
+            $.ajax({
+                url: get_product_url,
+                type: "POST",
+                data:{id:selected_shop},
+                success: function (returnData) {
+                    returnData = $.parseJSON(returnData);
+                    
+                    if (typeof returnData != "undefined"){
+
+                        $('#products').find('option').remove().end();
+
+                        $('#item-list').removeClass("d-none");
+                        $.each(returnData, function (key, val) {
+                            var newOption = new Option(val.name, val.id, false, false);
+                            $('#products').append(newOption).trigger('change');
+                        });
+                        return true;
+                    } 
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('error');
+                }
+            });
+        }
+    }
 
     if ($('#discount_type').is(':checked')){
         $('#max-disc').removeClass("d-none");

@@ -135,6 +135,22 @@
                     return $.trim(value);
                 }
             },
+            minimum_mile:{
+                required: true,
+                number: true,
+                greaterThanZeroEqualTo:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            charges_of_minimum_mile:{
+                required: true,
+                number: true,
+                greaterThanZeroEqualTo:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
             profile_picture:{
                 accept: "image/jpg, image/jpeg, image/png",
                 filesize: 10
@@ -214,6 +230,16 @@
                 number: "The delivery charges field is invalid.",
                 greaterThanZeroEqualTo: "The delivery charges field is invalid.",
             },
+            minimum_mile: {
+                required: "The minimum mile field is required.",
+                number: "The minimum mile field is invalid.",
+                greaterThanZeroEqualTo: "The minimum mile field is invalid.",
+            },
+            charges_of_minimum_mile: {
+                required: "The charges of minimum mile field is required.",
+                number: "The charges of minimum mile field is invalid.",
+                greaterThanZeroEqualTo: "The charges of minimum mile field is invalid.",
+            },
             'payment_mode[]': {
                 required: "Please select at least one payment mode."
             },
@@ -260,6 +286,14 @@ $( document ).ready(function() {
         $('#imgInp').click();
         $('#blah').attr('src', 'https://bootdey.com/img/Content/avatar/avatar6.png');
         return false;
+    });
+
+    $(".demo3").TouchSpin({
+        forcestepdivisibility: 'none',
+        max: 1000000000,
+        decimals: 2,
+        buttondown_class: 'btn btn-primary',
+        buttonup_class: 'btn btn-primary'
     });
 
     $(".demo2").TouchSpin({

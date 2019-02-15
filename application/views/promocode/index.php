@@ -28,7 +28,6 @@ $edit_link = base_url().'promocode-update';
                                 <th>Promocode</th>
                                 <th>Promocode By</th>
                                 <th>Amount</th>
-                                <th>Type</th>
                                 <th>From</th>
                                 <th>To</th>
                                 <th class='text-center'>Status</th>

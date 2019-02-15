@@ -79,12 +79,15 @@ class Vender_model extends CI_Model {
 						'contact_no2' => $this->input->post("contact_no2"),
 						'website' => addslashes($this->input->post("website")),
 						'tax_number' => $this->input->post("tax_number"),
-						'delivery_charges_per_mile' => $this->input->post("delivery_charges"),
 						'payment_mode' => $payment_mode,
 						'profile_picture' => ((isset($profile_picture) && !empty($profile_picture)) ? $profile_picture : ''),
 						'status' => 0,
 						'created_at' => date('Y-m-d H:i:s')
 					);
+
+		$user_data['minimum_mile'] = number_format((float)$this->input->post("minimum_mile"), 2, '.', '');
+		$user_data['charges_of_minimum_mile'] = number_format((float)$this->input->post("charges_of_minimum_mile"), 2, '.', '');
+		$user_data['delivery_charges_per_mile'] = number_format((float)$this->input->post("delivery_charges"), 2, '.', '');
 
 		$response = $this->db->insert("shop", $user_data);
 		$user_id = $this->db->insert_id();
@@ -217,9 +220,12 @@ class Vender_model extends CI_Model {
 		$user_data['contact_no2'] = $this->input->post("contact_no2");
 		$user_data['website'] = addslashes($this->input->post("website"));
 		$user_data['tax_number'] = addslashes($this->input->post("tax_number"));
-		$user_data['delivery_charges_per_mile'] = $this->input->post("delivery_charges");
 		$user_data['payment_mode'] = $payment_mode;
 		$user_data['updated_at'] = date('Y-m-d H:i:s');
+
+		$user_data['minimum_mile'] = number_format((float)$this->input->post("minimum_mile"), 2, '.', '');
+		$user_data['charges_of_minimum_mile'] = number_format((float)$this->input->post("charges_of_minimum_mile"), 2, '.', '');
+		$user_data['delivery_charges_per_mile'] = number_format((float)$this->input->post("delivery_charges"), 2, '.', '');
 	
 		$this->db->where('id', $this->input->post("shop_id"));
 		$this->db->update("shop", $user_data);

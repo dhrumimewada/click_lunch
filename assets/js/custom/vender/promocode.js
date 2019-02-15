@@ -326,19 +326,22 @@
             $('#shop-list').addClass("d-none");
             $('#order-no').addClass("d-none");
         }else if(is_admin){
-            //console.log($('#group').val());
             $('#shop').removeAttr('multiple');
             $('#shop-list').removeClass("d-none");
             $(".select2").select2();
             $('#order-no').addClass("d-none");
             $('#item-list').removeClass("d-none");
-            console.log("111");
-            // var selected_shop = $('#shop').val();
-            // set_products(selected_shop);
+
+            set_products(selected_shop);
+
         }else{
             
         }
-    }   
+    }
+
+    if(selected_group == 7){
+        $('#shop').val(selected_shop).trigger('change');
+    }
 
     $(document).on('change','#group',function(){
 
@@ -347,7 +350,8 @@
         $('#item-list').addClass("d-none");
         
         if($(this).val() == 5){
-
+            $('#shop').val('').trigger("change");
+            $('#shop').attr('multiple', 'multiple');
             $('#order-no').addClass("d-none");
             $('#shop-list').removeClass("d-none");
             $(".select2").select2();
@@ -364,11 +368,14 @@
                 $('#shop-list').addClass("d-none");
                 
             }else if(is_admin){
+
                 $('#shop').removeAttr('multiple');
                 $('#shop-list').removeClass("d-none");
                 $(".select2").select2();
                 $('#order-no').addClass("d-none");
                 $('#item-list').addClass("d-none");
+
+                $('#shop').val('').trigger("change");
             }else{
 
             }
@@ -377,30 +384,44 @@
 
     if(is_admin){
         $(document).on('change','#shop',function(){
-            var selected_shop = $(this).val();
-            set_products(selected_shop);
+            var selected_shop = $('#shop').val();
+            if($('#group').val() == 7){
+                set_products(selected_shop);
+            }
             
         });
     }
 
     function set_products(selected_shop) {
         if (typeof selected_shop != "undefined" && selected_shop != null && selected_shop.length > 0){
+
+            $('#products').find('option').remove().end();
+            $('#products').attr('disabled', 'disabled');
             $.ajax({
                 url: get_product_url,
                 type: "POST",
                 data:{id:selected_shop},
                 success: function (returnData) {
-                    returnData = $.parseJSON(returnData);
-                    
-                    if (typeof returnData != "undefined"){
-
-                        $('#products').find('option').remove().end();
-
-                        $('#item-list').removeClass("d-none");
+                    //console.log(returnData);
+                    $('#item-list').removeClass("d-none");
+                    if (typeof returnData != "undefined" && returnData != ''){
+                        returnData = $.parseJSON(returnData);
                         $.each(returnData, function (key, val) {
                             var newOption = new Option(val.name, val.id, false, false);
                             $('#products').append(newOption).trigger('change');
+
+                            // Default selected product on first load
+                            if (typeof group_shop_items !== 'undefined' && group_shop_items.length > 0){
+                                $.each(JSON.parse(group_shop_items), function(key1, val1){
+                                    if(val1.product_id == val.id){
+                                        $("#products option[value='"+val.id+"']").attr("selected","selected");
+                                    }
+                                });
+                            }
+                            
+
                         });
+                        $('#products').removeAttr('disabled');
                         return true;
                     } 
                 },
@@ -440,18 +461,23 @@
         }
     });
 
-    if ($('#promo_type').val() == 1){
-        $('#products-list').removeClass("d-none");
-    }else{
-        $('#products-list').addClass("d-none");
-    }
-    $(document).on('change','#promo_type',function(){
-        if ($(this).val() == 1){
+    if(is_vender){
+        if ($('#promo_type').val() == 1){
             $('#products-list').removeClass("d-none");
         }else{
             $('#products-list').addClass("d-none");
         }
-    });
+        $(document).on('change','#promo_type',function(){
+            if ($(this).val() == 1){
+                $('#products-list').removeClass("d-none");
+            }else{
+                $('#products-list').addClass("d-none");
+            }
+        });
+    }else{
+        $('#products-list').addClass("d-none");
+    }
+    
 
  });
 

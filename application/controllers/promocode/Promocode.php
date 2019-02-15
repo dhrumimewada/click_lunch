@@ -36,10 +36,11 @@ class Promocode extends CI_Controller {
 	 	$data = array();
 	 	$action_data = '';
 	 	$edit_link = base_url().'promocode-update';
+	 	$view_link = base_url().'promocode-customer-detail';
 
 		foreach($promocode_list as $key => $promocode) {
 
-		       	$action_data = "<a href='".$edit_link."/".encrypt($promocode['id'])."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a><button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_promocode' title='Delete' data-popup='tooltip'>Delete</button></td>";
+		       	$action_data = "<a href='".$edit_link."/".encrypt($promocode['id'])."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a><button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_promocode' title='Delete' data-popup='tooltip'>Delete</button><a href='".$view_link."/".encrypt($promocode['id'])."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='View Eligible Customers' data-popup='tooltip' > View</a></td>";
 
 		       	if($promocode["status"] == 1){
 	                $btn_name = 'Active';
@@ -66,12 +67,13 @@ class Promocode extends CI_Controller {
 
                 $added_by = ($promocode['shop_id'] == '')?'Admin':$promocode['shop_name'];
 
+                $amount = ($promocode["discount_type"] == 1)?$promocode["amount"].' &#37;':'&#36; '.$promocode["amount"];
+
 		       	$data[] = array(
 		            $promocode['id'],
 		            $promocode["promocode"],
 		            $added_by,
-		            $promocode['amount'],
-		            $discount_type,
+		            $amount,
 		            $promocode["from_date"],
 		            $promocode["to_date"],
 		            $status_str,
@@ -386,6 +388,10 @@ class Promocode extends CI_Controller {
 		$item_list = $this->email_template_model->get_table_data('item');
 		$output_data["item_list"] = $item_list;
 
+		// if($promocode_data->group_type == 7 && $promocode_data->shop_id != ''){
+		// 	$output_data['promocode_shops'] = 
+		// }
+
 		// echo "<pre>";
 		// print_r($output_data);
 		// exit;
@@ -434,5 +440,47 @@ class Promocode extends CI_Controller {
 		}
 		
 	}
+
+	public function get_promocode_customer_detail($id = NULL){
+		$output_data["promocode_id"] = $id;
+
+		$output_data['main_content'] = "promocode/promocode_customer_detail";
+		$this->load->view('template/template',$output_data);	
+	}
+
+	public function eligible_customer_list($promocode_id = NULL){
+	  	$draw = intval($this->input->get("draw"));
+	  	$start = intval($this->input->get("start"));
+	  	$length = intval($this->input->get("length"));
+
+
+	  	$eligible_customer_list = $this->promocode_model->get_eligible_customer(decrypt($promocode_id));
+
+	 	$data = array();
+	 	$action_data = '';
+	 	$edit_link = base_url().'promocode-update';
+	 	$view_link = base_url().'promocode-customer-detail';
+
+		foreach($eligible_customer_list as $key => $promocode) {
+
+		       	$data[] = array(
+		            $promocode['id'],
+		            $promocode["username"],
+		            $promocode['email'],
+		            $promocode['mobile_number'],
+		            $promocode['address']
+		       	);
+
+		}
+
+	  	$output = array(
+	       "draw" => $draw,
+	         "recordsTotal" => count($eligible_customer_list),
+	         "recordsFiltered" => count($eligible_customer_list),
+	         "data" => $data
+	    );
+	  	echo json_encode($output);
+	  	exit();
+  	}
 }
 ?>

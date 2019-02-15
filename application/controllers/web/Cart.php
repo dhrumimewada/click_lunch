@@ -15,7 +15,7 @@ class Cart extends CI_Controller {
 		'qty' => '2' );
 
 		 // This function add items into cart.
-		//$this->cart->insert($insert_data);
+		$this->cart->insert($insert_data);
 
 		$insert_data = array( 'id' => '12',
 		'name' => 'dhrumi2',
@@ -23,7 +23,7 @@ class Cart extends CI_Controller {
 		'qty' => '2' );
 
 		 // This function add items into cart.
-		//$this->cart->insert($insert_data);
+		$this->cart->insert($insert_data);
 
 		echo "<pre>";
 		print_r($this->cart->contents());

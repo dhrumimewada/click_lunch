@@ -91,7 +91,6 @@
     }
     ?>
                                             <select class="select2 form-control" data-placeholder="Select restaurant" name="shop[]" id="shop" multiple>
-                                                    <option disabled selected></option>
                                                     <?php 
                                                     
                                                     foreach ($shop_list as $key => $value) {
@@ -325,8 +324,8 @@ if($field_value == 1){
                             </div>
 
                             <?php
-                            if(!$is_admin){ ?>
-                            <div class="row" id="products-list">
+                            if(1){ ?>
+                            <div class="row d-none" id="products-list">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="required" for="products">Promocode Applied On These Products/Combos</label>
@@ -338,7 +337,7 @@ if($field_value == 1){
         $field_value = $temp_value;
     }
     ?>
-                                            <select class="select2 form-control" data-placeholder="Select Products/Combos" name="applied_on_products[]" id="products" multiple>
+                                            <select class="select2 form-control" data-placeholder="Select Products/Combos" name="applied_on_products[]" id="applied_on_products" multiple>
                                                     <?php 
                                                     
                                                     foreach ($item_list as $key => $value) {
@@ -439,5 +438,8 @@ if($field_value == 1){
 <script type="text/javascript" charset="utf-8" async defer>
     var is_admin = '<?php echo $is_admin; ?>';
     var is_vender = '<?php echo $is_vender; ?>';
+    var selected_group = '';
+    var selected_shop = '';
+    var group_shop_items ='';
     var get_product_url = '<?php echo base_url().'get-products'; ?>';
 </script>

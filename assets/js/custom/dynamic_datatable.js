@@ -72,13 +72,13 @@ $( document ).ready(function() {
                    $(row).attr("data-id",data[0]);
 
                    // from date
-                   var $fromDate_dateCell = $(row).find('td:eq(4)');
+                   var $fromDate_dateCell = $(row).find('td:eq(3)');
                    var fromDate = $fromDate_dateCell.text();
                    var full_date = get_full_date(fromDate);
                    $fromDate_dateCell.data('order', fromDate).text(full_date);
 
                    // To date
-                   var $toDate_dateCell = $(row).find('td:eq(5)');
+                   var $toDate_dateCell = $(row).find('td:eq(4)');
                    var toDate = $toDate_dateCell.text();
                    var full_date = get_full_date(toDate);
                    $toDate_dateCell.data('order', toDate).text(full_date);
@@ -88,9 +88,28 @@ $( document ).ready(function() {
                 "targets": [ 0 ],
                 "visible": false
             },
-            { "orderable": false, "targets": 8 },
-            { "orderable": false, "targets": 7 }
+            { "orderable": false, "targets": 7 },
+            { "orderable": false, "targets": 6 }
         ]
+    });
+
+    var eligible_customer_url = base_url+ 'promocode/promocode/eligible_customer_list/'+promocode_id;
+    $('.eligible_customer_list').DataTable( {
+        "ajax": {
+            url : eligible_customer_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            }
+        ],
+        "pageLength": 50
     });
 
 });

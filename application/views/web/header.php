@@ -14,7 +14,6 @@
 
     <link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>css/owl.carousel.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>css/owl.theme.default.css">
-
     <link href="<?php echo base_url() . 'assets/css/icons.css'; ?>" rel="stylesheet" type="text/css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

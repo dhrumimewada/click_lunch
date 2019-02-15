@@ -318,6 +318,46 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
+                                        <label for="minimum_mile" class="required">Minimum Mile</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('minimum_mile');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    ?>
+                                            <input type="number" name="minimum_mile" class="form-control demo3" id="minimum_mile" placeholder="Ex: 2.50" value="<?php echo $field_value; ?>">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('minimum_mile'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="charges_of_minimum_mile" class="required">Flat Charges Of Minimum Mile</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('charges_of_minimum_mile');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    ?>
+                                            <input type="number" name="charges_of_minimum_mile" class="form-control demo2" id="charges_of_minimum_mile" placeholder="Ex: 3.50" value="<?php echo $field_value; ?>">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('charges_of_minimum_mile'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
                                         <label class="required">Delivery Charges Per Mile</label>
                                         <div>
                                         <?php

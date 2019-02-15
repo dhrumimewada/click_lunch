@@ -139,6 +139,8 @@ $route['promocode-update'] = 'promocode/promocode/index';
 $route['promocode-status'] = 'promocode/promocode/active_deactive_promocode'; 
 
 $route['get-products'] = 'promocode/promocode/get_products_by_shop';
+$route['promocode-customer-detail/(:any)'] = 'promocode/promocode/get_promocode_customer_detail/$1';
+$route['eligible-customer-list/(:any)'] = 'promocode/promocode/eligible_customer_list/$1';
 
 //Employee
 $route['login-employee'] = 'employee/employee_login/login';

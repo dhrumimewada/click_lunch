@@ -267,9 +267,12 @@ class Promocode_model extends CI_Model {
 
 			$where = array('promocode_id' => $insert_id);
 
-			// Delete promocode_valid_product
-			$this->db->where($where);
-			$this->db->delete('promocode_valid_product');
+			if(($is_vender || $is_employee)){
+				// Delete promocode_valid_product
+				$this->db->where($where);
+				$this->db->delete('promocode_valid_product');
+			}
+			
 
 			// Delete promocode_shops
 			$this->db->where($where);
@@ -355,6 +358,93 @@ class Promocode_model extends CI_Model {
 			$return_value = TRUE;
 		}
 		return $return_value;
+	}
+
+	public function get_eligible_customer($promocode_id = NULL){
+		$return_data = array();
+		$this->db->select('*');
+		$this->db->from('promocode');
+		$this->db->where('id', $promocode_id);
+		$this->db->where("deleted_at", NULL);
+		$this->db->where("status", 1);
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			$promocode_data = $sql_query->row();
+
+			if($promocode_data->group_type == 1){
+
+				$sql_select = array(
+                            "t1.id",
+                            "t1.email",
+                            "t1.username",
+                            "t1.mobile_number",
+                            "t1.address"
+                        );
+
+				$this->db->select($sql_select);
+				$this->db->where("t1.deleted_at", NULL);
+        		$this->db->where("t1.status", 1);
+        		$this->db->where("t2.id", NULL);
+        		$this->db->from('customer t1');
+        		$this->db->join('orders t2', 't1.id = t2.customer_id', "left outer");
+        		$sql_query = $this->db->get();
+        		if ($sql_query->num_rows() > 0) {
+        			$return_data = $sql_query->result_array();
+        		}
+			}else if($promocode_data->group_type == 4){
+
+				$sql_select = array(
+                            "t1.id",
+                            "t1.email",
+                            "t1.username",
+                            "t1.mobile_number",
+                            "t1.address"
+                        );
+
+				$this->db->select($sql_select);
+				$this->db->where("t1.deleted_at", NULL);
+        		$this->db->where("t1.status", 1);
+        		$this->db->from('customer t1');
+        		$sql_query = $this->db->get();
+        		if ($sql_query->num_rows() > 0) {
+        			$return_data = $sql_query->result_array();
+        		}
+			}else if($promocode_data->group_type == 5){
+
+				$this->db->select('shop_id');
+				$this->db->from('promocode_shops');
+				$this->db->where("promocode_id", $promocode_id);
+				$sql_query = $this->db->get();
+				if ($sql_query->num_rows() > 0) {
+        			$shops_data = $sql_query->result_array();
+        			$shops = array_column($shops_data, 'shop_id');
+
+        			$sql_select = array(
+                            "t1.id",
+                            "t1.email",
+                            "t1.username",
+                            "t1.mobile_number",
+                            "t1.address"
+                        );
+
+					$this->db->select($sql_select);
+					$this->db->where("t1.deleted_at", NULL);
+	        		$this->db->where("t1.status", 1);
+	        		$this->db->where_in("t2.shop_id", $shops);
+	        		$this->db->from('customer t1');
+	        		$this->db->join('orders t2', 't1.id = t2.customer_id',"left join");
+	        		$sql_query = $this->db->get();
+	        		if ($sql_query->num_rows() > 0) {
+	        			$return_data = $sql_query->result_array();
+	        		}
+        		}
+
+			}else{
+
+			}
+			
+		}
+		return $return_data;
 	}
 
 }

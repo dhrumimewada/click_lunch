@@ -7,6 +7,11 @@
  <?php
  $put_link = base_url().'promocode-put';
  $back = base_url().'promocode-list';
+ $group_shop_items = '';
+ if(isset($promocode_products) && !empty($promocode_products) && ($is_admin) && ($promocode_data->group_type == 7) && ($promocode_data->shop_id != '')){
+    $group_shop_items = array_column($promocode_products, 'product_id');
+    $group_shop_items = json_encode($promocode_products);
+ }
  ?>
 <div class="content">
     <div class="container-fluid">
@@ -60,7 +65,7 @@
     }
     ?>
                                             <select class="select2 form-control" data-placeholder="Select group" name="group" id='group'>
-                                                <option selected disabled></option>
+
                                                     <?php 
                                                     
                                                     foreach ($group as $key => $value) {
@@ -148,14 +153,17 @@
     ?>
                                             <select class="select2 form-control" data-placeholder="Select Product/Combo" name="item[]" id="products" multiple>
                                                     <?php 
-                                                    
-                                                    foreach ($item_list as $key => $value) {
-                                                        $selected = '';
-                                                        if (in_array($value['id'], array_column($promocode_products, 'product_id'))){
-                                                            $selected = 'selected';
-                                                        }
+                                                    if(!$is_admin){
 
-                                                        echo "<option value='".$value['id']."' ".$selected.">".$value['name']."</option>";
+
+                                                        foreach ($item_list as $key => $value) {
+                                                            $selected = '';
+                                                            if (in_array($value['id'], array_column($promocode_products, 'product_id'))){
+                                                                $selected = 'selected';
+                                                            }
+
+                                                            echo "<option value='".$value['id']."' ".$selected.">".$value['name']."</option>";
+                                                        }
                                                     }
                                                     ?>
                                             </select>
@@ -344,12 +352,10 @@ if($field_value == 1){
                                 </div>
                             </div>
 
-                            <?php
-                            if(!$is_admin && $promocode_data->promo_type == 1){ ?>
-                            <div class="row">
+                            <div class="row" id="products-list">
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label class="required" for="products">Promocode Applied On These Products/Combos</label>
+                                        <label class="required" for="applied_on_products">Promocode Applied On These Products/Combos</label>
                                         <div>
                                         <?php
     $field_value = NULL;
@@ -358,7 +364,7 @@ if($field_value == 1){
         $field_value = $temp_value;
     }
     ?>
-                                            <select class="select2 form-control" data-placeholder="Select Products/Combos" name="applied_on_products[]" id="products" multiple>
+                                            <select class="select2 form-control" data-placeholder="Select Products/Combos" name="applied_on_products[]" id="applied_on_products" multiple >
                                                     <?php 
                                                     
                                                     foreach ($item_list as $key => $value) {
@@ -381,7 +387,6 @@ if($field_value == 1){
                                     </div>
                                 </div>
                             </div>
-                            <?php } ?>
 
                             <div class="row">
                                 <div class="col-lg-6">
@@ -477,5 +482,8 @@ if($field_value == 1){
 <script type="text/javascript" charset="utf-8" async defer>
     var is_admin = '<?php echo $is_admin; ?>';
     var is_vender = '<?php echo $is_vender; ?>';
+    var selected_group = '<?php echo $promocode_data->group_type; ?>';
+    var selected_shop = '<?php echo $promocode_data->shop_id; ?>';
+    var group_shop_items ='<?php echo $group_shop_items; ?>';
     var get_product_url = '<?php echo base_url().'get-products'; ?>';
 </script>

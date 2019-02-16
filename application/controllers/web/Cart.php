@@ -9,6 +9,11 @@ class Cart extends CI_Controller {
 	}
 
 	public function cart_add(){
+
+		echo "<pre>";
+		print_r($_POST);
+		exit;
+		
 		$insert_data = array( 'id' => '11',
 		'name' => 'dhrumi',
 		 'price' => '50',

@@ -32,29 +32,30 @@ class Welcome extends CI_Controller {
 	public function shop($short_name = NULL){
 		$shop = $this->welcome_model->get_shops($short_name);
 		$output_data["shop"] = $shop[0];
+		if(is_empty($shop[0])){
+			$this->load->view('web/error_page');
+		}else{
+			$select = array('id','name','short_name','price','offer_price','item_picture');
+			$where = array('shop_id' => $shop[0]['id'] ,'deleted_at' => NULL, 'is_active' => 1, 'quantity !=' => 0 );
+			$output_data["item"] = get_data_by_filter('item',$select,$where);
 
-		$select = array('id','name','short_name','price','offer_price','item_picture');
-		$where = array('shop_id' => $shop[0]['id'] ,'deleted_at' => NULL, 'is_active' => 1, 'quantity !=' => 0 );
-		$output_data["item"] = get_data_by_filter('item',$select,$where);
-
-		// echo "<pre>";
-		// print_r($output_data["shop"]); exit;
-
-		$output_data['main_content'] = 'restaurant_detail';
-		$this->load->view('web/template',$output_data);
+			$output_data['main_content'] = 'restaurant_detail';
+			$this->load->view('web/template',$output_data);
+		}
 	}
 
 	public function item($short_name = NULL){
 
 		$item = $this->welcome_model->get_item_data($short_name);
-		$output_data["item"] = $item;
-
-		// echo "<pre>";
-		// print_r($item['group_data']); exit;
-
-
-		$output_data['main_content'] = 'item_detail';
-		$this->load->view('web/template',$output_data);
+		if(is_empty($item)){
+			$this->load->view('web/error_page');
+		}else{
+			$output_data["item"] = $item;
+			// echo "<pre>"; print_r($item); exit;
+			$output_data['main_content'] = 'item_detail';
+			$this->load->view('web/template',$output_data);
+		}
+		
 	}
 
 	public function cart(){

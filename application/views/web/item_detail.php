@@ -25,7 +25,8 @@ $add_to_cart_link = base_url()."add-to-cart";
 								<img class="d-block w-100 item-photo object-cover" src="<?php echo $photo_url; ?>" alt="First slide">
 							</div>
 							<div class="col-md-6">
-								<form action="<?php echo $add_to_cart_link; ?>" method="post">
+								<form action="<?php echo $add_to_cart_link; ?>" method="post" id="form-item">
+								<input type="hidden" name="shop_id" value="<?php echo $item['item_data']['shop_id']; ?>">
 								<div class="product-description">
 									<h3><?php echo $item['item_data']['name']; ?></h3>
 									<div class="price">
@@ -68,6 +69,7 @@ $add_to_cart_link = base_url()."add-to-cart";
 
 											<?php
 											if(is_array($value['items']) && !empty($value['items'])){
+												 $availability = ($value['availability'] == 1)?'required':'';
 											?>
 											<table class="table">
 												<?php
@@ -77,10 +79,10 @@ $add_to_cart_link = base_url()."add-to-cart";
 													<td>
 														<div class="form-check">
 															<?php if($value['selection'] == 1){ ?>
-																<input class="form-check-input" type="checkbox" name="<?php echo $value['id']; ?>[]" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['id']; ?>">
+																<input class="form-check-input <?php echo $availability; ?>" type="checkbox" name="group[<?php echo $value['id']; ?>]['selection'][]" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['id']; ?>">
 																<label class="form-check-label" for="<?php echo $value1['id']; ?>"><?php echo ucfirst($value1['name']); ?></label>
 															<?php } else{ ?>
-																<input class="form-check-input" type="radio" name="<?php echo $value['id']; ?>" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['id']; ?>">
+																<input class="form-check-input <?php echo $availability; ?>" type="radio" name="group[<?php echo $value['id']; ?>]['selection'][]" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['id']; ?>">
 																<label class="form-check-label" for="<?php echo $value1['id']; ?>"><?php echo ucfirst($value1['name']); ?></label>
 															<?php }?>
 														</div>
@@ -102,8 +104,8 @@ $add_to_cart_link = base_url()."add-to-cart";
 									</div>
 									<div class="add-quantity">
 										<div class="quantity">
-											<input type="number" value="1" min="1" max="500" step="1" readonly />
-											<input type="submit" name="add-to-cart" id="add-to-cart" class="red-btn" value="Add To Cart">
+											<input type="number" value="1" min="1" max="500" step="1" name="quantity" readonly />
+											<input type="button" name="add-to-cart" id="add-to-cart" class="red-btn" value="Add To Cart">
 										</div>
 									</div>
 								</div>
@@ -207,3 +209,5 @@ $add_to_cart_link = base_url()."add-to-cart";
 <script type="text/javascript">
 	$("input[type='number']").inputSpinner();
 </script>
+<?php $assets = $this->config->item('website_assest'); ?>
+<script src="<?php echo $assets.'/js/custom/item_detail.js'; ?>"></script>

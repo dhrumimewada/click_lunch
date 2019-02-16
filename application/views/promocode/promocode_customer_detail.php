@@ -8,6 +8,9 @@ $edit_link = base_url().'promocode-update';
             <div class="col-sm-12">
                 <div class="page-title-box">
                     <h4 class="page-title">Eligible Customers of Promocode</h4>
+                    <div class="state-information d-none d-sm-block">
+                        <a class="btn btn-primary waves-effect waves-light btn-bg" href="<?php echo base_url().'promocode-list'; ?>">Back</a>
+                    </div>
                 </div>
             </div>
         </div>

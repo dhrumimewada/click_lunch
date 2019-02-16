@@ -287,4 +287,12 @@ function get_card_type($str, $format = 'string'){
     return $type;
 }
 
+if(!function_exists('is_empty')){
+	function is_empty($data){
+		if(empty($data)){
+			return true;
+		}
+	}
+}
+
 ?>

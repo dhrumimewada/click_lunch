@@ -211,8 +211,20 @@ class Customer_api extends REST_Controller {
                 $this->db->where('id',$customer->id);
                 $this->db->update('customer',$data);
 
+                $this->db->select('*');
+                $this->db->where("customer_id",$customer->id);
+                $this->db->where("deleted_at",NULL);
+                $this->db->from("delivery_address");
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $default_delivery_address = (array)$sql_query->row();
+                }else{
+                    $default_delivery_address = array();
+                }
+
                 $response['status'] = true;
-                $response['profile'] = (array)$customer;
+                $response['profile'] = $customer;
+                $response['default_delivery_address'] = $default_delivery_address;
 
                 }else{
                     $response['status'] = false;
@@ -389,8 +401,7 @@ class Customer_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
 
-        if(empty($errorPost))
-        {
+        if(empty($errorPost)){
             $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
             $user = (array)$this->db->get_where('customer',$where)->row();
             if(empty($user)){
@@ -637,16 +648,23 @@ class Customer_api extends REST_Controller {
                 $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
                 $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 
-                $delivery_address_data['latitude'] = $lat;
-                $delivery_address_data['longitude'] = $long;
+                if(isset($lat) && $lat != "" && isset($long) && $long != ""){
+                    $delivery_address_data['latitude'] = $lat;
+                    $delivery_address_data['longitude'] = $long;
 
-                if($this->db->insert('delivery_address',$delivery_address_data)){
-                    $response['status'] = true;
-                    $response['message'] = 'Delivery address added successfully';
+                    if($this->db->insert('delivery_address',$delivery_address_data)){
+                        $response['status'] = true;
+                        $response['message'] = 'Delivery address added successfully';
+                    }else{
+                        $response['status'] = false;
+                        $response['message'] = 'Server encountered an error.p lease try again';
+                    }
                 }else{
                     $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
+                    $response['message'] = 'Sorry, We could not fetch location. Please enter correct address';
                 }
+
+                
                 
                 
             }
@@ -675,7 +693,6 @@ class Customer_api extends REST_Controller {
 
                 $this->db->select('id');
                 $this->db->where("id", $_POST['address_id']);
-                $this->db->where("customer_id", $_POST['customer_id']);
                 $this->db->where("deleted_at", NULL);
                 $this->db->from('delivery_address');
                 $sql_query = $this->db->get();
@@ -1180,7 +1197,8 @@ class Customer_api extends REST_Controller {
                                 'state' => $shop['state'],
                                 'country' => $shop['country'],
                                 'delivery_time' => $shop['delivery_time'],
-                                'order_by_time' => $shop['order_by_time']
+                                'order_by_time' => $shop['order_by_time'],
+                                'delivery_charges' => $shop['charges_of_minimum_mile']
                                 );
 
                 $picture = array('profile_picture' => $shop['profile_picture']);
@@ -1866,13 +1884,38 @@ class Customer_api extends REST_Controller {
                     // GROUP 7 PROMOCODES ARE PENDING - waiting for order
 
                     $valid = FALSE;
+                    $discount_type = '';
+                    $discount_amount = '';
+                    $promo_type = '';
+                    $valid_product = array();
+                    $vali_promocode = strtoupper($_POST['promocode']);
                     foreach ($valid_promocodes as $key => $value) {
-                        if($_POST['promocode'] == $value['promocode']){
+                        if($vali_promocode == $value['promocode']){
                             $valid = TRUE;
+                            $discount_type = $value['discount_type'];
+                            $discount_amount = $value['amount'];
+                            $promo_type = $value['promo_type'];
+                            if($value['promo_type'] == 1){
+                                $this->db->select('product_id');
+                                $this->db->where("shop_id",$value['shop_id']);
+                                $this->db->from("promocode_valid_product");
+                                $sql_query = $this->db->get();
+                                if ($sql_query->num_rows() > 0){
+                                    $valid_products = $sql_query->result_array();
+                                    foreach ($products_array as $key => $value) {
+                                        $valid_product[] = $value;
+                                    }
+                                }
+                            }
                             break;
                         }
                     }
-                    $response['valid'] = $valid;
+                    $response['promocode'] = $_POST['promocode'];
+                    $response['valid_promocode'] = $valid;
+                    $response['discount_type'] = $discount_type;
+                    $response['discount_amount'] = $discount_amount;
+                    $response['promo_type'] = $promo_type;
+                    $response['valid_products'] = $valid_product;
                     //$response['valid_promocodes'] = $valid_promocodes;
                     $response['status'] = true;
                 }
@@ -1887,12 +1930,118 @@ class Customer_api extends REST_Controller {
 
     public function place_order_post(){
        
+        $postFields['order_data'] = $_POST['order_data']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $order_data =  json_decode($_POST['order_data'],true);
+
+            $postFields['customer_id'] = $order_data['customer_id']; 
+            $postFields['shop_id'] = $order_data['shop_id']; 
+            $postFields['order_type'] = $order_data['order_type']; 
+            $postFields['payment_mode'] = $order_data['payment_mode']; 
+            $postFields['payment_card_id'] = $order_data['payment_card_id']; 
+            $postFields['delivery_address_id'] = $order_data['delivery_address_id']; 
+            $postFields['products'] = $order_data['products']; 
+
+            $errorPost = $this->ValidatePostFields($postFields);
+            if(empty($errorPost)){
+                $where = array('id' => $order_data['customer_id'],'status' => '1', 'deleted_at' => NULL);
+                $user = (array)$this->db->get_where('customer',$where)->row();
+                if(empty($user)){
+                    $response['status'] = false;
+                    $response['message'] = 'User not found';
+                }else{
+                    $where = array('id' => $order_data['shop_id'],'status' => '1', 'deleted_at' => NULL);
+                    $shop = (array)$this->db->get_where('shop',$where)->row();
+                    if(empty($shop)){
+                        $response['status'] = false;
+                        $response['message'] = 'Restaurant not found';
+                    }else{
+                        $where = array('id' => $order_data['payment_card_id'],'deleted_at' => NULL);
+                        $customer_payment_card = (array)$this->db->get_where('customer_payment_card',$where)->row();
+                        if(empty($customer_payment_card)){
+                            $response['status'] = false;
+                            $response['message'] = 'Payment card does not exists';
+                        }else{
+                            $where = array('id' => $order_data['delivery_address_id'],'deleted_at' => NULL);
+                            $delivery_address = (array)$this->db->get_where('delivery_address',$where)->row();
+                            if(empty($delivery_address)){
+                                $response['status'] = false;
+                                $response['message'] = 'Delivery address does not exists';
+                            }else{
+                                $product_array = array_column($order_data['products'], 'product_id');
+                                $this->db->select('*'); 
+                                $this->db->where_in('id',$product_array); 
+                                $this->db->where('shop_id',$order_data['shop_id']); 
+                                $this->db->from('item'); 
+                                $sql_query = $this->db->get();
+                                if ($sql_query->num_rows() == count($product_array)){
+                                    // Add Order - start
+                                    if(($order_data['order_type'] == 2) || ($order_data['order_type'] == 4)){
+                                        $later_time = $order_data['later_time'];
+                                    }else{
+                                        $later_time = "";
+                                    }
+
+                                    $promocode_id = '';
+                                    if(isset($order_data['promocode_id']) && $order_data['promocode_id'] != "" && $order_data['promocode_id'] != "0" && !is_null($order_data['promocode_id'])){
+                                        $promocode_id = $order_data['promocode_id'];
+                                    }
+
+                                     $order = array( 
+                                            'customer_id' => $order_data['customer_id'], 
+                                            'shop_id'=> $order_data['shop_id'], 
+                                            'order_type'=> $order_data['order_type'], 
+                                            'later_time'=> $later_time,
+                                            'promocode_id'=> $promocode_id,
+                                            'order_status'=> 1,
+                                            'payment_status'=> 1,
+                                            'payment_mode'=> $order_data['payment_mode'],
+                                            'transaction_id'=> '',
+                                            'delivery_address_id'=> $order_data['delivery_address_id']
+                                        );
+
+                                    if($this->db->insert('orders', $order)){
+                                        $order['id'] = $this->db->insert_id();
+                                        $response['order'] = $order;
+                                        $response['status'] = true;
+                                    }else{
+                                        $response['status'] = false;
+                                        $response['message'] = 'Server encountered an error. please try again';
+                                    }
+                                    // Add Order - end
+                                }else{
+                                    $response['status'] = false;
+                                    $response['message'] = 'Product not found. Please refresh the cart.'; 
+                                }
+                            }
+                        }
+                    }
+                }
+            }else{
+                $response['status'] = false;
+                $response['message'] = $errorPost;
+            }
+
+            
+
+            
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function place_order_post2(){
+       
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['shop_id'] = $_POST['shop_id']; 
-        $postFields['promocode_id'] = $_POST['promocode_id']; 
         $postFields['order_type'] = $_POST['order_type']; 
         $postFields['payment_mode'] = $_POST['payment_mode']; 
-        $postFields['transaction_id'] = $_POST['transaction_id']; 
         $postFields['payment_card_id'] = $_POST['payment_card_id']; 
         $postFields['delivery_address_id'] = $_POST['delivery_address_id']; 
         $postFields['products'] = $_POST['products']; 
@@ -1915,12 +2064,123 @@ class Customer_api extends REST_Controller {
                     $response['message'] = 'Restaurant not found';
                 }else{
 
+                    $where = array('id' => $_POST['payment_card_id'],'deleted_at' => NULL);
+                    $customer_payment_card = (array)$this->db->get_where('customer_payment_card',$where)->row();
+                    if(empty($customer_payment_card)){
+                        $response['status'] = false;
+                        $response['message'] = 'Payment card does not exists';
+                    }else{
 
-                    $response['order'] = "ok";
-                    $response['status'] = true;
+                        $where = array('id' => $_POST['delivery_address_id'],'customer_id' => $_POST['customer_id'],'deleted_at' => NULL);
+                        $delivery_address = (array)$this->db->get_where('delivery_address',$where)->row();
+                        if(empty($delivery_address)){
+                            $response['status'] = false;
+                            $response['message'] = 'Delivery address does not exists';
+                        }else{
+
+                            //$products = explode(',',$_POST['products']);
+                            $product_array = array_column($_POST['products'], 'product_id');
+                            $this->db->select('*'); 
+                            $this->db->where_in('id',$product_array); 
+                            $this->db->where('shop_id',$_POST['shop_id']); 
+                            $this->db->from('item'); 
+                            $sql_query = $this->db->get();
+                            if ($sql_query->num_rows() > 0){
+
+                                // add order
+
+                                if($_POST['order_type'] == 2 || 4){
+                                    $later_time = $_POST['later_time'];
+                                }else{
+                                    $later_time = '';
+                                }
+
+                                $promocode_id = '';
+                                if(isset($_POST['promocode_id']) && $_POST['promocode_id'] != "" && $_POST['promocode_id'] != "0" && !is_null($_POST['promocode_id'])){
+                                    $promocode_id = $_POST['promocode_id'];
+                                }
+
+                                 $order = array( 
+                                        'customer_id' => $_POST['customer_id'], 
+                                        'shop_id'=> $_POST['shop_id'], 
+                                        'order_type'=> $_POST['order_type'], 
+                                        'later_time'=> $later_time,
+                                        'promocode_id'=> $promocode_id,
+                                        'order_status'=> 1,
+                                        'payment_status'=> 1,
+                                        'payment_mode'=> $_POST['payment_mode'],
+                                        'transaction_id'=> '123333',
+                                        'delivery_address_id'=> $_POST['delivery_address_id']
+                                    );
+
+                                if($this->db->insert('orders', $order)){
+                                    $order['id'] = $this->db->insert_id();
+                                    $response['order'] = $order;
+                                    $response['status'] = true;
+                                }else{
+                                    $response['status'] = false;
+                                    $response['message'] = 'Server encountered an error. please try again';
+                                }
+
+                            }else{
+                                $response['status'] = false;
+                                $response['message'] = 'Selected product does not exists';
+                            }
+
+                        }
+
+                    }
+                    
                 }
             }
             
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function fetch_delivery_charge_post(){
+        $postFields['delivery_address_id'] = $_POST['delivery_address_id']; 
+        $postFields['shop_id'] = $_POST['shop_id']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+            $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
+            $shop = (array)$this->db->get_where('shop',$where)->row();
+            if(empty($shop)){
+                $response['status'] = false;
+                $response['message'] = 'Restaurant not found';
+            }else{
+                $where = array('id' => $_POST['delivery_address_id'],'deleted_at' => NULL);
+                $address = (array)$this->db->get_where('delivery_address',$where)->row();
+                if(empty($address)){
+                    $response['status'] = false;
+                    $response['message'] = 'Delivery address does not exists';
+                }else{
+                    $google_key = $this->config->item("google_key");
+                    $distance_url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=".$shop['latitude'].",".$shop['longitude']."&destinations=".$address['latitude'].",".$address['longitude']."&key=".$google_key;        
+                    $distance = (array)json_decode(file_get_contents($distance_url));
+                    $km = $distance['rows'][0]->elements[0]->distance->value;
+
+                    if($km != '0'){
+                        $mile = $km / 1609.34;
+                    }else{
+                        $mile = 0;
+                    }
+                    $mile =  number_format((float)$mile, 2, '.', '');
+
+                    if($mile > $shop['minimum_mile']){
+                        $charges = $mile * $shop['delivery_charges_per_mile'];
+                        $charges = number_format((float)$charges, 2, '.', '');
+                    }else{
+                        $charges = $shop['charges_of_minimum_mile'];
+                    }
+                    $response['charges'] = $charges;
+                }
+            }
+
         }else{
             $response['status'] = false;
             $response['message'] = $errorPost;

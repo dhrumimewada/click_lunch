@@ -51,7 +51,7 @@ class Welcome extends CI_Controller {
 			$this->load->view('web/error_page');
 		}else{
 			$output_data["item"] = $item;
-			// echo "<pre>"; print_r($item); exit;
+			//echo "<pre>"; print_r($item); exit;
 			$output_data['main_content'] = 'item_detail';
 			$this->load->view('web/template',$output_data);
 		}

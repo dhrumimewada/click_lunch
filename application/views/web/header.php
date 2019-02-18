@@ -16,6 +16,8 @@
     <link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>css/owl.theme.default.css">
     <link href="<?php echo base_url() . 'assets/css/icons.css'; ?>" rel="stylesheet" type="text/css">
 
+    <link rel="stylesheet" href="<?php echo base_url() . 'plugins/sweet-alert2/sweetalert2.min.css'; ?>" type="text/css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript" src="<?php echo $assets; ?>js/popper.js"></script>
     <script type="text/javascript" src="<?php echo $assets; ?>js/bootstrap.min.js"></script>
@@ -30,4 +32,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>css/timepicki.css">
     <script type="text/javascript" src="<?php echo $assets; ?>js/bootstrap-datetimepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>css/datepicker.min.css">
+
+    <!-- Sweet-Alert  -->
+    <script src="<?php echo base_url() . 'plugins/sweet-alert2/sweetalert2.min.js'; ?>"></script>
 </head>

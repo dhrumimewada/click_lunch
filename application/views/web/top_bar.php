@@ -16,22 +16,22 @@
                 <div class="collapse navbar-collapse header-menu" id="navbarSupportedContent">
                   <ul class="navbar-nav ">
                     <li class="dropdown notification-list active">
-                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>web/home" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>welcome" role="button" aria-haspopup="false" aria-expanded="false">
                             <strong class="text-uppercase active">Home</strong>
                         </a>       
                     </li>
                      <li class="dropdown notification-list">
-                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>web/home/delivery" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>welcome" role="button" aria-haspopup="false" aria-expanded="false">
                             <strong class="text-uppercase">Delivery</strong>
                         </a>       
                     </li>                  
                     <li class="dropdown notification-list">
-                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>web/home/takeout_restaurant" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>welcome" role="button" aria-haspopup="false" aria-expanded="false">
                             <strong class="text-uppercase">Takeout</strong>
                         </a>       
                     </li>
                     <li class="dropdown notification-list">
-                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>web/home/restaurant_partner" role="button" aria-haspopup="false" aria-expanded="false">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>welcome" role="button" aria-haspopup="false" aria-expanded="false">
                             <strong class="text-uppercase">Restaurant Partners</strong>
                         </a>       
                     </li>

@@ -477,6 +477,9 @@ li.dropdown.notification-list.last-div:before{
 .object-cover{
     object-fit: cover;
 }
+.pointer{
+    cursor: pointer;
+}
 /* Scroll */
 /* width */
 ::-webkit-scrollbar {

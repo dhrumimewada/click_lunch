@@ -1,4 +1,3 @@
-<?php $assets = $this->config->item('website_assest'); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,8 +10,8 @@
         <meta content="Themesbrand" name="author" />
         <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-        <link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>css/style.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>assets/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>assets/css/style.css">
     </head>
 
     <body>

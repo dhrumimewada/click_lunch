@@ -51,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'Home/';
 //$route['default_controller'] = 'web/welcome';
-$route['404_override'] = 'errors/page_missing';
+$route['404_override'] = 'my404';
 $route['translate_uri_dashes'] = FALSE;
 
 $route['login'] = 'admin/admin_login/login';
@@ -306,6 +306,9 @@ $route['welcome'] = 'web/welcome';
 $route['restaurant/(:any)'] = 'web/welcome/shop/$1';
 $route['product/(:any)'] = 'web/welcome/item/$1';
 $route['add-to-cart'] = 'web/cart/cart_add';
+$route['cart-item-delete'] = 'web/cart/cart_item_delete';
+$route['get-cart-item-data'] = 'web/cart/get_cart_item_data';
 $route['subscribe'] = 'web/welcome/subscribe';
 $route['faq'] = 'web/welcome/faq';
+$route['restaurant-partner-form'] = 'web/welcome/restaurant_partner_form';
 

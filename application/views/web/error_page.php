@@ -40,7 +40,7 @@
                         <h1 class="text-dark">404!</h1>
                         <h4 class="">Sorry, data not found</h4><br>
 
-                        <a class="btn mb-5 waves-effect waves-light" href="<?php echo base_url(); ?>"><i class="mdi mdi-home"></i> Back to Website</a>
+                        <a class="btn mb-5 waves-effect waves-light" href="<?php echo base_url(); ?>welcome"><i class="mdi mdi-home"></i> Back to Website</a>
                     </div>
 
                 </div>

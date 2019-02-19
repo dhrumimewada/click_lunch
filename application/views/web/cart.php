@@ -1,13 +1,48 @@
 <?php
 $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
+$assets = $this->config->item('website_assest');
+$d_none = 'd-none';
 ?>
+<!-- model -->
+<div class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="customize-item-modal">
+    <div class="modal-dialog modal-dialog-centered my-modal">
+        <div class="modal-content">
+            <!-- Modal Header -->
+	        <div class="modal-header">
+	          <h4 class="modal-title">Modal Heading</h4>
+	          <i class="mdi mdi-close mdi-24px close" data-dismiss="modal"></i>
+	        </div>
+	        
+	        <!-- Modal body -->
+	        <div class="varient-headings text-center pt-2 pr-1 pl-1">
+	        	<!-- Group of haeder -->
+	    	</div>
+	    	<div class="mt-1 p-2 text-center bg-danger text-white error-item d-none">
+	    		You must select at least 1 Upgrade
+	    	</div>
+	        <div class="modal-body table-responsive">
+	        	<!-- options of group -->
+	        </div>
+	        
+	        <!-- Modal footer -->
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-danger w-100">
+	          	<span class="float-left">Total $<span class="total-item-price">100.00</span></span>
+	          	<span class="float-right">UPDATE ITEM</span>
+	          
+	      	</button>
+	        </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- model end -->
 <div id="content">
 	<div class="checkout-wrapper grey-bg">
 		<div class="container">
 			<div class="checkout-block white-bg">
 				<form >
 				<div class="product-list table-responsive">
-					<table class="table">
+					<table class="table" id="cart-table">
 						<thead>
 							<tr>
 								<th>Product</th>
@@ -36,8 +71,9 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
 								<td>
 									<div class="product-name">
 										<span><?php echo $value['name']; ?></span>
+										<span class="light-gray-txt">&#36;<?php echo $value['price']; ?></span>
 										<?php if(isset($value['group_data']) && is_array($value['group_data']) && !empty($value['group_data'])){ ?>
-										<span>Customize</span>
+										<span class="pointer customize" data-id="<?php echo $value['rowid']; ?>">Customize</span>
 										<?php
 										} else{
 										?>
@@ -48,20 +84,27 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
 								<td>
 									<input type="number" value="<?php echo $value['qty']; ?>" min="1" max="99" step="1"/>
 								</td>
-								<td class="product-price">&#36;<?php echo $value['price']; ?></td>
-								<td class="product-cancel"><i class="mdi mdi-close mdi-24px pointer"></i></td>
+								<td class="product-price">&#36;<?php echo $value['price']*$value['qty']; ?></td>
+								<td class="product-cancel" id="<?php echo $value['rowid']; ?>"><i class="mdi mdi-close mdi-24px pointer"></i></td>
 							</tr>
 
 							<?php
 
 								}
 							}else{
+								$d_none = "";
+							}
 							?>
-							<tr>
-								<td colspan="5" class="text-center p-3">Your cart is empty!</td>
+							<tr class="<?php echo $d_none; ?>" id="empty-cart">
+								<td colspan="5" class="text-center p-3">
+									<img src="<?php echo $assets.'/images/empty-cart.png'; ?>" alt="" class="d-block mx-auto mb-3 mt-2">
+									<div class="font-weight-light light-gray-txt">
+										<div class="d-block">Your cart is empty.</div>
+										<div class="d-block">Add an item to begin.</div>
+									</div>
+								</td>
 							</tr>
 							<?php
-							}
 							if(isset($cart_total) && ($cart_total != '') && !empty($cart_total)){
 							?>
 
@@ -233,4 +276,7 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
 
 <script type="text/javascript">
 	$("input[type='number']").inputSpinner();
+	var delete_url = "<?php echo base_url().'cart-item-delete'; ?>";
+	var customize_url = "<?php echo base_url().'get-cart-item-data'; ?>";
 </script>
+<script src="<?php echo $assets.'/js/custom/cart.js'; ?>"></script>

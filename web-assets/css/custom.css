@@ -480,6 +480,29 @@ li.dropdown.notification-list.last-div:before{
 .pointer{
     cursor: pointer;
 }
+.light-gray-txt{
+    color: #89959B;
+}
+.my-modal .modal-content{border-radius:.3rem;}
+.my-modal .modal-header{ border-bottom: 1px solid #e9ecef; }
+.my-modal .close{ right: 5px; top: 5px; margin: 0; }
+.my-modal .btn.btn-danger{ font-size: 14px; font-weight: 600; }
+
+.my-modal .varient-headings{ font-size: 12px; }
+.my-modal .varient-headings > div{border-bottom: 1px solid transparent;}
+.my-modal .varient-headings > div:hover{ color: #343a40; border-bottom: 1px solid #343a40;}
+.my-modal .modal-body h5 span{ font-size: 12px; }
+.my-modal .modal-body .form-check-label:hover{font-weight: bold;}
+.my-modal .modal-body tr:hover .form-check-label {font-weight: bold;}
+.my-modal .modal-body tr:hover .price {font-weight: bold;}
+#customize-item-modal .my-modal .modal-body{ max-height: 60vh; overflow-y: scroll; }
+
+.btn-danger, .btn-danger:hover, .btn-danger:not(:disabled):not(.disabled).active, .btn-danger:not(:disabled):not(.disabled):active, .show>.btn-danger.dropdown-toggle{
+    background-color: #ff0000;
+    border-color: #ff0000;
+}
+.bg-danger{background-color: #ff0000 !important;}
+.error-item{ font-size: 12px; }
 /* Scroll */
 /* width */
 ::-webkit-scrollbar {

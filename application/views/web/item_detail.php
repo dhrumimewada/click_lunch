@@ -215,5 +215,3 @@ $add_to_cart_link = base_url()."add-to-cart";
 <script type="text/javascript">
 	$("input[type='number']").inputSpinner();
 </script>
-<?php $assets = $this->config->item('website_assest'); ?>
-<script src="<?php echo $assets.'/js/custom/item_detail.js'; ?>"></script>

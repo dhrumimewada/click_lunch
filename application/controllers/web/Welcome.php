@@ -76,6 +76,29 @@ class Welcome extends CI_Controller {
 		$this->load->view('web/template',$output_data);
 	}
 
+	public function restaurant_partner_form(){
+
+		$this->auth->clear_messages();
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
+
+		if (isset($_POST) && !empty($_POST)){
+			if (isset($_POST['submit'])){
+				$validation_rules = array(
+					array('field' => 'shop_name', 'label' => 'shop name ', 'rules' => 'trim|required')
+				);
+				$this->form_validation->set_rules($validation_rules);
+				if ($this->form_validation->run() === true){
+					echo "true";
+					exit;
+				}
+			}
+		}
+
+		$output_data['main_content'] = 'restaurant_partner_form';
+		$this->load->view('web/template',$output_data);
+	}
+
 	public function weekly_planner()
 	{
 		$this->load->view('web/weekly-planner');

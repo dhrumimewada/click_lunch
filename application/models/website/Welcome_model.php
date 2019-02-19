@@ -88,6 +88,42 @@ class Welcome_model extends CI_Model {
 		return $result;
 	}
 
+	public function get_item_variants($id = NULL){
+		$return_data = array();
+		if(isset($id) && $id != '' && !is_null($id)){
+			$sql_select = array('id','variant_group_id','name','price');
+			$this->db->select($sql_select);
+			$this->db->from('variant_items');
+			$this->db->where("item_id", $id);
+			$sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0){
+				$item_data = $sql_query->result_array();
+				$group_array = array_column($item_data, 'variant_group_id');
+
+				$sql_select = array('id','name','selection','availability');
+				$this->db->select($sql_select);
+				$this->db->from('variant_group');
+				$this->db->where_in("id", $group_array);
+				$sql_query = $this->db->get();
+				if ($sql_query->num_rows() > 0){
+					$group_data = $sql_query->result_array();
+
+					foreach ($group_data as $key => $value) {
+						$group_data[$key]['items'] = array();
+
+						foreach ($item_data as $key1 => $value1) {
+							if($value1['variant_group_id'] == $value['id']){
+								$group_data[$key]['items'][] = $item_data[$key1];
+							}
+						}
+					}
+					$return_data = $group_data;
+				}
+			}
+		}
+		return $return_data;
+	}
+
 	public function subscribe(){
 		$return = false;
 

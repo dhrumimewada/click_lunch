@@ -5,7 +5,7 @@
             <nav class="navbar navbar-expand-lg navbar-light header-box">
                 <div class="header-app">
                     <a class="navbar-brand logo" href="<?php echo BASE_URL(); ?>welcome"><img src="<?php echo BASE_URL(); ?>assets/images/click-lunch.png" alt="" class="logo-large"></a>
-                    <a href="<?php echo BASE_URL(); ?>welcome">Get the App</a>
+                    <a href="<?php echo BASE_URL(); ?>welcome">Get the App </a>
                 </div>                      
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -76,14 +76,14 @@
                                      <span>My Profile</span></a>
 
                                     <div class="dropdown-menu  drop-box" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" href="<?php echo BASE_URL(); ?>web/home/profile"><i class="mdi mdi-account-circle m-r-5"></i> Contact Information</a>
-                                        <a class="dropdown-item" href="<?php echo BASE_URL(); ?>web/home/add_card"><i class="mdi mdi-account-circle m-r-5"></i> Payment Methods</a>                                                
+                                        <a class="dropdown-item" href="<?php echo BASE_URL(); ?>welcome"><i class="mdi mdi-account-circle m-r-5"></i> Contact Information</a>
+                                        <a class="dropdown-item" href="<?php echo BASE_URL(); ?>welcome"><i class="mdi mdi-account-circle m-r-5"></i> Payment Methods</a>                                                
                                     </div>
                                   </li> 
 
                                     <li class="nav-item dropdown drop-down-icon">
                                         <div class="sub-list">
-                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>web/home/order_history">
+                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
                                                 <img src="<?php echo $assets; ?>images/Order-History.png">
                                                 <span>Order History</span>
                                             </a>
@@ -91,7 +91,7 @@
                                     </li>
                                     <li class="nav-item dropdown drop-down-icon">
                                         <div class="sub-list">
-                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>web/home/favourites">
+                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
                                                 <img src="<?php echo $assets; ?>images/favorite-heart-button.png">
                                                 <span>Favourites</span>
                                             </a>
@@ -99,7 +99,7 @@
                                     </li>
                                     <li class="nav-item dropdown drop-down-icon">
                                         <div class="sub-list">
-                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>web/home/weekly_planner">
+                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
                                                 <img src="<?php echo $assets; ?>images/calendar-weekly.png">
                                                 <span>Weekly Planner</span>
                                             </a>
@@ -107,7 +107,7 @@
                                     </li>
                                      <li class="nav-item dropdown drop-down-icon">
                                         <div class="sub-list">
-                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>web/home/order_history">
+                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
                                                 <img src="<?php echo $assets; ?>images/Group-Order.png">
                                                 <span>Group Order</span>
                                             </a>
@@ -115,7 +115,7 @@
                                     </li>
                                      <li class="nav-item dropdown drop-down-icon">
                                         <div class="sub-list">
-                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>web/home/change_location">
+                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
                                                 <img src="<?php echo $assets; ?>images/Change-Location.png">
                                                 <span>Change Location</span>
                                             </a>
@@ -123,7 +123,7 @@
                                     </li>
                                      <li class="nav-item dropdown drop-down-icon">
                                         <div class="sub-list">
-                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>web/home/delivery_address">
+                                            <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
                                                 <img src="<?php echo $assets; ?>images/About-US.png">
                                                 <span>About Us</span>
                                             </a>
@@ -139,7 +139,7 @@
                     </div>
                 </div>                            
                 <div class="header-link notification-list last-div">
-                    <a class="nav-link waves-effect p-0" href="<?php echo BASE_URL(); ?>web/home/checkout" role="button" aria-haspopup="false" aria-expanded="false">
+                    <a class="nav-link waves-effect p-0" href="<?php echo BASE_URL(); ?>welcome" role="button" aria-haspopup="false" aria-expanded="false">
                         <img src="<?php echo $assets; ?>images/Cart.png" />
                     </a>       
                 </div>              

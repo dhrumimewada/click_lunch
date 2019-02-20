@@ -391,8 +391,8 @@ footer {background-color: #EFEFEF;}
 .form-border input.form-control.input-border {border: none;}
 .form-border input.form-control.input-border {border-bottom: 1px solid #e6e6e6; border-radius: 0; }
 .form-border .form-group{margin-bottom: 30px;}
-.form-border textarea#exampleFormControlTextarea1{border: none;}
-.form-border textarea#exampleFormControlTextarea1.form-control.input-border{border-bottom: 1px solid #e6e6e6; border-radius: 0; margin-bottom: 50px;}
+.form-border textarea.exampleFormControlTextarea1{border: none;}
+.form-border textarea.exampleFormControlTextarea1.form-control.input-border{border-bottom: 1px solid #e6e6e6; border-radius: 0;}
 
 
 

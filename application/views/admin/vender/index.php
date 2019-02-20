@@ -101,7 +101,7 @@ $edit_link = base_url().'vender-update';
 
     $(document).ready(function () {
 
-         $(document).on('click',".delete_vender", function(){
+        $(document).on('click',".delete_vender", function(){
 
             $this = $(this);
             var data_id = get_dataid($this);

@@ -22,9 +22,6 @@ class Welcome extends CI_Controller {
 
 		$output_data["shops"] = $this->welcome_model->get_shops();
 
-		// echo "<pre>";
-		// print_r($output_data["shops"]); exit;
-
 		$output_data['main_content'] = 'welcome/home';
 		$this->load->view('web/template',$output_data);
 	}
@@ -58,6 +55,17 @@ class Welcome extends CI_Controller {
 		
 	}
 
+	public function get_shops(){
+
+		$latitude = $_POST['latitude'];
+		$longitude = $_POST['longitude'];
+		$shops = $this->welcome_model->get_shops();
+
+		echo json_encode($shops);
+		return true;
+		exit;
+	}
+
 	public function cart(){
 		echo "<pre>";
 		print_r($_POST);
@@ -76,6 +84,20 @@ class Welcome extends CI_Controller {
 		$this->load->view('web/template',$output_data);
 	}
 
+	public function isexists($str) {
+		$this->db->select('email');
+		$this->db->where('email', $str);
+		$this->db->where('deleted_at', NULL);
+		$this->db->from('shop');
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			$this->form_validation->set_message('isexists', "The restaurant email is already in use.");
+			return FALSE;
+		} else {
+			return TRUE;
+		}
+	}
+
 	public function restaurant_partner_form(){
 
 		$this->auth->clear_messages();
@@ -85,13 +107,22 @@ class Welcome extends CI_Controller {
 		if (isset($_POST) && !empty($_POST)){
 			if (isset($_POST['submit'])){
 				$validation_rules = array(
-					array('field' => 'shop_name', 'label' => 'shop name ', 'rules' => 'trim|required')
+					array('field' => 'shop_name', 'label' => 'restaurant name', 'rules' => 'trim|required|min_length[2]|max_length[50]'),
+					array('field' => 'email', 'label' => 'email address', 'rules' => 'trim|required|max_length[225]|valid_email|callback_isexists'),
+					array('field' => 'mobile_number', 'label' => 'phone number', 'rules' => 'trim|required|min_length[12]|max_length[12]'),
+					array('field' => 'address', 'label' => 'restaurant address', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'message', 'label' => 'message', 'rules' => 'trim|max_length[1000]')
 				);
 				$this->form_validation->set_rules($validation_rules);
-				if ($this->form_validation->run() === true){
-					echo "true";
-					exit;
-				}
+				if ($this->form_validation->run() === true) {
+					if($this->welcome_model->post_restaurant_partner()){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "restaurant-partner-form");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "restaurant-partner-form");
+					}	
+				} 
 			}
 		}
 

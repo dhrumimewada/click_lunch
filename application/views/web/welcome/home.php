@@ -243,8 +243,8 @@ if(isset($banner_list) && !empty($banner_list)){
                                 <?php echo stripcslashes($value['shop_name']); ?>
                             </div>
                             <b>
-                                <div class="d-inline-block txt-black font-small">Delivery 11:40 PM</div>
-                                <div class="d-inline-block txt-black float-right font-small">Order by 11:40 PM</div>
+                                <div class="d-inline-block txt-black font-small">Delivery <?php echo $value['delivery_time']; ?></div>
+                                <div class="d-inline-block txt-black float-right font-small">Order by <?php echo $value['order_by_time']; ?></div>
                             </b>
                             <?php
                             if(isset($value['cuisine']) && $value['cuisine'] != ''){
@@ -262,7 +262,7 @@ if(isset($banner_list) && !empty($banner_list)){
                      <div class="restaurant-hover">
                         <div class="restaurant-hover-list">
                              <div class="restaurant-hover-img">
-                                <a href="<?php echo BASE_URL(); ?>web/home/restaurant_detail"><img src="<?php echo $assets; ?>images/zoom-in-out.png"></a>
+                                <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>"><img src="<?php echo $assets; ?>images/zoom-in-out.png"></a>
                             </div>
                         </div>
                     </div>
@@ -486,8 +486,9 @@ if(isset($banner_list) && !empty($banner_list)){
         <img class="app-image" src="<?php echo base_url(); ?>/assets/images/home-page/Mobile.png" alt="Click Lunch">
     </div>
 </div>
-
 <script type="text/javascript">
+var latitude = '<?php echo $_SESSION['lat']; ?>';
+var longitude = '<?php echo $_SESSION['long']; ?>';
 $(document).ready(function() {
 
 if($('#simple').length)
@@ -521,6 +522,51 @@ if($('#simple').length)
             }
         });       
 }
+
+if (latitude == '' || longitude == ''){
+
+    window.onload = function() {
+
+        function initMap(position) {
+             var latitude = parseFloat(position.coords.latitude);
+             var longitude = parseFloat(position.coords.longitude);
+             console.log('js fetch' + latitude+' ** '+longitude);
+        }
+        if (navigator.geolocation){
+            navigator.permissions && navigator.permissions.query({name: 'geolocation'}).then(function(PermissionStatus) {
+                navigator.geolocation.getCurrentPosition(initMap);
+            });
+        }
+
+    }
+}else{
+    console.log('php lat long fetch'+ latitude +' - '+longitude);
+}
+    
+    var get_shops_url = "<?php echo base_url().'get-shops'; ?>";
+
+if (latitude !== '' || longitude !== ''){
+    $.ajax({
+        url: get_shops_url,
+        type: "POST",
+        data:{
+            latitude:latitude,
+            longitude:longitude
+            },
+        success: function (returnData) {
+            if (typeof returnData != "undefined"){
+                returnData = $.parseJSON(returnData);
+                console.log(returnData);
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log('error');
+        }
+    });
+}else{
+    console.log("blank");
+}
+     
 
 });
 </script>

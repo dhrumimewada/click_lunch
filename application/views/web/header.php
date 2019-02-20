@@ -19,9 +19,16 @@
     <link rel="stylesheet" href="<?php echo base_url() . 'plugins/sweet-alert2/sweetalert2.min.css'; ?>" type="text/css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Js form validations -->
+    <script src="<?php echo base_url() . 'assets/js/validation/jquery.validate.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'assets/js/validation/jquery.validate.min.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'assets/js/validation/additional-methods.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'assets/js/validation/additional-methods.min.js'; ?>"></script>
+    
     <script type="text/javascript" src="<?php echo $assets; ?>js/popper.js"></script>
     <script type="text/javascript" src="<?php echo $assets; ?>js/bootstrap.min.js"></script>
-     <!-- <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script> -->
+    <!-- <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script> -->
     <script type="text/javascript" src="<?php echo $assets; ?>js/bootstrap-input-spinner.js"></script>
     <script type="text/javascript" src="<?php echo $assets; ?>js/owl.carousel.js"></script>
     <script type="text/javascript" src="<?php echo $assets; ?>js/custom.js"></script>

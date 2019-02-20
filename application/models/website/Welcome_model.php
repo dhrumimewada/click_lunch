@@ -141,4 +141,28 @@ class Welcome_model extends CI_Model {
 		}
 		return $return;
 	}
+
+	public function post_restaurant_partner(){
+		$this->db->trans_begin();
+		$return_value = FALSE;
+		$user_data = array(
+						'shop_name' => ucwords(addslashes($this->input->post("shop_name"))),
+						'email' => $this->input->post("email"),
+						'address' => addslashes($this->input->post("address")),
+						'contact_no' => $this->input->post("mobile_number"),
+						'message' => addslashes($this->input->post("message"))
+					);
+		$this->db->insert("shop_request", $user_data);
+		
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+			$this->auth->set_error_message("Error into registation. Please try again");
+		} else {
+			$this->db->trans_commit();
+			$this->auth->set_status_message("Your registration request submitted successfully");
+			$return_value = TRUE;
+		}
+
+		return $return_value;
+	}
 }

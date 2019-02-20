@@ -203,6 +203,12 @@ $route['vender-status'] = 'admin/vender/active_deactive_vender';
 $route['vender-delete'] = 'admin/vender/delete';  
 $route['vender-update'] = 'admin/vender/put';  
 
+// admin - shop requests list
+$route['vender-requests'] = 'admin/vender/vendor_requests'; 
+$route['vender-request-save'] = 'admin/vender/vendor_request_put';
+$route['vender-request-update/(:any)'] = 'admin/vender/vendor_request_put/$1';
+$route['vender-request-delete'] = 'admin/vender/vendor_request_delete';
+
 // admin - vender perc
 $route['vender-perc'] = 'admin/vender/vender_perc'; 
 $route['vender-perc-update'] = 'admin/vender/put_vender_perc'; 
@@ -303,6 +309,7 @@ $route['delivery-boy-reset-password'] = 'dispatcher/dispatcher_login/deliveryboy
 
 // Front
 $route['welcome'] = 'web/welcome';
+$route['get-shops'] = 'web/welcome/get_shops';
 $route['restaurant/(:any)'] = 'web/welcome/shop/$1';
 $route['product/(:any)'] = 'web/welcome/item/$1';
 $route['add-to-cart'] = 'web/cart/cart_add';

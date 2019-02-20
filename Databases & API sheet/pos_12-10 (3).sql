@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 07, 2019 at 02:45 PM
+-- Generation Time: Feb 20, 2019 at 03:24 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -129,7 +129,7 @@ CREATE TABLE `category` (
 
 INSERT INTO `category` (`id`, `category_name`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'Beverages', 1, '2019-01-17 13:39:00', NULL, NULL),
-(2, 'Salad', 1, '2019-01-17 13:39:00', NULL, NULL),
+(2, 'Saladd', 1, '2019-01-17 13:39:00', '2019-02-20 02:09:44', NULL),
 (3, 'Side Dish', 1, '2019-01-17 13:39:18', NULL, NULL),
 (4, 'Snack', 1, '2019-01-17 13:39:18', NULL, NULL),
 (5, 'Main Dish', 1, '2019-01-17 13:39:34', NULL, NULL),
@@ -232,7 +232,7 @@ INSERT INTO `customer` (`id`, `email`, `password`, `profile_picture`, `username`
 (33, 'developer.eww1@gmail.com', '$2y$10$aa.zH3/GXVhn4BNskycVWu0iRr3Xw2rYLTz1g5hdplV6Y95buGuFu', 'customer_1548152462.jpg', 'Mayur Two', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '333-222-1111', '2019-01-31', '', 0, 'fF_DIchM8oM:APA91bFG3NBWuBbZDWlsN7MNvxQFqguwdoOkx9LAsnfW5YzS7Xspk0W6qqsu-r7VrG2p6acSlexM1NyO92dbcamQ9spAgnr6OgEse7Ib8i_UVxngNYJuECW7rFb5TR_yfxvLlDsTHFu_', 0, '', 1, '2019-01-21 11:40:41', '2019-01-22 10:58:07', NULL, '0', '23.0727643', '72.5163472', 'b660c73941cee4ed06cb455cc620be5d0eb40a94', '', 1, 1, 1),
 (34, 'RhymePaladin@mailinator.com', '$2y$10$0LU.1X2e9RFtwmuRj7u2NeO1TlLB4UHPL3fw5PicVJVQLixo0eCT2', '', 'Paladin', '', '8866541254', '1996-02-14', '', 1, 'hjhjkhjkhjkhkj', 0, '', 0, '2019-01-23 11:37:07', NULL, NULL, '1', '13.666', '66.3333333', '', '487a25ca64324b9504fc260da580f06938197cb5', 1, 1, 1),
 (35, 'Rehan@gmail.com', '$2y$10$ZrD6PhBniRrXQBr8rJ/K1./4RvOPNExosmqA8owjy/7GuYPXW8OoK', 'customer_1548679677.jpeg', 'Rehan Hussein', '', '989898989898', '2019-01-28', '', 0, 'adsdasddasd', 0, '', 1, '2019-01-28 08:59:31', '2019-01-28 12:47:57', NULL, '0', '121212', '1212154', '', '', 0, 1, 0),
-(36, 'developer.eww2@gmail.com', '$2y$10$ZrD6PhBniRrXQBr8rJ/K1./4RvOPNExosmqA8owjy/7GuYPXW8OoK', '', 'StinkyElf', '', '989898989898', '2019-01-28', '', 0, 'adsdasddasd', 0, '', 0, '2019-01-28 08:59:31', '2019-01-28 12:47:57', NULL, '0', '121212', '1212154', '', '', 0, 1, 0);
+(36, 'developer.eww2@gmail.com', '$2y$10$ZrD6PhBniRrXQBr8rJ/K1./4RvOPNExosmqA8owjy/7GuYPXW8OoK', '', 'StinkyElf', '', '989898989898', '2019-01-28', '', 0, 'adsdasddasd', 0, '', 1, '2019-01-28 08:59:31', '2019-01-28 12:47:57', NULL, '0', '121212', '1212154', '', '', 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -246,9 +246,9 @@ CREATE TABLE `customer_payment_card` (
   `card_holder_name` varchar(255) NOT NULL,
   `card_number` varchar(255) NOT NULL,
   `expiry_date` varchar(255) NOT NULL,
-  `cvv` int(3) NOT NULL,
+  `cvv` int(4) NOT NULL,
   `nickname` varchar(255) NOT NULL,
-  `card_type` int(1) NOT NULL COMMENT '1 - visa, 2 - Mastercard, 3 - American Express, 4 - Diners Club, 5 - Discover, 6 - JCB',
+  `card_type` int(1) NOT NULL COMMENT '1 - Visa, 2 - Mastercard, 3 - American Express, 4 - Diners Club, 5 - Discover, 6 - JCB, 7 - Other',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -472,6 +472,7 @@ CREATE TABLE `favorite` (
   `id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -480,8 +481,8 @@ CREATE TABLE `favorite` (
 -- Dumping data for table `favorite`
 --
 
-INSERT INTO `favorite` (`id`, `customer_id`, `shop_id`, `created_at`, `deleted_at`) VALUES
-(1, 25, 52, '2019-01-21 13:48:38', NULL);
+INSERT INTO `favorite` (`id`, `customer_id`, `shop_id`, `order_id`, `created_at`, `deleted_at`) VALUES
+(1, 25, 0, 52, '2019-01-21 13:48:38', NULL);
 
 -- --------------------------------------------------------
 
@@ -515,6 +516,7 @@ CREATE TABLE `item` (
   `id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `short_name` varchar(255) NOT NULL,
   `cuisine_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `price` varchar(11) NOT NULL,
@@ -535,22 +537,23 @@ CREATE TABLE `item` (
 -- Dumping data for table `item`
 --
 
-INSERT INTO `item` (`id`, `shop_id`, `name`, `cuisine_id`, `quantity`, `price`, `offer_price`, `item_description`, `item_picture`, `is_combo`, `category_id`, `inventory_status`, `notify_stock`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(18, 52, 'Masala Frankie', 10, 80, '60.00', '56.00', 'Combine The Mashed Potatoes, Carrot, Cheese, Onions, Chat Masala Powder, Lemon Juice And Salt', 'item_1541501653.jpg', 0, '', 1, 12, 1, '2018-11-06 06:24:13', NULL, NULL),
-(19, 52, 'Chinese Frankie', 10, 100, '90.00', '89.00', 'Mashed Potatoes, Carrot, Cheese, Onions, Chat Masala Powder, Lemon Juice And Salt', 'item_1541501826.jpeg', 0, '', 0, 0, 1, '2018-11-06 06:27:06', NULL, NULL),
-(20, 52, 'Chicken P\\\"izza', 9, 20, '200.00', '189.00', 'Our Family Will Never Guess That This Fun Twist On Typical Pizza Uses Up Leftover Pesto. Loaded With Protein, Hearty Slices Of This Chicken Pizza\\\" Will Fill Them Up Fast!', 'item_1542019186.png', 1, '', 0, 0, 1, '2018-11-12 09:41:00', NULL, NULL),
-(21, 52, 'Test', 10, 1, '33.33', '10.00', 'Dfgdfg', 'item_1542018900.jpg', 1, '', 0, 0, 1, '2018-11-12 06:05:00', NULL, '2018-11-12 06:05:24'),
-(22, 52, 'Dhrumi', 3, 4, '100.00', '77.00', 'Fgdg', '', 0, '', 0, 0, 1, '2019-01-07 00:44:50', NULL, '2019-01-07 00:45:04'),
-(23, 52, 'Sushi', 10, 100, '100.00', '77.00', '78768ggggg', '', 0, '', 0, 0, 1, '2019-01-07 00:45:50', NULL, NULL),
-(24, 52, 'Burger Meal Combo', 2, 1, '100.00', '77.00', 'Dfddf', 'item_1546838672.jpg', 0, '', 0, 0, 1, '2019-01-07 00:54:32', NULL, NULL),
-(25, 52, 'P12', 3, 1, '100.00', '77.00', 'Edd', '', 0, '3', 1, 0, 1, '2019-01-18 06:13:13', NULL, NULL),
-(26, 52, 'C1', 2, 1, '100.00', '9.00', 'Gg', '', 1, '', 1, 10, 1, '2019-01-07 00:58:20', NULL, NULL),
-(27, 58, 'Fresh Mushrooms', 9, 50, '5.00', '', 'Ut Wisi Enim Ad Minim Veniam, Quis Nostrud Exerci Tation Ullamcorper Suscipit Lobortis Nisl Ut Aliquip Ex Ea Commodo Consequat. Duis Autem Vel Eum Iriure', 'item_1549544038.jpg', 0, '', 1, 0, 1, '2019-01-11 11:30:19', NULL, NULL),
-(28, 58, 'Coco Drinks', 9, 50, '3.00', '2.00', 'Coco Drinks', 'item_1549544038.jpg', 0, '', 1, 0, 1, '2019-01-14 10:45:42', NULL, NULL),
-(29, 58, 'French Fries', 6, 10, '15.00', '10.00', 'Spicy And Tasty', 'item_1549544038.jpg', 0, '', 1, 0, 1, '2019-01-14 10:43:45', NULL, NULL),
-(30, 58, 'Veg Meal + Coco Drinks', 3, 40, '20.00', '15.00', 'Biriyani + Coco Drinks', 'item_1549544038.jpg', 1, '1', 1, 2, 1, '2019-02-07 08:23:58', NULL, NULL),
-(31, 62, 'Ice Cream', 2, 100, '166.00', '150.00', 'Eld Our Little One?s First Birthday Here. The Cake Was Also Made By Fiona From The Restaurant And Was Exactly How I Wanted It. Was Guided By The Owner As To Where I Could Find Party Decorations As Per Our Colour Theme. We Only Needed To Deliver The Things To Them And Did Not Have To Worry About Anything. The Guests Appreciated The Ambience And The Food.. Thank You To The Entire Team For Making Our Special Day Perfect And Hassle Free And Providing Lip Smacking Food To Our Guests.', 'item_1547722922.png', 0, '7', 1, 40, 1, '2019-01-17 11:02:02', NULL, NULL),
-(32, 62, 'Ice Cream 2', 2, 100, '166.00', '150.00', 'Eld Our Little One?s First Birthday Here. The Cake Was Also Made By Fiona From The Restaurant And Was Exactly How I Wanted It. Was Guided By The Owner As To Where I Could Find Party Decorations As Per Our Colour Theme. We Only Needed To Deliver The Things To Them And Did Not Have To Worry About Anything. The Guests Appreciated The Ambience And The Food.. Thank You To The Entire Team For Making Our Special Day Perfect And Hassle Free And Providing Lip Smacking Food To Our Guests.', 'item_1547722922.png', 0, '7', 1, 40, 1, '2019-01-17 11:02:02', NULL, NULL);
+INSERT INTO `item` (`id`, `shop_id`, `name`, `short_name`, `cuisine_id`, `quantity`, `price`, `offer_price`, `item_description`, `item_picture`, `is_combo`, `category_id`, `inventory_status`, `notify_stock`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(18, 52, 'Masala Frankie', 'masala-frankie', 7, 80, '60.00', '10.50', 'Combine The Mashed Potatoes, Carrot, Cheese, Onions, Chat Masala Powder, Lemon Juice And Salt Combine The Mashed Potatoes, Carrot, Cheese, Onions, Chat Masala Powder, Lemon Juice And Salt', 'item_1541501653.jpg', 0, '5', 1, 12, 1, '2019-02-18 07:13:39', NULL, NULL),
+(19, 52, 'Chinese Frankie', 'chines', 9, 100, '90.00', '89.00', 'Mashed Potatoes, Carrot, Cheese, Onions, Chat Masala Powder, Lemon Juice And Salt', 'item_1541501826.jpeg', 0, '5', 0, 0, 1, '2018-11-06 06:27:06', NULL, NULL),
+(20, 52, 'Chicken Pizza2', 'chicken-pizza', 9, 20, '200.00', '189.00', 'Our Family Will Never Guess That This Fun Twist On Typical Pizza Uses Up Leftover Pesto. Loaded With Protein, Hearty Slices Of This Chicken Pizza\\\" Will Fill Them Up Fast!', 'item_1542019186.png', 1, '5', 0, 0, 1, '2019-02-09 01:48:28', NULL, NULL),
+(21, 52, 'Test', '', 9, 1, '33.33', '10.00', 'Dfgdfg', 'item_1542018900.jpg', 1, '5', 0, 0, 1, '2018-11-12 06:05:00', NULL, '2018-11-12 06:05:24'),
+(22, 52, 'Dhrumi', '', 9, 4, '100.00', '77.00', 'Fgdg', '', 0, '5', 0, 0, 1, '2019-01-07 00:44:50', NULL, '2019-01-07 00:45:04'),
+(23, 52, 'Sushi', '', 9, 100, '100.00', '77.00', '78768ggggg', '', 0, '5', 0, 0, 1, '2019-01-07 00:45:50', NULL, NULL),
+(24, 52, 'Burger Meal Combo', '', 9, 1, '100.00', '77.00', 'Dfddf', 'item_1546838672.jpg', 0, '5', 0, 0, 1, '2019-01-07 00:54:32', NULL, NULL),
+(25, 52, 'Chicken Pizza23', 'chicken-pizza-1', 9, 1, '100.00', '77.00', 'Edd', 'item_1549604046.png', 0, '5', 1, 0, 1, '2019-02-09 01:49:52', NULL, NULL),
+(26, 52, 'C1', '', 2, 1, '100.00', '9.00', 'Gg', '', 1, '5', 1, 10, 1, '2019-01-07 00:58:20', NULL, NULL),
+(27, 58, 'Fresh Mushrooms', 'fresh-mushrooms', 9, 50, '5.00', '0.00', 'Ut Wisi Enim Ad Minim Veniam, Quis Nostrud Exerci Tation Ullamcorper Suscipit Lobortis Nisl Ut Aliquip Ex Ea Commodo Consequat. Duis Autem Vel Eum Iriure', 'item_1549544038.jpg', 0, '5', 1, 0, 1, '2019-02-13 06:26:25', NULL, NULL),
+(28, 58, 'Coco Drinks', 'coco-drinks', 9, 50, '3.00', '2.00', 'Coco Drinks', 'item_1549544038.jpg', 0, '5', 1, 0, 0, '2019-01-14 10:45:42', NULL, NULL),
+(29, 58, 'French Fries', '', 6, 10, '15.00', '10.00', 'Spicy And Tasty', 'item_1549544038.jpg', 0, '5', 1, 0, 1, '2019-01-14 10:43:45', NULL, NULL),
+(30, 58, 'Veg Meal + Coco Drinks', '', 3, 40, '20.00', '15.00', 'Biriyani + Coco Drinks', 'item_1549544038.jpg', 1, '5', 1, 2, 1, '2019-02-07 08:23:58', NULL, NULL),
+(31, 62, 'Ice Cream', '', 2, 100, '166.00', '150.00', 'Eld Our Little One?s First Birthday Here. The Cake Was Also Made By Fiona From The Restaurant And Was Exactly How I Wanted It. Was Guided By The Owner As To Where I Could Find Party Decorations As Per Our Colour Theme. We Only Needed To Deliver The Things To Them And Did Not Have To Worry About Anything. The Guests Appreciated The Ambience And The Food.. Thank You To The Entire Team For Making Our Special Day Perfect And Hassle Free And Providing Lip Smacking Food To Our Guests.', 'item_1547722922.png', 0, '5', 1, 40, 1, '2019-01-17 11:02:02', NULL, NULL),
+(32, 62, 'Ice Cream 2', '', 2, 100, '166.00', '150.00', 'Eld Our Little One?s First Birthday Here. The Cake Was Also Made By Fiona From The Restaurant And Was Exactly How I Wanted It. Was Guided By The Owner As To Where I Could Find Party Decorations As Per Our Colour Theme. We Only Needed To Deliver The Things To Them And Did Not Have To Worry About Anything. The Guests Appreciated The Ambience And The Food.. Thank You To The Entire Team For Making Our Special Day Perfect And Hassle Free And Providing Lip Smacking Food To Our Guests.', 'item_1547722922.png', 0, '5', 1, 40, 1, '2019-01-17 11:02:02', NULL, NULL),
+(33, 52, 'Burger King', 'burger-king', 3, 1, '33.33', '9.00', 'Chicken Pizza2Chicken Pizza2Chicken Pizza2', 'item_1549693163.jpg', 0, '4', 1, 0, 1, '2019-02-09 01:49:41', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -605,6 +608,14 @@ CREATE TABLE `orders` (
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `customer_id`, `shop_id`, `total`, `subtotal`, `delivery_charges`, `promocode`, `discount_amount`, `discount_type`, `tax`, `schedule_date`, `schedule_time`, `order_status`, `payment_status`, `payment_mode`, `transaction_id`, `suggestion`, `QR_code`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 6, 58, '100', '', '', '', '', 0, '', '0000-00-00', '', 0, 0, 0, 0, '', '', '2019-02-15 05:42:53', NULL, NULL),
+(3, 36, 58, '100', '', '', '', '', 0, '', '0000-00-00', '', 0, 0, 0, 0, '', '', '2019-02-15 05:42:53', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -657,19 +668,6 @@ CREATE TABLE `payment_settings` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `photos`
---
-
-CREATE TABLE `photos` (
-  `id` int(11) NOT NULL,
-  `shop_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `photo_name` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `promocode`
 --
 
@@ -677,7 +675,7 @@ CREATE TABLE `promocode` (
   `id` int(11) NOT NULL,
   `shop_id` varchar(11) NOT NULL,
   `group_type` varchar(1) NOT NULL,
-  `promo_type` varchar(1) NOT NULL COMMENT '1 => ''Product based promocode'', 2 => ''Order based promocode''',
+  `promo_type` varchar(1) NOT NULL DEFAULT '2' COMMENT '1 => ''Product based promocode'', 2 => ''Order based promocode''',
   `usage_limit` int(11) NOT NULL,
   `max_disc` varchar(255) NOT NULL,
   `min_no_of_orders` varchar(11) NOT NULL COMMENT 'Customer have to order min X no of orders',
@@ -687,6 +685,7 @@ CREATE TABLE `promocode` (
   `from_date` date NOT NULL,
   `to_date` date NOT NULL,
   `promo_min_order_amount` varchar(11) NOT NULL,
+  `description` text NOT NULL,
   `status` int(5) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -697,13 +696,19 @@ CREATE TABLE `promocode` (
 -- Dumping data for table `promocode`
 --
 
-INSERT INTO `promocode` (`id`, `shop_id`, `group_type`, `promo_type`, `usage_limit`, `max_disc`, `min_no_of_orders`, `promocode`, `amount`, `discount_type`, `from_date`, `to_date`, `promo_min_order_amount`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(21, '52', '', '', 0, '', '0', 'GET577', '2', '0', '2018-11-30', '2018-12-01', '496.00', 1, '2018-11-12 05:27:16', NULL, NULL),
-(26, '', '5', '', 2, '200', '', 'MYCODE1', '20', '1', '2019-02-05', '2019-02-28', '1000', 1, '2019-02-05 01:49:07', NULL, NULL),
-(27, '52', '7', '1', 1, '100', '', 'GET10', '10', '1', '2019-02-06', '2019-02-28', '1050', 1, '2019-02-05 02:00:46', NULL, NULL),
-(28, '', '1', '', 3, '', '', 'MYSET5', '10', '0', '2019-02-05', '2019-02-28', '50', 1, '2019-02-05 02:03:29', NULL, NULL),
-(29, '52', '6', '2', 3, '100.00', '1', 'GET5050', '50', '1', '2019-03-01', '2019-03-31', '500.00', 1, '2019-02-05 02:08:14', NULL, NULL),
-(30, '58', '6', '1', 3, '40.90', '1', 'GET50JJ', '20.50', '1', '2019-02-05', '2019-02-28', '149.99', 1, '2019-02-05 03:14:30', '2019-02-05 03:19:39', NULL);
+INSERT INTO `promocode` (`id`, `shop_id`, `group_type`, `promo_type`, `usage_limit`, `max_disc`, `min_no_of_orders`, `promocode`, `amount`, `discount_type`, `from_date`, `to_date`, `promo_min_order_amount`, `description`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(21, '52', '', '', 0, '', '0', 'GET577', '2', '0', '2018-11-30', '2018-12-01', '496.00', '', 1, '2018-11-12 05:27:16', NULL, NULL),
+(26, '', '5', '', 2, '200.00', '', 'MYCODE1', '20.00', '1', '2019-02-05', '2019-02-28', '1000.00', 'Use Promocode MYCODE1 To Get 20.00% Discount* On Total Order Value (Max Discount $200.00)', 1, '2019-02-05 01:49:07', '2019-02-15 01:50:18', NULL),
+(27, '52', '7', '1', 1, '100', '', 'GET10', '10', '1', '2019-02-06', '2019-02-28', '1050', '', 1, '2019-02-05 02:00:46', NULL, NULL),
+(28, '', '1', '', 3, '25.00', '', 'MYSET5', '40.00', '0', '2019-02-05', '2019-02-28', '50.00', 'Use Promocode MYSET5 To Get flat $40.00 Discount* On Total Order Value ', 1, '2019-02-05 02:03:29', '2019-02-11 05:35:38', NULL),
+(29, '52', '6', '2', 3, '100.00', '1', 'GET5050', '50', '1', '2019-03-01', '2019-03-31', '500.00', '', 1, '2019-02-05 02:08:14', NULL, NULL),
+(30, '58', '7', '1', 3, '40.90', '1', 'GET50JJ', '20.50', '1', '2019-02-05', '2019-02-28', '149.99', 'Use Promocode GET50JJ To Get 20.50% Discount* On Total Product(s) Value (Max Discount $40.90)', 1, '2019-02-05 03:14:30', '2019-02-13 04:41:08', NULL),
+(31, '', '4', '', 5, '100.00', '', 'ALL50', '50.00', '1', '2019-03-01', '2019-03-09', '', 'Use Promocode ALL50 To Get 50.00% Discount* On Total Order Value (Max Discount $100.00)', 1, '2019-02-11 03:17:30', '2019-02-11 09:02:17', NULL),
+(32, '62', '7', '', 17, '10.00', '', 'MYGFRW', '10.00', '1', '2019-02-14', '2019-02-23', '100.00', 'Use Promocode MYGFRW To Get 10.00% Discount* On Total Order Value (Max Discount $10.00)', 1, '2019-02-12 08:08:59', '2019-02-13 02:32:22', NULL),
+(33, '58', '7', '2', 5, '100.00', '', 'FF40', '10.00', '1', '2019-02-14', '2019-02-22', '1000.00', 'Use Promocode FF40 To Get 10.00% Discount* On Total Order Value (Max Discount $100.00)', 1, '2019-02-13 04:42:28', '2019-02-13 04:45:40', NULL),
+(34, '62', '7', '2', 1, '', '', 'VA3', '10.00', '0', '2019-02-28', '2019-03-01', '444.00', 'Use Promocode VA3 To Get Flat $10.00 Discount* On Total Order Value ', 1, '2019-02-13 04:45:18', '2019-02-13 04:46:53', NULL),
+(35, '58', '7', '1', 1, '', '1', 'GET509', '10.00', '0', '2019-02-22', '2019-02-23', '30.00', 'Use Promocode GET509 To Get Flat $10.00 Discount* On Total Order Value ', 1, '2019-02-13 04:47:18', '2019-02-13 05:41:09', NULL),
+(36, '52', '4', '1', 3, '50.00', '', 'MYFREE', '10.00', '1', '2019-02-18', '2019-02-28', '100.00', 'Use Promocode MYFREE To Get 10.00% Cashback* On Total Product(s) Value (Max Cashback Rs.50)', 1, '2019-02-18 04:46:22', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -724,7 +729,15 @@ CREATE TABLE `promocode_products` (
 
 INSERT INTO `promocode_products` (`id`, `promocode_id`, `shop_id`, `product_id`) VALUES
 (1, 27, 52, 18),
-(2, 27, 52, 19);
+(2, 27, 52, 19),
+(8, 32, 62, 31),
+(9, 32, 62, 32),
+(10, 30, 58, 28),
+(11, 30, 58, 30),
+(13, 33, 58, 28),
+(14, 33, 58, 29),
+(15, 34, 62, 32),
+(21, 35, 58, 29);
 
 -- --------------------------------------------------------
 
@@ -747,10 +760,8 @@ INSERT INTO `promocode_shops` (`id`, `promocode_id`, `shop_id`) VALUES
 (6, 123, 62),
 (7, 123, 57),
 (8, 123, 62),
-(9, 26, 52),
-(10, 26, 57),
-(11, 26, 58),
-(12, 26, 62);
+(14, 26, 58),
+(15, 26, 62);
 
 -- --------------------------------------------------------
 
@@ -772,8 +783,11 @@ CREATE TABLE `promocode_valid_product` (
 INSERT INTO `promocode_valid_product` (`id`, `promocode_id`, `shop_id`, `product_id`) VALUES
 (1, 27, 52, 23),
 (2, 27, 52, 26),
-(7, 30, 58, 29),
-(8, 30, 58, 30);
+(9, 30, 58, 29),
+(10, 30, 58, 30),
+(13, 35, 58, 29),
+(14, 36, 52, 18),
+(15, 36, 52, 19);
 
 -- --------------------------------------------------------
 
@@ -828,6 +842,7 @@ CREATE TABLE `shop` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `shop_name` varchar(255) NOT NULL,
+  `short_name` varchar(255) NOT NULL,
   `percentage` varchar(255) NOT NULL,
   `vender_name` varchar(255) NOT NULL,
   `shop_code` varchar(255) NOT NULL,
@@ -847,12 +862,16 @@ CREATE TABLE `shop` (
   `twitter_link` text NOT NULL,
   `pinterest_link` text NOT NULL,
   `min_order` varchar(11) NOT NULL,
-  `delivery_charges` varchar(255) NOT NULL,
+  `delivery_charges_per_mile` varchar(255) NOT NULL,
+  `minimum_mile` varchar(11) NOT NULL,
+  `charges_of_minimum_mile` varchar(11) NOT NULL,
   `payment_mode` varchar(255) NOT NULL DEFAULT '0' COMMENT '0 - Card , 1 - Apple Pay, 2 - Google Pay',
   `tax_number` varchar(255) NOT NULL,
   `device_type` int(5) NOT NULL COMMENT '	0-web, 1- android, 2 -ios',
   `device_token` varchar(255) NOT NULL,
   `broacher` varchar(255) NOT NULL,
+  `delivery_time` varchar(255) NOT NULL,
+  `order_by_time` varchar(255) NOT NULL,
   `status` int(5) NOT NULL COMMENT '0  - pending , 1 - active, 2 - deactive',
   `remember_token` varchar(255) NOT NULL,
   `activation_token` varchar(255) NOT NULL,
@@ -865,23 +884,28 @@ CREATE TABLE `shop` (
 -- Dumping data for table `shop`
 --
 
-INSERT INTO `shop` (`id`, `email`, `password`, `shop_name`, `percentage`, `vender_name`, `shop_code`, `profile_picture`, `address`, `zip_code`, `city`, `state`, `country`, `latitude`, `longitude`, `about`, `contact_no1`, `contact_no2`, `website`, `facebook_link`, `twitter_link`, `pinterest_link`, `min_order`, `delivery_charges`, `payment_mode`, `tax_number`, `device_type`, `device_token`, `broacher`, `status`, `remember_token`, `activation_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(52, 'sugar@mailinator.com', '$2y$10$2Qov5hbktXILNk8/EezJi.rakocg80gqr75xA7JIFLNVHLoLgQlvi', 'Ristretto - Behi', '10', 'Mr Ristretto', 'RIS52', 'vender_1549518937.jpg', 'FFA FHA Camp Road, Covington, GA, USA', '30014', 'Newton County', 'Georgia', 'United States', '33.4395707', '-83.8367465', 'Your family will never guess that this fun twist on typical pizza uses up leftover pesto. Loaded with protein, hearty slices of this chicken pizza will fill them up fast!', '886 658 4541', '774 587 1466', 'https://www.zomato.com/ah', '', '', '', '100.00', '1', '0,1,2', '657-57-5765', 0, '', 'brochure_1541502113.jpg', 1, '6c0bf58d69c1a8adead8c7c158badc2f87430bf9', '', '2018-11-06 05:49:41', '2019-02-07 01:25:37', NULL),
-(53, 'palboy@mailinator.com', '', 'Test Shop', '10.50', 'Pal', 'TES53', 'vender_1541999590.jpg', 'Gota, Ahmedabad, Gujarat, India', '', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '', '2018-11-12 00:43:10', NULL, NULL),
-(54, 'palcakes@mailinator.com', '$2y$10$9H2n2v7cI.lNp3E0JvAJoerpKhmOQxebMeWD2rnlcEETivT5B3nky', 'Git', '8.00', 'Frl', 'GIT54', '', 'Del\\\"hi, Ind\\\"ia', '', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '', '2', '', 0, '', '', 2, '', '', '2018-11-12 09:06:52', '2018-11-23 00:41:26', NULL),
-(55, 'Cafe@eww.com', '', 'The Hytt Cafe', '10.00', 'Giop', 'THE55', '', 'Hynes Convention Center, Boston, MA, USA', '02115', 'Suffolk County', 'Massachusetts', 'United States', '42.34797469999999', '-71.08792840000001', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '', '2019-01-03 09:21:24', NULL, NULL),
-(56, 'PunchyMan@mailinator.com', '', 'Punchy Man', '', 'Dhrumi', 'PUN56', '', 'DFW Remote North Parking, Grapevine, TX, USA', '33598', 'Hillsborough County', 'Florida', 'United States', '32.926195', '-97.04413999999997', '', '7745871466', '4353455434', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '', '2019-01-09 01:52:15', NULL, NULL),
-(57, 'SmartDoody@mailinator.com', '$2y$10$CjPL17v5/rIGScMxRYs8x.9VT0K84Z109Z9niH80PKnJSOPcj//Oa', 'Smart Doody', '', 'Doody', 'SMA57', 'vender_1549518926.jpg', 'Hynes Convention Center (Boylston Street and Gloucester Street), Boston, MA, USA', '02199', 'Suffolk County', 'Massachusetts', 'United States', '42.3483041', '-71.08359259999997', '', '888 555 6984', '', '', '', '', '', '', '11', '0', '666-66-6666', 0, '', '', 1, '', '', '2019-01-10 02:23:39', '2019-02-07 01:25:26', NULL),
-(58, 'vadilal@yopmail.com', '$2y$10$9H2n2v7cI.lNp3E0JvAJoerpKhmOQxebMeWD2rnlcEETivT5B3nky', 'Vadilal Eatery', '', 'Vadilal', 'VAD58', 'vender_1549518906.jpg', 'Ghramville Road, Myrtle Beach, SC, USA', '33598', 'Hillsborough County', 'Florida', 'United States', '33.7569751', '-78.92280299999999', 'This is test This is testThis is testThis is testThis is testThis is testThis is testThis is test This is testThis is testThis is test This is testThis is testThis is test', '774 587 1466', '774 587 1466', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', '100.00', '1', '0,2', '545-55-5555', 0, '', 'brochure_1547460096.jpg', 1, '', '', '2019-01-11 10:50:17', '2019-02-07 01:25:06', NULL),
-(59, 'BusyBoy@mailinator.com', '', 'Havmore', '', 'Mr  Patel', 'HAV59', '', 'Hynes Convention Center, Boston, MA, USA', '02115', 'Suffolk County', 'Massachusetts', 'United States', '', '', '', '7745871466', '7745871466', 'www.test.com', '', '', '', '', '', '0,1,2', '777-77-7777', 0, '', '', 0, '', '', '2019-01-11 11:04:12', '2019-01-14 07:47:37', NULL),
-(60, 'bistro@mailinator.com', '$2y$10$LgPaANV6eu.2z8qblfoMf.qeNS8WVrfhEGBBiT8YBL6AJfVsCmGUy', 'Cafe Bistro', '', 'Mr Ristretto', 'CAF60', 'vender_1547208493.jpg', 'FGCU South Bridge Loop Road, Fort Myers, FL, USA', '33965', 'Lee County', 'Florida', 'United States', '26.4586806', '-81.76785970000003', 'Find the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in AhmedabadFind the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in Ahmedabad Find the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in Ahmedabad', '8866541256', '8445687499', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', '', '', '100.00', '', '0,1,2', '', 0, '', 'brochure_1547208593.png', 1, '', '', '2019-01-11 12:07:06', '2019-01-12 06:14:25', '2019-01-14 07:50:17'),
-(61, 'dominos@gmail.com', '', 'Dominos', '10.00', 'Dominu', 'DOM61', '', 'Canton, MI, USA', '48488889', 'bangalore', 'ka', 'India', '42.3086444', '-83.48211600000002', '', '57687898890808', '35465676756577', 'www.hfajfhaifr.com', '', '', '', '', '', '0,1', '', 0, '', '', 0, '', '63245e31b00d4f5b9b03c8ca0fe05f4890f5d4c6', '2019-01-14 07:55:53', NULL, NULL),
-(62, 'vineyard@mailinator.com', '$2y$10$NkmTmprrqUfdh/jBk.727eTMFtqouT2iIz/mXMJ04IwrRba8JXLW2', 'The Vineyard', '10.50', 'Mr Vine', 'THE62', 'vender_1549518891.jpg', 'London Eye Court, Las Vegas, NV, USA', '89178', 'Clark County', 'Nevada', 'United States', '36.0346157', '-115.30548069999998', '', '886 654 1258', '778 845 8745', 'https://www.zomato.com/ahmedabad/the-vineyard-bodakdev?zrp_bid=0&zrp_pid=14', '', '', '', '', '2', '0,2', '996-65-5745', 0, '', '', 1, '', '', '2019-01-17 10:38:12', '2019-02-07 01:24:51', NULL),
-(63, 'test@gmail.com', '', 'Test', '', 'Rrtrt', 'TES63', '', 'Dg Farms Road, Wimauma, FL, USA', '33598', 'Hillsborough County', 'Florida', 'United States', '', '', '', '546 546 4577', '444 444 4444', 'https://www.zomato.com/ahmedabad/', '', '', '', '', '', '1,2', '555-55-5555', 0, '', '', 0, '', 'c7c1cf2f18b8f9c6e49f78a98e920877d17f288b', '2019-01-21 12:03:28', NULL, '2019-01-21 12:03:35'),
-(64, 'MaleTater@mailinator.com', '$2y$10$u0u3DECZfKltNRAC..VwRegw2gUoiLY1dd.m3FcyOjRTVWNDu8LgG', 'MaleTater', '', 'MaleTater', 'MAL64', '', 'Aha Macav Parkway, Needles, CA, USA', '66666', 'San Bernardino County', 'California', 'United States', '35.0402223', '-114.64573039999999', '', '', '', '', '', '', '', '', '', '0', '66-66-6666', 0, '', '', 2, '', '', '2019-01-23 06:11:39', '2019-01-23 06:12:38', NULL),
-(65, 'developer.eww2@gmail.com', '', 'Eww', '', 'Eww', 'EWW65', '', 'London Eye Court, Las Vegas, NV, USA', '89178', 'Clark County', 'Nevada', 'United States', '36.0346157', '-115.30548069999998', '', '', '555 555 5555', '', '', '', '', '', '', '2', '555-55-5555', 0, '', '', 0, '', '6f99e942816d9b6fc40ef22d82de525396deb7a2', '2019-01-23 06:15:09', NULL, '2019-01-23 06:30:28'),
-(66, 'developer.eww2@gmail.com', '', 'The Esplendido Cafe', '', 'Mr Esplendo', 'THE66', '', 'Glendale, CA, USA', '32205', 'Duval County', 'Florida', 'United States', '', '', '', '555 555 5556', '', '', '', '', '', '', '9', '0', '555-55-5555', 0, '', '', 0, '', 'e5234ea06feeb57a1a78e1594224fa175fc054b8', '2019-01-23 06:37:05', NULL, NULL),
-(67, 'myshop@binkmail.com', '', 'Waffles Store', '', 'Dhrumi', 'WAF67', '', 'Jollyville Road, Austin, TX, USA', '78759', 'Travis County', 'Texas', 'United States', '30.4065779', '-97.7478949', '', '', '', '', '', '', '', '', '2', '0', '666-66-6666', 0, '', '', 0, '', 'a03cc2da19ad20a31997fd09e4756843e301664d', '2019-01-31 12:04:09', NULL, NULL);
+INSERT INTO `shop` (`id`, `email`, `password`, `shop_name`, `short_name`, `percentage`, `vender_name`, `shop_code`, `profile_picture`, `address`, `zip_code`, `city`, `state`, `country`, `latitude`, `longitude`, `about`, `contact_no1`, `contact_no2`, `website`, `facebook_link`, `twitter_link`, `pinterest_link`, `min_order`, `delivery_charges_per_mile`, `minimum_mile`, `charges_of_minimum_mile`, `payment_mode`, `tax_number`, `device_type`, `device_token`, `broacher`, `delivery_time`, `order_by_time`, `status`, `remember_token`, `activation_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(52, 'sugar@mailinator.com', '$2y$10$2Qov5hbktXILNk8/EezJi.rakocg80gqr75xA7JIFLNVHLoLgQlvi', 'Ristretto - Behi', 'eistretto-behi', '10', 'Mr Ristretto', 'RIS52', 'vender_1549518937.jpg', 'FFA FHA Camp Road, Covington, GA, USA', '30014', 'Newton County', 'Georgia', 'United States', '33.4395707', '-83.8367465', 'Your family will never guess that this fun twist on typical pizza uses up leftover pesto. Loaded with protein, hearty slices of this chicken pizza will fill them up fast!', '886 658 4541', '774 587 1466', 'https://www.zomato.com/ah', '', '', '', '100.00', '1', '', '', '0,1,2', '657-57-5765', 0, '', 'brochure_1541502113.jpg', '11:30 AM', '10:00 AM', 1, '6c0bf58d69c1a8adead8c7c158badc2f87430bf9', '', '2018-11-06 05:49:41', '2019-02-07 01:25:37', NULL),
+(53, 'palboy@mailinator.com', '', 'Test Shop', '', '10.50', 'Pal', 'TES53', 'vender_1541999590.jpg', 'Gota, Ahmedabad, Gujarat, India', '', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '11:30 AM', '10:00 AM', 0, '', '', '2018-11-12 00:43:10', NULL, NULL),
+(54, 'palcakes@mailinator.com', '$2y$10$9H2n2v7cI.lNp3E0JvAJoerpKhmOQxebMeWD2rnlcEETivT5B3nky', 'Git', '', '8.00', 'Frl', 'GIT54', '', 'Del\\\"hi, Ind\\\"ia', '', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2', '', 0, '', '', '11:30 AM', '10:00 AM', 2, '', '', '2018-11-12 09:06:52', '2018-11-23 00:41:26', NULL),
+(55, 'Cafe@eww.com', '', 'The Hytt Cafe', '', '10.00', 'Giop', 'THE55', '', 'Hynes Convention Center, Boston, MA, USA', '02115', 'Suffolk County', 'Massachusetts', 'United States', '42.34797469999999', '-71.08792840000001', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '11:30 AM', '10:00 AM', 0, '', '', '2019-01-03 09:21:24', NULL, NULL),
+(56, 'PunchyMan@mailinator.com', '', 'Punchy Man', '', '', 'Dhrumi', 'PUN56', '', 'DFW Remote North Parking, Grapevine, TX, USA', '33598', 'Hillsborough County', 'Florida', 'United States', '32.926195', '-97.04413999999997', '', '7745871466', '4353455434', '', '', '', '', '', '', '', '', '', '', 0, '', '', '11:30 AM', '10:00 AM', 0, '', '', '2019-01-09 01:52:15', NULL, NULL),
+(57, 'SmartDoody@mailinator.com', '$2y$10$CjPL17v5/rIGScMxRYs8x.9VT0K84Z109Z9niH80PKnJSOPcj//Oa', 'Main Bar, Willy', 'main-bar-willy', '', 'Doody', 'SMA57', 'vender_1549518926.jpg', 'Hynes Convention Center (Boylston Street and Gloucester Street), Boston, MA, USA', '02199', 'Suffolk County', 'Massachusetts', 'United States', '42.3483041', '-71.08359259999997', '', '888 555 6984', '', '', '', '', '', '', '11.00', '', '', '0', '666-66-6666', 0, '', '', '11:30 AM', '10:00 AM', 1, '', '', '2019-01-10 02:23:39', '2019-02-08 09:02:40', NULL),
+(58, 'vadilal@yopmail.com', '$2y$10$9H2n2v7cI.lNp3E0JvAJoerpKhmOQxebMeWD2rnlcEETivT5B3nky', 'Vadilal Eatery', 'vadilal-eatery', '', 'Vadilal', 'VAD58', 'vender_1549518906.jpg', 'Ghramville Road, Myrtle Beach, SC, USA', '33598', 'Hillsborough County', 'Florida', 'United States', '33.7569751', '-78.92280299999999', 'This is test This is testThis is testThis is testThis is testThis is testThis is testThis is test This is testThis is testThis is test This is testThis is testThis is test', '774 587 1466', '774 587 1466', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', '100.00', '1', '', '', '0,2', '545-55-5555', 0, '', 'brochure_1547460096.jpg', '12:00 PM', '11:00 AM', 1, '', '', '2019-01-11 10:50:17', '2019-02-07 01:25:06', NULL),
+(59, 'BusyBoy@mailinator.com', '', 'Havmore', '', '', 'Mr  Patel', 'HAV59', '', 'Hynes Convention Center, Boston, MA, USA', '02115', 'Suffolk County', 'Massachusetts', 'United States', '', '', '', '7745871466', '7745871466', 'www.test.com', '', '', '', '', '', '', '', '0,1,2', '777-77-7777', 0, '', '', '11:30 AM', '10:00 AM', 0, '', '', '2019-01-11 11:04:12', '2019-01-14 07:47:37', NULL),
+(60, 'bistro@mailinator.com', '$2y$10$LgPaANV6eu.2z8qblfoMf.qeNS8WVrfhEGBBiT8YBL6AJfVsCmGUy', 'Cafe Bistro', '', '', 'Mr Ristretto', 'CAF60', 'vender_1547208493.jpg', 'FGCU South Bridge Loop Road, Fort Myers, FL, USA', '33965', 'Lee County', 'Florida', 'United States', '26.4586806', '-81.76785970000003', 'Find the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in AhmedabadFind the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in Ahmedabad Find the best restaurants, caf?s, and bars in Ahmedabad\r\nFind the best restaurants, caf?s, and bars in Ahmedabad', '8866541256', '8445687499', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', '', '', '100.00', '', '', '', '0,1,2', '', 0, '', 'brochure_1547208593.png', '11:30 AM', '10:00 AM', 1, '', '', '2019-01-11 12:07:06', '2019-01-12 06:14:25', '2019-01-14 07:50:17'),
+(61, 'dominos@gmail.com', '', 'Dominos', '', '10.00', 'Dominu', 'DOM61', '', 'Canton, MI, USA', '48488889', 'bangalore', 'ka', 'India', '42.3086444', '-83.48211600000002', '', '57687898890808', '35465676756577', 'www.hfajfhaifr.com', '', '', '', '', '', '', '', '0,1', '', 0, '', '', '11:30 AM', '10:00 AM', 0, '', '63245e31b00d4f5b9b03c8ca0fe05f4890f5d4c6', '2019-01-14 07:55:53', NULL, NULL),
+(62, 'vineyard@mailinator.com', '$2y$10$NkmTmprrqUfdh/jBk.727eTMFtqouT2iIz/mXMJ04IwrRba8JXLW2', 'The Vineyard Hotel', 'the-vineyard-hotel', '10.50', 'Mr Vine', 'THE62', 'vender_1549518891.jpg', 'London Eye Court, Las Vegas, NV, USA', '89178', 'Clark County', 'Nevada', 'United States', '36.0346157', '-115.30548069999998', '', '886 654 1258', '778 845 8745', 'https://www.zomato.com/ahmedabad/the-vineyard-bodakdev?zrp_bid=0&zrp_pid=14', '', '', '', '', '1.50', '5.20', '5.50', '0,2', '996-65-5745', 0, '', '', '11:30 AM', '10:00 AM', 1, '', '', '2019-01-17 10:38:12', '2019-02-13 08:47:36', NULL),
+(63, 'test@gmail.com', '', 'Test', '', '', 'Rrtrt', 'TES63', '', 'Dg Farms Road, Wimauma, FL, USA', '33598', 'Hillsborough County', 'Florida', 'United States', '', '', '', '546 546 4577', '444 444 4444', 'https://www.zomato.com/ahmedabad/', '', '', '', '', '', '', '', '1,2', '555-55-5555', 0, '', '', '11:30 AM', '10:00 AM', 0, '', 'c7c1cf2f18b8f9c6e49f78a98e920877d17f288b', '2019-01-21 12:03:28', NULL, '2019-01-21 12:03:35'),
+(64, 'MaleTater@mailinator.com', '$2y$10$u0u3DECZfKltNRAC..VwRegw2gUoiLY1dd.m3FcyOjRTVWNDu8LgG', 'MaleTater', '', '', 'MaleTater', 'MAL64', '', 'Aha Macav Parkway, Needles, CA, USA', '66666', 'San Bernardino County', 'California', 'United States', '35.0402223', '-114.64573039999999', '', '', '', '', '', '', '', '', '', '', '', '0', '66-66-6666', 0, '', '', '11:30 AM', '10:00 AM', 2, '', '', '2019-01-23 06:11:39', '2019-01-23 06:12:38', NULL),
+(65, 'developer.eww2@gmail.com', '', 'Eww', '', '', 'Eww', 'EWW65', '', 'London Eye Court, Las Vegas, NV, USA', '89178', 'Clark County', 'Nevada', 'United States', '36.0346157', '-115.30548069999998', '', '', '555 555 5555', '', '', '', '', '', '', '', '', '2', '555-55-5555', 0, '', '', '11:30 AM', '10:00 AM', 0, '', '6f99e942816d9b6fc40ef22d82de525396deb7a2', '2019-01-23 06:15:09', NULL, '2019-01-23 06:30:28'),
+(66, 'developer.eww2@gmail.com', '', 'The Esplendido Cafe', 'the-esplendido-cafe', '', 'Mr Esplendo', 'THE66', '', 'Glendale, CA, USA', '32205', 'Duval County', 'Florida', 'United States', '', '', '', '555 555 5556', '', '', '', '', '', '', '9.00', '', '', '0', '555-55-5555', 0, '', '', '11:30 AM', '10:00 AM', 0, '', 'e5234ea06feeb57a1a78e1594224fa175fc054b8', '2019-01-23 06:37:05', '2019-02-08 09:01:55', NULL),
+(67, 'myshop@binkmail.com', '', 'Wffal - W', 'wffal-w', '', 'Dhrumi', 'WAF67', '', 'Jollyville Road, Austin, TX, USA', '78759', 'Travis County', 'Texas', 'United States', '30.4065779', '-97.7478949', '', '', '', '', '', '', '', '', '0.00', '', '', '0', '666-66-6666', 0, '', '', '11:30 AM', '10:00 AM', 0, '', 'a03cc2da19ad20a31997fd09e4756843e301664d', '2019-01-31 12:04:09', '2019-02-09 01:41:01', '2019-02-20 04:46:37'),
+(68, 'Cafe123@eww.com', '', 'The Esplendido Cafe', 'the-esplendido-cafe-1', '', 'Mr Ristretto', 'THE68', '', 'Hynes Convention Center (Boylston Street and Gloucester Street), Boston, MA, USA', '02199', 'Suffolk County', 'Massachusetts', 'United States', '', '', '', '774 587 1466', '', '', '', '', '', '', '6.00', '6.00', '66.00', '0', '6-66-6666', 0, '', '', '', '', 0, '', 'b3969e340ecbdbcf09d53825f1c2d4373840a4c2', '2019-02-20 04:45:53', NULL, '2019-02-20 04:46:26'),
+(69, 'Cafejj@eww.com', '', 'Myd', 'myd', '', 'Mr Ristretto', 'MYD69', '', 'F.S.C.J. Kent Campus, Jacksonville, FL, USA', '32205', 'Duval County', 'Florida', 'United States', '', '', '', '774 587 1466', '', '', '', '', '', '', '1.00', '10.00', '10.00', '0', '888-88-8888', 0, '', '', '', '', 0, '', '2acf63a2cd108a2cc519079a83f7959f96686b8b', '2019-02-20 04:48:34', NULL, '2019-02-20 04:54:17'),
+(70, 'Cafejkl@eww.com', '', 'Testttt5', 'testttt', '', 'Mr Ristretto Tyy', 'TES70', '', 'FDR Drive, Brooklyn, NY, USA', '66666', 'Kings County', 'New York', 'United States', '40.71003039999999', '-73.98972170000002', '', '774 587 1466', '', '', '', '', '', '', '6.00', '666.00', '6.00', '1', '666-66-6666', 0, '', '', '', '', 0, '', '35a0b9cd7482ae0720d8d7a8990aed1923f39610', '2019-02-20 04:54:58', NULL, NULL),
+(71, 'lunch@safetymail.info', '', 'Lunch Fast', 'lunch-fast', '', 'Fast Man', 'LUN71', '', 'Dg Farms Road, Wimauma, FL, USA', '33598', 'Hillsborough County', 'Florida', 'United States', '27.7436691', '-82.3332734', '', '666 666 6666', '', '', '', '', '', '', '7.00', '7.00', '7.00', '0', '777-77-7777', 0, '', '', '', '', 0, '', '21ba2f91f758c87f449fd838e236460da9604535', '2019-02-20 04:59:12', NULL, NULL),
+(72, 'lunch1@safetymail.info', '', 'Kkk', 'kkk', '', 'Mr Ristretto', 'KKK72', '', 'F.S.C.J. Kent Campus, Jacksonville, FL, USA', '32205', 'Duval County', 'Florida', 'United States', '', '', '', '774 587 1466', '666 666 6666', '', '', '', '', '', '7.00', '7.00', '7.00', '0', '666-66-6666', 0, '', '', '', '', 0, '', '27b87d9569e661bf40823e907ec06737f9db4f09', '2019-02-20 05:22:20', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -913,20 +937,20 @@ INSERT INTO `shop_availibality` (`id`, `shop_id`, `day`, `from_time`, `to_time`,
 (332, 60, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-12 06:30:02'),
 (333, 60, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-01-12 06:30:02'),
 (334, 60, 'Saturday', '07:00 PM', '11:30 PM', 0, 0, '2019-01-12 06:30:02'),
-(342, 58, 'Sunday', '', '', 0, 1, '2019-02-05 03:04:51'),
-(343, 58, 'Monday', '09:00 AM', '05:00 PM', 0, 0, '2019-02-05 03:04:51'),
-(344, 58, 'Tuesday', '09:00 AM', '05:00 PM', 0, 0, '2019-02-05 03:04:51'),
-(345, 58, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-02-05 03:04:51'),
-(346, 58, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-02-05 03:04:51'),
-(347, 58, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-02-05 03:04:51'),
-(348, 58, 'Saturday', '09:00 AM', '02:00 PM', 0, 0, '2019-02-05 03:04:51'),
-(356, 52, 'Sunday', '', '', 1, 0, '2019-02-06 05:40:18'),
-(357, 52, 'Monday', '', '', 1, 0, '2019-02-06 05:40:18'),
-(358, 52, 'Tuesday', '', '', 1, 0, '2019-02-06 05:40:18'),
-(359, 52, 'Wednesday', '', '', 1, 0, '2019-02-06 05:40:18'),
-(360, 52, 'Thursday', '', '', 1, 0, '2019-02-06 05:40:18'),
-(361, 52, 'Friday', '', '', 1, 0, '2019-02-06 05:40:18'),
-(362, 52, 'Saturday', '', '', 0, 1, '2019-02-06 05:40:18');
+(363, 52, 'Sunday', '', '', 1, 0, '2019-02-08 01:04:22'),
+(364, 52, 'Monday', '', '', 1, 0, '2019-02-08 01:04:22'),
+(365, 52, 'Tuesday', '', '', 1, 0, '2019-02-08 01:04:22'),
+(366, 52, 'Wednesday', '', '', 1, 0, '2019-02-08 01:04:22'),
+(367, 52, 'Thursday', '', '', 1, 0, '2019-02-08 01:04:22'),
+(368, 52, 'Friday', '', '', 1, 0, '2019-02-08 01:04:22'),
+(369, 52, 'Saturday', '', '', 0, 1, '2019-02-08 01:04:22'),
+(377, 58, 'Sunday', '', '', 0, 1, '2019-02-08 06:13:35'),
+(378, 58, 'Monday', '09:00 AM', '05:00 PM', 0, 0, '2019-02-08 06:13:35'),
+(379, 58, 'Tuesday', '09:00 AM', '05:00 PM', 0, 0, '2019-02-08 06:13:35'),
+(380, 58, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-02-08 06:13:35'),
+(381, 58, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-02-08 06:13:35'),
+(382, 58, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-02-08 06:13:35'),
+(383, 58, 'Saturday', '09:00 AM', '02:00 PM', 0, 0, '2019-02-08 06:13:35');
 
 -- --------------------------------------------------------
 
@@ -949,11 +973,24 @@ INSERT INTO `shop_cuisines` (`id`, `shop_id`, `cuisine_id`) VALUES
 (70, 57, 23),
 (74, 53, 3),
 (75, 62, 18),
-(76, 58, 3),
-(77, 58, 23),
 (79, 521, 5),
 (80, 62, 23),
-(81, 521, 9);
+(81, 521, 9),
+(82, 52, 7),
+(83, 52, 21),
+(84, 581, 3),
+(85, 581, 23),
+(86, 58, 1),
+(87, 58, 3),
+(88, 58, 4),
+(89, 58, 7),
+(90, 58, 9),
+(91, 58, 18),
+(92, 58, 19),
+(93, 58, 20),
+(94, 58, 21),
+(95, 58, 22),
+(96, 58, 23);
 
 -- --------------------------------------------------------
 
@@ -964,7 +1001,7 @@ INSERT INTO `shop_cuisines` (`id`, `shop_id`, `cuisine_id`) VALUES
 CREATE TABLE `shop_hours` (
   `id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
-  `order_delivery` int(1) NOT NULL COMMENT 'order - 1, delivery - 2',
+  `order_delivery` int(1) NOT NULL COMMENT ' delivery - 2',
   `morning_evening` int(1) NOT NULL COMMENT 'morning - 1, evening - 2',
   `from_time` varchar(255) NOT NULL,
   `to_time` varchar(255) NOT NULL
@@ -975,22 +1012,40 @@ CREATE TABLE `shop_hours` (
 --
 
 INSERT INTO `shop_hours` (`id`, `shop_id`, `order_delivery`, `morning_evening`, `from_time`, `to_time`) VALUES
-(9, 52, 1, 1, '08:00 AM', '02:00 PM'),
-(10, 52, 1, 2, '02:30 PM', '10:30 PM'),
-(11, 52, 2, 1, '09:00 AM', '01:00 PM'),
-(12, 52, 2, 2, '03:00 PM', '09:00 PM');
+(13, 52, 1, 1, '08:00 AM', '02:00 PM'),
+(14, 52, 1, 2, '02:30 PM', '10:30 PM'),
+(15, 52, 2, 1, '09:00 AM', '01:00 PM'),
+(16, 52, 2, 2, '03:00 PM', '09:00 PM'),
+(19, 58, 2, 1, '06:00 AM', '12:00 PM'),
+(20, 58, 2, 2, '04:00 PM', '10:00 PM');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `shop_tags`
+-- Table structure for table `shop_request`
 --
 
-CREATE TABLE `shop_tags` (
+CREATE TABLE `shop_request` (
   `id` int(11) NOT NULL,
-  `shop_id` int(11) NOT NULL,
-  `tag_id` int(11) NOT NULL
+  `email` varchar(255) NOT NULL,
+  `shop_name` varchar(255) NOT NULL,
+  `address` text NOT NULL,
+  `contact_no` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `shop_request`
+--
+
+INSERT INTO `shop_request` (`id`, `email`, `shop_name`, `address`, `contact_no`, `message`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Cafe@eww.com', 'The Esplendido Cafe', 'Hynes Convention Center, Boston, MA, USA', '774587146677', 'am trying to format numbers in chartjs chart. I am getting this error on my console and the numbers are not visible on the chart', '2019-02-20 06:55:07', NULL, NULL),
+(2, 'Cafe@eww.com2', 'The Esplendido2', 'Hynes Convention Center, Boston, MA, USA', '774587146677', 'am trying to format numbers in chartjs chart. am trying to format numbers in chartjs chart. I am getting this error on my console and the numbers are not visible on the chartam trying to format numbers in chartjs chart. I am getting this error on my console and the numbers are not visible on the chartam trying to format numbers in chartjs chart. I am getting this error on my console and the numbers are not visible on the chartam trying to format numbers in chartjs chart. I am getting this error on my console and the numbers are not visible on the chartI am getting this error on my console and the numbers are not visible on the chart', '2019-02-20 06:55:07', NULL, NULL),
+(3, 'lunch@safetymail.info', 'Lunch Fast', 'Dg Farms Road, Wimauma, FL, USA', '666666666666', 'this is test message ', '2019-02-20 09:27:35', NULL, '2019-02-20 04:59:18'),
+(4, 'lunch@mailinator.com', 'Shpp G', 'F.S.C.J. Kent Campus, Jacksonville, FL, USA', '656 567 5675', 'dddd', '2019-02-20 10:00:01', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1024,21 +1079,8 @@ CREATE TABLE `subscriber` (
 --
 
 INSERT INTO `subscriber` (`id`, `email`, `created_at`) VALUES
-(1, 'dhrumi@mailinator.com', '2019-02-07 07:36:10');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tag`
---
-
-CREATE TABLE `tag` (
-  `id` int(11) NOT NULL,
-  `tag_name` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+(1, 'dhrumi@mailinator.com', '2019-02-07 07:36:10'),
+(2, 'ramadac@mailinator.com', '2019-02-20 10:09:02');
 
 -- --------------------------------------------------------
 
@@ -1064,18 +1106,20 @@ CREATE TABLE `variant_group` (
 INSERT INTO `variant_group` (`id`, `shop_id`, `name`, `selection`, `availability`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (4, 46, 'Cheese', 0, 1, '2018-10-31 09:09:04', NULL, NULL),
 (5, 46, 'Butter', 0, 0, '2018-10-31 09:09:24', NULL, NULL),
-(7, 52, 'Topping', 1, 0, '2018-11-06 06:22:40', NULL, NULL),
+(7, 52, 'Topping', 1, 1, '2019-02-16 07:55:02', NULL, NULL),
 (8, 52, 'Fries', 0, 0, '2018-11-06 06:28:57', NULL, NULL),
 (9, 52, 'Wat\\\"er', 0, 0, '2018-11-12 13:47:05', NULL, '2018-11-12 09:17:05'),
 (10, 52, 'Wate\\\'r', 0, 0, '2018-11-12 13:47:07', NULL, '2018-11-12 09:17:07'),
 (11, 52, 'Gg\\\'l', 0, 0, '2018-11-12 14:05:55', NULL, '2018-11-12 09:35:55'),
-(12, 58, 'Toppings', 0, 0, '2019-01-11 11:28:30', NULL, NULL),
+(12, 58, 'Toppings', 0, 1, '2019-02-16 07:53:55', NULL, NULL),
 (13, 58, 'Vgroup', 1, 1, '2019-01-12 03:53:46', NULL, NULL),
 (14, 58, 'Drinks', 1, 1, '2019-01-14 10:39:22', NULL, '2019-01-14 10:39:22'),
 (15, 58, 'Snacks', 1, 1, '2019-01-14 10:44:38', NULL, NULL),
 (16, 58, 'Drinks', 1, 1, '2019-01-14 10:44:56', NULL, NULL),
 (17, 62, 'Cream', 0, 1, '2019-01-17 11:00:39', NULL, NULL),
-(18, 62, 'peri peri', 0, 1, '2019-01-17 11:00:39', NULL, NULL);
+(18, 62, 'peri peri', 0, 1, '2019-01-17 11:00:39', NULL, NULL),
+(19, 52, 'Jain Preparation', 0, 0, '2019-02-08 11:41:48', NULL, NULL),
+(20, 52, 'Size', 0, 1, '2019-02-18 07:13:01', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1099,27 +1143,33 @@ CREATE TABLE `variant_items` (
 INSERT INTO `variant_items` (`id`, `variant_group_id`, `name`, `item_id`, `price`, `created_at`) VALUES
 (15, 4, 'Single', 16, '10.80', '2018-11-01 02:31:39'),
 (16, 4, 'double', 16, '20.00', '2018-11-01 02:31:39'),
-(18, 7, 'Cheese', 18, '10', '2018-11-06 06:24:13'),
-(19, 7, 'Butter', 18, '7', '2018-11-06 06:24:13'),
-(20, 7, 'Peri peri', 18, '15', '2018-11-06 06:24:13'),
 (21, 7, 'chilli', 19, '2', '2018-11-06 06:27:06'),
 (22, 7, 'onion ', 19, '6', '2018-11-06 06:27:06'),
-(33, 8, 'Small', 20, '25.00', '2018-11-12 09:41:00'),
-(34, 8, 'Medium', 20, '40.00', '2018-11-12 09:41:00'),
 (35, 7, 'all', 23, '50', '2019-01-07 00:45:50'),
 (36, 7, 'small', 23, '10', '2019-01-07 00:45:50'),
 (37, 8, 'small', 24, '10', '2019-01-07 00:54:32'),
 (38, 8, 'med', 24, '15', '2019-01-07 00:54:32'),
-(39, 12, 'Chille', 27, '1', '2019-01-11 11:30:19'),
-(40, 12, 'Anchovies', 27, '2', '2019-01-11 11:30:19'),
-(41, 12, 'Rockt', 27, '2', '2019-01-11 11:30:19'),
 (42, 13, 'small', 29, '10', '2019-01-14 10:43:45'),
 (43, 13, 'large', 29, '15', '2019-01-14 10:43:45'),
 (44, 16, 'Small', 28, '20', '2019-01-14 10:45:42'),
 (45, 17, 'Normal', 31, '10', '2019-01-17 11:02:02'),
 (46, 17, 'Double', 31, '20', '2019-01-17 11:02:02'),
 (47, 18, 'small packet', 31, '10', '2019-01-17 11:02:02'),
-(48, 18, 'large packet', 31, '20', '2019-01-17 11:02:02');
+(48, 18, 'large packet', 31, '20', '2019-01-17 11:02:02'),
+(56, 8, 'Small', 20, '25.00', '2019-02-09 01:48:29'),
+(57, 8, 'Medium', 20, '40.00', '2019-02-09 01:48:29'),
+(60, 8, 'ui', 25, '0.00', '2019-02-09 01:49:52'),
+(61, 7, 'v2', 25, '1.00', '2019-02-09 01:49:52'),
+(82, 12, 'Chille', 27, '1.00', '2019-02-13 06:26:25'),
+(83, 12, 'Anchovies', 27, '2.00', '2019-02-13 06:26:25'),
+(84, 12, 'Rockt', 27, '2.00', '2019-02-13 06:26:25'),
+(85, 7, 'Cheese', 18, '10.00', '2019-02-18 07:13:39'),
+(86, 7, 'Butter', 18, '7.00', '2019-02-18 07:13:39'),
+(87, 7, 'Peri peri', 18, '15.00', '2019-02-18 07:13:39'),
+(88, 19, 'Yes', 18, '2.00', '2019-02-18 07:13:39'),
+(89, 19, 'No', 18, '0.00', '2019-02-18 07:13:39'),
+(90, 20, 'Small', 18, '2.5', '2019-02-18 07:13:39'),
+(91, 20, 'large', 18, '5', '2019-02-18 07:13:39');
 
 --
 -- Indexes for dumped tables
@@ -1252,12 +1302,6 @@ ALTER TABLE `payment_settings`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `photos`
---
-ALTER TABLE `photos`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `promocode`
 --
 ALTER TABLE `promocode`
@@ -1318,9 +1362,9 @@ ALTER TABLE `shop_hours`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `shop_tags`
+-- Indexes for table `shop_request`
 --
-ALTER TABLE `shop_tags`
+ALTER TABLE `shop_request`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1333,12 +1377,6 @@ ALTER TABLE `state`
 -- Indexes for table `subscriber`
 --
 ALTER TABLE `subscriber`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `tag`
---
-ALTER TABLE `tag`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1451,7 +1489,7 @@ ALTER TABLE `highlight`
 -- AUTO_INCREMENT for table `item`
 --
 ALTER TABLE `item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `keys`
@@ -1463,7 +1501,7 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `order_items`
@@ -1484,34 +1522,28 @@ ALTER TABLE `payment_settings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `photos`
---
-ALTER TABLE `photos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `promocode`
 --
 ALTER TABLE `promocode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `promocode_products`
 --
 ALTER TABLE `promocode_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `promocode_shops`
 --
 ALTER TABLE `promocode_shops`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `promocode_valid_product`
 --
 ALTER TABLE `promocode_valid_product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `rating`
@@ -1529,31 +1561,31 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT for table `shop`
 --
 ALTER TABLE `shop`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `shop_availibality`
 --
 ALTER TABLE `shop_availibality`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=363;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=384;
 
 --
 -- AUTO_INCREMENT for table `shop_cuisines`
 --
 ALTER TABLE `shop_cuisines`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- AUTO_INCREMENT for table `shop_hours`
 --
 ALTER TABLE `shop_hours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT for table `shop_tags`
+-- AUTO_INCREMENT for table `shop_request`
 --
-ALTER TABLE `shop_tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `shop_request`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `state`
@@ -1565,25 +1597,19 @@ ALTER TABLE `state`
 -- AUTO_INCREMENT for table `subscriber`
 --
 ALTER TABLE `subscriber`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `tag`
---
-ALTER TABLE `tag`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `variant_group`
 --
 ALTER TABLE `variant_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `variant_items`
 --
 ALTER TABLE `variant_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -124,6 +124,7 @@ if($is_admin){
                     <ul class="submenu">
                         <li><a href="<?php echo base_url().'vender-list'; ?>">List of All Restaurants </a></li>
                         <li><a href="<?php echo base_url().'vender-perc'; ?>">Percentage of Restaurant </a></li>
+                        <li><a href="<?php echo base_url().'vender-requests'; ?>">Pending Requests </a></li>
                     </ul>
                 </li>
 

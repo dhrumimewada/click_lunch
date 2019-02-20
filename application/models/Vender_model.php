@@ -27,6 +27,26 @@ class Vender_model extends CI_Model {
 		return $return_data;
 	}
 
+	public function get_vendor_request($id = NULL){
+		$return_data = array();
+		$this->db->select('*');
+		$this->db->from('shop_request');
+		if (isset($id) && !is_null($id)) {
+			$this->db->where('id', $id);
+		}
+		$this->db->where("deleted_at", NULL);
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			if (isset($id) && !is_null($id)) {
+				$return_data = $sql_query->row();
+			}else{
+				$return_data = $sql_query->result_array();
+			}
+			
+		}
+		return $return_data;
+	}
+
 	public function post($modal_data = NULL) {
 		$this->db->trans_begin();
 		$return_value = FALSE;
@@ -140,6 +160,13 @@ class Vender_model extends CI_Model {
 			$token_array = array('activation_token' => $activation_token);
 			$this->db->where("id", $user_id);
 			$this->db->update("shop", $token_array);
+
+			if(isset($_POST['request_id']) && $_POST['request_id'] != ''){
+				$delete_data = array('deleted_at' => date('Y-m-d H:i:s'));
+				$this->db->where('id', $this->input->post("request_id"));
+				$this->db->update("shop_request", $delete_data);
+			}
+		
 		}
 
 

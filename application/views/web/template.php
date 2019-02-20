@@ -1,4 +1,5 @@
-<?php $assets = $this->config->item('website_assest'); ?>
+<?php $assets = $this->config->item('website_assest');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <?php include 'header.php'; ?>

@@ -7,31 +7,35 @@ $d_none = 'd-none';
 <div class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="customize-item-modal">
     <div class="modal-dialog modal-dialog-centered my-modal">
         <div class="modal-content">
-            <!-- Modal Header -->
-	        <div class="modal-header">
-	          <h4 class="modal-title">Modal Heading</h4>
-	          <i class="mdi mdi-close mdi-24px close" data-dismiss="modal"></i>
-	        </div>
-	        
-	        <!-- Modal body -->
-	        <div class="varient-headings text-center pt-2 pr-1 pl-1">
-	        	<!-- Group of haeder -->
-	    	</div>
-	    	<div class="mt-1 p-2 text-center bg-danger text-white error-item d-none">
-	    		You must select at least 1 Upgrade
-	    	</div>
-	        <div class="modal-body table-responsive">
-	        	<!-- options of group -->
-	        </div>
-	        
-	        <!-- Modal footer -->
-	        <div class="modal-footer">
-	          <button type="button" class="btn btn-danger w-100">
-	          	<span class="float-left">Total $<span class="total-item-price">100.00</span></span>
-	          	<span class="float-right">UPDATE ITEM</span>
-	          
-	      	</button>
-	        </div>
+
+        	<form method="post" accept-charset="utf-8" id="form-varient">
+	            <!-- Modal Header -->
+		        <div class="modal-header">
+		          <h4 class="modal-title">Modal Heading</h4>
+		          <i class="mdi mdi-close mdi-24px close" data-dismiss="modal"></i>
+		        </div>
+		        
+		        <!-- Modal body -->
+		        <div class="varient-headings text-center pt-2 pr-1 pl-1">
+		        	<!-- Group of haeder -->
+		    	</div>
+		    	<div class="mt-1 p-2 text-center bg-danger text-white position-absolute w-100 error-item" style="z-index: 1;">
+		    		You must select at least 1 Upgrade
+		    	</div>
+		        <div class="modal-body table-responsive">
+		        	<!-- options of group -->
+		        </div>
+		        
+		        <!-- Modal footer -->
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-danger w-100" id="form-varient-btn">
+		          	<span class="float-left">Total $<span class="total-item-price">100.00</span></span>
+		          	<span class="float-right">UPDATE ITEM</span>
+		          
+		      	</button>
+		        </div>
+
+	        </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
@@ -71,7 +75,13 @@ $d_none = 'd-none';
 								<td>
 									<div class="product-name">
 										<span><?php echo $value['name']; ?></span>
-										<span class="light-gray-txt">&#36;<?php echo $value['price']; ?></span>
+										<?php 
+										$product_price_with_varient = $value['item_price'];
+										if($value['varient_price'] != ''){
+											$product_price_with_varient = "&#36; ".$value['varient_price'] ." + &#36;". $value['item_price'];
+										} 
+										?>
+										<span class="light-gray-txt"><?php echo $product_price_with_varient; ?></span>
 										<?php if(isset($value['group_data']) && is_array($value['group_data']) && !empty($value['group_data'])){ ?>
 										<span class="pointer customize" data-id="<?php echo $value['rowid']; ?>">Customize</span>
 										<?php
@@ -81,11 +91,15 @@ $d_none = 'd-none';
 										<?php } ?>
 									</div>
 								</td>
-								<td>
-									<input type="number" value="<?php echo $value['qty']; ?>" min="1" max="99" step="1"/>
+								<td class="quatity-update">
+									<input type="number" value="<?php echo $value['qty']; ?>" min="1" max="99" step="1" data-id="<?php echo $value['rowid']; ?>" />
 								</td>
-								<td class="product-price">&#36;<?php echo $value['price']*$value['qty']; ?></td>
-								<td class="product-cancel" id="<?php echo $value['rowid']; ?>"><i class="mdi mdi-close mdi-24px pointer"></i></td>
+								<?php
+								$product_price = $value['price'] * $value['qty'];
+								$product_price = number_format((float)$product_price, 2, '.', '');
+								?>
+								<td class="product-price">&#36;<?php echo $product_price; ?></td>
+								<td class="product-cancel"><i class="mdi mdi-close mdi-24px pointer" id="<?php echo $value['rowid']; ?>" data-price="<?php echo $product_price; ?>"></i></td>
 							</tr>
 
 							<?php
@@ -112,7 +126,10 @@ $d_none = 'd-none';
 								<td></td>
 								<td></td>
 								<td class="total-text">Total:</td>
-								<td class="total">&#36;<?php echo $cart_total; ?></td>
+								<?php
+								$cart_total = number_format((float)$cart_total, 2, '.', '');
+								?>
+								<td class="total">&#36;<span class="total_cart_amount"><?php echo $cart_total; ?><span></td>
 								<td></td>
 							</tr>
 
@@ -278,5 +295,6 @@ $d_none = 'd-none';
 	$("input[type='number']").inputSpinner();
 	var delete_url = "<?php echo base_url().'cart-item-delete'; ?>";
 	var customize_url = "<?php echo base_url().'get-cart-item-data'; ?>";
+	var customize_cart_item_url = "<?php echo base_url().'update-cart-item-data'; ?>";
 </script>
 <script src="<?php echo $assets.'/js/custom/cart.js'; ?>"></script>

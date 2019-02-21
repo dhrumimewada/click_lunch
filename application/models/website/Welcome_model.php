@@ -124,6 +124,21 @@ class Welcome_model extends CI_Model {
 		return $return_data;
 	}
 
+	public function get_variants($values = array()){
+		$return_data = array();
+
+		$sql_select = array('id','variant_group_id','item_id', 'price');
+
+		$this->db->select($sql_select);
+		$this->db->from('variant_items');
+		$this->db->where_in("id", $values);
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$return_data = $sql_query->result_array();
+		}
+		return $return_data;
+	}
+
 	public function subscribe(){
 		$return = false;
 

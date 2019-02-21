@@ -58,7 +58,8 @@ $add_to_cart_link = base_url()."add-to-cart";
 										<div class="add-toppings">
 											<div class="add-toppings-text <?php echo $availability; ?>">
 												<?php
-												echo $value['name']; 
+												echo '<span class="group_title">'.$value['name'].'</span>'; 
+												//echo $value['name']; 
 												if($value['selection'] == 1){
 													$varient_count = count($value['items']);
 													$selection_txt = '(Choose up to '.$varient_count.')';
@@ -86,10 +87,10 @@ $add_to_cart_link = base_url()."add-to-cart";
 													<td>
 														<div class="form-check">
 															<?php if($value['selection'] == 1){ ?>
-																<input class="form-check-input" type="checkbox" name="group[<?php echo $value['id']; ?>]['selection'][]" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['id']; ?>" <?php echo $checked; ?> >
+																<input class="form-check-input <?php echo $availability; ?>" type="checkbox" name="group[<?php echo $value['id']; ?>][]" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['id']; ?>" <?php echo $checked; ?> >
 																<label class="form-check-label" for="<?php echo $value1['id']; ?>"><?php echo ucfirst($value1['name']); ?></label>
 															<?php } else{ ?>
-																<input class="form-check-input" type="radio" name="group[<?php echo $value['id']; ?>]['selection'][]" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['id']; ?>" <?php echo $checked; ?>>
+																<input class="form-check-input <?php echo $availability; ?>" type="radio" name="group[<?php echo $value['id']; ?>][]" id="<?php echo $value1['id']; ?>" value="<?php echo $value1['id']; ?>" <?php echo $checked; ?>>
 																<label class="form-check-label" for="<?php echo $value1['id']; ?>"><?php echo ucfirst($value1['name']); ?></label>
 															<?php }?>
 														</div>
@@ -112,7 +113,7 @@ $add_to_cart_link = base_url()."add-to-cart";
 									<div class="add-quantity">
 										<div class="quantity">
 											<input type="number" value="1" min="1" max="500" step="1" name="quantity" readonly />
-											<input type="submit" name="add-to-cart" id="add-to-cart" class="red-btn" value="Add To Cart">
+											<input type="button" name="add-to-cart" id="add-to-cart" class="red-btn" value="Add To Cart">
 										</div>
 									</div>
 								</div>
@@ -215,3 +216,4 @@ $add_to_cart_link = base_url()."add-to-cart";
 <script type="text/javascript">
 	$("input[type='number']").inputSpinner();
 </script>
+<script src="<?php echo base_url().'web-assets/js/custom/item_detail.js'; ?>"></script>

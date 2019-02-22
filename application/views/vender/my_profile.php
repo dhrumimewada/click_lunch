@@ -499,7 +499,7 @@ $delivery_evening_to = $delivery['evening']['to'];
                                     <h4 class="mt-0 mb-0 header-title">Restaurant Information</h4>
                                     <hr class="mt-1 mb-3">
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="form-group">
                                         <label class="required">Restaurant Cuisines</label>
                                         <div>
@@ -517,6 +517,27 @@ $delivery_evening_to = $delivery['evening']['to'];
                                             </select>
                                             <div class="validation-error-label">
                                                 <?php echo form_error('cuisines[]'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="service_charge" class="required">Service Charge</label>
+                                        <div>
+                                        <?php
+    $field_value = NULL;
+    $temp_value = set_value('service_charge');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    else{
+        $field_value = $vender_detail->service_charge;
+    }
+    ?>
+                                            <input type="text" name="service_charge" class="form-control demo3" id="service_charge" placeholder="Ex: 2.20" value="<?php echo $field_value; ?>">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('service_charge'); ?>
                                             </div>
                                         </div>
                                     </div>

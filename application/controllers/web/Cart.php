@@ -20,6 +20,13 @@ class Cart extends CI_Controller {
 		exit;
 	}
 
+	public function my_cart(){
+		$output_data['cart_contents'] = $this->cart->contents();
+		$output_data['cart_total'] = $this->cart->total();
+		$output_data['main_content'] = 'cart';
+		$this->load->view('web/template',$output_data);
+	}
+
 	public function cart_add(){
 
 		if(isset($_POST['item_id']) && !empty($_POST["item_id"])){
@@ -81,6 +88,7 @@ class Cart extends CI_Controller {
 		// echo "<pre>";
 		// print_r($this->cart->contents());
 		// exit;
+		redirect('cart');
 		
 		$output_data['cart_contents'] = $this->cart->contents();
 		$output_data['cart_total'] = $this->cart->total();
@@ -157,6 +165,31 @@ class Cart extends CI_Controller {
 		}
 
 		//exit;
+	}
+
+	public function update_quantity(){
+
+		$cart_contents = $this->cart->contents();
+		$cart_content_data = $cart_contents[$_POST['cart_id']];
+		$old_qty = $cart_content_data['qty'];
+		$qty = 0;
+		if($_POST['minus_plus'] == 1){
+			$qty = $old_qty + 1;
+		}else{
+			$qty = $old_qty - 1;
+		}
+		$data = array(
+		        'rowid' => $_POST['cart_id'],
+		        'qty' => $qty
+		);
+		
+		if($this->cart->update($data)){
+			echo 'true';
+			return true;
+		}else{
+			echo 'false';
+			return false;
+		}
 	}
 
 	public function cart_item_delete(){

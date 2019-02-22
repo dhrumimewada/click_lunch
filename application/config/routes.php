@@ -264,6 +264,9 @@ $route['highlight-put'] = 'admin/banner/highlight_put';
 $route['app-setting'] = 'appsetting/index';  
 $route['app-setting-update'] = 'appsetting/put';  
 
+$route['setting'] = 'admin/setting/index';  
+$route['admin-setting-update'] = 'admin/setting/put';
+
 // Admin - Paayment spotal
 $route['setup-payment'] = 'admin/setup_payment/index'; 
 
@@ -312,11 +315,13 @@ $route['welcome'] = 'web/welcome';
 $route['get-shops'] = 'web/welcome/get_shops';
 $route['restaurant/(:any)'] = 'web/welcome/shop/$1';
 $route['product/(:any)'] = 'web/welcome/item/$1';
+$route['cart'] = 'web/cart/my_cart';
 $route['add-to-cart'] = 'web/cart/cart_add';
 $route['cart-destroy'] = 'web/cart/cart_destroy';
 $route['cart-item-delete'] = 'web/cart/cart_item_delete';
 $route['get-cart-item-data'] = 'web/cart/get_cart_item_data';
 $route['update-cart-item-data'] = 'web/cart/update_cart_item_data';
+$route['update-quantity'] = 'web/cart/update_quantity';
 $route['subscribe'] = 'web/welcome/subscribe';
 $route['faq'] = 'web/welcome/faq';
 $route['restaurant-partner-form'] = 'web/welcome/restaurant_partner_form';

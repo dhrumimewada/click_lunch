@@ -142,7 +142,8 @@ class Vender_model extends CI_Model {
 		$user_data['latitude'] = $this->input->post("latitude");
 		$user_data['longitude'] = $this->input->post("longitude");
 		$user_data['website'] = addslashes($this->input->post("website"));
-		$user_data['min_order'] = $this->input->post("min_order");
+		$user_data['min_order'] = number_format((float)$this->input->post("min_order"), 2, '.', '');
+		$user_data['service_charge'] = number_format((float)$this->input->post("service_charge"), 2, '.', '');
 		$user_data['facebook_link'] = addslashes($this->input->post("facebook_link"));
 		$user_data['twitter_link'] = addslashes($this->input->post("twitter_link"));
 		$user_data['pinterest_link'] = addslashes($this->input->post("pinterest_link"));

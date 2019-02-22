@@ -155,6 +155,15 @@
                     return $.trim(value);
                 }
             },
+            service_charge:{
+                required: true,
+                number: true,
+                greaterThanZeroEqualTo:true,
+                validate_perc:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
             facebook_link: {
                 valid_url:true,
                 normalizer: function (value) {
@@ -280,12 +289,18 @@
             min_order: {
                 required: "The minimum order field is required.",
                 number: "The minimum order field is invalid.",
-                greaterThanZeroEqualTo: "The minimum order field is invalid.",
+                greaterThanZeroEqualTo: "The minimum order field is invalid."
             },
             delivery_charges: {
                 required: "The delivery charges field is required.",
                 number: "The delivery charges field is invalid.",
-                greaterThanZeroEqualTo: "The delivery charges field is invalid.",
+                greaterThanZeroEqualTo: "The delivery charges field is invalid."
+            },
+            service_charge: {
+                required: "The service charges field is required.",
+                number: "The service charges field is invalid.",
+                validate_perc:"The service charges field is invalid.",
+                greaterThanZeroEqualTo: "The service charges field is invalid."
             },
             facebook_link: {
                 valid_url: "The website field is invalid."
@@ -340,6 +355,14 @@
         return this.optional(element) || (value.indexOf('_') < 0);
     });
 
+    $.validator.addMethod("validate_perc", function(value, element) {
+        if(parseFloat(value) <= 100 && parseFloat(value) >= 0){
+            return true;
+        }else{
+            return false;
+        }
+    });
+
     $.validator.addMethod("filesize", function(value, element, param) {
         //console.log((element.files[0].size/1024)/1024);
         return this.optional(element) || ((element.files[0].size/1024)/1024 <= param);
@@ -377,6 +400,15 @@ $( document ).ready(function() {
         max: 1000000000,
         decimals: 2,
         prefix: '$',
+        buttondown_class: 'btn btn-primary',
+        buttonup_class: 'btn btn-primary'
+    });
+
+    $(".demo3").TouchSpin({
+        forcestepdivisibility: 'none',
+        max: 100,
+        decimals: 2,
+        postfix: '%',
         buttondown_class: 'btn btn-primary',
         buttonup_class: 'btn btn-primary'
     });

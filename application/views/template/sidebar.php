@@ -279,6 +279,11 @@ if($is_admin){
                         <i class="mdi mdi-credit-card-multiple"></i><span> Setup Payment Portal </span>
                     </a>
                 </li>
+                <li>
+                    <a href="<?php echo base_url().'setting'; ?>" class="waves-effect">
+                        <i class="mdi mdi-settings-box"></i><span> Setting </span>
+                    </a>
+                </li>
             <?php }?>
                 
                 <?php } ?>

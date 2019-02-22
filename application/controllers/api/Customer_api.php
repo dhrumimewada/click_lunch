@@ -214,6 +214,7 @@ class Customer_api extends REST_Controller {
                 $this->db->select('*');
                 $this->db->where("customer_id",$customer->id);
                 $this->db->where("deleted_at",NULL);
+                $this->db->where("default_address",1);
                 $this->db->from("delivery_address");
                 $sql_query = $this->db->get();
                 if ($sql_query->num_rows() > 0){
@@ -1092,7 +1093,9 @@ class Customer_api extends REST_Controller {
 
             // Add cuisines to shop array
             foreach ($shop_data as $key => $value) {
+                $shop_data[$key]['rating'] = '4.5';
                 $shop_data[$key]['cuisine'] = array();
+                
 
                 foreach ($cuisine_data as $key1 => $value1) {
                     if($value['id'] == $value1['shop_id']){
@@ -1124,12 +1127,37 @@ class Customer_api extends REST_Controller {
                         if($value['id'] == $value1['shop_id']){
                             $shop_data[$key]['from_time'] = $value1['from_time'];
                             $shop_data[$key]['to_time'] = $value1['to_time'];
+                            //$shop_data[$key]['rating'] = '4.5';
                         }
                     }
                 }
             }
 
+            // Get banners
+            $banner_data = array();
+            $this->db->select('id,banner_picture,title,sub_title');
+            $this->db->where("deleted_at", NULL);
+            $this->db->where("status", 1);
+            $this->db->from('banner');
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $banner_data = $sql_query->result_array();
+            }
+
+            // get TAX
+            $tax = '';
+            $this->db->select('data');
+            $this->db->where("name", 'tax');
+            $this->db->from('setting');
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $tax_data = $sql_query->row();
+                $tax = $tax_data->data;
+            }
+
             $response['status'] = true;
+            $response['banner'] = $banner_data;
+            $response['tax'] = $tax;
             $response['shop'] = $shop_data;
         }else{
             $response['status'] = false;
@@ -1198,7 +1226,8 @@ class Customer_api extends REST_Controller {
                                 'country' => $shop['country'],
                                 'delivery_time' => $shop['delivery_time'],
                                 'order_by_time' => $shop['order_by_time'],
-                                'delivery_charges' => $shop['charges_of_minimum_mile']
+                                'delivery_charges' => $shop['charges_of_minimum_mile'],
+                                'service_charge' => $shop['service_charge']
                                 );
 
                 $picture = array('profile_picture' => $shop['profile_picture']);
@@ -2171,13 +2200,23 @@ class Customer_api extends REST_Controller {
                     }
                     $mile =  number_format((float)$mile, 2, '.', '');
 
-                    if($mile > $shop['minimum_mile']){
-                        $charges = $mile * $shop['delivery_charges_per_mile'];
-                        $charges = number_format((float)$charges, 2, '.', '');
+                    $delivery_avalilable_mile = $this->config->item("delivery_avalilable_mile");
+                    if($mile <= $delivery_avalilable_mile){
+                        if($mile > $shop['minimum_mile']){
+                            $charges = $mile * $shop['delivery_charges_per_mile'];
+                            $charges = number_format((float)$charges, 2, '.', '');
+                        }else{
+                            $charges = $shop['charges_of_minimum_mile'];
+                        }
+                        $response['charges'] = $charges;
+                        $response['mile'] = $mile . ' mile far this restaurant';
                     }else{
-                        $charges = $shop['charges_of_minimum_mile'];
+                        $response['status'] = false;
+                        $response['message'] = 'Delivery is not available on this location';
+                        $response['mile'] = $mile . ' mile far this restaurant';
                     }
-                    $response['charges'] = $charges;
+
+                    
                 }
             }
 

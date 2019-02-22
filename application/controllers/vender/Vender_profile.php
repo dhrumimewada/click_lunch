@@ -73,6 +73,7 @@ class Vender_profile extends CI_Controller {
 					array('field' => 'cuisines[]', 'label' => 'shop cuisines', 'rules' => 'trim|required|numeric'),
 					array('field' => 'website', 'label' => 'shop website', 'rules' => 'trim|valid_url'),
 					array('field' => 'min_order', 'label' => 'minimum order', 'rules' => 'trim|required|numeric|greater_than_equal_to[0]'),
+					array('field' => 'service_charge', 'label' => 'service charge', 'rules' => 'trim|required|numeric|greater_than_equal_to[0]|less_than_equal_to[100]|max_length[10]'),
 					array('field' => 'facebook_link', 'label' => 'facebook link', 'rules' => 'trim|valid_url'),
 					array('field' => 'twitter_link', 'label' => 'twitter link', 'rules' => 'trim|valid_url'),
 					array('field' => 'pinterest_link', 'label' => 'pinterest link', 'rules' => 'trim|valid_url'),

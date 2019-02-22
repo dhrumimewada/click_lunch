@@ -35,8 +35,41 @@ $(document).on('click','.product-cancel .mdi-close',function(){
     }
 });
 
-$(document).on('click','.quatity-update .input-group-prepend',function(){
-    console.log($(this).parent().siblings().attr('data-id'));
+$(document).on('click','.quatity-update .input-group-prepend, .quatity-update .input-group-append',function(){
+    var quantity  = $(this).closest(".quatity-update").find('input:first').val();
+    var cart_id = $(this).parent().siblings().attr('data-id');
+    var minus_plus = $(this).find("strong").text();
+    var minus_plus_val = 0;
+    if(minus_plus == '+'){
+        minus_plus_val = 1;
+    }
+
+
+    if (typeof cart_id != "undefined" && cart_id != null && cart_id.length > 0){
+        $.ajax({
+            url: update_quantity_url,
+            type: "POST",
+            data:{
+                cart_id:cart_id,
+                minus_plus:minus_plus_val
+            },
+            success: function (returnData) {
+                if(returnData == 'true'){
+                    console.log('quantity updated');
+                    location.reload();
+                }else{
+                    console.log('quantity updation fail');
+                    location.reload();
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log('error');
+            }
+        });
+    }else{
+        console.log('cart_id not found');
+    }
+
 });
 
 $(document).on('click','#form-varient-btn',function(){

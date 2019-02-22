@@ -71,7 +71,7 @@ $d_none = 'd-none';
 
 
 							<tr>
-								<td><img src="<?php echo $prof_url; ?>" width="113" height="114" /></td>
+								<td><img src="<?php echo $prof_url; ?>" width="113" height="114" class="object-cover"/></td>
 								<td>
 									<div class="product-name">
 										<span><?php echo $value['name']; ?></span>
@@ -83,7 +83,7 @@ $d_none = 'd-none';
 										?>
 										<span class="light-gray-txt"><?php echo $product_price_with_varient; ?></span>
 										<?php if(isset($value['group_data']) && is_array($value['group_data']) && !empty($value['group_data'])){ ?>
-										<span class="pointer customize" data-id="<?php echo $value['rowid']; ?>">Customize</span>
+										<span class="pointer customize d-inline-block" data-id="<?php echo $value['rowid']; ?>">Customize</span>
 										<?php
 										} else{
 										?>
@@ -212,8 +212,8 @@ $d_none = 'd-none';
 					</div>
 				</div>
 				<div class="form-actions d-flex justify-content-between">
-					<input type="button" name="continue-shopping" class="white-btn continue-shopping-btn" id="continue-shopping-btn" value="Continue Shopping" onclick="location.href = 'takeout-restaurant.html';">
-					<input type="button" name="checkout" class="small-red-btn checkout-btn" id="checkout-btn" value="Checkout" onclick="location.href = 'place-order.html';">
+					<input type="button" name="continue-shopping" class="white-btn continue-shopping-btn" id="continue-shopping-btn" value="Continue Shopping" onclick="">
+					<input type="button" name="checkout" class="small-red-btn checkout-btn" id="checkout-btn" value="Checkout" onclick="">
 				</div>
 			</div>
 			</form>
@@ -296,5 +296,6 @@ $d_none = 'd-none';
 	var delete_url = "<?php echo base_url().'cart-item-delete'; ?>";
 	var customize_url = "<?php echo base_url().'get-cart-item-data'; ?>";
 	var customize_cart_item_url = "<?php echo base_url().'update-cart-item-data'; ?>";
+	var update_quantity_url = "<?php echo base_url().'update-quantity'; ?>";
 </script>
 <script src="<?php echo $assets.'/js/custom/cart.js'; ?>"></script>

@@ -195,7 +195,7 @@
     });
 
   $.validator.addMethod("validate_perc", function(value, element) {
-        if(parseFloat(value) <= 100){
+        if(parseFloat(value) <= 100 && parseFloat(value) > 0){
             return true;
         }else{
             return false;

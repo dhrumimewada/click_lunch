@@ -21,9 +21,9 @@ class Customer extends CI_Controller {
 
 	public function index(){
 
-		$customer_list = $this->customer_model->get_customer();
+		//$customer_list = $this->customer_model->get_customer();
 
-		$output_data["customer_list"] = $customer_list;
+		//$output_data["customer_list"] = $customer_list;
 		//echo "<pre>"; print_r($output_data["customer_list"]); exit;
 		$output_data['main_content'] = "admin/customer/index";
 		$this->load->view('template/template',$output_data);	

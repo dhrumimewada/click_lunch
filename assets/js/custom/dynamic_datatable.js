@@ -135,6 +135,37 @@ $( document ).ready(function() {
         ]
     });
 
+    var new_order_url = base_url+ 'dispatcher/order/new_order_list/';
+    $('#new-order-list').DataTable( {
+        "ajax": {
+            url : new_order_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+
+                   // // from date
+                   // var $fromDate_dateCell = $(row).find('td:eq(3)');
+                   // var fromDate = $fromDate_dateCell.text();
+                   // var full_date = get_full_date(fromDate);
+                   // $fromDate_dateCell.data('order', fromDate).text(full_date);
+
+                   // // To date
+                   // var $toDate_dateCell = $(row).find('td:eq(4)');
+                   // var toDate = $toDate_dateCell.text();
+                   // var full_date = get_full_date(toDate);
+                   // $toDate_dateCell.data('order', toDate).text(full_date);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 5 }
+        ]
+    });
+
 });
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];

@@ -292,6 +292,9 @@ $route['delivery-boy-save'] = 'dispatcher/delivery_boy/post';
 $route['delivery-boy-status'] = 'dispatcher/delivery_boy/active_deactive_delivery_boy';  
 $route['delivery-boy-update'] = 'dispatcher/delivery_boy/put';
 
+// Dispatcher
+$route['order-new'] = 'dispatcher/order/order_new';
+
 //--------------------------------------------------
 
 //Vender

@@ -86,7 +86,7 @@ class Vender_profile extends CI_Controller {
 
 				if ($this->form_validation->run() === TRUE) {
 
-					$file_upload = TRUE;
+					$file_upload = $file_upload2 =  TRUE;
 
 					if (isset($_FILES['profile_picture']) && !empty($_FILES['profile_picture']) && strlen($_FILES['profile_picture']['name']) > 0) {
 
@@ -107,6 +107,29 @@ class Vender_profile extends CI_Controller {
 						} else {
 							$file_upload_data = $this->upload->data();
 							$modal_data['profile_picture'] = $file_upload_data;
+
+							$this->load->library('image_lib');
+
+							$config['image_library'] = 'gd2';
+							$config['source_image'] = FCPATH . $this->config->item("profile_path").'/'.$file_upload_data['file_name'];
+							$config['create_thumb'] = TRUE;
+							$config['thumb_marker'] = '';
+						    $config['maintain_ratio'] = TRUE;
+						    $config['width'] = 600;
+	    					$config['height'] = 600;
+
+						    $this->image_lib->clear();
+						    $this->image_lib->initialize($config);
+
+						    if (!$this->image_lib->resize()){
+							    ucfirst($this->upload->display_errors());
+								$this->auth->set_error_message(ucfirst($this->upload->display_errors()));
+								$this->session->set_flashdata($this->auth->get_messages_array());
+								$file_upload = false;
+							}else{
+								$file_upload = true;
+							}
+
 						}
 
 					}
@@ -126,14 +149,14 @@ class Vender_profile extends CI_Controller {
 							ucfirst($this->upload->display_errors());
 							$this->auth->set_error_message(ucfirst($this->upload->display_errors()));
 							$this->session->set_flashdata($this->auth->get_messages_array());
-							$file_upload = FALSE;
+							$file_upload2 = FALSE;
 						} else {
 							$file_upload_data = $this->upload->data();
 							$modal_data['broacher'] = $file_upload_data;
 						}
 					}
 
-					if ($file_upload){
+					if ($file_upload && $file_upload2){
 						// $abc = $this->vender_model->update_profile($modal_data);
 						// echo "<pre>";
 						// print_r($abc);

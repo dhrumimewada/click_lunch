@@ -8,6 +8,8 @@ class Customer_api extends REST_Controller {
         parent::__construct();
         header('Access-Control-Allow-Origin: *');  
         $this->load->model("email_template_model");
+        $this->load->model("promocode_model");
+        $this->load->model("api/customer_api_model");
     }
 
     public function init_get($app_version = '',$type = ''){
@@ -1924,6 +1926,7 @@ class Customer_api extends REST_Controller {
                             $discount_type = $value['discount_type'];
                             $discount_amount = $value['amount'];
                             $promo_type = $value['promo_type'];
+                            $promo_id = $value['id'];
                             if($value['promo_type'] == 1){
                                 $this->db->select('product_id');
                                 $this->db->where("shop_id",$value['shop_id']);
@@ -1939,6 +1942,7 @@ class Customer_api extends REST_Controller {
                             break;
                         }
                     }
+                    $response['promocode_id'] = $promo_id;
                     $response['promocode'] = $_POST['promocode'];
                     $response['valid_promocode'] = $valid;
                     $response['discount_type'] = $discount_type;
@@ -1950,6 +1954,69 @@ class Customer_api extends REST_Controller {
                 }
             }
             
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function validate_prices_post(){
+        $postFields['prices'] =  $_POST['prices'];
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+            $prices =  json_decode($_POST['prices'],true);
+            $product_array = array_column($prices['products'], 'id');
+
+            $item_data_array = array();
+            $this->db->select('id,IF(offer_price = "", price, offer_price) as price'); 
+            $this->db->where_in('id',$product_array); 
+            $this->db->where('deleted_at',NULL); 
+            $this->db->where('is_active',1); 
+            $this->db->from('item'); 
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $item_data_array = $sql_query->result_array();
+                $product_data = array();
+                foreach ($prices['products'] as $key => $value) {
+                    $product_data[$value['id']] = $value['price'];
+                }
+                $original_data = array();
+                foreach ($item_data_array as $key => $value) {
+                    $original_data[$value['id']] = $value['price'];
+                }
+                $product_diff_data = array_diff($original_data,$product_data);
+            }
+
+            $varients_array = array_column($prices['varients'], 'id');
+
+            $varients_data_array = array();
+            $this->db->select('id,price'); 
+            $this->db->where_in('id',$varients_array); 
+            $this->db->from('variant_items'); 
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $varients_data_array = $sql_query->result_array();
+
+                $varient_data = array();
+                foreach ($prices['varients'] as $key => $value) {
+                    $varient_data[$value['id']] = number_format((float)$value['price'], 2, '.', ''); 
+                }
+                $varient_original_data = array();
+                foreach ($varients_data_array as $key => $value) {
+                    $varient_original_data[$value['id']] = number_format((float)$value['price'], 2, '.', ''); 
+                }
+                $varients_diff_data = array_diff($varient_original_data,$varient_data);
+            }
+
+            if(empty($product_diff_data) && empty($varients_diff_data)){
+                $response['status'] = true;
+            }else{
+                $response['status'] = false;
+            }
+
+            $response['product_original_data'] = $product_diff_data;
+            $response['varients_original_data'] = $varients_diff_data;
         }else{
             $response['status'] = false;
             $response['message'] = $errorPost;
@@ -2002,46 +2069,182 @@ class Customer_api extends REST_Controller {
                                 $response['message'] = 'Delivery address does not exists';
                             }else{
                                 $product_array = array_column($order_data['products'], 'product_id');
-                                $this->db->select('*'); 
+                                $this->db->select('id,IF(offer_price = "", price, offer_price) as price'); 
                                 $this->db->where_in('id',$product_array); 
                                 $this->db->where('shop_id',$order_data['shop_id']); 
                                 $this->db->from('item'); 
                                 $sql_query = $this->db->get();
                                 if ($sql_query->num_rows() == count($product_array)){
-                                    // Add Order - start
-                                    if(($order_data['order_type'] == 2) || ($order_data['order_type'] == 4)){
-                                        $later_time = $order_data['later_time'];
-                                    }else{
-                                        $later_time = "";
+
+                                    $product_data_array = $sql_query->result_array();
+
+                                    // check group exists
+                                    $groups = array();
+                                    $group_variants_array = array();
+                                    foreach ($order_data['products'] as $product_key => $product_value) {
+                                        foreach ($product_value['variant_group'] as $group_key => $group_value) {
+                                            array_push($groups, $group_value['group_id']);
+                                            foreach ($group_value['variants'] as $variant_key => $variant_value) {
+                                                array_push($group_variants_array, $variant_value['variant_id']);
+                                            }
+                                        }
                                     }
+                                    $groups = array_unique($groups);
+                                    $group_variants_array = array_unique($group_variants_array);
 
-                                    $promocode_id = '';
-                                    if(isset($order_data['promocode_id']) && $order_data['promocode_id'] != "" && $order_data['promocode_id'] != "0" && !is_null($order_data['promocode_id'])){
-                                        $promocode_id = $order_data['promocode_id'];
-                                    }
+                                    $this->db->select('id'); 
+                                    $this->db->where_in('id',$groups); 
+                                    $this->db->where('shop_id',$order_data['shop_id']); 
+                                    $this->db->where('deleted_at',NULL); 
+                                    $this->db->from('variant_group'); 
+                                    $sql_query = $this->db->get();
+                                    if ($sql_query->num_rows() == count($groups)){
 
-                                     $order = array( 
-                                            'customer_id' => $order_data['customer_id'], 
-                                            'shop_id'=> $order_data['shop_id'], 
-                                            'order_type'=> $order_data['order_type'], 
-                                            'later_time'=> $later_time,
-                                            'promocode_id'=> $promocode_id,
-                                            'order_status'=> 1,
-                                            'payment_status'=> 1,
-                                            'payment_mode'=> $order_data['payment_mode'],
-                                            'transaction_id'=> '',
-                                            'delivery_address_id'=> $order_data['delivery_address_id']
-                                        );
+                                        // check varient exists
+                                        $this->db->select('id,price'); 
+                                        $this->db->where_in('id',$group_variants_array); 
+                                        $this->db->from('variant_items'); 
+                                        $sql_query = $this->db->get();
+                                        if ($sql_query->num_rows() == count($group_variants_array)){
 
-                                    if($this->db->insert('orders', $order)){
-                                        $order['id'] = $this->db->insert_id();
-                                        $response['order'] = $order;
-                                        $response['status'] = true;
+                                            $variants_array = $sql_query->result_array();
+
+                                            // if varient exists
+                                            if(($order_data['order_type'] == 2) || ($order_data['order_type'] == 4)){
+                                                $later_time = $order_data['later_time'];
+                                            }else{
+                                                $later_time = "";
+                                            }
+
+                                            $promocode_id = '';
+                                            if(isset($order_data['promocode_id']) && $order_data['promocode_id'] != "" && $order_data['promocode_id'] != "0" && !is_null($order_data['promocode_id'])){
+
+                                                $promocode_id = $order_data['promocode_id'];
+                                                $promocode_basic_data = $this->promocode_model->get_promocode($promocode_id);
+                                                $discounted_products = array();
+
+                                               
+                                                if($promocode_basic_data->promo_type == 1){
+                                                    $promocode_valid_products = $this->customer_api_model->get_promocode_valid_products($promocode_id);
+
+                                                    if(isset($promocode_valid_products) && !empty($promocode_valid_products)){
+                                                        foreach ($promocode_valid_products as $key => $value) {
+                                                            if (in_array($value['product_id'], $product_array)){
+                                                                array_push($discounted_products, $value['product_id']);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                if(isset($discounted_products) && !empty($discounted_products)){
+                                                    foreach ($discounted_products as $key => $value) {
+                                                        foreach ($product_data_array as $product_key => $product_value) {
+                                                            if($product_value['id'] == $value){
+                                                                if($promocode_basic_data->discount_type == 0){
+                                                                    $disc_amount = floatval($product_value['price']) - floatval($promocode_basic_data->amount);
+                                                                    $discounted_price = floatval($product_value['price']) - $disc_amount;
+                                                                    $product_data_array[$product_key]['price'] = number_format((float)$discounted_price, 2, '.', '');
+                                                                }else{
+                                                                    $disc_amount = (floatval($product_value['price']) / 100) * floatval($promocode_basic_data->amount);
+                                                                    $discounted_price = floatval($product_value['price']) - floatval($disc_amount);
+                                                                    $product_data_array[$product_key]['price'] = number_format((float)$discounted_price, 2, '.', '');
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                
+                                            }
+
+                                            $subtotal_amount = 0;
+                                            foreach ($product_data_array as $key => $value) {
+                                                $subtotal_amount += $value['price'];
+                                            }
+                                            foreach ($variants_array as $key => $value) {
+                                                $subtotal_amount += $value['price'];
+                                            }
+
+                                            $tax_amount = ($order_data['tax'] > 0)?(floatval($subtotal_amount) / 100) * floatval($order_data['tax']):0;
+                                            $service_charge_amount = ($order_data['service_charge'] > 0)?(floatval($subtotal_amount) / 100) * floatval($order_data['service_charge']):0;
+                                            $delivery_charges_amount = ($order_data['delivery_charges'] > 0)?(floatval($subtotal_amount) / 100) * floatval($order_data['delivery_charges']):0;
+                                            $total_amount += $subtotal_amount + $tax_amount + $service_charge_amount + $delivery_charges_amount;
+
+                                            $order = array( 
+                                                'customer_id' => $order_data['customer_id'], 
+                                                'shop_id'=> $order_data['shop_id'], 
+                                                'order_type'=> $order_data['order_type'], 
+                                                'later_time'=> $later_time,
+                                                'tax' => $order_data['tax'],
+                                                'service_charge' => $order_data['service_charge'],
+                                                'subtotal' => number_format((float)$subtotal_amount, 2, '.', ''),
+                                                'total' => number_format((float)$total_amount, 2, '.', ''),
+                                                'delivery_charges' => number_format((float)$order_data['delivery_charges'], 2, '.', ''),
+                                                'promocode_id'=> $promocode_id,
+                                                'order_status'=> 1,
+                                                'payment_status'=> 1,
+                                                'payment_mode'=> $order_data['payment_mode'],
+                                                'transaction_id'=> '',
+                                                'delivery_address_id'=> $order_data['delivery_address_id']
+                                            );
+
+                                            if($this->db->insert('orders', $order)){
+                                                $order_id = $this->db->insert_id();
+                                                $order['id'] = $order_id;
+
+                                                $products_price_array = $this->customer_api_model->get_products_price($product_array);
+
+                                                foreach ($order_data['products'] as $products_key => $products_value) {
+
+                                                    $data = array(
+                                                        'order_id' => $order_id,
+                                                        'item_id' => $products_value['product_id'],
+                                                        'quantity' => $products_value['qty'],
+                                                        'price' => $products_price_array[$products_value['product_id']]
+                                                    );
+
+                                                    $this->db->insert('order_items', $data);
+                                                    $insert_id = $this->db->insert_id();
+
+                                                    $variant_data = array();
+                                                    foreach ($variants_array as $key => $value) {
+                                                        $variant_data[$value['id']] = $value['price'];
+                                                    }
+                                                    foreach ($products_value['variant_group'] as $group_key => $group_value) {
+                                                        $group_id = $group_value['group_id'];
+                                                        foreach ($group_value['variants'] as $variants_key => $variants_value) {
+
+                                                            $variants_data = array(
+                                                                'order_item_id' => $insert_id,
+                                                                'variant_group_id' => $group_id,
+                                                                'variant_id' => $variants_value['variant_id'],
+                                                                'price' => $variant_data[$variants_value['variant_id']]
+                                                            );
+
+                                                            $this->db->insert('order_item_variant', $variants_data);
+                                                        }
+                                                    }
+                                                }
+                                                $response['status'] = true;
+                                                $response['order'] = $order;
+                                                //$response['discounted_products'] = $discounted_products;
+                                                // $response['product_data_array'] = $product_data_array;
+                                                // $response['variants_array'] = $variants_array;
+
+                                            }else{
+                                                $response['status'] = false;
+                                                $response['message'] = 'Server encountered an error. please try again';
+                                            }
+
+
+                                        }else{
+                                            $response['status'] = false;
+                                            $response['message'] = 'Varient of group not found. Please refresh the cart.'; 
+                                        }  
                                     }else{
                                         $response['status'] = false;
-                                        $response['message'] = 'Server encountered an error. please try again';
+                                        $response['message'] = 'Product group not found. Please refresh the cart.'; 
                                     }
-                                    // Add Order - end
+
                                 }else{
                                     $response['status'] = false;
                                     $response['message'] = 'Product not found. Please refresh the cart.'; 

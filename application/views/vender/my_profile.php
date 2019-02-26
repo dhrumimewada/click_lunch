@@ -499,7 +499,7 @@ $delivery_evening_to = $delivery['evening']['to'];
                                     <h4 class="mt-0 mb-0 header-title">Restaurant Information</h4>
                                     <hr class="mt-1 mb-3">
                                 </div>
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
                                     <div class="form-group">
                                         <label class="required">Restaurant Cuisines</label>
                                         <div>
@@ -521,6 +521,58 @@ $delivery_evening_to = $delivery['evening']['to'];
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Avalable for -->
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="required">Available Services</label>
+                                        <div class="d-block mt-2">
+                                            <?php
+    $field_value = '';
+    $temp_value = set_value('takeout_delivery_status[]');
+    if (isset($temp_value) && !empty($temp_value)) {
+       if (in_array("1", $temp_value)){
+            $field_value = 'checked';
+       }
+    }
+    else{
+        if ($vender_detail->takeout_delivery_status == 1 || $vender_detail->takeout_delivery_status == 3){
+            $field_value = 'checked';
+       }
+    }
+    ?>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customControlInline2" value="1" name="takeout_delivery_status[]" <?php echo $field_value; ?> >
+                                                <label class="custom-control-label" for="customControlInline2">Delivery</label>
+                                            </div>
+<?php
+    $field_value = '';
+    $temp_value = set_value('takeout_delivery_status[]');
+    if (isset($temp_value) && !empty($temp_value)) {
+       if (in_array("2", $temp_value)){
+            $field_value = 'checked';
+       }
+    }
+    else{
+        if ($vender_detail->takeout_delivery_status == 2 || $vender_detail->takeout_delivery_status == 3){
+            $field_value = 'checked';
+       }
+    }
+    ?>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customControlInline3" value="2" name="takeout_delivery_status[]" <?php echo $field_value; ?> >
+                                                <label class="custom-control-label" for="customControlInline3">Takout</label>
+                                            </div>
+                                        </div>
+                                        <div class="validation-error-label">
+                                            <?php echo form_error('takeout_delivery_status[]'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label for="service_charge" class="required">Service Charge</label>

@@ -143,26 +143,17 @@ $( document ).ready(function() {
         },
         "order":[[ 0, "desc" ]],
         createdRow: function(row, data, dataIndex ) {
-                   $(row).attr("data-id",data[0]);
+                  $(row).attr("data-id",data[0]);
 
-                   // // from date
-                   // var $fromDate_dateCell = $(row).find('td:eq(3)');
-                   // var fromDate = $fromDate_dateCell.text();
-                   // var full_date = get_full_date(fromDate);
-                   // $fromDate_dateCell.data('order', fromDate).text(full_date);
-
-                   // // To date
-                   // var $toDate_dateCell = $(row).find('td:eq(4)');
-                   // var toDate = $toDate_dateCell.text();
-                   // var full_date = get_full_date(toDate);
-                   // $toDate_dateCell.data('order', toDate).text(full_date);
+                  var $last_Cell = $(row).find('td:eq(5)');
+                  $($last_Cell).addClass("text-center");
               },
         "columnDefs": [
             {
                 "targets": [ 0 ],
                 "visible": false
             },
-            { "orderable": false, "targets": 5 }
+            { "orderable": false, "targets": 6 }
         ]
     });
 

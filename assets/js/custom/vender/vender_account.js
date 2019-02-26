@@ -185,6 +185,9 @@
             'payment_mode[]': {
                 required:true
             },
+            'takeout_delivery_status[]': {
+                required:true
+            },
             about: {
                 required:true,
                 minlength: 150,
@@ -313,6 +316,9 @@
             },
             'payment_mode[]': {
                 required: "Please select at least one payment mode."
+            },
+            'takeout_delivery_status[]': {
+                required: "Please select at least one avalilable service."
             },
             about: {
                 required: "The description field is required.",

@@ -78,6 +78,7 @@ class Vender_profile extends CI_Controller {
 					array('field' => 'twitter_link', 'label' => 'twitter link', 'rules' => 'trim|valid_url'),
 					array('field' => 'pinterest_link', 'label' => 'pinterest link', 'rules' => 'trim|valid_url'),
 					array('field' => 'payment_mode[]', 'label' => 'payment mode', 'rules' => 'trim|required|numeric'),
+					array('field' => 'takeout_delivery_status[]', 'label' => 'available service', 'rules' => 'trim|required|numeric'),
 					array('field' => 'about', 'label' => 'description', 'rules' => 'trim|required|min_length[150]')
 				);
 

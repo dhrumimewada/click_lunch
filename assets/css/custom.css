@@ -318,3 +318,5 @@ a:hover .topbar-name{
 .enlarged #wrapper .left.side-menu #sidebar-menu > ul > li > a:hover, .enlarged #wrapper .left.side-menu #sidebar-menu > ul > li > a:active, .enlarged #wrapper .left.side-menu #sidebar-menu > ul > li > a:focus{
   background-color: #dee2e6;
 }
+
+.varient-data{ font-size: 10px; }

@@ -980,7 +980,7 @@ class Customer_api extends REST_Controller {
     public function home_post(){
 
         $cuisine_shops = array();
-        if(isset($_POST['cuisine']) && $_POST['cuisine'] != ""){
+        if(isset($_POST['cuisine']) && $_POST['cuisine'] != "" && !isset($_POST['filter_by'])){
             $cuisine_data = explode(',',$_POST['cuisine']);
 
             $this->db->select('shop_id'); 
@@ -1013,6 +1013,7 @@ class Customer_api extends REST_Controller {
                             "id",
                             "shop_name",
                             "profile_picture",
+                            "takeout_delivery_status",
                             "city",
                             "delivery_time",
                             "order_by_time",
@@ -1058,6 +1059,22 @@ class Customer_api extends REST_Controller {
         $this->db->where("latitude !=", '');
         $this->db->where("deleted_at", NULL);
         $this->db->where("status", 1);
+
+        if(isset($_POST['filter_by']) && $_POST['filter_by'] != ""){
+            if($_POST['filter_by'] == 1){
+                // delivery
+                $this->db->group_start();
+                $this->db->where("takeout_delivery_status", 1);
+                $this->db->or_where("takeout_delivery_status", 3);
+                $this->db->group_end();
+            }else{
+                // takout
+                $this->db->group_start();
+                $this->db->where("takeout_delivery_status", 2);
+                $this->db->or_where("takeout_delivery_status", 3);
+                $this->db->group_end();
+            }
+        }
 
         $limit = 10; // messages per page
         if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
@@ -1135,17 +1152,21 @@ class Customer_api extends REST_Controller {
                 }
             }
 
-            // Get banners
-            $banner_data = array();
-            $this->db->select('id,banner_picture,title,sub_title');
-            $this->db->where("deleted_at", NULL);
-            $this->db->where("status", 1);
-            $this->db->from('banner');
-            $sql_query = $this->db->get();
-            if ($sql_query->num_rows() > 0){
-                $banner_data = $sql_query->result_array();
-            }
+            if(!isset($_POST['filter_by'])){
+                // Get banners
+                $banner_data = array();
+                $this->db->select('id,banner_picture,title,sub_title');
+                $this->db->where("deleted_at", NULL);
+                $this->db->where("status", 1);
+                $this->db->from('banner');
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $banner_data = $sql_query->result_array();
+                }
 
+                $response['banner'] = $banner_data;
+            }
+            
             // get TAX
             $tax = '';
             $this->db->select('data');
@@ -1156,9 +1177,10 @@ class Customer_api extends REST_Controller {
                 $tax_data = $sql_query->row();
                 $tax = $tax_data->data;
             }
+            
 
             $response['status'] = true;
-            $response['banner'] = $banner_data;
+            
             $response['tax'] = $tax;
             $response['shop'] = $shop_data;
         }else{

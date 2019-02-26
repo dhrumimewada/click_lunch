@@ -23,10 +23,11 @@ $edit_link = base_url().'processing-update';
                             <tr>
                                 <th>Id</th>
                                 <th>Order Id</th>
-                                <th>Customer</th>
-                                <th>shop</th>
-                                <th>Total</th>
-                                <th class='text-center'>Action</th>
+                                <th>Customer Name</th>
+                                <th>Restaurant Name</th>
+                                <th>Order Amount</th>
+                                <th>Order Date Time</th>
+                                <th class="text-center">Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -44,3 +45,10 @@ $edit_link = base_url().'processing-update';
 </div> <!-- content -->
 <script src="<?php echo base_url() . 'assets/js/custom/dynamic_datatable.js'; ?>"></script>
 <script src="<?php echo base_url() . 'assets/js/custom/custom.js'; ?>"></script>
+<script src="<?php echo base_url() . 'assets/js/custom/dispatcher/order.js'; ?>"></script>
+<script type="text/javascript" charset="utf-8" async defer>
+    var order_status_update_url = "<?php echo base_url().'order-status-update'; ?>";
+    var redirect = '';
+    var order_id = '';
+    var index_url = "";
+</script>

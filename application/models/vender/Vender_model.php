@@ -196,6 +196,18 @@ class Vender_model extends CI_Model {
 		if(isset($_POST['payment_mode'])){
 			$user_data['payment_mode'] = implode (",", $this->input->post("payment_mode"));
 		}
+		if(isset($_POST['takeout_delivery_status'])){
+			if(count($_POST['takeout_delivery_status']) == 2){
+				$takeout_delivery_status = 3;
+			}else if($_POST['takeout_delivery_status'][0] == 1){
+				$takeout_delivery_status = 1;
+			}else if($_POST['takeout_delivery_status'][0] == 2){
+				$takeout_delivery_status = 2;
+			}else{
+				$takeout_delivery_status = 0;
+			}
+		}
+		$user_data['takeout_delivery_status'] = $takeout_delivery_status;
 
 		// echo "<pre>";
 		// print_r($user_data);

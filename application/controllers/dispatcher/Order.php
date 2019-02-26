@@ -35,21 +35,39 @@ class Order extends CI_Controller {
 
 	 	$data = array();
 	 	$action_data = '';
-	 	$edit_link = base_url().'customer-update';
+	 	$order_view_url = base_url().'order-detail';
+
+		$is_vender = $this->auth->is_vender();
+		$is_employee = $this->auth->is_employee();
+		$is_dispatcher = $this->auth->is_dispatcher();
 
 		foreach($order_list as $key => $value) {
 
+				$id = encrypt($value['id']);
 
-		       $status_str = "<button type='button' class='btn btn-success btn-sm waves-effect waves-light deactive_customer' status-id='" . $value["order_status"] . "' title='Active' data-popup='tooltip' > Assign</button>";
+				if($is_dispatcher){
+					$status_str = "<a href='".$order_view_url."/".$id."' class='btn btn-outline-primary waves-effect waves-light btn-sm' status-id='" . $value["order_status"] . "' title='View' data-popup='tooltip' > View</a>";
+				}else if($is_vender || $is_employee){
+					$status_str = 
+						"<a href='".$order_view_url."/".$id."' class='btn btn-outline-primary waves-effect waves-light btn-sm' status-id='" . $value["order_status"] . "' title='View' data-popup='tooltip' > View</a>
+						<button type='button' class='btn btn-success btn-sm waves-effect waves-light update-status' status-id='1' title='Accept' data-popup='tooltip' > Accept</button>
+						<button type='button' class='btn btn-danger btn-sm waves-effect waves-light update-status' status-id='2' title='Reject' data-popup='tooltip' > Reject</button>";
+				}else{
+					$status_str = '';
+				}
 
-		       $data[] = array(
+				$created_date_ts = strtotime($value["created_at"]);
+                $created_date = date("j M, Y g:i a", $created_date_ts);
+		       	
+		       	$data[] = array(
 		            $value['id'],
 		            'CL'.$value['id'],
-		            $value["customer_id"],
-		            $value["shop_id"],
-		            '$233',
+		            $value["username"],
+		            $value["shop_name"],
+		            '&#36;'.$value["total"],
+		            $created_date,
 		            $status_str
-		       );
+		       	);
 
 		}
 
@@ -61,6 +79,30 @@ class Order extends CI_Controller {
 	    );
 	  	echo json_encode($output);
 	  	exit();
+  	}
+
+  	public function order_detail($id = NULL){
+  		$order_data = $this->order_model->get_order_detail($id);
+  		// echo "<pre>";
+  		// print_r($order_data);
+  		// exit;
+  		$output_data['order_data'] = $order_data;
+  		$output_data['main_content'] = "dispatcher/order/order_detail";
+		$this->load->view('template/template',$output_data);	
+  	}
+
+  	public function order_status_update(){
+  		$id = $_POST['id'];
+		$status = $_POST['status'];
+		if (isset($id) && !is_null($id) && !empty($id)) {
+			$user_data = array('order_status' => $status,'updated_at' => date('Y-m-d H:i:s') );
+			$this->db->where('id', $id);
+			$this->db->update('orders', $user_data);
+			echo json_encode(array("is_success" => true));
+			return TRUE;
+		}else{
+			return FALSE;
+		}
   	}
 
 }

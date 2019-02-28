@@ -12,8 +12,8 @@ class Order_model extends CI_Model {
 						't1.id',
 						't1.customer_id',
 						't1.shop_id',
+						't1.order_status',
 						't1.order_type',
-						't1.later_time',
 						't1.total',
 						't2.username',
 						't3.shop_name',
@@ -25,16 +25,21 @@ class Order_model extends CI_Model {
 		$this->db->join('customer t2', 't1.customer_id = t2.id','left');
 		$this->db->join('shop t3', 't1.shop_id = t3.id','left');
 
-		$this->db->where('t1.order_status', 0);
+		
 		$this->db->where('t2.status', 1);
 		$this->db->where('t3.deleted_at', NULL);
 
 		if($this->auth->is_dispatcher()){
-
+			$this->db->group_start();
+			$this->db->where('t1.order_status', 0);
+			$this->db->or_where('t1.order_status', 1);
+			$this->db->group_end();
 		}elseif($this->auth->is_vender()){
 			$this->db->where("t1.shop_id",$this->auth->get_user_id());
+			$this->db->where('t1.order_status', 0);
 		}elseif ($this->auth->is_employee()) {
 			$this->db->where("t1.shop_id",$this->auth->get_emp_shop_id());
+			$this->db->where('t1.order_status', 0);
 		}else{
 		}
 

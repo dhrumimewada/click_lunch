@@ -297,6 +297,8 @@ $route['order-new'] = 'dispatcher/order/order_new';
 $route['order-status-update'] = 'dispatcher/order/order_status_update';
 $route['order-detail/(:any)'] = 'dispatcher/order/order_detail/$1';
 
+$route['fetch-db'] = 'dispatcher/order/get_all_db';
+
 //--------------------------------------------------
 
 //Vender

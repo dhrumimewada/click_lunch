@@ -1,4 +1,7 @@
 $(document).ready(function (){
+
+    $(".select2").select2();
+
         $(document).on('click',".update-status", function() {
 
             $this = $(this);
@@ -62,5 +65,37 @@ $(document).ready(function (){
                     });    
                 })
             }    
+        });
+
+        $(document).on('click',".assign-db", function(){
+            $.ajax({
+                url: get_db_url,
+                type: "POST",
+                success: function (returnData) {
+
+                    returnData = $.parseJSON(returnData);
+                    
+                     if (typeof returnData != "undefined" && returnData != ''){
+                        console.log(returnData);
+                     }
+                    // {
+                        
+                    //     if(redirect == '1'){
+                    //         window.location = index_url;
+                    //     }else{
+                    //         swal(
+                    //         change_status_to1,
+                    //             'Order has been '+change_status_to1,
+                    //             'success'
+                    //         )
+                    //         remove_row($this);
+                    //     }
+                        
+                    // } 
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('error');
+                }
+            });
         });
     });

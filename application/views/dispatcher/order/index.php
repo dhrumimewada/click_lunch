@@ -1,6 +1,16 @@
 <?php
 $edit_link = base_url().'processing-update';
 ?>
+<style type="text/css" media="screen">
+   .modal h4{
+        margin: 0;
+   } 
+   .modal .btn-danger{
+        color: #f9f9f9;
+        border-color: #fe3153;
+        background-color: #fe3153;
+   }
+</style>
 <div class="content">
     <div class="container-fluid">
 
@@ -13,6 +23,39 @@ $edit_link = base_url().'processing-update';
             </div>
         </div>
         <!-- end row -->
+
+        <!-- The Modal -->
+        <div class="modal" id="db-model">
+            <div class="modal-dialog">
+              <div class="modal-content">
+              
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Assign Order To Delivery Boy (<span class="order-id">CL80</span>)</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-group col-12">
+                        <label class="required" for="group">List of Delivery Boys</label>
+                        <div>
+                            <select class="select2 form-control" data-placeholder="Select Delivery Boy" name="selct_db" id='selct_db'>
+                            </select>
+                            <div class="text-danger">Please select delivery boy</div>
+                        </div>
+                  </div>
+                </div>
+                
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-success">Assign</button>
+                </div>
+                
+              </div>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-12">
@@ -48,6 +91,8 @@ $edit_link = base_url().'processing-update';
 <script src="<?php echo base_url() . 'assets/js/custom/dispatcher/order.js'; ?>"></script>
 <script type="text/javascript" charset="utf-8" async defer>
     var order_status_update_url = "<?php echo base_url().'order-status-update'; ?>";
+    var get_db_url = "<?php echo base_url().'fetch-db'; ?>";
+
     var redirect = '';
     var order_id = '';
     var index_url = "";

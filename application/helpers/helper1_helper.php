@@ -260,6 +260,60 @@ function validate_card($number = NULL){
 	return $return_value;
 }
 
+function validate_customer_card($card_number = NULL){
+
+	if (isset($card_number) && $card_number != ''){
+		global $type;
+
+	    $cardtype = array(
+	        "visa"       => "/^4[0-9]{12}(?:[0-9]{3})?$/",
+	        "mastercard" => "/^5[1-5][0-9]{14}$/",
+	        "amex"       => "/^3[47][0-9]{13}$/",
+	        "jcb"       => "/^(?:2131|1800|35\d{3})\d{11}$/",
+	        "dinnerclub"       => "/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/",
+	        "discover"   => "/^6(?:011|5[0-9]{2})[0-9]{12}$/",
+	    );
+
+	    if (preg_match($cardtype['visa'],$card_number))
+	    {
+		$type= "visa";
+	        return 'visa';
+		
+	    }
+	    else if (preg_match($cardtype['mastercard'],$card_number))
+	    {
+		$type= "mastercard";
+	        return 'mastercard';
+	    }
+	    else if (preg_match($cardtype['dinnerclub'],$card_number))
+	    {
+		$type= "dinnerclub";
+	        return 'dinnerclub';
+	    }
+	    else if (preg_match($cardtype['jcb'],$card_number))
+	    {
+		$type= "jcb";
+	        return 'jcb';
+	    }
+	    else if (preg_match($cardtype['amex'],$card_number))
+	    {
+		$type= "amex";
+	        return 'amex';
+		
+	    }
+	    else if (preg_match($cardtype['discover'],$card_number))
+	    {
+		$type= "discover";
+	        return 'discover';
+	    }
+	    else
+	    {
+	        return "FALSE";
+	    } 
+	}
+
+}
+
 function get_card_type($str, $format = 'string'){
     if (empty($str)){
         return false;

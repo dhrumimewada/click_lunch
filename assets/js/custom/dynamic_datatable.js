@@ -143,7 +143,6 @@ $( document ).ready(function() {
         },
         "order":[[ 0, "desc" ]],
         createdRow: function(row, data, dataIndex ) {
-            console.log(data);
                   $(row).attr("data-id",data[0]);
 
                   var $last_Cell = $(row).find('td:eq(5)');

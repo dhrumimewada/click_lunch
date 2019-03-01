@@ -41,7 +41,7 @@ if($is_admin){
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Orders <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="<?php echo base_url().'order-new'; ?>">New Order</a></li>
+                        <li><a href="<?php echo base_url().'maintenance7'; ?>">New Order</a></li>
                         <li><a href="<?php echo base_url().'maintenance2'; ?>">Live Order</a></li>
                         <li><a href="<?php echo base_url().'maintenance3'; ?>">Cancelled</a></li>
                         <li><a href="<?php echo base_url().'maintenance4'; ?>">Completed</a></li>
@@ -59,7 +59,7 @@ if($is_admin){
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Assign Order <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="<?php echo base_url().'maintenance7'; ?>">Single Order</a></li>
+                        <li><a href="<?php echo base_url().'order-new'; ?>">Single Order</a></li>
                         <li><a href="<?php echo base_url().'maintenance8'; ?>">Multiple Order</a></li>
                         <li><a href="<?php echo base_url().'maintenance9'; ?>">Weekly Order</a></li>
                     </ul>

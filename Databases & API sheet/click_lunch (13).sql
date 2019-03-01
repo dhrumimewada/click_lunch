@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 28, 2019 at 11:25 AM
+-- Generation Time: Mar 01, 2019 at 01:52 PM
 -- Server version: 5.6.41
 -- PHP Version: 7.0.32
 
@@ -227,9 +227,15 @@ INSERT INTO `customer` (`id`, `email`, `password`, `profile_picture`, `username`
 (6, 'DullRat@mailinator.com', '$2y$10$s5xq4SSBkVvXZow/pR6f9.mNUDyTNaonrZSsLwjTNPI27tahx3ASO', 'customer_1546514755.jpg', 'Dhrumi SS', 'city center 2, science city', '8866541254', '1996-02-14', '', 0, '', 0, '', 1, '2019-01-03 06:55:55', '2019-01-22 07:36:53', NULL, '1', '42.34797469999999', '-71.08792840000001', '', '', 1, 1, 1),
 (25, 'PieThunder@mailinator.com', '$2y$10$TJ0cFGhfYRvD.9OSimFFAekIE4ZLFHiUi0SKaZmemq4p9fGp1m7BG', 'customer_1548150942.jpg', 'Dhrumi SS', 'Dallas-Fort Worth Metropolitan Area, TX, USA', '8866541254', '1996-02-14', '', 1, 'hjhjkhjkhjkhkj', 0, '', 1, '2019-01-09 01:35:17', '2019-01-22 09:55:42', NULL, '1', '121212', '1212154', 'f59c153f1b0653cd0b04228d133252259d027c74', '', 0, 1, 1),
 (32, 'vinodkummar@yahoo.com', '$2y$10$qwBontvpGvQkgoMmf7zhKO.wZj1htnE0rUHE4bMvUOxuQ2MjPQbme', 'customer_1547811554.jpg', 'Vinodkummar', '#5,1 floor,1 main road,rama chandra pura', '900 859 9119', '2001-01-08', '', 0, '', 0, '', 1, '2019-01-14 07:22:20', '2019-01-17 10:29:52', NULL, '0', '', '', '', '', 1, 1, 1),
-(33, 'developer.eww@gmail.com', '$2y$10$aa.zH3/GXVhn4BNskycVWu0iRr3Xw2rYLTz1g5hdplV6Y95buGuFu', 'customer_1551337791.jpg', 'Mayur Two', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '333-222-1111', '2019-01-31', '', 0, 'eN9ExDRBVkI:APA91bFmq4gtsgfVsh2Y7YUZa9WCs-wHqB1abpx_VN3m-4XcENF4ln6h9PDmvN8FMNnNQ9a7NFaMgt3md2e5jPhtzEXAaK2jtZ8HJmEMv-W2yZvqa0KumLk0YoE0EDMjTdxSVJ9Fju8s', 0, '', 1, '2019-01-21 11:40:41', '2019-02-28 07:10:18', NULL, '1', '23.0727746', '72.5163358', 'b660c73941cee4ed06cb455cc620be5d0eb40a94', '', 1, 1, 0),
+(33, 'developer.eww@gmail.com', '$2y$10$aa.zH3/GXVhn4BNskycVWu0iRr3Xw2rYLTz1g5hdplV6Y95buGuFu', 'customer_1551337791.jpg', 'Mayur Two', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '333-222-1111', '2019-03-01', '', 0, 'ej1d0qJEZsU:APA91bGBLPdUqLEMJaDUYAs0o27Vu7JLLa3rStanyp2RZn8NZwEncRRNTegQvap7YfU3IwZ_3GnAM-qGbmlhX9dHb2Wzx6WXFvSB5csgCbnHcLGINEbBcskGM8NIs_DhkNNh6LBTw_BB', 0, '', 1, '2019-01-21 11:40:41', '2019-03-01 08:01:02', NULL, '0', '23.0727664', '72.5163406', 'b660c73941cee4ed06cb455cc620be5d0eb40a94', '', 1, 1, 0),
 (34, 'RhymePaladin@mailinator.com', '$2y$10$0LU.1X2e9RFtwmuRj7u2NeO1TlLB4UHPL3fw5PicVJVQLixo0eCT2', '', 'Paladin', '', '8866541254', '1996-02-14', '', 1, 'hjhjkhjkhjkhkj', 0, '', 0, '2019-01-23 11:37:07', NULL, NULL, '1', '13.666', '66.3333333', '', '487a25ca64324b9504fc260da580f06938197cb5', 1, 1, 1),
-(35, 'Rehan@gmail.com', '$2y$10$ZrD6PhBniRrXQBr8rJ/K1./4RvOPNExosmqA8owjy/7GuYPXW8OoK', 'customer_1548679677.jpeg', 'Rehan Hussein', '', '989898989898', '2019-01-28', '', 0, 'adsdasddasd', 0, '', 1, '2019-01-28 08:59:31', '2019-01-28 12:47:57', NULL, '0', '121212', '1212154', '', '', 0, 1, 0);
+(35, 'Rehan@gmail.com', '$2y$10$ZrD6PhBniRrXQBr8rJ/K1./4RvOPNExosmqA8owjy/7GuYPXW8OoK', 'customer_1548679677.jpeg', 'Rehan Hussein', '', '989898989898', '2019-01-28', '', 0, 'adsdasddasd', 0, '', 1, '2019-01-28 08:59:31', '2019-01-28 12:47:57', NULL, '0', '121212', '1212154', '', '', 0, 1, 0),
+(36, 'pooja@excellentwebworld.in', '$2y$10$lmY8XIuPSNGwDoxNHjwFd.XsfXeS.Q9KHOm0PSciYzx5H/5BvSsjS', 'customer_1551427005.jpg', 'Pooja', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '777-807-5528', '2019-03-30', '', 0, 'cTpf0cgLaH0:APA91bHiS4SLEOroLPrVYvjs7QhcO0Mv_88BSvIuxiy6pFCbD1fg9IlBSuQo7fQ6kyGCdgSTY6sR5udWDqrTXKuekhbBr-9GXKMArFCz7fFLf7Fvv3MsFszPFjlPU4YGY94jQvRA7omE', 0, '', 1, '2019-03-01 06:14:02', '2019-03-01 07:56:45', NULL, '1', '23.072744', '72.5163417', '', '', 1, 1, 1),
+(37, 'developer.eww2@gmail.com', '$2y$10$kf5slIKW6A0.9bhyi/jFW.9gmM90RdZADh5jLPlr9JJfKNpM5jLzu', '', 'Mayur', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '111-111-1111', '1996-12-12', '', 0, 'ej1d0qJEZsU:APA91bGBLPdUqLEMJaDUYAs0o27Vu7JLLa3rStanyp2RZn8NZwEncRRNTegQvap7YfU3IwZ_3GnAM-qGbmlhX9dHb2Wzx6WXFvSB5csgCbnHcLGINEbBcskGM8NIs_DhkNNh6LBTw_BB', 0, '', 1, '2019-03-01 06:20:34', NULL, NULL, '0', '23.0727664', '72.5163406', '', '', 1, 1, 1),
+(38, 'developer.ewweww2@gmail.com', '$2y$10$GbJgiU7VHBgoHOaL5JRq4O3G3Z47f5KUWpWO3mGpcjUPlIx953j06', '', 'Saurav', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '111-111-1111', '1996-12-12', '', 0, 'ej1d0qJEZsU:APA91bGBLPdUqLEMJaDUYAs0o27Vu7JLLa3rStanyp2RZn8NZwEncRRNTegQvap7YfU3IwZ_3GnAM-qGbmlhX9dHb2Wzx6WXFvSB5csgCbnHcLGINEbBcskGM8NIs_DhkNNh6LBTw_BB', 0, '', 0, '2019-03-01 06:37:32', NULL, NULL, '0', '23.0727664', '72.5163406', '', '9fc031ca9c43028a29a6d1e16d8bafcc65f52c07', 1, 1, 1),
+(39, 'dianahedlund123@gmail.com', '$2y$10$.u67p3.xpo5M33.WK4/kkuMfsMgTHAZhgSBhJ/wQ1P/Yx/6T7hzrO', '', 'Pooja', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '777-807-5528', '1994-12-25', '', 0, 'd2s_3TEFZXc:APA91bHILFkkDpjCZVIYJxSmjsCS93MIk7hKNNKedrqDRWOsiiLoucin-22aV1lxFfNluYfYN5YFsERLYeipp4wwpB9F79ZFmOQFMopiSkkMU9qDbhL3quRqrWBaSME99HauJxUVedW9', 0, '', 0, '2019-03-01 06:48:38', NULL, NULL, '1', '23.072744', '72.5163417', '', 'cd0032614a9fb6482701e20f12d0ca3864f6047d', 1, 1, 1),
+(40, 'r@r.com', '$2y$10$vWn4yoO9j80noylM8SmeJ.W0Enui99kvfTJvqof9WP0V0J6xPep5m', '', 'rj381', 'Sarvanad Society Opp. Ramdev Mandir, 14, CIMS Hospital Road, Ahmedabad, Gujarat 380060, India', '999-999-9999', '2019-03-01', '', 0, 'af8b52580c7e6f275ba5f99dd45d4881428e5b2e479fcbdc8c6a1c3f063f2442', 0, '', 0, '2019-03-01 12:09:57', NULL, NULL, '0', '23.07094709289872', '72.51622031254746', '', '5b73e1486c470f37e7a297b6d9576b0867bd3e2e', 1, 1, 1),
+(41, 'r@t.com', '$2y$10$PS0p2rCqnWCJdPdAIKhFGOquXaFOOK4Tnc0yDWoj98WdBk2sahG1y', '', 'rj381', 'Science City Rd, Sola, Ahmedabad, Gujarat 380059, India', '999-999-9999', '2019-03-01', '', 0, 'af8b52580c7e6f275ba5f99dd45d4881428e5b2e479fcbdc8c6a1c3f063f2442', 0, '', 1, '2019-03-01 12:14:11', NULL, NULL, '0', '23.07366614840197', '72.51405079595821', '', '', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -323,8 +329,8 @@ INSERT INTO `delivery_address` (`id`, `customer_id`, `default_address`, `popular
 (6, 25, 1, 0, 'f3355', 'fgf', '', '380016', '36.778261', '-119.4179324', 'No inst ', '2', 'bunu', '2019-02-27 05:54:39', NULL, NULL),
 (7, 33, 0, 0, '20', 'kadi', 'patan', '38426', '36.778261', '-119.4179324', 'hey', '1', 'mayur', '2019-02-28 07:50:04', NULL, NULL),
 (8, 6, 0, 0, 'f33', 'sursagar+tower', 'Ahmedabad', '380061', '23.0680435', '72.5307147', 'No inst ', '2', 'bunu', '2019-01-24 13:17:10', NULL, NULL),
-(9, 33, 1, 0, 'fhdy', 'cjig', 'gjkg', '95565', '36.778261', '-119.4179324', 'ncfh', '4', '', '2019-02-28 07:50:04', NULL, NULL),
-(10, 33, 0, 0, 'fjfj', 'cjjf', 'cjng', '56959', '36.778261', '-119.4179324', 'zv', '3', '', '2019-02-28 07:48:26', NULL, NULL),
+(9, 33, 0, 0, 'fhdy', 'cjig', 'gjkg', '95565', '36.778261', '-119.4179324', 'ncfh', '4', '', '2019-03-01 05:18:57', NULL, NULL),
+(10, 33, 1, 0, 'fjfj', 'cjjf', 'cjng', '56959', '36.778261', '-119.4179324', 'zv', '3', '', '2019-03-01 08:03:23', NULL, NULL),
 (11, 6, 0, 0, 'f33', 'sursagar tower', 'Ahmedabad', '380061', '23.0680435', '72.5307147', 'No inst ', '2', 'bunu', '2019-01-24 13:39:58', NULL, NULL),
 (13, 0, 0, 1, 'Excellent WebWorld', 'City Center', 'Ahmedabad', '380060', '23.0726414', '72.51423', 'San Francisco, in northern California, is a hilly city on the tip of a peninsula surrounded by the Pacific Ocean and San Francisco Bay', '1', 'Transbay Tower', '2019-02-18 07:06:00', NULL, NULL),
 (14, 35, 0, 0, '411', 'Science city', 'California', '12456', '36.778261', '-119.4179324', '', '3', '', '2019-01-30 10:19:15', NULL, NULL),
@@ -339,12 +345,15 @@ INSERT INTO `delivery_address` (`id`, `customer_id`, `default_address`, `popular
 (23, 33, 0, 0, '43', 'sattadhar', 'kadi', '38271', '23.0676233', '72.530006', '', '3', 'mayur', '2019-02-22 06:23:15', NULL, NULL),
 (24, 33, 0, 0, '65', 'sattadhar', 'kadi', '38426', '23.0670686', '72.5310495', '', '1', '', '2019-02-28 07:35:04', NULL, NULL),
 (25, 33, 0, 0, '803', 'South Ocean Boulevard', 'Myrtle Beach', '29579', '33.6781578', '-78.8950967', '', '4', '', '2019-02-22 08:50:18', NULL, NULL),
-(26, 33, 0, 0, '6', 'sttadhar', 'kadi', '38426', '23.0681595', '72.5292566', '', '1', '', '2019-02-22 07:25:53', NULL, NULL),
-(27, 33, 0, 0, '1', 'acv', 'kadi', '38555', '35.9186133', '-84.9609464', '', '4', '', '2019-02-27 09:57:04', NULL, NULL),
-(28, 33, 0, 0, '44', 'abc', 'abc', '57424', '45.024261', '-98.4500606', '', '3', '', '2019-02-26 09:43:28', NULL, NULL),
-(29, 33, 0, 0, '111', 'abc', 'abc', '36542', '30.2999788', '-87.6778378', 'No inst ', '2', 'ggg', '2019-02-27 09:57:31', NULL, NULL),
-(30, 33, 0, 0, '111', 'abc', 'abc', '57424', '45.024261', '-98.4500606', 'No inst ', '2', 'ggg', '2019-02-27 09:57:25', NULL, NULL),
-(31, 33, 0, 0, '55', 'avc', 'avc', '12345', '34.6769819', '-118.1862581', '', '4', '', '2019-02-27 09:56:59', NULL, NULL);
+(26, 33, 0, 0, '6', 'sttadhar', 'kadi', '38426', '23.0681595', '72.5292566', '', '1', '', '2019-03-01 05:48:41', NULL, NULL),
+(27, 33, 0, 0, '1', 'acv', 'kadi', '38555', '35.9186133', '-84.9609464', '', '4', '', '2019-03-01 05:20:58', NULL, NULL),
+(28, 33, 0, 0, '44', 'abc', 'abc', '57424', '45.024261', '-98.4500606', '', '3', '', '2019-03-01 05:20:23', NULL, NULL),
+(29, 33, 0, 0, '111', 'abc', 'abc', '36542', '30.2999788', '-87.6778378', 'No inst ', '2', 'ggg', '2019-03-01 05:20:50', NULL, NULL),
+(30, 33, 0, 0, '111', 'abc', 'abc', '57424', '45.024261', '-98.4500606', 'No inst ', '2', 'ggg', '2019-03-01 05:20:43', NULL, NULL),
+(31, 33, 0, 0, '55', 'avc', 'avc', '12345', '34.6769819', '-118.1862581', '', '4', '', '2019-03-01 05:20:37', NULL, NULL),
+(32, 37, 1, 0, '12', 'sattadhar ', 'Ahmedabad ', '38425', '23.0681595', '72.5292566', '', '3', '', '2019-03-01 09:47:52', NULL, NULL),
+(33, 36, 0, 0, '   ', '   ', '     ', '12345', '34.0410619', '-118.260189', '   ', '2', '', '2019-03-01 10:22:26', NULL, NULL),
+(34, 36, 1, 0, 'ahmedabad', 'ahmedabad', 'ahmedabad', '12345', '23.022505', '72.5713621', 'test', '3', 'test', '2019-03-01 10:24:11', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -632,7 +641,7 @@ CREATE TABLE `orders` (
   `service_charge` varchar(11) NOT NULL COMMENT '%',
   `schedule_date` varchar(255) NOT NULL,
   `schedule_time` varchar(255) NOT NULL,
-  `order_status` int(3) NOT NULL DEFAULT '0',
+  `order_status` int(3) NOT NULL DEFAULT '0' COMMENT '0  - pending , 1 - accept, 2 - reject, 3 - assigned delivery_boy',
   `delivery_address_id` int(11) NOT NULL,
   `payment_status` int(3) NOT NULL DEFAULT '0' COMMENT '0- pending , 1- success, 2 - failed',
   `payment_mode` int(5) NOT NULL COMMENT '0  - Card , 1 -  Apple Pay, 2 -  Google Pay',
@@ -642,6 +651,15 @@ CREATE TABLE `orders` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `customer_id`, `shop_id`, `order_type`, `later_time`, `total`, `subtotal`, `delivery_charges`, `promocode_id`, `promo_amount`, `tax`, `service_charge`, `schedule_date`, `schedule_time`, `order_status`, `delivery_address_id`, `payment_status`, `payment_mode`, `transaction_id`, `QR_code`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(80, 33, 52, '1', '', '99.16', '187.00', '5.00', '35', '93.50', '0.20', '0.50', '', '', 1, 17, 1, 2, '', '', '2019-02-28 11:30:01', NULL, NULL),
+(81, 33, 52, '1', '', '99.16', '187.00', '5.00', '35', '93.50', '0.20', '0.50', '', '', 5, 17, 1, 2, '', '', '2019-02-28 11:30:01', NULL, NULL),
+(82, 33, 52, '1', '', '99.16', '187.00', '5.00', '35', '93.50', '0.20', '0.50', '', '', 5, 17, 1, 2, '', '', '2019-02-28 11:30:01', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -659,6 +677,18 @@ CREATE TABLE `order_items` (
   `total_product_price` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `item_id`, `item_price`, `variants_price`, `quantity`, `total_product_price`) VALUES
+(107, 80, 32, '100.00', '17.00', 1, '117.00'),
+(108, 80, 33, '25.00', '10.00', 2, '70.00'),
+(109, 81, 32, '100.00', '17.00', 1, '117.00'),
+(110, 81, 33, '25.00', '10.00', 2, '70.00'),
+(111, 82, 32, '100.00', '17.00', 1, '117.00'),
+(112, 82, 33, '25.00', '10.00', 2, '70.00');
+
 -- --------------------------------------------------------
 
 --
@@ -672,6 +702,17 @@ CREATE TABLE `order_item_variant` (
   `variant_id` int(11) NOT NULL,
   `price` varchar(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order_item_variant`
+--
+
+INSERT INTO `order_item_variant` (`id`, `order_item_id`, `variant_group_id`, `variant_id`, `price`) VALUES
+(326, 107, 21, 86, '5.00'),
+(327, 107, 22, 91, '0.00'),
+(328, 107, 23, 92, '10.00'),
+(329, 107, 23, 101, '2.00'),
+(330, 108, 22, 102, '10.00');
 
 -- --------------------------------------------------------
 
@@ -730,7 +771,12 @@ INSERT INTO `promocode` (`id`, `shop_id`, `group_type`, `promo_type`, `usage_lim
 (36, '52', '7', '2', 5, '100.00', '', 'GET50M', '10.00', '1', '2019-02-13', '2019-02-28', '500.00', 'Use Promocode GET50M To Get 10.00% Discount* On Total Order Value (Max Discount $100.00)', 1, '2019-02-13 05:56:34', '2019-02-13 09:21:21', NULL),
 (37, '62', '7', '1', 5, '', '', 'MYTEST', '50.00', '0', '2019-02-14', '2019-02-28', '500.00', 'Use Promocode MYTEST To Get Flat $50.00 Discount* On Total Product(s) Value ', 1, '2019-02-13 10:02:34', '2019-02-13 10:12:34', NULL),
 (38, '52', '4', '1', 1, '', '', 'ALL10', '50.00', '0', '2019-02-18', '2019-03-09', '100.00', 'Use Promocode ALL10 To Get flat $50.00 Cashback* On Total Product(s) Value ', 1, '2019-02-18 09:17:57', NULL, NULL),
-(39, '52', '4', '1', 2, '50.00', '', 'SAVE15', '15.00', '1', '2019-02-25', '2019-03-09', '100.00', 'Use Promocode SAVE15 To Get 15.00% Discount* On Total Product(s) Value (Max Discount $50.00)', 1, '2019-02-25 07:29:22', '2019-02-25 07:29:50', NULL);
+(39, '52', '4', '1', 2, '50.00', '', 'SAVE15', '15.00', '1', '2019-02-25', '2019-03-09', '100.00', 'Use Promocode SAVE15 To Get 15.00% Discount* On Total Product(s) Value (Max Discount $50.00)', 1, '2019-02-25 07:29:22', '2019-02-25 07:29:50', NULL),
+(40, '', '1', '2', 2, '20.00', '', 'FLAT10', '10.00', '1', '2019-03-01', '2019-03-02', '200.00', 'Use Promocode FLAT10 To Get 10.00% Discount* On Total Order Value (Max Discount $20.00)', 1, '2019-03-01 11:04:39', '2019-03-01 11:11:55', NULL),
+(41, '', '4', '2', 2, '100.00', '', 'SAVE50PERCENT', '50.00', '1', '2019-03-01', '2019-03-06', '500.00', 'Use Promocode SAVE50PERCENT To Get 50.00% Cashback* On Total Order Value (Max Cashback Rs.100)', 1, '2019-03-01 11:24:34', NULL, NULL),
+(42, '', '5', '2', 3, '', '', 'SAVE100', '100.00', '0', '2019-03-01', '2019-03-08', '700.00', 'Use Promocode SAVE100 To Get flat $100.00 Cashback* On Total Order Value ', 1, '2019-03-01 11:29:42', NULL, NULL),
+(43, '58', '7', '2', 2, '100.00', '', 'OFF20', '20.00', '1', '2019-03-01', '2019-03-04', '500.00', 'Use Promocode OFF20 To Get 20.00% Cashback* On Total Order Value (Max Cashback Rs.100)', 1, '2019-03-01 11:35:55', NULL, NULL),
+(44, '52', '7', '1', 3, '50.00', '', 'SAVE501', '50.00', '1', '2019-02-04', '2019-03-02', '100.00', 'Use Promocode SAVE50 To Get 50.00% Discount* On Total Order Value (Max Discount $50.00)', 1, '2019-02-11 07:49:47', '2019-02-11 10:08:28', NULL);
 
 -- --------------------------------------------------------
 
@@ -753,7 +799,9 @@ INSERT INTO `promocode_products` (`id`, `promocode_id`, `shop_id`, `product_id`)
 (5, 31, 58, 29),
 (6, 31, 58, 30),
 (8, 36, 52, 23),
-(12, 37, 62, 31);
+(12, 37, 62, 31),
+(13, 43, 58, 27),
+(14, 43, 58, 30);
 
 -- --------------------------------------------------------
 
@@ -775,7 +823,8 @@ INSERT INTO `promocode_shops` (`id`, `promocode_id`, `shop_id`) VALUES
 (15, 34, 52),
 (16, 34, 58),
 (17, 34, 62),
-(18, 34, 68);
+(18, 34, 68),
+(19, 42, 58);
 
 -- --------------------------------------------------------
 
@@ -801,7 +850,8 @@ INSERT INTO `promocode_valid_product` (`id`, `promocode_id`, `shop_id`, `product
 (17, 38, 52, 18),
 (18, 38, 52, 19),
 (20, 39, 52, 20),
-(21, 39, 52, 25);
+(21, 39, 52, 25),
+(22, 44, 52, 32);
 
 -- --------------------------------------------------------
 
@@ -1504,7 +1554,7 @@ ALTER TABLE `cuisine`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `customer_payment_card`
@@ -1516,7 +1566,7 @@ ALTER TABLE `customer_payment_card`
 -- AUTO_INCREMENT for table `delivery_address`
 --
 ALTER TABLE `delivery_address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `delivery_boy`
@@ -1570,19 +1620,19 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `order_item_variant`
 --
 ALTER TABLE `order_item_variant`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=326;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=331;
 
 --
 -- AUTO_INCREMENT for table `payment_settings`
@@ -1594,25 +1644,25 @@ ALTER TABLE `payment_settings`
 -- AUTO_INCREMENT for table `promocode`
 --
 ALTER TABLE `promocode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `promocode_products`
 --
 ALTER TABLE `promocode_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `promocode_shops`
 --
 ALTER TABLE `promocode_shops`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `promocode_valid_product`
 --
 ALTER TABLE `promocode_valid_product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `rating`

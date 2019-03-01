@@ -17,7 +17,6 @@ class Order extends CI_Controller {
 			}
 		}
 		$this->load->model("dispatcher/order_model");
-		$this->load->model("dispatcher/delivery_boy_model");
 	}
 
 	public function order_new(){
@@ -25,13 +24,6 @@ class Order extends CI_Controller {
 
 		$output_data['main_content'] = "dispatcher/order/index";
 		$this->load->view('template/template',$output_data);	
-	}
-
-	public function test()
-	{
-		$order_list = $this->order_model->get_order();
-		echo "<pre>";
-		print_r($order_list);
 	}
 
 	public function new_order_list(){
@@ -53,13 +45,14 @@ class Order extends CI_Controller {
 		foreach($order_list as $key => $value) {
 
 				$id = encrypt($value['id']);
+				$order_name = 'CL'.$value['id'];
 
 				if($is_dispatcher){
 					$status_str = "<a href='".$order_view_url."/".$id."' class='btn btn-outline-primary waves-effect waves-light btn-sm' status-id='" . $value["order_status"] . "' title='View' data-popup='tooltip' > View</a> ";
 					if($value['order_status'] == 0){
 						$status_str .= "<button type='button' class='btn btn-sm btn-yellow waves-effect waves-light pending' title='Pending' data-popup='tooltip' disabled>Pending</button>";
 					}elseif($value['order_status'] == 1){
-						$status_str .= "<button type='button' class='btn btn-success btn-sm waves-effect waves-light assign-db' title='Assign to Delivery Boy' data-popup='tooltip' data-toggle='modal' data-target='#db-model'> Assign</button>";
+						$status_str .= "<button type='button' class='btn btn-success btn-sm waves-effect waves-light assign-db' title='Assign to Delivery Boy' data-popup='tooltip' data-toggle='modal' data-target='#db-model' data-ordername='".$order_name."'> Assign</button>";
 					}else{
 
 					}
@@ -77,7 +70,7 @@ class Order extends CI_Controller {
 		       	
 		       	$data[] = array(
 		            $value['id'],
-		            'CL'.$value['id'],
+		            $order_name,
 		            $value["username"],
 		            $value["shop_name"],
 		            '&#36;'.$value["total"],
@@ -113,7 +106,11 @@ class Order extends CI_Controller {
   	}
 
   	public function get_all_db(){
-  		$data = $this->delivery_boy_model->get_delivery_boy();
+  		$where = array('deleted_at' => NULL, 'status' => 1);
+        $select = array('id','username');
+        $table = 'delivery_boy';
+        $data = get_data_by_filter($table,$select, $where);
+
   		if(isset($data) && is_array($data) && !empty($data)){
   			echo json_encode($data);
 			return TRUE;
@@ -122,6 +119,19 @@ class Order extends CI_Controller {
 			echo json_encode($data1);
 			return FALSE;
 		}
+  	}
+
+  	public function set_db(){
+  		$delivery_boy_id = intval($_POST['db_id']);
+  		$order_id = intval($_POST['order_id']);
+
+  		if (isset($order_id) && !is_null($order_id) && !empty($order_id) && isset($delivery_boy_id) && !is_null($delivery_boy_id) && !empty($delivery_boy_id)) {
+  			$result = $this->order_model->set_delivery_boy();
+  			echo $result;
+			return TRUE;
+  		}else{
+  			return FALSE;
+  		}
   	}
 
   	public function order_status_update(){

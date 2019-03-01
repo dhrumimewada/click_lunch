@@ -298,6 +298,7 @@ $route['order-status-update'] = 'dispatcher/order/order_status_update';
 $route['order-detail/(:any)'] = 'dispatcher/order/order_detail/$1';
 
 $route['fetch-db'] = 'dispatcher/order/get_all_db';
+$route['set-db'] = 'dispatcher/order/set_db';
 
 //--------------------------------------------------
 

@@ -599,3 +599,5 @@ $config['copyrights'] =  '&#9400; 2019 Click Lunch';
 $config['email_template_logo'] = '<img width="100" alt="logo" src="'.$config['base_url'].'assets/images/logo-white.png"/>';
 $config['website_assest'] = $config['base_url']."/web-assets/";
 
+$config['fcm_key'] = 'AIzaSyDuU86vWnkRQU22Ugwpyq5CmOTh6LMcm6s';
+

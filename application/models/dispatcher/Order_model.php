@@ -130,5 +130,30 @@ class Order_model extends CI_Model {
 		}
 		return $return_data;
 	}
+
+	public function set_delivery_boy(){
+		$return = FALSE;
+		if(isset($_POST['db_id']) && $_POST['db_id'] != '' && isset($_POST['order_id']) && $_POST['order_id'] != ''){
+			$data = array('delivery_boy_id' => intval($_POST['db_id']), 'order_status' => 3);
+			$this->db->where('id', $_POST['order_id']);
+			if($this->db->update('orders', $data)){
+
+				$where = array('deleted_at' => NULL, 'status' => 1, 'device_token !=' => '', 'id' => $_POST['db_id']);
+		        $select = array('id','device_token','username');
+		        $table = 'delivery_boy';
+		        $data = get_data_by_filter($table,$select, $where);
+
+		        $device_token = $data[0]['device_token'];
+		        $push_title = 'New request of delivery';
+		        $push_data = 'Hey '.$data[0]['device_token'].'!';
+		        $push_data .= 'You got new order delivery';
+		        $push_type = 'request';
+
+				send_push('Android',$device_token, $push_title, $push_data, $push_type);
+				$return = TRUE;
+			}
+		}
+		return $return;
+	}
 }
 ?>

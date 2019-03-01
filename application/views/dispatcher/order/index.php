@@ -42,7 +42,7 @@ $edit_link = base_url().'processing-update';
                         <div>
                             <select class="select2 form-control" data-placeholder="Select Delivery Boy" name="selct_db" id='selct_db'>
                             </select>
-                            <div class="text-danger">Please select delivery boy</div>
+                            <div class="text-danger d-none error">Please select delivery boy</div>
                         </div>
                   </div>
                 </div>
@@ -50,7 +50,7 @@ $edit_link = base_url().'processing-update';
                 <!-- Modal footer -->
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-success">Assign</button>
+                  <button type="button" class="btn btn-success submit">Assign</button>
                 </div>
                 
               </div>
@@ -92,6 +92,7 @@ $edit_link = base_url().'processing-update';
 <script type="text/javascript" charset="utf-8" async defer>
     var order_status_update_url = "<?php echo base_url().'order-status-update'; ?>";
     var get_db_url = "<?php echo base_url().'fetch-db'; ?>";
+    var set_db_url = "<?php echo base_url().'set-db'; ?>";
 
     var redirect = '';
     var order_id = '';

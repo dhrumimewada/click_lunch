@@ -54,6 +54,11 @@ class Delivery_boy_model extends CI_Model {
 		$user_id = $this->db->insert_id();
 
 		if($response){
+			$cl_id = 'DB'.$user_id;
+			$data = array('cl_id' => $cl_id);
+			$this->db->where("id", $user_id);
+			$this->db->update("delivery_boy", $data);
+
 			$activation_token = encrypt($user_id);
 			$email_var_data["deliveryboy_name"] = ucwords($this->input->post("username"));
 			$email_var_data["email"] = $this->input->post("email");

@@ -404,6 +404,20 @@ class Delivery_boy_api extends REST_Controller {
        return $template;
     }
 
+    public function test_get(){
+        $device_token = 'emCZFC1-U1o:APA91bGEAzYneQ95zUlCstxmgx3ODnj1T0jPX38bXYXCNVEc6sjGRePfEyRI3RtygjlcaxlKI_xBATXbPv-N7xJj0f1ZvWUSHSstvdfQ0rs7xIqoe9vxGOEBxCZ7A2-tW5IATF3iscE4';
+        $push_title = 'New request of delivery';
+        $push_data = 'Hey Delivery Boy!';
+        $push_data .= 'You got new order delivery';
+        $push_type = 'request';
+
+        $abc = send_push('Android',$device_token, $push_title, $push_data, $push_type);
+        echo "<pre>";
+        print_r($abc);
+        exit;
+
+    }
+
     public function send_mail2($to,$subject,$message){
 
         $from = '"Click Lunch" <excellentwebworld@admin.com>';

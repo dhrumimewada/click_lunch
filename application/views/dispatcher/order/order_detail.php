@@ -235,6 +235,8 @@ $back_link = base_url().'order-new';
 <script type="text/javascript" charset="utf-8" async defer>
     var order_status_update_url = "<?php echo base_url().'order-status-update'; ?>";
     var get_db_url = "<?php echo base_url().'fetch-db'; ?>";
+    var set_db_url = "";
+    
     var redirect = '1';
     var order_id = "<?php echo $order_data['order']->id; ?>";
     var index_url = "<?php echo base_url().'order-new'; ?>";

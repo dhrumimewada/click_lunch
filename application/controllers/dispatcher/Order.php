@@ -110,13 +110,10 @@ class Order extends CI_Controller {
         $select = array('id','username');
         $table = 'delivery_boy';
         $data = get_data_by_filter($table,$select, $where);
-
   		if(isset($data) && is_array($data) && !empty($data)){
   			echo json_encode($data);
 			return TRUE;
 		}else{
-			$data1 = '';
-			echo json_encode($data1);
 			return FALSE;
 		}
   	}

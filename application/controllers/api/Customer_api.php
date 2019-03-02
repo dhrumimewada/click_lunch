@@ -2024,7 +2024,7 @@ class Customer_api extends REST_Controller {
 
                     // If no any ordered from any shop - promocode by admin - GROUP 1
                     $new_customer_for_admin_promocode = array();
-                    if($customer_total_orders <= 0){
+                    if($customer_total_orders == 0){
                         $this->db->select('*'); 
 
                         $this->db->where('shop_id','');  
@@ -2051,8 +2051,10 @@ class Customer_api extends REST_Controller {
                             }
                         }
 
+                    }else{
+
                         // Get customer total completed order for this shop
-                        $where = array('customer_id' => $_POST['customer_id'],'shop_id' => $_POST['shop_id'], 'order_status' => 1);
+                        $where = array('customer_id' => $_POST['customer_id'],'shop_id' => $_POST['shop_id'], 'order_status' => 5);
                         $select = array('id');
                         $table = 'orders';
                         $customer_total_shop_orders_array = get_data_by_filter($table,$select, $where);
@@ -2102,15 +2104,75 @@ class Customer_api extends REST_Controller {
                             }
                         }
 
+                        if($customer_total_shop_orders > 0){
+
+                            // GROUP 7 PROMOCODES ARE PENDING - waiting for order
+
+                            $customer_total_shop_orders_ids = array_column($customer_total_shop_orders_array, 'id');
+
+                            $this->db->select('item_id');  
+                            $this->db->where_in('order_id',$customer_total_shop_orders_ids);  
+                            $this->db->from('order_items'); 
+                            $sql_query = $this->db->get();
+                            $customer_total_item_orders_array = $sql_query->result_array();
+                            $customer_total_ordered_items = array_column($customer_total_item_orders_array, 'item_id');
+                            $customer_total_ordered_items = array_unique($customer_total_ordered_items);
+
+                            // get promocode for this shop - have to orderd these products
+
+                            $this->db->select('id'); 
+                            $this->db->where('shop_id',$_POST['shop_id']);  
+                            $this->db->where('group_type',7);  
+
+                            $this->db->group_start();
+                                $this->db->where('from_date <=', $today);
+                                $this->db->where('to_date >=', $today);
+                            $this->db->group_end();
+
+                            $this->db->where('status',1);  
+                            $this->db->where('deleted_at',NULL);  
+
+                            $this->db->group_start();
+                                $this->db->where('promo_min_order_amount', '');
+                                $this->db->or_where('promo_min_order_amount <=', floatval($_POST['total_amount']));
+                            $this->db->group_end();
+
+                            $this->db->from('promocode'); 
+                            $sql_query = $this->db->get();
+                            if ($sql_query->num_rows() > 0){
+
+                                $promocode_shop_group7_array = $sql_query->result_array();
+                                $promocode_shop_group7_ids = array_column($promocode_shop_group7_array, 'id');
+                                
+                                $this->db->select('*'); 
+                                $this->db->where('shop_id',$_POST['shop_id']);  
+                                $this->db->where_in('promocode_id',$promocode_shop_group7_ids);  
+                                $this->db->from('promocode_products'); 
+                                $sql_query = $this->db->get();
+                                $promocode_haveto_ordeded_products = $sql_query->result_array();
+
+                                $matched_ordered_products = array();
+                                foreach ($promocode_haveto_ordeded_products as $key => $value) {
+                                    if(in_array($value['product_id'], $customer_total_ordered_items)){
+                                        $matched_ordered_products[] = $value;
+                                    }
+                                }
+
+                                if(isset($matched_ordered_products) && !empty($matched_ordered_products)){
+                                    foreach ($matched_ordered_products as $key => $value) {
+                                        $where = array('id' => $value['promocode_id']);
+                                        $select = array('*');
+                                        $table = 'promocode';
+                                        $promocode_valid_data = get_data_by_filter($table,$select, $where);
+                                        array_push($valid_promocodes, $promocode_valid_data[0]);
+                                    }
+                                }
+
+                            }
+
+                        }
                     }
 
-
-                    
-
-                    // GROUP 7 PROMOCODES ARE PENDING - waiting for order
-
-                    //$response['promocode_all_customer'] = $all_customer_promocode;
-                    //$response['group_of_shops_promocode'] = $group_of_shops_promocode;
                     $response['valid_promocodes'] = $valid_promocodes;
                     $response['status'] = true;
                 }

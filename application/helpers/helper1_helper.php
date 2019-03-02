@@ -230,7 +230,6 @@ function get_data_by_filter($table_name = NULL, $select = array(), $where= array
 	if ($sql_query->num_rows() > 0){
 		$return_data = $sql_query->result_array();
 	}
-	
 	return $return_data;
 }
 
@@ -342,8 +341,9 @@ function get_card_type($str, $format = 'string'){
 }
 
 function send_push($device_type = '',$device_token = '', $push_title = '', $push_data = '', $push_type = ''){
-  
-        $key = $this->config->item('fcm_key');
+  		
+  		$CI = &get_instance();
+        $key = $CI->config->item('fcm_key');
         define('API_ACCESS_KEY', $key);
 
         if($device_type == 'IOS' || $device_type == 'ios'){
@@ -364,7 +364,7 @@ function send_push($device_type = '',$device_token = '', $push_title = '', $push
 
         }else{
 
-            $push_data = 'You got new order delivery from shop_name to adddress';
+            //$push_data = 'You got new order delivery from shop_name to adddress';
 
             $fcmFields = array(
                 'priority' => 'high',

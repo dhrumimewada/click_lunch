@@ -145,8 +145,9 @@ class Order_model extends CI_Model {
 
 		        $device_token = $data[0]['device_token'];
 		        $push_title = 'New request of delivery';
-		        $push_data = 'Hey '.$data[0]['device_token'].'!';
-		        $push_data .= 'You got new order delivery';
+		        $push_data_msg = 'Hey '.$data[0]['username'].'!';
+		        $push_data_msg .= 'You got new order delivery request.';
+		        $push_data = array('order_id' => $_POST['order_id'], 'message' => $push_data_msg);
 		        $push_type = 'request';
 
 				send_push('Android',$device_token, $push_title, $push_data, $push_type);

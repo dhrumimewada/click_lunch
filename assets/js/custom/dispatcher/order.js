@@ -84,10 +84,9 @@ $(document).ready(function (){
                 url: get_db_url,
                 type: "POST",
                 success: function (returnData) {
-
-                    returnData = $.parseJSON(returnData);
-                    
+                     console.log(returnData);
                      if (typeof returnData != "undefined" && returnData != ''){
+                        returnData = $.parseJSON(returnData);
 
                         // console.log('DB');
                         // console.log(returnData);

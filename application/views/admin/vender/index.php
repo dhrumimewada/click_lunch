@@ -123,9 +123,10 @@ $edit_link = base_url().'vender-update';
                         type: "POST",
                         data:{id:data_id},
                         success: function (returnData) {
-                            returnData = $.parseJSON(returnData);
+                            
                             if (typeof returnData != "undefined")
                             {
+                                returnData = $.parseJSON(returnData);
                                 swal(
                                     'Deleted!',
                                     'Vender has been deleted.',

@@ -30,6 +30,13 @@ class Order_model extends CI_Model {
 		$this->db->where('t3.deleted_at', NULL);
 
 		if($this->auth->is_dispatcher()){
+
+			$this->db->group_start();
+				$this->db->where('t1.order_type', 1);
+				$this->db->or_where('t1.order_type', 2);
+				$this->db->or_where('t1.order_type', 5);
+			$this->db->group_end();
+		
 			$this->db->group_start();
 			$this->db->where('t1.order_status', 0);
 			$this->db->or_where('t1.order_status', 1);

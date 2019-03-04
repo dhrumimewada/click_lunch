@@ -318,26 +318,26 @@ class Vender extends CI_Controller {
 			$this->db->where('shop_id', $id);
 			$this->db->update('promocode', $user_data);
 
-			$this->db->where('shop_id', $id);
-			$this->db->update('promocode_products', $user_data);
+			// $this->db->where('shop_id', $id);
+			// $this->db->delete('promocode_products');
 
-			$this->db->where('shop_id', $id);
-			$this->db->update('promocode_shops', $user_data);
+			// $this->db->where('shop_id', $id);
+			// $this->db->delete('promocode_shops');
 
-			$this->db->where('shop_id', $id);
-			$this->db->update('promocode_valid_product', $user_data);
+			// $this->db->where('shop_id', $id);
+			// $this->db->delete('promocode_valid_product');
 
 			$this->db->where('shop_id', $id);
 			$this->db->update('rating', $user_data);
 
-			$this->db->where('shop_id', $id);
-			$this->db->update('shop_availibality', $user_data);
+			// $this->db->where('shop_id', $id);
+			// $this->db->delete('shop_availibality');
 
-			$this->db->where('shop_id', $id);
-			$this->db->delete('shop_cuisines');
+			// $this->db->where('shop_id', $id);
+			// $this->db->delete('shop_cuisines');
 
-			$this->db->where('shop_id', $id);
-			$this->db->delete('shop_hours');
+			// $this->db->where('shop_id', $id);
+			// $this->db->delete('shop_hours');
 
 			$this->db->select('id');
 			$this->db->from('variant_group');
@@ -349,8 +349,8 @@ class Vender extends CI_Controller {
 				$variant_group_array = array_column($return_data, 'id');
 				$variant_group_list = explode(',',$variant_group_array);
 
-				$this->db->where_in('variant_group_id', $variant_group_list);
-				$this->db->delete('variant_items');
+				// $this->db->where_in('variant_group_id', $variant_group_list);
+				// $this->db->delete('variant_items');
 
 				$this->db->where('shop_id', $id);
 				$this->db->update('variant_group', $user_data);

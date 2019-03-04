@@ -541,8 +541,8 @@ $delivery_evening_to = $delivery['evening']['to'];
     }
     ?>
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customControlInline2" value="1" name="takeout_delivery_status[]" <?php echo $field_value; ?> >
-                                                <label class="custom-control-label" for="customControlInline2">Delivery</label>
+                                                <input type="checkbox" class="custom-control-input" id="customControlInline3" value="1" name="takeout_delivery_status[]" <?php echo $field_value; ?> >
+                                                <label class="custom-control-label" for="customControlInline3">Delivery</label>
                                             </div>
 <?php
     $field_value = '';
@@ -559,8 +559,8 @@ $delivery_evening_to = $delivery['evening']['to'];
     }
     ?>
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customControlInline3" value="2" name="takeout_delivery_status[]" <?php echo $field_value; ?> >
-                                                <label class="custom-control-label" for="customControlInline3">Takout</label>
+                                                <input type="checkbox" class="custom-control-input" id="customControlInline4" value="2" name="takeout_delivery_status[]" <?php echo $field_value; ?> >
+                                                <label class="custom-control-label" for="customControlInline4">Takout</label>
                                             </div>
                                         </div>
                                         <div class="validation-error-label">

@@ -1159,7 +1159,7 @@ class Customer_api extends REST_Controller {
 
             $this->db->select($sql_select);
             $this->db->where("t2.deleted_at", NULL);
-            $this->db->where("t2.is_active", 1);
+            //$this->db->where("t2.is_active", 1);
             $this->db->where_in("t1.shop_id", $shop_array);
             $this->db->from('shop_cuisines t1');
             $this->db->join('cuisine t2', 't1.cuisine_id = t2.id', "left join");
@@ -1307,7 +1307,7 @@ class Customer_api extends REST_Controller {
 
             $this->db->select($sql_select);
             $this->db->where("t2.deleted_at", NULL);
-            $this->db->where("t2.is_active", 1);
+            //$this->db->where("t2.is_active", 1);
             $this->db->where_in("t1.shop_id", $shop_array);
             $this->db->from('shop_cuisines t1');
             $this->db->join('cuisine t2', 't1.cuisine_id = t2.id', "left join");
@@ -1393,7 +1393,7 @@ class Customer_api extends REST_Controller {
                                 );
                 $this->db->select($sql_select);
                 $this->db->where("t2.deleted_at", NULL);
-                $this->db->where("t2.is_active", 1);
+                //$this->db->where("t2.is_active", 1);
                 $this->db->where("t1.shop_id", $_POST['shop_id']);
                 $this->db->from('shop_cuisines t1');
                 $this->db->join('cuisine t2', 't1.cuisine_id = t2.id', "left join");

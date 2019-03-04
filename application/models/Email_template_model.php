@@ -110,20 +110,24 @@ class Email_template_model extends CI_Model {
 		$email_message_string = $this->input->post("emat_email_message");
 		$message = $this->load->view("email_templates/custom_mail", array("mail_body" => $email_message_string), TRUE);
 
-		if($this->input->post("group") == 2){
-			$filter = array("status" => 1);
-			$customer_list = get_customer_by_filter($filter);
-		}else if($this->input->post("group") == 3){
-			$filter = array("status" => 0);
-			$customer_list = get_customer_by_filter($filter);
-		}else if($this->input->post("group") == 4){
-			$customer_list = get_customer_by_filter(array());
-		}//else if($this->input->post("group") == 5 || 1 || 6){
-			//$customer_list = get_customer_by_shops($this->input->post("shop"));
-			//$customer_list = array();
-		//}
-		else{
-			$customer_list = array();
+		$customer_list = array();
+
+		if($this->input->post("group") == 4){
+			// All customer for shop
+            $this->db->select('t2.email');
+            $this->db->where("t2.deleted_at", NULL);
+            $this->db->where("t2.status", 1);
+            if($this->auth->is_vender()){
+				$this->db->where("t1.shop_id", $this->auth->get_user_id());
+			}else if($this->auth->is_employee()){
+				$this->db->where("t1.shop_id",$this->auth->get_emp_shop_id());
+			}
+            $this->db->from('orders t1');
+            $this->db->join('customer t2', 't1.customer_id = t2.id', "left join");
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+            	$customer_list = $sql_query->result_array();
+            }
 		}
 
 		if(is_array($customer_list) && !empty($customer_list)){

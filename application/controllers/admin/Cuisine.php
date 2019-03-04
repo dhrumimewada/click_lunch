@@ -55,11 +55,21 @@ class Cuisine extends CI_Controller {
 	public function delete(){
 		$id = $_POST['id'];
 		if (isset($id) && !is_null($id) && !empty($id)) {
-			$user_data = array('deleted_at' => date('Y-m-d H:i:s') );
-			$this->db->where('id', $id);
-			$this->db->update('cuisine', $user_data);
-			echo json_encode(array("is_success" => true));
-			return TRUE;
+
+			$where = array('cuisine_id' => $id);
+            $select = array('id');
+            $table = 'item';
+            $cuisine_items = get_data_by_filter($table,$select, $where);
+            if(count($cuisine_items) > 0){
+            	echo json_encode(array("is_success" => false, "message" => 'Could not delete'));
+				return TRUE;
+            }else{
+            	$user_data = array('deleted_at' => date('Y-m-d H:i:s') );
+				$this->db->where('id', $id);
+				$this->db->update('cuisine', $user_data);
+				echo json_encode(array("is_success" => true, "message" => 'deleted'));
+				return TRUE;
+            }
 		}else{
 			return FALSE;
 		}

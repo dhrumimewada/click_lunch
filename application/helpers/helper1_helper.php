@@ -183,23 +183,6 @@ function is_allowed($role_id = NULL, $module_name = NULL){
 	return $return_value;
 }
 
-function get_customer_by_filter($where = array()){
-	$return_data = array();
-
-	$CI = &get_instance();
-	$CI->db->select('email');
-	$CI->db->from('customer');
-	if (isset($where) && !empty($where)) {
-		$CI->db->where($where);
-	}
-	$sql_query = $CI->db->get();
-	if ($sql_query->num_rows() > 0){
-		$return_data = $sql_query->result_array();
-	}
-	
-	return $return_data;
-}
-
 function get_customer_by_shop($shops = array()){
 	$return_data = array();
 

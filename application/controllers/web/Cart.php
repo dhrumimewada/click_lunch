@@ -13,14 +13,41 @@ class Cart extends CI_Controller {
 		echo "<pre>";
 		echo "Before destroy";
 		print_r($this->cart->contents());
-		// echo "after destroy";
-		// $this->cart->destroy();
-		// echo "<pre>";
-		// print_r($this->cart->contents());
-		exit;
+		echo "after destroy";
+		$this->cart->destroy();
+		echo "<pre>";
+		print_r($this->cart->contents());
+
+		// $insert_data = array(
+  //   				'id' => "8d39e3679e0898c5292a7e59105bda96",
+  //   				'item_id' => "30",
+  //   				'name' => "Veg Meal + Coco Drinks",
+  //   				'price' => "15.00",
+  //   				'item_price' => "15.00",
+  //   				'varient_price' => "0.00",
+  //   				'qty' => "1",
+  //   				'shop_id' => "58",
+  //   				'picture' => "item_1547462856.jpg",
+  //   				'is_combo' => "1"
+  //   			);
+
+		// 		// This function add items into cart.
+		// 		if($this->cart->insert($insert_data)){
+		// 			echo 'inserted';
+		// 		}else{
+		// 			echo 'fail';
+		// 		}
+
+		// 		echo "<pre>";
+		//         // print_r($item_data);
+		//          print_r($insert_data);
+		//         print_r($this->cart->contents());
+		        exit;
 	}
 
 	public function my_cart(){
+
+
 		$output_data['cart_contents'] = $this->cart->contents();
 		$output_data['cart_total'] = $this->cart->total();
 		$output_data['main_content'] = 'cart';
@@ -41,59 +68,72 @@ class Cart extends CI_Controller {
 
 	        	// get all varients array
 	        	$all_varients = array();
-				foreach ($_POST['group'] as $key => $value) {
-					foreach ($value as $key1 => $value1) {
-						array_push($all_varients, $value1);
+	        	$total_variants_price = 0;
+	        	if(isset($_POST['group']) && is_array($_POST['group']) && !empty($_POST['group'])){
+
+	        		foreach ($_POST['group'] as $key => $value) {
+						foreach ($value as $key1 => $value1) {
+							array_push($all_varients, $value1);
+						}
 					}
-				}
-				// get varients data from DB
-				$all_variants_data = $this->welcome_model->get_variants($all_varients);
-				$total_variants_price = 0.00;
-				// Sum of varients prices
-				foreach ($all_variants_data as $key => $value) {
-					$total_variants_price += number_format((float)$value['price'], 2, '.', '');
-				}
 
+					// get varients data from DB
+					$all_variants_data = $this->welcome_model->get_variants($all_varients);
 
-	        	if(is_array($_POST['group']) && !empty($_POST['group'])){
-	        		$item_data['group_data'] = $_POST['group'];
+					// Sum of varients prices
+					foreach ($all_variants_data as $key => $value) {
+						$total_variants_price += number_format((float)$value['price'], 2, '.', '');
+					}
+
+					$item_data['group_data'] = $_POST['group'];
+
+	        	}else{
+	        		$item_data['group_data'] = '';
 	        	}
-	        }
 
-	        if($item_data['offer_price'] == ''){
-	        	$price = $item_data['price'];
-	        }else{
-	        	$price = $item_data['offer_price'];
-	        }
-			
-			$total_price = $price + $total_variants_price;
-			$insert_data = array(
-								'id' => md5($item_data['id'].serialize($_POST['group'])),
-								'item_id' => $item_data['id'],
-								'name' => $item_data['name'],
-								'price' => number_format((float)$total_price, 2, '.', ''),
-								'item_price' => number_format((float)$price, 2, '.', ''),
-								'varient_price' => number_format((float)$total_variants_price, 2, '.', ''),
-								'qty' => $_POST['quantity'],
-								'shop_id' => $_POST['shop_id'],
-								'picture' => $item_data['item_picture'],
-								'is_combo' => $item_data['is_combo'],
-								'group_data' => $_POST['group']
-							);
+	        	if($item_data['offer_price'] == ''){
+		        	$price = $item_data['price'];
+		        }else{
+		        	$price = $item_data['offer_price'];
+		        }
+				
+				$total_price = floatval($price) + floatval($total_variants_price);
 
-			// This function add items into cart.
-			$this->cart->insert($insert_data);
+				if(isset($_POST['group']) && is_array($_POST['group']) && !empty($_POST['group'])){
+					$unique_id = md5($item_data['id'].serialize($_POST['group']));
+				}else{
+					$unique_id = md5($item_data['id']);
+				}
+
+				$insert_data = array(
+									'id' => $unique_id,
+									'item_id' => $item_data['id'],
+									'name' => $item_data['name'],
+									'price' => number_format((float)$total_price, 2, '.', ''),
+									'item_price' => number_format((float)$price, 2, '.', ''),
+									'varient_price' => number_format((float)$total_variants_price, 2, '.', ''),
+									'qty' => $_POST['quantity'],
+									'shop_id' => $_POST['shop_id'],
+									'picture' => $item_data['item_picture'],
+									'is_combo' => $item_data['is_combo'],
+									'group_data' => $item_data['group_data']
+								);
+
+				// This function add items into cart.
+				if($this->cart->insert($insert_data)){
+					//echo 'inserted';
+				}else{
+					//echo 'fail';
+				}
+	        }
 		}
 
 		// echo "<pre>";
-		// print_r($this->cart->contents());
-		// exit;
+	 //        print_r($item_data);
+	 //        print_r($insert_data);
+	 //        print_r($this->cart->contents());
+	 //        exit;
 		redirect('cart');
-		
-		$output_data['cart_contents'] = $this->cart->contents();
-		$output_data['cart_total'] = $this->cart->total();
-		$output_data['main_content'] = 'cart';
-		$this->load->view('web/template',$output_data);
 	}
 
 	public function get_cart_item_data(){
@@ -106,11 +146,15 @@ class Cart extends CI_Controller {
 		$data['item_variants'] = $this->welcome_model->get_item_variants($cart_content_item['item_id']);
 
 		$variants = array();
-		foreach ($data['cart_contents']['group_data'] as $key => $value) {
-			foreach ($value as $key1 => $value1) {
-				array_push($variants, $value1);
+
+		if(isset($data['cart_contents']['group_data']) && is_array($data['cart_contents']['group_data']) && !empty($data['cart_contents']['group_data'])){
+			foreach ($data['cart_contents']['group_data'] as $key => $value) {
+				foreach ($value as $key1 => $value1) {
+					array_push($variants, $value1);
+				}
 			}
 		}
+		
 
 		$data['variants'] = $variants;
 		

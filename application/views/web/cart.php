@@ -188,16 +188,16 @@ $d_none = 'd-none';
 					<div class="select-delivery-address-block text-left">
 						<div class="row m-0">
 							<div class="col-md-4">
-								<a href="#" data-toggle="modal" data-target="#addNewAddressModal" class="delivery-address text-center d-flex justify-content-center align-items-center">
+								<span data-toggle="modal" data-target="#addNewAddressModal" class="delivery-address text-center d-flex justify-content-center align-items-center">
 									<div class="new-address">
 										<img src="<?php echo $assets; ?>images/add.png" class="d-block mx-auto mb-1" />
 										<span>Add New Address</span>
 									</div>
-								</a>
+								</span>
 							</div>
 							<div class="col-md-4">
 								<a href="<?php echo BASE_URL(); ?>web/home/delivery_address" class="delivery-address text-center d-flex justify-content-center align-items-center">
-									<span>Choose from one of our<br> existing delivery location</span>
+									<span>Choose from one of<br> existing delivery location</span>
 								</a>
 							</div>
 							<div class="col-md-4">

@@ -49,11 +49,22 @@ class Category extends CI_Controller {
 	public function delete(){
 		$id = $_POST['id'];
 		if (isset($id) && !is_null($id) && !empty($id)) {
-			$user_data = array('deleted_at' => date('Y-m-d H:i:s') );
-			$this->db->where('id', $id);
-			$this->db->update('category', $user_data);
-			echo json_encode(array("is_success" => true));
-			return TRUE;
+
+			$where = array('category_id' => $id);
+            $select = array('id');
+            $table = 'item';
+            $category_items = get_data_by_filter($table,$select, $where);
+            if(count($category_items) > 0){
+            	echo json_encode(array("is_success" => false, "message" => 'Could not delete'));
+				return TRUE;
+            }else{
+            	$user_data = array('deleted_at' => date('Y-m-d H:i:s') );
+				$this->db->where('id', $id);
+				$this->db->update('category', $user_data);
+				echo json_encode(array("is_success" => true));
+				return TRUE;
+            }
+			
 		}else{
 			return FALSE;
 		}

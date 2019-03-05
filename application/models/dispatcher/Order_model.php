@@ -157,7 +157,8 @@ class Order_model extends CI_Model {
 		        $push_data = array('order_id' => $_POST['order_id'], 'message' => $push_data_msg);
 		        $push_type = 'request';
 
-				send_push('Android',$device_token, $push_title, $push_data, $push_type);
+				$result = send_push('Android',$device_token, $push_title, $push_data, $push_type);
+				print_r($result);
 				$return = TRUE;
 			}
 		}

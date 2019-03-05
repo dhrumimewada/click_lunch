@@ -423,12 +423,13 @@ li.dropdown.notification-list.last-div:before{
     object-fit: cover;
 }
 .validation-error-label {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
     display: block;
     color: #F44336;
     position: relative;
-    font-weight: 500;
+    font-weight: 500 !important;
+    text-transform:  none !important;
 }
 .shop-h{
     max-height: 450px;

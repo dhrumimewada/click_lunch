@@ -71,18 +71,14 @@ class Email_push extends CI_Controller {
 					array_push($validation_rules, $shop_validation);
 				}
 
-				//echo "<pre>";
-				//print_r($_POST['emat_email_message']);
-
-				// $abc = $this->email_template_model->send_custom_email_customer();
-				// print_r($abc);
-				// exit;
-
-				
 				$this->form_validation->set_rules($validation_rules);
 				 
 				if ($this->form_validation->run() === true){
-					
+
+					//$data = $this->email_template_model->send_custom_email_customer();
+					// echo "<pre>";
+					// print_r($data);
+					// exit;
 					if($this->email_template_model->send_custom_email_customer()){
 						$this->session->set_flashdata($this->auth->get_messages_array());
 						redirect(base_url() . "vender-custom-email-customer");
@@ -115,7 +111,7 @@ class Email_push extends CI_Controller {
 		}else{
 
 		}
-		
+
 		$output_data["to"] =$to;
 		$output_data['main_content'] = "admin/email_template/email_custom_customer";
 		$this->load->view('template/template',$output_data);	

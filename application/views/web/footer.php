@@ -28,9 +28,94 @@
         </div>
     </div>
 </footer>
+
+<?php $register_link = base_url().'register'; ?>
+<style type="text/css" media="screen">
+ .form-check-input.validation-error-label{
+    position: absolute;
+    margin-top: .3rem !important;
+    margin-left: -1.25rem;
+ }
+</style>
+<!-- Register Modal -->
+<div class="modal fade" id="registerFormModal" tabindex="-1" role="dialog" aria-labelledby="registerFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content pt-4 pb-4">
+            <div class="modal-header justify-content-center position-relative">
+                <h5 class="modal-title" id="registerFormModalLabel">Register</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="register-form" id="register-form" action="<?php echo $register_link; ?>">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerUsername">Username</label>
+                                <input type="text" class="form-control" id="register_username" name="register_username">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerEmail">E-mail</label>
+                                <input type="email" class="form-control" id="register_email" name="register_email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerPassword">Password</label>
+                                <input type="password" class="form-control" id="register_password" name="register_password">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="registerConfirmPassword">Confirm Password</label>
+                                <input type="password" class="form-control" id="register_confpassword" name="register_confpassword">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="acceptTerms" name="acceptTerms">
+                                <label class="form-check-label grey" for="acceptTerms">I agree to the Terms of Use and to receive emails.</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="submit" name="register" class="register red-btn" id="register-btn" value="Register">
+                        </div>
+                    </div>
+                    <div class="row signin-custom-text justify-content-center">
+                        <span>or join with</span>
+                    </div>
+                    <div class="signin-with-social-account row">
+                        <div class="col-sm-6">
+                            <a href="https://accounts.Facebook.com/" class="facebook-account blue-btn">Facebook</a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a href="https://accounts.google.com/signin" class="google-account orange-btn">Google</a>
+                        </div>
+                    </div>
+                    <div class="already-have-account text-center mt-4">
+                        <span class="grey">I already have an account <a id="dialog-login" href="javascript:void(0)" data-toggle="modal" data-target="#loginFormModal" class="font-weight-bold">Login</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <a href="#" id="scroll" class="scroll" style="display: none;"><span></span></a>
+
+<script src="<?php echo base_url().'web-assets/js/custom/register.js'; ?>"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+
+        // Register _ Start
+        // Register _ end
         $('.mail-subscription-block .validation-error-label').hide();
         var subscribe_url = "<?php echo base_url().'subscribe'; ?>";
         $(document).on('click',"#subscribe", function(){

@@ -334,3 +334,7 @@ $route['subscribe'] = 'web/welcome/subscribe';
 $route['faq'] = 'web/welcome/faq';
 $route['restaurant-partner-form'] = 'web/welcome/restaurant_partner_form';
 
+/*Customer login - register */
+$route['register'] = 'web/welcome/register';
+$route['email-check-availability'] = 'web/welcome/email_check_availability';
+

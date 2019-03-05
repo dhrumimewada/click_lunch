@@ -3461,6 +3461,133 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
+    public function search_post(){
+        $postFields['keyword'] = $_POST['keyword']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+
+            if(strlen($_POST['keyword']) > 2){
+                $sql_select = array(
+                                "id",
+                                "shop_name",
+                                "profile_picture",
+                                "takeout_delivery_status",
+                                "city",
+                                "delivery_time",
+                                "order_by_time",
+                                "state",
+                                "country",
+                                "zip_code"
+                            );
+
+                if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != ""){
+
+                    $latitude = $_POST['latitude'];
+                    $longitude = $_POST['longitude'];
+
+                    $distance = "(3956 * 2 * ASIN(SQRT( POWER(SIN((".$latitude." - latitude) * pi()/180 / 2), 2) +COS( ".$latitude." * pi()/180) * COS(longitude * pi()/180) * POWER(SIN(( ".$longitude." - longitude) * pi()/180 / 2), 2) ))) as distance";
+                    array_push($sql_select,$distance);
+
+                }
+
+                $this->db->select($sql_select);
+
+                if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != ""){
+                    $this->db->order_by("distance", "asc");
+                    $this->db->having("distance <=", 100);
+                }
+
+                $this->db->where("longitude !=", '');
+                $this->db->where("latitude !=", '');
+                $this->db->where("deleted_at", NULL);
+                $this->db->where("status", 1);
+
+                $this->db->where("shop_name LIKE '%".$_POST['keyword']."%'");
+
+                $this->db->from('shop');
+                $sql_query = $this->db->get();
+                $last = $this->db->last_query();
+                if ($sql_query->num_rows() > 0){
+                    $shop_data = $sql_query->result_array();
+                    $shop_array = array_column($shop_data, 'id');
+
+                    $sql_select = array(
+                                    "t2.cuisine_name",
+                                    "t1.shop_id"
+                                );
+
+                    $this->db->select($sql_select);
+                    $this->db->where("t2.deleted_at", NULL);
+                    //$this->db->where("t2.is_active", 1);
+                    $this->db->where_in("t1.shop_id", $shop_array);
+                    $this->db->from('shop_cuisines t1');
+                    $this->db->join('cuisine t2', 't1.cuisine_id = t2.id', "left join");
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $cuisine_data = $sql_query->result_array();                        
+                    }
+
+                    // Add cuisines to shop array
+                    foreach ($shop_data as $key => $value) {
+                        $shop_data[$key]['rating'] = '4.5';
+                        $shop_data[$key]['cuisine'] = array();
+                        
+
+                        foreach ($cuisine_data as $key1 => $value1) {
+                            if($value['id'] == $value1['shop_id']){
+                                array_push($shop_data[$key]['cuisine'], $value1['cuisine_name']);
+                            }
+                        }
+                    }
+
+                    $sql_select = array(
+                                    "from_time",
+                                    "to_time",
+                                    "full_day",
+                                    "is_closed",
+                                    "shop_id"
+                                );
+
+                    $this->db->select($sql_select);
+                    $this->db->where_in("shop_id", $shop_array);
+                    $this->db->where("day", date('l'));
+                    $this->db->from('shop_availibality');
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $availibality_data = $sql_query->result_array();
+
+                        // Add availibality_data to shop array
+                        foreach ($shop_data as $key => $value) {
+
+                            foreach ($availibality_data as $key1 => $value1) {
+                                if($value['id'] == $value1['shop_id']){
+                                    $shop_data[$key]['from_time'] = $value1['from_time'];
+                                    $shop_data[$key]['to_time'] = $value1['to_time'];
+                                    //$shop_data[$key]['rating'] = '4.5';
+                                }
+                            }
+                        }
+                    }
+                    
+                    $response['status'] = true;
+                    $response['shop'] = $shop_data;
+
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'No any restaurant found';
+                }
+            }else{
+                $response['status'] = false;
+                $response['message'] = 'Please type more for search';
+            }
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
     public function create_email_template($template){
        $base_url = BASE_URL();
        $template = str_replace('##SITEURL##', $base_url, $template);

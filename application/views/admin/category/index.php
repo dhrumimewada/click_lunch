@@ -108,12 +108,21 @@ $edit_link = base_url().'category-update';
                             console.log(returnData);
                             if (typeof returnData != "undefined")
                             {
-                                swal(
-                                    'Deleted!',
-                                    'Category has been deleted.',
-                                    'success'
-                                )
-                                remove_row($this);
+                                if(returnData.is_success == false){
+                                    swal(
+                                        'Warning!',
+                                        'Product(s) already exists for this category',
+                                        'warning'
+                                    )
+                                }else{
+                                    swal(
+                                        'Deleted!',
+                                        'Category has been deleted.',
+                                        'success'
+                                    )
+                                    remove_row($this);
+                                }
+                                
                             } 
                         },
                         error: function (xhr, ajaxOptions, thrownError) {

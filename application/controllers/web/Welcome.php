@@ -130,6 +130,34 @@ class Welcome extends CI_Controller {
 		$this->load->view('web/template',$output_data);
 	}
 
+	public function email_check_availability(){
+
+		// $table_name = 'customer';
+		// $select = array('id');
+		// $where = array('email' => $_POST['email'], 'deleted_at !=' => NULL);
+		// $customer_data = get_data_by_filter($table_name, $select, $where);
+		// if(is_array($customer_data) && !empty($customer_data)){
+		// 	echo json_encode($customer_data);
+		// 	return FALSE;
+		// }else{
+		// 	//return TRUE;
+		// 	return $_POST['email'];
+		// }
+
+		$this->db->select('id');
+		$this->db->where('email', $_POST['email']);
+		$this->db->where('deleted_at', NULL);
+		$this->db->from('customer');
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			return FALSE;
+		}else{
+			echo '1';
+			return TRUE;
+		}
+
+	}
+
 	public function weekly_planner()
 	{
 		$this->load->view('web/weekly-planner');

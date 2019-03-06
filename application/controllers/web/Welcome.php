@@ -7,6 +7,7 @@ class Welcome extends CI_Controller {
 		parent::__construct();
 		$this->load->model("admin/banner_model");
 		$this->load->model("website/welcome_model");
+		$this->load->library('parser');
 	}
 
 	public function index(){
@@ -132,18 +133,6 @@ class Welcome extends CI_Controller {
 
 	public function email_check_availability(){
 
-		// $table_name = 'customer';
-		// $select = array('id');
-		// $where = array('email' => $_POST['email'], 'deleted_at !=' => NULL);
-		// $customer_data = get_data_by_filter($table_name, $select, $where);
-		// if(is_array($customer_data) && !empty($customer_data)){
-		// 	echo json_encode($customer_data);
-		// 	return FALSE;
-		// }else{
-		// 	//return TRUE;
-		// 	return $_POST['email'];
-		// }
-
 		$this->db->select('id');
 		$this->db->where('email', $_POST['email']);
 		$this->db->where('deleted_at', NULL);
@@ -155,7 +144,119 @@ class Welcome extends CI_Controller {
 			echo '1';
 			return TRUE;
 		}
+	}
 
+	public function number_check_availability(){
+		$this->db->select('id');
+		$this->db->where('mobile_number', $_POST['register_number']);
+		$this->db->where('deleted_at', NULL);
+		$this->db->from('customer');
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			return FALSE;
+		}else{
+			echo '1';
+			return TRUE;
+		}
+	}	
+
+	public function register_customer(){
+		$error = '0';
+		$this->db->select('id');
+		$this->db->where('email', $_POST['email']);
+		$this->db->where('deleted_at', NULL);
+		$this->db->from('customer');
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			$error = '1';
+		}else{
+			$this->db->select('id');
+			$this->db->where('mobile_number', $_POST['register_number']);
+			$this->db->where('deleted_at', NULL);
+			$this->db->from('customer');
+			$sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0) {
+				$error = '2';
+			}else{
+
+				$dob = DateTime::createFromFormat('d-m-Y', $_POST['dob']);
+				$dob = $dob->format("Y-m-d");
+
+				$user = array( 
+                        'username' => $_POST['name'], 
+                        'email'=> $_POST['email'], 
+                        'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+                        'device_type'=> 0, 
+                        'mobile_number'=> $_POST['mobile_number'],
+                        'latitude'=> '',
+                        'longitude'=> '',
+                        'gender'=> $_POST['gender'],
+                        'dob'=> $dob
+                    );
+				$this->db->insert('customer', $user);
+				$insert_id = $this->db->insert_id();
+
+                if($insert_id){
+
+                	$this->db->select('*');
+					$this->db->from('email_template');
+					$this->db->where('emat_email_type', 1);
+					$this->db->where("emat_is_active", 1);
+					$sql_query = $this->db->get();
+					$return_data = $sql_query->row();
+
+					if (isset($return_data) && !empty($return_data)){
+
+						$activation_token = bin2hex(random_bytes(20));
+						$email_var_data["activation_link"] = base_url() . 'customer-activate/'. $activation_token;
+						$from = "";
+						$to = $_POST['email'];
+						$subject = 'Activate Your '.$this->config->item('site_name').' Account';
+
+						$email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+						$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+						$mail = sendmail($from, $to, $subject, $message);
+						if(!$mail){
+							$error = '4';
+						}else{
+							$update_data = array('activation_token' => $activation_token);
+                            $this->db->where('id', $insert_id);
+                            $this->db->update('customer', $update_data);
+						}
+
+					}else{
+						$error = '3';
+					}
+                }
+			}
+		}
+		echo $error;
+		return TRUE;
+	}
+
+	public function login_customer(){
+		$error = '0';
+		$this->db->select('*');
+		$this->db->where('email', $_POST['email']);
+		$this->db->where("password !=",'');
+		$this->db->where('deleted_at', NULL);
+		$this->db->from('customer');
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			$customer = $sql_query->row();
+			if (password_verify($_POST['password'],$customer->password)){
+				echo 'set session';
+
+			}else{
+				$error = '2';
+				// echo $customer->password;
+				// echo '   '.$_POST['password'];
+			}
+		}else{
+			$error = '1';
+		}
+		echo $error;
+		return TRUE;
 	}
 
 	public function weekly_planner()

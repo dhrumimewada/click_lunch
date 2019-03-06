@@ -337,4 +337,6 @@ $route['restaurant-partner-form'] = 'web/welcome/restaurant_partner_form';
 /*Customer login - register */
 $route['register'] = 'web/welcome/register';
 $route['email-check-availability'] = 'web/welcome/email_check_availability';
-
+$route['number-check-availability'] = 'web/welcome/number_check_availability';
+$route['register-customer'] = 'web/welcome/register_customer';
+$route['login-customer'] = 'web/welcome/login_customer';

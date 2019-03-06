@@ -40,7 +40,7 @@
 <!-- Register Modal -->
 <div class="modal fade" id="registerFormModal" tabindex="-1" role="dialog" aria-labelledby="registerFormModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content pt-4 pb-4">
+        <div class="modal-content pt-3 pb-4">
             <div class="modal-header justify-content-center position-relative">
                 <h5 class="modal-title" id="registerFormModalLabel">Register</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -53,27 +53,57 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="registerUsername">Username</label>
-                                <input type="text" class="form-control" id="register_username" name="register_username">
+                                <input type="text" class="form-control" id="register_username" name="register_username" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="registerEmail">E-mail</label>
-                                <input type="email" class="form-control" id="register_email" name="register_email">
+                                <input type="text" class="form-control" id="register_email" name="register_email" autocomplete="off">
+                                <span class="validation-email">
+                                </span>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="registerPassword">Password</label>
-                                <input type="password" class="form-control" id="register_password" name="register_password">
+                                <label for="register_password">Password</label>
+                                <input type="password" class="form-control" id="register_password" name="register_password" autocomplete="off">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="registerConfirmPassword">Confirm Password</label>
-                                <input type="password" class="form-control" id="register_confpassword" name="register_confpassword">
+                                <label for="register_confpassword">Confirm Password</label>
+                                <input type="password" class="form-control" id="register_confpassword" name="register_confpassword" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="register_number">Mobile Number</label>
+                                <input type="text" class="form-control" id="register_number" name="register_number">
+                                <span class="validation-number" autocomplete="off">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="register_dob">Date Of Birth</label>
+                                <input type="text" class="form-control datepicker-autoclose" id="register_dob" name="register_dob" width="276" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="register_gender">Gender</label>
+                                <select class="form-control" id="register_gender" name="register_gender">
+                                    <option selected disabled>Select gender</option>
+                                    <option value="0">Male</option>
+                                    <option value="1">Female</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -108,9 +138,108 @@
     </div>
 </div>
 
-<a href="#" id="scroll" class="scroll" style="display: none;"><span></span></a>
+<!-- Login Modal -->
+<div class="modal fade" id="loginFormModal" tabindex="-1" role="dialog" aria-labelledby="loginFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content pt-sm-4 pb-sm-4">
+            <div class="modal-header justify-content-center position-relative">
+                <h5 class="modal-title" id="loginFormModalLabel">Log in</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="login-form" id="login-form">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="login_email">E-mail</label>
+                                <input type="text" class="form-control" id="login_email" name="login_email" autocomplete="off">
+                                <span class="validation-login-email">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="login_password">Password</label>
+                                <input type="password" class="form-control" id="login_password" name="login_password" autocomplete="off">
+                                <span class="validation-login-password">
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="register-form-direction">
+                                <div class="register-form-link">No account? <a id="dialog-register" href="javascript:void(0)" data-toggle="modal" data-target="#registerFormModal">Register</a></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="forgot-password d-flex align-items-center justify-content-between">
+                                <a  id="dialog-forgot" href="javascript:void(0)" data-toggle="modal" data-target="#forgotFormModal">Forgot password?</a>
+                                <input type="submit" name="login" class="login red-btn" id="login-btn" value="Log in">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row signin-custom-text justify-content-center">
+                        <span>or sign in with</span>
+                    </div>
+                    <div class="signin-with-social-account row">
+                        <div class="col-sm-6">
+                            <a href="https://accounts.Facebook.com/" class="facebook-account blue-btn">Facebook</a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a href="https://accounts.google.com/signin" class="google-account orange-btn">Google</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
+ <!-- forgot-password model -->
+<div class="modal fade" id="forgotFormModal" tabindex="-1" role="dialog" aria-labelledby="loginFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content pt-sm-4 pb-sm-4 border-0">
+            <div class="modal-header justify-content-center position-relative">
+                <h5 class="modal-title" id="loginFormModalLabel">Forgot Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="faq-inner forgot-inner">                  
+                   <form class="forgot-form" id="forgot-form">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <div class="form-group">                                          
+                                <input type="text" class="form-control" id="forgot_email" placeholder="Enter your e-mail" autocomplete="off" name='forgot_email'>
+                                <span class="validation-forgot-email">
+                                </span>
+                            </div>
+                        </div>
+                    </div>                               
+                    <div class="row">                                   
+                        <div class="col-sm-6 forgot-btn">
+                            <input type="submit" name="submit" class="register red-btn" id="pass-submit-btn" value="Send Mail">
+                        </div>
+                    </div>                            
+                   
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a href="#" id="scroll" class="scroll" style="display: none;"><span></span></a>
+<div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;z-index: 9999;"><img src='<?php echo base_url()."assets/images/loader.gif"; ?>' width="100" height="100" />
+
+<script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
 <script src="<?php echo base_url().'web-assets/js/custom/register.js'; ?>"></script>
+<script src="<?php echo base_url().'web-assets/js/custom/login.js'; ?>"></script>
+<script src="<?php echo base_url().'web-assets/js/custom/forgot_password.js'; ?>"></script>
 <script type="text/javascript">
     $(document).ready(function () {
 

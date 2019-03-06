@@ -37,6 +37,25 @@
                 required: true,
                 equalTo: "#register_password"
             },
+            register_number:{
+                required: true,
+                digits: false,
+                greaterThanZero:false,
+                minlength: 12,
+                maxlength: 12,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            register_dob:{
+                required: true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            register_gender:{
+                required: true
+            },
             acceptTerms:{
                 required: true
             }
@@ -61,67 +80,106 @@
                 required: "The confirm password field is required.",
                 equalTo: "Please enter the same password as above."
             },
+            register_number: {
+                required: "The contact number field is required.",
+                digits: "Enter only numeric value",
+                greaterThanZero: "The contact number field is invalid.",
+                minlength: "At least 10 digit required",
+                maxlength: "Maximum 10 digit allowed"
+            },
+            register_dob: {
+                required: "The date of birth field is required."
+            },
+            register_gender: {
+                required: "The gender field is required."
+            },
             acceptTerms:{
                 required: "The accept terms field is required."
             }
         },
         submitHandler: function(form) {
-           if(validate_email()){
-           		console.log("form Submit");
-                //form.submit();
-            }else{
-            	console.log("no email availability");
-            	//$(".validation-availibality").append('<label class="validation-error-label" style="">The restaurant availability time field is invalid.</label>');
-            
-            }
+        	var result = register();
+        	console.log(result);
         }
     });
 
     $.validator.addMethod("emailValidation", function (value, element) {
+    	$(".validation-email").html('');
         return this.optional(element) || /^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(value);
     });
     $.validator.addMethod("alpha", function(value, element) {
         return this.optional(element) || value == value.match(/^[a-zA-Z][\sa-zA-Z]*/);
     });
-    $.validator.addMethod("is_available", function (value, element) {
-        var email = value;
-        var check_email_url = 'email-check-availability';
-        var return_val = true;
-        $.ajax({
-            url: check_email_url,
-            type: "POST",
-            data:{email:email},
-            success: function (returnData) {
-            	console.log(returnData);
-            	return_val = false;
-            }
-        });
-        return return_val;
+    $.validator.addMethod("greaterThanZero", function(value, element) {
+    	$(".validation-number").html('');
+        return this.optional(element) || value > 0;
     });
 
-function validate_email() {
-     	var email =$('#register_email').val();
-     	var check_email_url = 'email-check-availability';
-     	var return_val = false;
-     	$.ajax({
-            url: check_email_url,
+function register() {
+	
+	$("#wait").css("display", "block");
+	//$("#register-btn").attr("disabled", true);
+
+	var register_customer_url = 'register-customer';
+
+	var name =$('#register_username').val();
+	var email =$('#register_email').val();
+	var password =$('#register_password').val();
+	var mobile_number =$('#register_number').val();
+	var dob =$('#register_dob').val();
+	var gender =$('#register_gender').val();
+
+	$.ajax({
+            url: register_customer_url,
             type: "POST",
-            data:{email:email},
+            data:{
+            	name:name,
+            	email:email,
+            	password:password,
+            	mobile_number:mobile_number,
+            	dob:dob,
+            	gender:gender
+            },
             success: function (returnData) {
-            	console.log(returnData);
+            	//returnData = $.parseJSON(returnData);
+            	$("#wait").css("display", "none");
             	if(returnData == '1'){
-            		return_val = true;
+            		console.log('email exists');
+            		$(".validation-email").append('<label id="register_email-error" class="validation-error-label" for="register_email">This e-mail is already in use.</label>');
+            	}else if(returnData == '2'){
+            		console.log('mobile exists');
+            		$(".validation-number").append('<label id="register_number-error" class="validation-error-label" for="register_email">This mobile number is already in use.</label>');
+            	}else if(returnData == '3'){
+            		console.log('email template not found');
+            	}else if(returnData == '4'){
+            		console.log('error into sending mail');
             	}else{
-            		return_val = false;
+            		console.log(returnData);
+            		$('#registerFormModal').modal('toggle');
+            		swal(
+                        'Account Created Successfully!',
+                        'Account activation mail is sent on your email address.',
+                        'success'
+                    )
+                    $('#register-form')[0].reset();
+                    return true;
             	}
+            	
             }
         });
 
-     	return return_val;
-     }
+	return false;
 
-$( document ).ready(function() {
-     console.log("register");
-     
-});
+}
 
+ $( document ).ready(function(){
+ 	$("#register_number").inputmask("999 999 9999",{"placeholder": ""});
+
+ 	$('.datepicker-autoclose').datepicker({
+            format: 'dd-mm-yyyy',
+            endDate: '0',
+            autoclose: true,
+            todayHighlight: false,
+            orientation: "top auto"
+        });
+ });

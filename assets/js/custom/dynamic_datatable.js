@@ -1,7 +1,7 @@
 var protocol = window.location.protocol;
 var host = window.location.host;
-var base_url = protocol+'//'+host+'/click_lunch/';
-//var base_url = protocol+'//'+host+'/';
+//var base_url = protocol+'//'+host+'/click_lunch/';
+var base_url = protocol+'//'+host+'/';
 
 if(!promocode_id){
     var promocode_id = '';

@@ -69,14 +69,17 @@ class Customer_api extends REST_Controller {
         if(empty($errorPost)){
 
             $this->db->select('*');
-            $this->db->where("email",$_POST['email']);
+            $this->db->group_start();
+                $this->db->where("email",$_POST['email']);
+                $this->db->or_where("mobile_number",$_POST['mobile_number']);
+            $this->db->group_end();
             $this->db->where("deleted_at",NULL);
             $this->db->from("customer");
             $sql_query = $this->db->get();
             if ($sql_query->num_rows() > 0){
 
                 $response['status'] = false;
-                $response['message'] = 'Email id is already in use';
+                $response['message'] = 'Your account is already exists. Please login instead register.';
 
             }else{
 
@@ -2691,33 +2694,39 @@ class Customer_api extends REST_Controller {
                 $product_diff_data = array_diff($original_data,$product_data);
             }
 
-            $varients_array = array_column($prices['varients'], 'id');
+            $varients_diff_data = array();
+            if(isset($prices['varients']) && is_array($prices['varients']) && !empty($prices['varients'])){
 
-            $varients_data_array = array();
-            $this->db->select('id,price'); 
-            $this->db->where_in('id',$varients_array); 
-            $this->db->from('variant_items'); 
-            $sql_query = $this->db->get();
-            if ($sql_query->num_rows() > 0){
-                $varients_data_array = $sql_query->result_array();
+                $varients_array = array_column($prices['varients'], 'id');
 
-                $varient_data = array();
-                foreach ($prices['varients'] as $key => $value) {
-                    $varient_data[$value['id']] = number_format((float)$value['price'], 2, '.', ''); 
+                $varients_data_array = array();
+                $this->db->select('id,price'); 
+                $this->db->where_in('id',$varients_array); 
+                $this->db->from('variant_items'); 
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $varients_data_array = $sql_query->result_array();
+
+                    $varient_data = array();
+                    foreach ($prices['varients'] as $key => $value) {
+                        $varient_data[$value['id']] = number_format((float)$value['price'], 2, '.', ''); 
+                    }
+                    $varient_original_data = array();
+                    foreach ($varients_data_array as $key => $value) {
+                        $varient_original_data[$value['id']] = number_format((float)$value['price'], 2, '.', ''); 
+                    }
+                    $varients_diff_data = array_diff($varient_original_data,$varient_data);
                 }
-                $varient_original_data = array();
-                foreach ($varients_data_array as $key => $value) {
-                    $varient_original_data[$value['id']] = number_format((float)$value['price'], 2, '.', ''); 
-                }
-                $varients_diff_data = array_diff($varient_original_data,$varient_data);
+
             }
+            
 
             if(empty($product_diff_data) && empty($varients_diff_data)){
                 $response['status'] = true;
             }else{
                 $response['status'] = false;
             }
-
+            
             $response['product_original_data'] = $product_diff_data;
             $response['varients_original_data'] = $varients_diff_data;
         }else{

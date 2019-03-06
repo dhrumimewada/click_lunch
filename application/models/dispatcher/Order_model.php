@@ -150,16 +150,43 @@ class Order_model extends CI_Model {
 		        $table = 'delivery_boy';
 		        $data = get_data_by_filter($table,$select, $where);
 
-		        $device_token = $data[0]['device_token'];
-		        $push_title = 'New request of delivery';
-		        $push_data_msg = 'Hey '.$data[0]['username'].'!';
-		        $push_data_msg .= 'You got new order delivery request.';
-		        $push_data = array('order_id' => $_POST['order_id'], 'message' => $push_data_msg);
-		        $push_type = 'request';
+		        $sql_select = array(
+								't2.shop_name',
+								't2.profile_picture as shop_picture',
+								't2.address as shop_address',
+								'CONCAT_WS(", ", t3.house_no, t3.street, t3.city, t3.zipcode) AS delivery_address'
+					);
 
-				$result = send_push('Android',$device_token, $push_title, $push_data, $push_type);
-				print_r($result);
-				$return = TRUE;
+
+				$this->db->select($sql_select);
+				$this->db->from('orders t1');
+				$this->db->join('shop t2', 't1.shop_id = t2.id','left');
+				$this->db->join('delivery_address t3', 't1.delivery_address_id = t3.id','left');
+				$this->db->where("t1.id", $_POST['order_id']);
+				$sql_query = $this->db->get();
+				if ($sql_query->num_rows() > 0){
+					$order_data = (array)$sql_query->row();
+
+					$device_token = $data[0]['device_token'];
+			        $push_title = 'New request of delivery';
+			        $push_data_msg = 'Hey '.$data[0]['username'].'!';
+			        $push_data_msg .= 'You got new order delivery request.';
+			        $push_data = array(
+				        	'order_id' => $_POST['order_id'],
+				        	'message' => $push_data_msg,
+				        	'shop_name' => $order_data['shop_name'],
+				        	'shop_address' => $order_data['shop_address'],
+				        	'shop_picture' => $order_data['shop_picture'],
+				        	'delivery_address' => $order_data['delivery_address']
+				        );
+			        $push_type = 'request';
+
+					$result = send_push('Android',$device_token, $push_title, $push_data, $push_type);
+					$return = TRUE;
+
+				}else{
+					$return = FALSE;
+				}
 			}
 		}
 		return $return;

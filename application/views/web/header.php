@@ -17,6 +17,11 @@
     <link href="<?php echo base_url() . 'assets/css/icons.css'; ?>" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="<?php echo base_url() . 'plugins/sweet-alert2/sweetalert2.min.css'; ?>" type="text/css">
+    <!-- Select 2 dropdown CSS -->
+    <link href="<?php echo base_url() . 'plugins/select2/css/select2.min.css'; ?>" rel="stylesheet" type="text/css" />
+
+    <!-- autoclose date picker -->
+    <link href="<?php echo base_url() . 'plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css'; ?>" rel="stylesheet">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -34,12 +39,17 @@
     <script type="text/javascript" src="<?php echo $assets; ?>js/custom.js"></script>
 
     <script src="<?php echo $assets; ?>js/timepicki.js"></script>
-    <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
-    <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>css/timepicki.css">
     <script type="text/javascript" src="<?php echo $assets; ?>js/bootstrap-datetimepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>css/datepicker.min.css">
 
     <!-- Sweet-Alert  -->
     <script src="<?php echo base_url() . 'plugins/sweet-alert2/sweetalert2.min.js'; ?>"></script>
+    <!-- Select 2 dropdown -->
+    <script src="<?php echo base_url() . 'plugins/select2/js/select2.min.js'; ?>"></script>
+
+
+    <!-- Auto Close datepicker -->
+    <script src="<?php echo base_url() . 'plugins/bootstrap-datepicker/js/bootstrap-datepicker.js'; ?>"></script>
+    
 </head>

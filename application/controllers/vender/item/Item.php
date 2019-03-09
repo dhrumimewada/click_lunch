@@ -59,6 +59,31 @@ class Item extends CI_Controller {
 		}
 	}
 
+	public function recommended_item(){
+		$id = $_POST['id'];
+		$status = $_POST['status'];
+		if (isset($id) && !is_null($id) && !empty($id)) {
+
+			if($status == 1){
+				$where = array('recommended' => 1, 'deleted_at' => NULL);
+	            $select = array('id');
+	            $table = 'item';
+	            $recommended_items = get_data_by_filter($table,$select, $where);
+	            if(count($recommended_items) >= 3){
+	            	echo json_encode(array("is_success" => false));
+					return TRUE;
+	            }
+			}
+			$user_data = array('recommended' => $status );
+			$this->db->where('id', $id);
+			$this->db->update('item', $user_data);
+			echo json_encode(array("is_success" => true));
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+
 	public function post($type = NULL){
 
 		$this->auth->clear_messages();

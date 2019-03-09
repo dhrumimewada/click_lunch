@@ -232,40 +232,40 @@ if(isset($banner_list) && !empty($banner_list)){
             ?>
             <div class="col-lg-3 px-2">
                 <div class="card">
-                    <div class="restaurant-img position-relative">
-                        <img class="card-img-top" src="<?php echo $photo_url; ?>" alt="Card image cap">
-                        <div class="rating txt1">Ratings</div>
-                        <div class="rating txt2 txt-red">4.2</div>
-                    </div>
-                    <div class="card-body restaurant-body">
-                        <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>">
-                            <div class="card-title txt-red font-md text-center cut-text">
-                                <?php echo stripcslashes($value['shop_name']); ?>
-                            </div>
-                            <b>
-                                <div class="d-inline-block txt-black font-small">Delivery <?php echo $value['delivery_time']; ?></div>
-                                <div class="d-inline-block txt-black float-right font-small">Order by <?php echo $value['order_by_time']; ?></div>
-                            </b>
-                            <?php
-                            if(isset($value['cuisine']) && $value['cuisine'] != ''){
-                            ?>
-                            <div class="position-relative txt-black font-14 pl-4 cusion cut-text">
-                                <?php echo $value['cuisine']; ?>
-                            </div>
-                            <?php
-                            }
-                            ?>
-                            <div class="card-text txt-black font-11">11:00am to 15:00pm / 18:30am to 22:30am</div>
-                            <div class="text-right txt-black mt-1"><b>0.71mi</b></div>
-                        </a>
-                    </div>
-                     <div class="restaurant-hover">
-                        <div class="restaurant-hover-list">
-                             <div class="restaurant-hover-img">
-                                <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>"><img src="<?php echo $assets; ?>images/zoom-in-out.png"></a>
+                    <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>">
+                        <div class="restaurant-img position-relative">
+                            <img class="card-img-top" src="<?php echo $photo_url; ?>" alt="Card image cap">
+                            <div class="rating txt1">Ratings</div>
+                            <div class="rating txt2 txt-red">4.2</div>
+                        </div>
+                        <div class="card-body restaurant-body">
+                                <div class="card-title txt-red font-md text-center cut-text">
+                                    <?php echo stripcslashes($value['shop_name']); ?>
+                                </div>
+                                <b>
+                                    <div class="d-inline-block txt-black font-small">Delivery <?php echo $value['delivery_time']; ?></div>
+                                    <div class="d-inline-block txt-black float-right font-small">Order by <?php echo $value['order_by_time']; ?></div>
+                                </b>
+                                <?php
+                                if(isset($value['cuisine']) && $value['cuisine'] != ''){
+                                ?>
+                                <div class="position-relative txt-black font-14 pl-4 cusion cut-text">
+                                    <?php echo $value['cuisine']; ?>
+                                </div>
+                                <?php
+                                }
+                                ?>
+                                <div class="card-text txt-black font-11">11:00am to 15:00pm / 18:30am to 22:30am</div>
+                                <div class="text-right txt-black mt-1"><b>0.71mi</b></div>
+                        </div>
+                        <div class="restaurant-hover">
+                            <div class="restaurant-hover-list">
+                                 <div class="restaurant-hover-img">
+                                    <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>"><img src="<?php echo $assets; ?>images/zoom-in-out.png"></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
 

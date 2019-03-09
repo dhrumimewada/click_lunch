@@ -77,13 +77,14 @@
                     }else{
                         console.log(returnData);
                         console.log('else');
-                        $('#loginFormModal').modal('toggle');
-                        swal(
-                            'Logged in!',
-                            'You are successfully logged in into clicklunch',
-                            'success'
-                        )
-                        $('#login-form')[0].reset();
+                        //$('#loginFormModal').modal('toggle');
+                        // swal(
+                        //     'Logged in!',
+                        //     'You are successfully logged in into clicklunch',
+                        //     'success'
+                        // )
+                        //$('#login-form')[0].reset();
+                        location.reload(); 
                         return true;
                     }
                     

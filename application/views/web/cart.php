@@ -2,6 +2,11 @@
 $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
 $assets = $this->config->item('website_assest');
 $d_none = 'd-none';
+$add_address_link = base_url()."customer-add-address";
+
+if(isset($_SESSION['shop_short_name']) && $_SESSION['shop_short_name'] != ''){
+	$url = base_url().'restaurant/'.$_SESSION['shop_short_name'];
+}
 ?>
 <!-- model -->
 <div class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="customize-item-modal">
@@ -29,7 +34,7 @@ $d_none = 'd-none';
 		        <!-- Modal footer -->
 		        <div class="modal-footer">
 		          <button type="button" class="btn btn-danger w-100" id="form-varient-btn">
-		          	<span class="float-left">Total $<span class="total-item-price">100.00</span></span>
+		          	<span class="float-left">&#36;<span class="total-item-price">100.00</span></span>
 		          	<span class="float-right">UPDATE ITEM</span>
 		          
 		      	</button>
@@ -40,9 +45,49 @@ $d_none = 'd-none';
     </div><!-- /.modal-dialog -->
 </div>
 <!-- model end -->
+
+
+<!-- model -->
+<div class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="customize-recommendation-item-modal">
+    <div class="modal-dialog modal-dialog-centered my-modal">
+        <div class="modal-content">
+
+        	<form method="post" accept-charset="utf-8" id="form-recommendation-varient">
+	            
+		        <div class="modal-header">
+		          <h4 class="modal-title">Modal Heading</h4>
+		          <i class="mdi mdi-close mdi-24px close" data-dismiss="modal"></i>
+		        </div>
+		        
+		        
+		        <div class="varient-headings text-center pt-2 pr-1 pl-1">
+		        	
+		    	</div>
+		    	<div class="mt-1 p-2 text-center bg-danger text-white position-absolute w-100 error-item" style="z-index: 1;">
+		    		You must select at least 1 Upgrade
+		    	</div>
+		        <div class="modal-body table-responsive">
+		        	
+		        </div>
+		        
+		        
+		        <div class="modal-footer">
+		          <button type="button" class="btn btn-danger w-100" id="form-recommendation-varient-btn" data-itemid=''>
+		          	<span class="float-left">&#36;<span class="total-item-price">100.00</span></span>
+		          	<span class="float-right">UPDATE ITEM</span>
+		      	</button>
+		        </div>
+
+	        </form>
+        </div>
+    </div>
+</div>
+
+
 <div id="content">
 	<div class="checkout-wrapper grey-bg">
 		<div class="container">
+			<?php echo get_msg(); ?>
 			<div class="checkout-block white-bg">
 				<form >
 				<div class="product-list table-responsive">
@@ -76,9 +121,9 @@ $d_none = 'd-none';
 									<div class="product-name">
 										<span><?php echo $value['name']; ?></span>
 										<?php 
-										$product_price_with_varient = $value['item_price'];
-										if($value['varient_price'] != ''){
-											$product_price_with_varient = "&#36; ".$value['varient_price'] ." + &#36;". $value['item_price'];
+										$product_price_with_varient = '&#36;'.$value['item_price'];
+										if($value['varient_price'] != '' && $value['varient_price'] > 0){
+											$product_price_with_varient = "&#36;".$value['item_price'] ." + &#36;". $value['varient_price'];
 										} 
 										?>
 										<span class="light-gray-txt"><?php echo $product_price_with_varient; ?></span>
@@ -140,55 +185,59 @@ $d_none = 'd-none';
 						</tbody>
 					</table>
 				</div>
+
+				<?php
+				if(isset($additional_recommendation) && is_array($additional_recommendation) && !empty($additional_recommendation)){
+				?>
 				<div class="additional-recommendation-wrapper text-center">
 					<h3 class="text-with-border-right">Additional Recommendation</h3>
 					<div class="additional-recommendation-list text-left">
 						<div class="row m-0">
+							<?php
+							foreach ($additional_recommendation as $key => $value) {
+								$prof_url = base_url() . 'assets/images/default/cuisine.jpg';
+								if (isset($value['item_picture']) && ($value['item_picture'] != '')){
+									if (file_exists($this->config->item("item_photo_path") . '/'.$value['item_picture'])){
+										$prof_url = base_url() . $this->config->item("item_photo_path") . '/'.$value['item_picture'];
+									}
+									
+								}
+
+							?>
 							<div class="col-md-4">
 								<div class="additional-recommendation">
-									<div class="additional-rec-image"><img src="<?php echo $assets; ?>images/dishwide1.png" width="343" height="136" /></div>
+									<div class="additional-rec-image"><img src="<?php echo $prof_url; ?>" width="343" height="136" /></div>
 									<div class="additional-rec-detail">
-										<div class="rec-product-name">Home Fries</div>
+										<div class="rec-product-name"><?php echo $value['name']; ?></div>
 										<div class="rec-product-desc d-flex justify-content-between">
-											<div class="rec-product-price">$ 50.00</div>
-											<div class="rec-product-quantity"><input type="number" value="1" min="1" max="99" step="1"/></div>
+											<?php
+											if($value['offer_price'] == ''){
+												$price_string = '&#36; '.$value['price'];
+											}else{
+												$price_string = '<strike class="text-muted">&#36;'.$value['price'].'</strike> &#36;'.$value['offer_price'];
+											}
+											?>
+											<div class="rec-product-price"><?php echo $price_string; ?></div>
+											<span class='btn btn-danger recommendation-add' id="<?php echo $value['id']; ?>">Add</span>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col-md-4">
-								<div class="additional-recommendation">
-									<div class="additional-rec-image"><img src="<?php echo $assets; ?>images/dishwide2.png" width="343" height="136" /></div>
-									<div class="additional-rec-detail">
-										<div class="rec-product-name">Mashed Potato</div>
-										<div class="rec-product-desc d-flex justify-content-between">
-											<div class="rec-product-price">$ 50.00</div>
-											<div class="rec-product-quantity"><input type="number" value="1" min="1" max="99" step="1"/></div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="additional-recommendation">
-									<div class="additional-rec-image"><img src="<?php echo $assets; ?>images/dishwide1.png" width="343" height="136" /></div>
-									<div class="additional-rec-detail">
-										<div class="rec-product-name">Home Fries</div>
-										<div class="rec-product-desc d-flex justify-content-between">
-											<div class="rec-product-price">$ 50.00</div>
-											<div class="rec-product-quantity"><input type="number" value="1" min="1" max="99" step="1"/></div>
-										</div>
-									</div>
-								</div>
-							</div>
+							<?php
+							}
+							?>
 						</div>
 					</div>
 				</div>
+				<?php
+				}
+				?>
 				<div class="select-delivery-address-wrapper text-center">
 					<h3 class="text-with-border-right">Select Delivery Address</h3>
 					<div class="select-delivery-address-block text-left">
 						<div class="row m-0">
 							<div class="col-md-4">
-								<span data-toggle="modal" data-target="#addNewAddressModal" class="delivery-address text-center d-flex justify-content-center align-items-center">
+								<span class="delivery-address add-delivery-address text-center d-flex justify-content-center align-items-center pointer">
 									<div class="new-address">
 										<img src="<?php echo $assets; ?>images/add.png" class="d-block mx-auto mb-1" />
 										<span>Add New Address</span>
@@ -196,24 +245,36 @@ $d_none = 'd-none';
 								</span>
 							</div>
 							<div class="col-md-4">
-								<a href="<?php echo BASE_URL(); ?>web/home/delivery_address" class="delivery-address text-center d-flex justify-content-center align-items-center">
+								<span class="delivery-address choose-address text-center d-flex justify-content-center align-items-center pointer">
 									<span>Choose from one of<br> existing delivery location</span>
-								</a>
+								</span>
 							</div>
+							<?php
+							if(isset($default_address) && is_array($default_address) && !empty($default_address)){
+								$this->session->set_userdata('delivery_address_id', encrypt($default_address['id']));
+							?>
 							<div class="col-md-4">
-								<div class="delivery-address d-flex align-items-center">
+								<div class="delivery-address d-flex align-items-center choose-address">
 									<div class="form-check">
 										<input class="form-check-input" type="radio" name="address" id="deliveryAddressRadio" value="address1" checked>
-										<label class="form-check-label" for="deliveryAddressRadio">29 Stonybrook Lane<br> Sulphur, LA 70663</label>
+										<label class="form-check-label" for="deliveryAddressRadio">
+											<?php 
+											echo $default_address['house_no'].', '.$default_address['street'].', <br>'.$default_address['city'].', '.$default_address['zipcode'];
+											?>
+										</label>
 									</div>
 								</div>
 							</div>
+							<?php
+							}
+							?>
+							
 						</div>
 					</div>
 				</div>
 				<div class="form-actions d-flex justify-content-between">
-					<input type="button" name="continue-shopping" class="white-btn continue-shopping-btn" id="continue-shopping-btn" value="Continue Shopping" onclick="">
-					<input type="button" name="checkout" class="small-red-btn checkout-btn" id="checkout-btn" value="Checkout" onclick="">
+					<a href="<?php echo $url; ?>" name="continue-shopping" class="white-btn continue-shopping-btn pointer" id="continue-shopping-btn">Continue Shopping</a>
+					<input type="button" name="checkout" class="small-red-btn checkout-btn pointer" id="checkout-btn" value="Checkout">
 				</div>
 			</div>
 			</form>
@@ -224,58 +285,67 @@ $d_none = 'd-none';
 <!-- Add New Address Modal -->
 <div class="modal fade modal-with-logo" id="addNewAddressModal" tabindex="-1" role="dialog" aria-labelledby="addNewAddressModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content pt-4 pb-4">
+		<div class="modal-content">
 			<div class="modal-header justify-content-center position-relative">
 				<img src="<?php echo $assets; ?>images/click-lunch-logo-white.png" width="130" />
 			</div>
 			<div class="modal-body">
-				<form class="add-new-address-block" id="addNewAddress">
+				<form class="add-new-address-block" id="addNewAddress" method="post" action="<?php echo $add_address_link; ?>">
 					<div class="row white-bg modalform">
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="text" class="form-control" id="housernum" placeholder="House/Office Number">
+								<input type="text" class="form-control" id="housernum" placeholder="House/Office Number" name="housernum" autocomplete="off">
 							</div>
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="email" class="form-control" id="street" placeholder="Street/Locality">
+								<input type="text" class="form-control" id="street" placeholder="Street/Locality" name="street" autocomplete="off">
 							</div>
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="text" class="form-control" id="city" placeholder="City">
+								<input type="text" class="form-control" id="city" placeholder="City" name="city" autocomplete="off">
 							</div>
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="text" class="form-control" id="zipcode" placeholder="Zip Code">
+								<input type="text" class="form-control" id="zipcode" placeholder="ZipCode Ex: 10001" name="zipcode" autocomplete="off">
 							</div>
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="text" class="form-control" id="deliveryInstruction" placeholder="Any delivery instructions">
+								<input type="text" class="form-control" id="delivery_instruction" placeholder="Any delivery instructions" name="delivery_instruction" autocomplete="off">
 							</div>
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<input type="text" class="form-control" id="nickname" placeholder="Nickname">
+								<input type="text" class="form-control" id="nickname" placeholder="Nickname" name="nickname" autocomplete="off">
 							</div>
 						</div>
 						<div class="col-md-12">
 							<label>Address Type</label>
 							<div class="row m-0 d-flex">
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="addresstype" id="addressType1" value="office" checked>
-									<label class="form-check-label" for="addressType1">Office</label>
+								<?php
+								if(isset($address_type) && is_array($address_type) && !empty($address_type)){
+									foreach ($address_type as $key => $value) {
+									$checked = ($key == 1)?'checked':'';
+								?>
+									<div class="form-check mb-1">
+										<input class="form-check-input" type="radio" name="addresstype" id="<?php echo $key; ?>" value="<?php echo $key; ?>" <?php echo $checked; ?> >
+										<label class="form-check-label" for="<?php echo $key; ?>"><?php echo ucwords($value); ?></label>
+									</div>
+								<?php	
+									}
+								?>
+								<?php	
+								}else{
+								?>
+								<div class="form-check mb-1">
+									<label>Address Type not found</label>
 								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="addresstype" id="addressType2" value="home">
-									<label class="form-check-label" for="addressType2">Home</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="addresstype" id="addressType3" value="other">
-									<label class="form-check-label" for="addressType3">Other</label>
-								</div>
+								<?php
+								}
+								?>
 							</div>
 						</div>
 					</div>
@@ -290,12 +360,27 @@ $d_none = 'd-none';
 		</div>
 	</div>
 </div>
-
+<script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
 <script type="text/javascript">
 	$("input[type='number']").inputSpinner();
 	var delete_url = "<?php echo base_url().'cart-item-delete'; ?>";
 	var customize_url = "<?php echo base_url().'get-cart-item-data'; ?>";
 	var customize_cart_item_url = "<?php echo base_url().'update-cart-item-data'; ?>";
 	var update_quantity_url = "<?php echo base_url().'update-quantity'; ?>";
+
+	var logged_in = "<?php echo $this->auth->is_logged_in() ?>";
+	var is_customer = "<?php echo $this->auth->is_customer(); ?>";
+	var choose_address = "<?php echo base_url().'choose-address'; ?>";
+
+	var defualt_delivery_address_id = "<?php echo $_SESSION['delivery_address_id']; ?>";
+	var cart_contents_data = '<?php echo (empty($this->cart->contents()))?'':'1'; ?>';
+
+	var customize_recommendation_url = "<?php echo base_url().'get-recommendation-item-data'; ?>";
+	var add_recommended_item_cart_url = "<?php echo base_url().'add-recommended-item-cart'; ?>";
+
+	var add_direct_to_cart_url = "<?php echo base_url().'add-direct-recommended-item-cart'; ?>";
+
+	console.log(defualt_delivery_address_id);
+	console.log(cart_contents_data);
 </script>
 <script src="<?php echo $assets.'/js/custom/cart.js'; ?>"></script>

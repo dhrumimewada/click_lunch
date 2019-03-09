@@ -30,6 +30,7 @@ $edit_link = base_url().'item-update';
                                 <th>Type</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
+                                <th class='text-center'>Recommended</th>
                                 <th class='text-center'>Status</th>
                                 <th>Created Date</th>
                                 <th class='text-center'>Action</th>
@@ -58,6 +59,16 @@ $edit_link = base_url().'item-update';
                                     
                                     
                                     echo "<td>" . $value["quantity"] . "</td>";
+
+                                    if($value["recommended"] == 1){
+                                        $btn_name = 'ON';
+                                        $btn_class = 'btn-success';
+                                    }else{
+                                        $btn_name = 'OFF';
+                                        $btn_class = 'btn-deactive';
+                                    }
+                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light recommended_item' status-id='" . $value["recommended"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
+
                                     
                                     if($value["is_active"] == 1){
                                         $btn_name = 'Active';
@@ -93,13 +104,14 @@ $edit_link = base_url().'item-update';
 <script type="text/javascript">
     var item_list = $('.item_list').DataTable({
             keys: true,
-            "order": [[6, "desc"]],
+            "order": [[7, "desc"]],
             'iDisplayLength': 10,
-            columnDefs: [{orderable: false, targets: [7]},{visible: false,targets: [6]}],
+            columnDefs: [{orderable: false, targets: [8]},{visible: false,targets: [7]}],
     });
 
     var delete_url = "<?php echo base_url().'item-delete'; ?>";
     var status_url = "<?php echo base_url().'item-status'; ?>";
+    var recommended_url = "<?php echo base_url().'item-recommended'; ?>";
 
     $(document).ready(function () {
 
@@ -131,7 +143,7 @@ $edit_link = base_url().'item-update';
                             {
                                 swal(
                                     'Deleted!',
-                                    'Item has been deleted.',
+                                    'Product has been deleted.',
                                     'success'
                                 )
                                 remove_row($this);
@@ -192,12 +204,82 @@ $edit_link = base_url().'item-update';
                             {
                                 swal(
                                     change_status_to1,
-                                    'Item has been '+change_status_to1,
+                                    'Product has been '+change_status_to1,
                                     'success'
                                 )
                                 $this.replaceWith("<button type='button' class='btn "+btn_cls_replace+ " waves-effect waves-light btn-sm deactive_item' status-id='" +status+ "' title='"+btn_name_replace+"' data-popup='tooltip'>" +btn_name_replace+ "</button>");
                                 
                             } 
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log('error');
+                        },
+                        complete: function () {
+                            $(this).removeAttr("disabled");
+                            $(this).blur();
+                        }
+                    });    
+                })
+            }    
+        });
+
+        $(document).on('click',".recommended_item", function() {
+
+            $this = $(this);
+            var data_id = get_dataid($this);
+
+            if($this.attr("status-id") == '1'){
+                var change_status_to = 'remove from recommended';
+                var change_status_to1 = 'Recommended removed!';
+                var btn_name_replace = 'OFF';
+                var btn_cls_replace = 'btn-deactive';
+                var status = '0';
+            }else{
+                var change_status_to = 'add to recommended';
+                var change_status_to1 = 'recommended!';
+                var btn_name_replace = 'ON';
+                var btn_cls_replace = 'btn-success';
+                var status = '1';
+            }
+
+            if (data_id !== null && data_id.length > 0){
+
+                swal({
+                    title: 'Are you sure you want to '+change_status_to+'?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonClass: 'btn btn-success',
+                    cancelButtonClass: 'btn btn-deactive m-l-10',
+                    confirmButtonText: 'Yes'
+                }).then(
+                    function () {
+
+                    $.ajax({
+                        url: recommended_url,
+                        type: "POST",
+                        data:{
+                            id:data_id,
+                            status:status
+                            },
+                        success: function (returnData) {
+                            returnData = $.parseJSON(returnData);
+                            
+                            if (typeof returnData != "undefined"){
+                                if(returnData.is_success == true){
+                                    swal(
+                                        change_status_to1,
+                                        'Product has been '+change_status_to1,
+                                        'success'
+                                    )
+                                    $this.replaceWith("<button type='button' class='btn "+btn_cls_replace+ " waves-effect waves-light btn-sm recommended_item' status-id='" +status+ "' title='"+btn_name_replace+"' data-popup='tooltip'>" +btn_name_replace+ "</button>");
+                                }else{
+                                    swal(
+                                        'Could not recommended!',
+                                        'You can max choose up to 3',
+                                        'warning'
+                                    )
+                                }
+                            }
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                             console.log('error');

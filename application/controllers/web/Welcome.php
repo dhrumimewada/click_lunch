@@ -10,6 +10,13 @@ class Welcome extends CI_Controller {
 		$this->load->library('parser');
 	}
 
+
+	public function check(){
+		echo "<pre>";
+		print_r($_SESSION);
+		exit;
+	}
+
 	public function index(){
 		$banner_list = $this->banner_model->get_banner();
 		$output_data["banner_list"] = $banner_list;
@@ -85,13 +92,26 @@ class Welcome extends CI_Controller {
 		$this->load->view('web/template',$output_data);
 	}
 
+	public function logout(){
+		if($this->auth->logout()){
+			redirect(base_url() . "welcome");
+		}
+	}
+
 	public function isexists($str) {
 		$this->db->select('email');
 		$this->db->where('email', $str);
 		$this->db->where('deleted_at', NULL);
 		$this->db->from('shop');
 		$sql_query = $this->db->get();
-		if ($sql_query->num_rows() > 0) {
+
+		$this->db->select('email');
+		$this->db->where('email', $str);
+		$this->db->where('deleted_at', NULL);
+		$this->db->from('shop_request');
+		$sql_query2 = $this->db->get();
+
+		if ($sql_query->num_rows() > 0 || $sql_query2->num_rows() > 0) {
 			$this->form_validation->set_message('isexists', "The restaurant email is already in use.");
 			return FALSE;
 		} else {
@@ -244,13 +264,32 @@ class Welcome extends CI_Controller {
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
 			$customer = $sql_query->row();
-			if (password_verify($_POST['password'],$customer->password)){
-				echo 'set session';
-
+			if($this->auth->login($_POST['email'], $_POST['password'], 'customer')){
+				echo 'login success';
 			}else{
 				$error = '2';
-				// echo $customer->password;
-				// echo '   '.$_POST['password'];
+			}
+		}else{
+			$error = '1';
+		}
+		echo $error;
+		return TRUE;
+	}
+
+	public function forgot_password_customer(){
+		$error = '0';
+		$this->db->select('id');
+		$this->db->where('email', $_POST['email']);
+		$this->db->where("password !=",'');
+		$this->db->where('status', 1);
+		$this->db->where('deleted_at', NULL);
+		$this->db->from('customer');
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			if($this->auth->password_recovery($_POST['email'],'customer')){
+				echo "Recovery MAil Sent";
+			}else{
+				$error = '2';
 			}
 		}else{
 			$error = '1';

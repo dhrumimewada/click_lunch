@@ -77,7 +77,7 @@ $(document).on('click','#form-varient-btn',function(){
 
     var error = false;
     var error_group_name = ''
-    $.each(total_groups, function (key, val){
+    $.each(total_required_groups, function (key, val){
         if($("input[name='group["+val+"][]']:checked").length == 0){
             error = true;
             error_group_name = $("input[name='group["+val+"][]']").attr("data-groupname");
@@ -107,6 +107,8 @@ $(document).on('click','#form-varient-btn',function(){
                     if (typeof returnData != "undefined" && returnData == 'true'){
                         console.log("succ");
                         $('#customize-item-modal').modal('toggle');
+                        $("#customize-item-modal .varient-headings").empty();
+                        $("#customize-item-modal .modal-body").empty();
                         location.reload();
                     } 
                 },
@@ -117,11 +119,60 @@ $(document).on('click','#form-varient-btn',function(){
         }    
 
     }
-
-    
 });
 
-var total_groups = [];
+$(document).on('click','#form-recommendation-varient-btn',function(){
+    //console.log($('#form-varient').serializeArray());
+
+    var error = false;
+    var error_group_name = ''
+    $.each(total_required_groups, function (key, val){
+        if($("input[name='group["+val+"][]']:checked").length == 0){
+            error = true;
+            error_group_name = $("input[name='group["+val+"][]']").attr("data-groupname");
+        }
+    });
+
+    if(error == true){
+        $('.error-item').text('You Must Select At Least 1 '+error_group_name);
+        $('.error-item').show();
+        $('.error-item').delay(3000).hide(0);
+    }else{
+
+        var form_data = $('#form-recommendation-varient').serializeArray();
+
+        if (typeof form_data != "undefined" && form_data != null && form_data.length > 0){
+
+            var recommended_item_id = $('#form-recommendation-varient-btn').data('itemid');
+            // console.log(recommended_item_id);
+            // return false;
+
+            $.ajax({
+                url: add_recommended_item_cart_url,
+                type: "POST",
+                data:{
+                    form_data:form_data,
+                    id:recommended_item_id
+                },
+                success: function (returnData) {
+                    //returnData = $.parseJSON(returnData);
+                    //console.log(returnData);
+                    if (typeof returnData != "undefined" && returnData == '1'){
+                        console.log("succ");
+                        $('#customize-recommendation-item-modal').modal('toggle');
+                        location.reload();
+                    } 
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('error');
+                }
+            });   
+        }    
+
+    }
+});
+
+var total_required_groups = [];
 var row_id = ''
 $(document).on('click','.customize',function(){
 	row_id = $(this).data("id");
@@ -137,25 +188,28 @@ $(document).on('click','.customize',function(){
 
                         $(".varient-headings").empty();
                         $(".modal-body").empty();
-                        total_groups = [];
+                        total_required_groups = [];
 
                 		returnData = $.parseJSON(returnData);
+                        console.log(returnData);
 
                         $('#customize-item-modal .modal-title').text('Customize '+returnData.cart_contents.name);
-                        $('#customize-item-modal .total-item-price').text(Number(returnData.cart_contents.price).toFixed(2));
+                        $('#customize-item-modal .total-item-price').text(Number(returnData.cart_contents.item_price).toFixed(2));
 
                         var group_str = '&nbsp;|&nbsp;';
                         var table_group_str = '';
 
                         $.each(returnData.item_variants, function (key, val){
 
-                            total_groups.push(val.id);
                             group_str += '<div class="d-inline-block pointer"> <a href="#addon" class="light-gray-txt ">'+val.name+'</a> </div>&nbsp;|&nbsp;';
 
                             if(val.availability == 1){
                                 var optional = '<span class="light-gray-txt text-danger">&nbsp;(required)</span>';
+                                var required = 'required';
+                                total_required_groups.push(val.id);
                             }else{
                                 var optional = '<span class="light-gray-txt">&nbsp;(optional)</span>';
+                                var required = '';
                             }
 
                             table_group_str +=
@@ -176,12 +230,12 @@ $(document).on('click','.customize',function(){
                                 if(val.selection == 1){
 
                                     table_group_str +=
-                                                '<input class="form-check-input" type="checkbox" name="group['+val.id+'][]" id="'+val1.id+'" value="'+val1.id+'" data-groupname="'+val.name+'">'
+                                                '<input class="form-check-input '+required+'" type="checkbox" name="group['+val.id+'][]" id="'+val1.id+'" value="'+val1.id+'" data-groupname="'+val.name+'">'
                                                 +'<label class="form-check-label" for="'+val1.id+'">'+val1.name +'</label>';
                                 }else{
 
                                     table_group_str +=
-                                                '<input class="form-check-input" type="radio" name="group['+val.id+'][]" id="'+val1.id+'" value="'+val1.id+'" data-groupname="'+val.name+'">'
+                                                '<input class="form-check-input '+required+'" type="radio" name="group['+val.id+'][]" id="'+val1.id+'" value="'+val1.id+'" data-groupname="'+val.name+'">'
                                                 +'<label class="form-check-label" for="'+val1.id+'">'+val1.name+'</label>';
                                 }
 
@@ -229,6 +283,303 @@ $(document).on('click','.customize',function(){
 	}
 });
 
+$(document).on('click','.recommendation-add',function(){
+    recommendation_id = $(this).attr('id')
+    // console.log(recommendation_id);
+    // return false;
+    if (typeof recommendation_id != "undefined" && recommendation_id != null && recommendation_id.length > 0){
+        $.ajax({
+                url: customize_recommendation_url,
+                type: "POST",
+                data:{id:recommendation_id},
+                success: function (returnData) {
+                    if (typeof returnData != "undefined" && returnData != ''){
+
+                        $("#form-recommendation-varient .varient-headings").empty();
+                        $("#form-recommendation-varient .modal-body").empty();
+
+                        total_required_groups = [];
+                        returnData = $.parseJSON(returnData);
+
+                        if( typeof returnData.item_variants != 'undefined' && returnData.item_variants.length > 0){
+                            
+                        }else{
+                            window.location = add_direct_to_cart_url+'/'+recommendation_id;
+
+                            console.log('add direct to cart');
+                            return true;
+                        }
+                          console.log(returnData.item_variants);
+                         // return false;
+
+                        $('#customize-recommendation-item-modal .modal-title').text('Customize '+returnData.cart_contents.name);
+                        $('#customize-recommendation-item-modal .total-item-price').text(Number(returnData.cart_contents.price).toFixed(2));
+
+                        var group_str = '&nbsp;|&nbsp;';
+                        var table_group_str = '';
+
+                        $.each(returnData.item_variants, function (key, val){
+
+                            group_str += '<div class="d-inline-block pointer"> <a href="#addon" class="light-gray-txt ">'+val.name+'</a> </div>&nbsp;|&nbsp;';
+
+                            if(val.availability == 1){
+                                var optional = '<span class="light-gray-txt text-danger">&nbsp;(required)</span>';
+                                var required = 'required';
+                                total_required_groups.push(val.id);
+                            }else{
+                                var optional = '<span class="light-gray-txt">&nbsp;(optional)</span>';
+                                var required = '';
+                            }
+
+                            table_group_str +=
+                            '<table class="w-100 mt-4">'
+                                +'<thead><tr>'
+                                    +'<th colspan="2"><h5><b>'+val.name+'</b>'+optional+'</h5></th>'
+                                +'</tr></thead>'
+                                +'<tbody class="add-toppings">';
+
+                            
+                            $.each(val.items, function (key1, val1){
+
+                                table_group_str +=
+                                    '<tr>'
+                                        +'<td>'
+                                            +'<div class="form-check pb-1">';
+
+                                if(val.selection == 1){
+
+                                    table_group_str +=
+                                                '<input class="form-check-input '+required+'" type="checkbox" name="group['+val.id+'][]" id="'+val1.id+'" value="'+val1.id+'" data-groupname="'+val.name+'">'
+                                                +'<label class="form-check-label" for="'+val1.id+'">'+val1.name +'</label>';
+                                }else{
+
+                                    table_group_str +=
+                                                '<input class="form-check-input '+required+'" type="radio" name="group['+val.id+'][]" id="'+val1.id+'" value="'+val1.id+'" data-groupname="'+val.name+'">'
+                                                +'<label class="form-check-label" for="'+val1.id+'">'+val1.name+'</label>';
+                                }
+
+                                var price = Number(val1.price).toFixed(2);
+
+                                if(price == '0.00'){
+                                    var price = '';
+                                }else{
+                                    var price = '+ &#36;'+price;
+                                }
+
+                                table_group_str +=
+                                            '</div>'
+                                        +'</td>'
+                                        +'<td>'
+                                            +'<div class="text-right pr-1 price" data-id="'+val1.price+'">'+price+'</div>'
+                                        +'</td>'
+                                    +'</tr>';
+
+                            });
+
+                                table_group_str +=
+                                '</tbody>'
+                            +'</table>';
+                        });
+
+                    
+                        $("#form-recommendation-varient .varient-headings").append(group_str);
+                        $("#form-recommendation-varient .modal-body").append(table_group_str);
+
+                        $.each(returnData.variants, function (variant_key, variant_val){
+                            $('#'+variant_val).attr('checked',true);
+                        });
+
+
+                        $('.error-item').hide();
+                        $('#form-recommendation-varient-btn').attr("data-itemid",returnData.cart_contents.id); 
+                        $('#customize-recommendation-item-modal').modal('show');
+                        
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log('error');
+                }
+            });
+    }
+});
+
  $( document ).ready(function() {
     $('.quatity-update .form-control').attr('readonly', true);
+    $("#zipcode").inputmask("99999",{"placeholder": ""});
+
+    $(document).on('click','.add-delivery-address',function(){
+        if(logged_in && is_customer){
+            $('#addNewAddressModal').modal('show');
+        }else{
+            $('#loginFormModal').modal('show');
+        }
+    });
+
+    $(document).on('click','.choose-address',function(){
+        if(logged_in && is_customer){
+            
+            window.location = choose_address;
+        }else{
+            $('#loginFormModal').modal('show');
+        }
+    });
+
+    $(document).on('click','#checkout-btn',function(){
+        
+        if(logged_in && is_customer && (defualt_delivery_address_id != '') && (cart_contents_data == '1')){
+            console.log("checkout now");
+        }else{
+            if(cart_contents_data != '1'){
+                swal(
+                        'Your cart is empty!',
+                        'Add an item to begin',
+                        'warning'
+                    )
+            }else if(defualt_delivery_address_id == '' || defualt_delivery_address_id == null){
+                swal(
+                        'Please select delivery address',
+                        'You have to set delivery address for checkout',
+                        'warning'
+                    )
+            }else{
+                swal(
+                        'Please login / register',
+                        'You have to login for checkout',
+                        'warning'
+                    )
+            }
+        }
+    });
+
  });
+
+
+  var validator = $("#addNewAddress").validate({
+
+        ignore: 'input[type=hidden], .select2-search__field', // ignore hidden fields
+        errorClass: 'validation-error-label',
+        successClass: 'validation-valid-label',
+        // Different components require proper error label placement
+        errorPlacement: function(error, element) {
+                if (element.hasClass('form-check-input')) {
+                    error.appendTo(element.parent().parent());
+                }else{
+                    error.insertAfter(element);
+                }
+        },
+        validClass: "validation-valid-label",
+        rules: {
+            housernum: {
+                required:true,
+                minlength: 1,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            street: {
+                required:true,
+                minlength: 1,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            city: {
+                required:true,
+                minlength: 1,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            zipcode: {
+                required:true,
+                digits: true,
+                maxlength:5,
+                minlength:5,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            latitude: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            longitude: {
+                required:true,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            delivery_instruction: {
+                required:false,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            nickname: {
+                required:false,
+                maxlength:255,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            addresstype: {
+                required:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            }
+        },
+        messages: {
+
+            housernum: {
+                required: "The house/office number field is required.",
+                minlength: jQuery.validator.format("At least {0} characters required"),
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            street: {
+                required: "The street/locality field is required.",
+                minlength: jQuery.validator.format("At least {0} characters required"),
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            city: {
+                required: "The street/locality field is required.",
+                minlength: jQuery.validator.format("At least {0} characters required"),
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            zipcode: {
+                required: "The zipcode field is required.",
+                digits: "Enter only numeric value",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed"),
+                minlength: jQuery.validator.format("At least {0} characters required")
+            },
+            latitude: {
+                required: "The latitude field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            longitude: {
+                required: "The longitude field is required.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            delivery_instruction: {
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            nickname: {
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            addresstype: {
+                required: "The address type field is required."
+            }
+        },
+        submitHandler: function(form) {
+            form.submit();
+           //console.log('SUBMIT ADDRESS');
+        }
+    });

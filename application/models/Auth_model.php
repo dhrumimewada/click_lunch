@@ -101,6 +101,8 @@ class Auth_model extends CI_Model {
 			$this->db->from('employee');
 		}elseif($user_type == 'dispatcher'){
 			$this->db->from('delivery_dispatcher');
+		}elseif($user_type == 'customer'){
+			$this->db->from('customer');
 		}else{
 			return false;
 		}
@@ -122,6 +124,7 @@ class Auth_model extends CI_Model {
 				$this->session->unset_userdata('vendor_user');
 				$this->session->unset_userdata('admin_user');
 				$this->session->unset_userdata('dispatcher_user');
+				$this->session->unset_userdata('customer_user');
 				// Set user login sessions.
 				if($user_type == 'admin'){
 					$session_data['user_id'] = (int) $user->id;
@@ -147,6 +150,7 @@ class Auth_model extends CI_Model {
 					$session_data['is_vender'] = (bool) TRUE;
 					$session_data['is_employee'] = (bool) FALSE;
 					$session_data['is_dispatcher'] = (bool) FALSE;
+					$session_data['is_customer'] = (bool) FALSE;
 					$session_data['role_id'] = (bool) FALSE;
 					$session_data['shop_id'] = (bool) FALSE;
 
@@ -162,6 +166,7 @@ class Auth_model extends CI_Model {
 					$session_data['is_vender'] = (bool) FALSE;
 					$session_data['is_employee'] = (bool) TRUE;
 					$session_data['is_dispatcher'] = (bool) FALSE;
+					$session_data['is_customer'] = (bool) FALSE;
 					$session_data['role_id'] = (int) $user->role;
 					$session_data['shop_id'] = (int) $user->shop_id;
 
@@ -176,17 +181,32 @@ class Auth_model extends CI_Model {
 					$session_data['is_admin'] = (bool) FALSE;
 					$session_data['is_vender'] = (bool) FALSE;
 					$session_data['is_employee'] = (bool) FALSE;
+					$session_data['is_customer'] = (bool) FALSE;
 					$session_data['is_dispatcher'] = (bool) TRUE;
 					$session_data['role_id'] = (bool) FALSE;
 					$session_data['shop_id'] = (bool) FALSE;
 
 					$this->session_data = $session_data;
 					$this->session->set_userdata(array('dispatcher_user' => $this->session_data));
+
+				}elseif($user_type == 'customer'){
+					$session_data['user_id'] = (int) $user->id;
+					$session_data['username'] =  (string) $user->username;
+					$session_data['email'] =  (string) $user->email;
+					$session_data['logged_in'] = (bool) TRUE;
+					$session_data['is_admin'] = (bool) FALSE;
+					$session_data['is_vender'] = (bool) FALSE;
+					$session_data['is_employee'] = (bool) FALSE;
+					$session_data['is_dispatcher'] = (bool) FALSE;
+					$session_data['is_customer'] = (bool) TRUE;
+					$session_data['role_id'] = (bool) FALSE;
+					$session_data['shop_id'] = (bool) FALSE;
+
+					$this->session_data = $session_data;
+					$this->session->set_userdata(array('customer_user' => $this->session_data));
 				}else{
 					return FALSE;
 				}
-				
-				
 
 				return TRUE;
 
@@ -207,6 +227,8 @@ class Auth_model extends CI_Model {
 			$email_var_data["recovery_link"] = base_url() . 'vender-reset-password/'. $remember_token;
 		}elseif($user_type == 'employee'){
 			$email_var_data["recovery_link"] = base_url() . 'employee-reset-password/'. $remember_token;
+		}elseif($user_type == 'customer'){
+			$email_var_data["recovery_link"] = base_url() . 'customer-reset-password/'. $remember_token;
 		}else{
 			$email_var_data["recovery_link"] = '';
 		}
@@ -225,7 +247,7 @@ class Auth_model extends CI_Model {
 			return FALSE;
 		}
 
-		$from = "excellentwebworld@admin.com";
+		$from = '"Click Lunch" <excellentwebworld@admin.com>';
 		$to = $email;
 		$subject = "Request to reset your password";
 
@@ -245,6 +267,8 @@ class Auth_model extends CI_Model {
 				$this->db->update("shop", $token_array);
 			}elseif($user_type == 'employee'){
 				$this->db->update("employee", $token_array);
+			}elseif($user_type == 'customer'){
+				$this->db->update("customer", $token_array);
 			}else{
 			}
 		}
@@ -265,6 +289,9 @@ class Auth_model extends CI_Model {
 			return $user_session['user_id'];
 		}else if($this->is_dispatcher()){
 			$user_session = $this->session->userdata('dispatcher_user');
+			return $user_session['user_id'];
+		}else if($this->is_customer()){
+			$user_session = $this->session->userdata('customer_user');
 			return $user_session['user_id'];
 		}else{
 			return FALSE;
@@ -297,7 +324,8 @@ class Auth_model extends CI_Model {
 		$user_vendor = $this->session->userdata('vendor_user');
 		$user_employee = $this->session->userdata('employee_user');
 		$user_dispatcher = $this->session->userdata('dispatcher_user');
-        if((isset($user_admin)) || (isset($user_vendor)) || (isset($user_employee)) || (isset($user_dispatcher))){
+		$user_customer = $this->session->userdata('customer_user');
+        if((isset($user_admin)) || (isset($user_vendor)) || (isset($user_employee)) || (isset($user_dispatcher)) || (isset($user_customer))){
             return TRUE;
         }
         else{
@@ -345,6 +373,16 @@ class Auth_model extends CI_Model {
         }
     }
 
+    public function is_customer(){
+		$user_session = $this->session->userdata('customer_user');
+        if((isset($user_session)) && ($user_session['user_id'] > 0)){
+            return TRUE;
+        }
+        else{
+            return FALSE;
+        }
+    }
+    
     public function logout() {
 		$this->session->unset_userdata('employee_user');
 		$this->session->unset_userdata('vendor_user');

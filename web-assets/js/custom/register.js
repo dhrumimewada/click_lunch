@@ -162,6 +162,7 @@ function register() {
                         'success'
                     )
                     $('#register-form')[0].reset();
+                    $('#loginFormModal').modal('show');
                     return true;
             	}
             	

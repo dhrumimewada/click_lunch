@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . '/libraries/REST_Controller.php';
 error_reporting(1);
 
-class Delivery_boy_api extends REST_Controller {
+class Shop_ipad_api extends REST_Controller {
     public function __construct() {
         parent::__construct();
         header('Access-Control-Allow-Origin: *');  
@@ -66,11 +66,11 @@ class Delivery_boy_api extends REST_Controller {
             $this->db->where("password !=",'');
             $this->db->where("deleted_at",NULL);
             $this->db->where("status",1);
-            $this->db->from("delivery_boy");
+            $this->db->from("shop");
             $sql_query = $this->db->get();
             if ($sql_query->num_rows() > 0){
-                $delivery_boy = $sql_query->row();
-                if (password_verify($_POST['password'],$delivery_boy->password)){
+                $shop_details = $sql_query->row();
+                if (password_verify($_POST['password'],$shop_details->password)){
 
                     $data = array('device_token' => $_POST['device_token']);
 
@@ -79,11 +79,12 @@ class Delivery_boy_api extends REST_Controller {
                         $data['longitude'] = $_POST['longitude'];
                     }
 
-                $this->db->where('id',$delivery_boy->id);
-                $this->db->update('delivery_boy',$data);
+                $this->db->where('id',$shop_details->id);
+                $this->db->update('shop',$data);
 
                 $response['status'] = true;
-                $response['profile'] = (array)$delivery_boy;
+                $response['message'] = 'Login successfully.';
+                $response['profile'] = (array)$shop_details;
 
                 }else{
                     $response['status'] = false;
@@ -106,19 +107,19 @@ class Delivery_boy_api extends REST_Controller {
 
     public function logout_post(){
         
-        $postFields['delivery_boy_id'] = $_POST['delivery_boy_id'];
+        $postFields['shop_id'] = $_POST['shop_id'];
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['delivery_boy_id']), 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('delivery_boy',$where)->row();
-            if(empty($user)){
+            $where = array('id' => intval($_POST['shop_id']), 'deleted_at' => NULL);
+            $shop = (array)$this->db->get_where('shop',$where)->row();
+            if(empty($shop)){
                 $response['status'] = false;
                 $response['message'] = 'User not found';   
             }else{
                 $data = array('device_token' => '', 'latitude' => '','longitude' => '' );
-                $this->db->where('id',$_POST['delivery_boy_id']);
-                if($this->db->update('delivery_boy',$data)){
+                $this->db->where('id',$_POST['shop_id']);
+                if($this->db->update('shop',$data)){
                     $response['status'] = true;
                 }else{
                     $response['status'] = false;
@@ -135,9 +136,8 @@ class Delivery_boy_api extends REST_Controller {
 
     public function change_password_post(){
         $postFields['current_password'] = $_POST['current_password'];        
-        $postFields['new_password'] = $_POST['new_password']; 
-        $postFields['confirm_new_password'] = $_POST['confirm_new_password']; 
-        $postFields['delivery_boy_id'] = $_POST['delivery_boy_id']; 
+        $postFields['new_password'] = $_POST['new_password'];         
+        $postFields['shop_id'] = $_POST['shop_id']; 
 
         $errorPost = $this->ValidatePostFields($postFields);
 
@@ -146,8 +146,8 @@ class Delivery_boy_api extends REST_Controller {
             $this->db->select('password');
             $this->db->where("deleted_at",NULL);
             $this->db->where("status",1);
-            $this->db->where("id",$_POST['delivery_boy_id']);
-            $this->db->from("delivery_boy");
+            $this->db->where("id",$_POST['shop_id']);
+            $this->db->from("shop");
             $sql_query = $this->db->get();
             if ($sql_query->num_rows() > 0){
                 $data = $sql_query->row();
@@ -157,8 +157,8 @@ class Delivery_boy_api extends REST_Controller {
                     $response['password'] = $data->password;
                 }else{
                     $user_data = array('password' => password_hash($_POST['new_password'], PASSWORD_DEFAULT) );
-                    $this->db->where('id',$_POST['delivery_boy_id']);
-                    if($this->db->update('delivery_boy',$user_data)){
+                    $this->db->where('id',$_POST['shop_id']);
+                    if($this->db->update('shop',$user_data)){
                         $response['status'] = true;
                         $response['message'] = 'Password changed successfully';
                     }else{
@@ -186,10 +186,10 @@ class Delivery_boy_api extends REST_Controller {
         if(empty($errorPost))
         {
             $where = array('email' => $_POST['email'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('delivery_boy',$where)->row();
-            if(empty($user)){
+            $shop = (array)$this->db->get_where('shop',$where)->row();
+            if(empty($shop)){
                 $response['status'] = false;
-                $response['message'] = 'User not found';
+                $response['message'] = 'Shop not found';
             }else{
                 $to =  array($_POST['email']);
                 $subject = $this->config->item('site_name').' - Reset Password';
@@ -197,10 +197,10 @@ class Delivery_boy_api extends REST_Controller {
                 $template = file_get_contents($path);
 
                 $remember_token = bin2hex(random_bytes(20));
-                $reset_url = base_url() . 'delivery-boy-reset-password/'. $remember_token;
+                $reset_url = base_url() . 'vender-reset-password/'. $remember_token;
 
                 $template = str_replace('##RESETPWURL##', $reset_url, $template);
-                $template = str_replace('##USERNAME##', $user['username'], $template);
+                $template = str_replace('##USERNAME##', $shop['shop_name'], $template);
 
                 $template = $this->create_email_template($template);
 
@@ -209,8 +209,8 @@ class Delivery_boy_api extends REST_Controller {
                 if($mail){
 
                     $update_data = array('remember_token' => $remember_token);
-                    $this->db->where('id', $user['id']);
-                    $this->db->update('delivery_boy', $update_data);
+                    $this->db->where('id', $shop['id']);
+                    $this->db->update('shop', $update_data);
 
                     $response['status'] = true;
                     $response['message'] = 'Reset Password mail is sent on this email address';
@@ -286,19 +286,19 @@ class Delivery_boy_api extends REST_Controller {
     }
 
     public function myprofile_post(){
-        $postFields['delivery_boy_id'] = $_POST['delivery_boy_id']; 
+        $postFields['shop_id'] = $_POST['shop_id']; 
         $errorPost = $this->ValidatePostFields($postFields);
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['delivery_boy_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('delivery_boy',$where)->row();
-            if(empty($user)){
+            $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
+            $shop = (array)$this->db->get_where('shop',$where)->row();
+            if(empty($shop)){
                 $response['status'] = false;
-                $response['message'] = 'User not found';
+                $response['message'] = 'Shop not found';
             }else{
                 $response['status'] = true;
-                $response['profile'] = $user;
+                $response['profile'] = $shop;
             }
 
         }else{
@@ -309,21 +309,21 @@ class Delivery_boy_api extends REST_Controller {
     }
 
     public function update_profile_post(){
-        $postFields['delivery_boy_id'] = $_POST['delivery_boy_id'];
+        $postFields['shop_id'] = $_POST['shop_id'];
 
         $errorPost = $this->ValidatePostFields($postFields);
 
         if(empty($errorPost))
         {
-            $where = array('id' => $_POST['delivery_boy_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('delivery_boy',$where)->row();
-            if(empty($user)){
+            $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
+            $shop = (array)$this->db->get_where('shop',$where)->row();
+            if(empty($shop)){
                 $response['status'] = false;
                 $response['message'] = 'User not found';
             }else{
 
-                if(isset($_POST['username']) && $_POST['username'] != ""){
-                    $user_data['username'] = ucwords($_POST['username']);
+                if(isset($_POST['shop_name']) && $_POST['shop_name'] != ""){
+                    $user_data['shop_name'] = ucwords($_POST['shop_name']);
                 }
                 if(isset($_POST['mobile_number']) && $_POST['mobile_number'] != ""){
                     $user_data['mobile_number'] = $_POST['mobile_number'];
@@ -394,13 +394,56 @@ class Delivery_boy_api extends REST_Controller {
         $this->response($response);
     }
 
+    public function register_post()
+    {
+	    $postFields['email'] = $_POST['email'];
+	    $postFields['shop_name'] = $_POST['shop_name'];
+	    $postFields['address'] = $_POST['address'];
+	    $postFields['contact_no'] = $_POST['contact_no'];
+	    $postFields['message'] = $_POST['message'];	    	   
+
+	    $errorPost = $this->ValidatePostFields($postFields);
+
+	    if(empty($errorPost))
+	    {
+	    	$shop_request_count = $this->db->get_where('shop_request',array('email'=>$_POST['email']))->num_rows();
+	    	$shop_count = $this->db->get_where('shop',array('email'=>$_POST['email']))->num_rows();
+	    	if($shop_count == 0 && $shop_request_count == 0)
+	    	{
+	    		$data['email'] = $_POST['email'];
+	    		$data['shop_name'] = $_POST['shop_name'];
+	    		$data['address'] = $_POST['address'];
+	    		$data['contact_no'] = $_POST['contact_no'];
+	    		$data['message'] = $_POST['message'];
+	    		$data['created_at'] = date('Y-m-d H:i:s');
+	    		$data['updated_at'] = NULL;
+	    		$data['deleted_at'] = NULL;
+	    		$this->db->insert('shop_request',$data);
+	    		$response['status'] = true;
+	        	$response['message'] = 'Register successfully, admin will cantact to you soon.';
+	    	}
+	    	else
+	    	{
+	    		$response['status'] = false;
+	        	$response['message'] = 'Email is already exist';
+	    	}
+	    }
+	    else
+	    {
+	    	$response['status'] = false;
+	        $response['message'] = $errorPost;
+	    }
+	    $this->response($response);
+	}
+
+
     public function create_email_template($template){
        $base_url = BASE_URL();
        $template = str_replace('##SITEURL##', $base_url, $template);
-       // $template = str_replace('##SITENAME##', $this->config->item('site_name'), $template);
-       // $template = str_replace('##SITEEMAIL##', $this->config->item('site_email'), $template);
-       // $template = str_replace('##COPYRIGHTS##', $this->config->item('copyrights'), $template);
-       // $template = str_replace('##EMAILTEMPLATELOGO##', $this->config->item('email_template_logo'), $template);
+       $template = str_replace('##SITENAME##', $this->config->item('site_name'), $template);
+       $template = str_replace('##SITEEMAIL##', $this->config->item('site_email'), $template);
+       $template = str_replace('##COPYRIGHTS##', $this->config->item('copyrights'), $template);
+       $template = str_replace('##EMAILTEMPLATELOGO##', $this->config->item('email_template_logo'), $template);
        return $template;
     }
 
@@ -478,16 +521,16 @@ class Delivery_boy_api extends REST_Controller {
     }
 
     public function myorders_post(){
-        $postFields['delivery_boy_id'] = $_POST['delivery_boy_id']; 
+        $postFields['shop_id'] = $_POST['shop_id']; 
         $postFields['order_type'] = $_POST['order_type']; 
 
         if(empty($errorPost)){
 
-            $where = array('id' => intval($_POST['delivery_boy_id']) ,'deleted_at' => NULL, 'status' => 1);
-            $delivery_boy = (array)$this->db->get_where('delivery_boy',$where)->row();
-            if(empty($delivery_boy)){
+            $where = array('id' => intval($_POST['shop_id']) ,'deleted_at' => NULL, 'status' => 1);
+            $shop = (array)$this->db->get_where('shop',$where)->row();
+            if(empty($shop)){
                 $response['status'] = false;
-                $response['message'] = 'User not found';    
+                $response['message'] = 'shop not found';    
             }else{
 
                 $sql_select = array(
@@ -515,8 +558,8 @@ class Delivery_boy_api extends REST_Controller {
                 $this->db->join('shop t3', 't1.shop_id = t3.id','left');
                 $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
 
-                $this->db->where('t1.delivery_boy_id', $_POST['delivery_boy_id']);
-                $this->db->where('t1.order_status', 4);
+                $this->db->where('t1.shop_id', $_POST['shop_id']);
+              //  $this->db->where('t1.order_status', 4);
 
                 $this->db->group_start();
                     $this->db->where('t1.order_type', 1);
@@ -555,46 +598,16 @@ class Delivery_boy_api extends REST_Controller {
                             $products = array_column($products_data, 'name');
                             $orders_data[$key]['products'] = implode(', ', $products);
 
-                            $pickup_minutes = $this->config->item("pickup_minutes");
-                            $delivery_minutes = $this->config->item("delivery_minutes");
 
                             if($value['order_type'] == 1){
-
                                 $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
-                                $my_date2 = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
-                                $pickup_time = $my_date->add(new DateInterval('PT'.$pickup_minutes.'M'));
-                                $delivery_time = $my_date2->add(new DateInterval('PT'.$delivery_minutes.'M'));
-
-                                $orders_data[$key]['order_date'] = $value['created_at'];
-                                $orders_data[$key]['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
-                                $orders_data[$key]['delivery_time'] = $delivery_time->format('Y-m-d H:i:s');
-
+                                $added_time = $my_date->add(new DateInterval('PT30M'));
+                                $orders_data[$key]['delivery_time'] = $added_time->format('h:i A');
                             }else if($value['order_type'] == 2){
-
-                                $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
-                                $created_date = $my_date->format('Y-m-d');
-                                $later_datetime = DateTime::createFromFormat('Y-m-d h:i A', $created_date.' '.$value['later_time']);
-                                $later_datetime2 = DateTime::createFromFormat('Y-m-d h:i A', $created_date.' '.$value['later_time']);
-
-                                $pickup_time = $later_datetime2->sub(new DateInterval('PT'.$delivery_minutes.'M'));
-
-                                $orders_data[$key]['order_date'] = $value['created_at'];
-                                $orders_data[$key]['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
-                                $orders_data[$key]['delivery_time'] = $later_datetime->format('Y-m-d H:i:s');
-
+                                $orders_data[$key]['delivery_time'] = $value['later_time'];
                             }else if($value['order_type'] == 5){
-
-                                $my_date = DateTime::createFromFormat('Y-m-d h:i A', $value['schedule_date'].' '.$value['schedule_time']);
-                                $my_date2 = DateTime::createFromFormat('Y-m-d h:i A', $value['schedule_date'].' '.$value['schedule_time']);
-                                $pickup_time = $my_date->sub(new DateInterval('PT'.$delivery_minutes.'M'));
-
-                                $orders_data[$key]['order_date'] = $value['created_at'];
-                                $orders_data[$key]['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
-                                $orders_data[$key]['delivery_time'] = $my_date2->format('Y-m-d H:i:s');
-
+                                $orders_data[$key]['delivery_time'] = $value['schedule_time'];
                             }else{
-
-                                $orders_data[$key]['pickup_time'] = '';
                                 $orders_data[$key]['delivery_time'] = '';
                             }
 
@@ -608,6 +621,7 @@ class Delivery_boy_api extends REST_Controller {
                     $response['message'] = 'No any order pending';                  
                     $response['status'] = FALSE; 
                 }
+                //$response['last_query'] = $last_query; 
             }
 
         }else{
@@ -700,46 +714,15 @@ class Delivery_boy_api extends REST_Controller {
                             $orders_data[$key]['products'] = implode(', ', $products);
 
 
-                            $pickup_minutes = $this->config->item("pickup_minutes");
-                            $delivery_minutes = $this->config->item("delivery_minutes");
-
                             if($value['order_type'] == 1){
-
                                 $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
-                                $my_date2 = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
-                                $pickup_time = $my_date->add(new DateInterval('PT'.$pickup_minutes.'M'));
-                                $delivery_time = $my_date2->add(new DateInterval('PT'.$delivery_minutes.'M'));
-
-                                $orders_data[$key]['order_date'] = $value['created_at'];
-                                $orders_data[$key]['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
-                                $orders_data[$key]['delivery_time'] = $delivery_time->format('Y-m-d H:i:s');
-
+                                $added_time = $my_date->add(new DateInterval('PT30M'));
+                                $orders_data[$key]['delivery_time'] = $added_time->format('h:i A');
                             }else if($value['order_type'] == 2){
-
-                                $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
-                                $created_date = $my_date->format('Y-m-d');
-                                $later_datetime = DateTime::createFromFormat('Y-m-d h:i A', $created_date.' '.$value['later_time']);
-                                $later_datetime2 = DateTime::createFromFormat('Y-m-d h:i A', $created_date.' '.$value['later_time']);
-
-                                $pickup_time = $later_datetime2->sub(new DateInterval('PT'.$delivery_minutes.'M'));
-
-                                $orders_data[$key]['order_date'] = $value['created_at'];
-                                $orders_data[$key]['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
-                                $orders_data[$key]['delivery_time'] = $later_datetime->format('Y-m-d H:i:s');
-
+                                $orders_data[$key]['delivery_time'] = $value['later_time'];
                             }else if($value['order_type'] == 5){
-
-                                $my_date = DateTime::createFromFormat('Y-m-d h:i A', $value['schedule_date'].' '.$value['schedule_time']);
-                                $my_date2 = DateTime::createFromFormat('Y-m-d h:i A', $value['schedule_date'].' '.$value['schedule_time']);
-                                $pickup_time = $my_date->sub(new DateInterval('PT'.$delivery_minutes.'M'));
-
-                                $orders_data[$key]['order_date'] = $value['created_at'];
-                                $orders_data[$key]['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
-                                $orders_data[$key]['delivery_time'] = $my_date2->format('Y-m-d H:i:s');
-
+                                $orders_data[$key]['delivery_time'] = $value['schedule_time'];
                             }else{
-
-                                $orders_data[$key]['pickup_time'] = '';
                                 $orders_data[$key]['delivery_time'] = '';
                             }
 
@@ -778,7 +761,6 @@ class Delivery_boy_api extends REST_Controller {
                                 't1.id',
                                 't1.total',
                                 't2.username',
-                                't1.order_type',
                                 'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
                                 't4.latitude as address_latitude',
                                 't4.longitude as address_longitude',
@@ -795,13 +777,9 @@ class Delivery_boy_api extends REST_Controller {
                                 'ROUND((((t1.subtotal + t1.promo_amount) * t1.service_charge) / 100), 2) as service_charge_amount',
                                 't1.delivery_charges',
                                 't1.total',
-                                'IF(t1.order_type=5, t1.schedule_date, "") as schedule_date',
-                                'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
-                                'IF(t1.order_type=2, t1.later_time, "") as later_time',
-                                't1.created_at'
-                                // 'IF(t1.order_type=2, t1.schedule_date, "") as schedule_date',
-                                // 'IF(t1.order_type=2, t1.schedule_time, "") as schedule_time',
-                                // 'IF(t1.order_type=1, t1.created_at, "") as created_at'
+                                'IF(t1.order_type=2, t1.schedule_date, "") as schedule_date',
+                                'IF(t1.order_type=2, t1.schedule_time, "") as schedule_time',
+                                'IF(t1.order_type=1, t1.created_at, "") as created_at'
                 );
                 $this->db->select($sql_select);
 
@@ -813,10 +791,16 @@ class Delivery_boy_api extends REST_Controller {
                 $this->db->where('t1.id', $_POST['order_id']);
                 $this->db->where('t1.order_status', 4);
 
-                // $this->db->group_start();
-                //     $this->db->where('t1.order_type', 1);
-                //     $this->db->or_where('t1.order_type', 2);
-                // $this->db->group_end();
+                $this->db->group_start();
+                    $this->db->where('t1.order_type', 1);
+                    $this->db->or_where('t1.order_type', 2);
+                $this->db->group_end();
+
+                if(intval($_POST['order_type']) == 1){
+                    $this->db->where('DATE(t1.created_at)', date("Y-m-d"));
+                }else{
+                    $this->db->where('DATE(t1.created_at) !=', date("Y-m-d"));
+                }
 
                 $sql_query = $this->db->get();
 
@@ -824,48 +808,19 @@ class Delivery_boy_api extends REST_Controller {
                     $orders_data = (array)$sql_query->row();
                     $orders_data['rating'] = '3.5';
 
-                    $pickup_minutes = $this->config->item("pickup_minutes");
-                    $delivery_minutes = $this->config->item("delivery_minutes");
-
-                    if($orders_data['order_type'] == 1){
-
-                        $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $orders_data['created_at']);
-                        $my_date2 = DateTime::createFromFormat('Y-m-d H:i:s', $orders_data['created_at']);
-                        $pickup_time = $my_date->add(new DateInterval('PT'.$pickup_minutes.'M'));
-                        $delivery_time = $my_date2->add(new DateInterval('PT'.$delivery_minutes.'M'));
-
-                        $orders_data['order_date'] = $orders_data['created_at'];
-                        $orders_data['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
-                        $orders_data['delivery_time'] = $delivery_time->format('Y-m-d H:i:s');
-
-                    }else if($orders_data['order_type'] == 2){
-
-                        $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $orders_data['created_at']);
-                        $created_date = $my_date->format('Y-m-d');
-                        $later_datetime = DateTime::createFromFormat('Y-m-d h:i A', $created_date.' '.$orders_data['later_time']);
-                        $later_datetime2 = DateTime::createFromFormat('Y-m-d h:i A', $created_date.' '.$orders_data['later_time']);
-
-                        $pickup_time = $later_datetime2->sub(new DateInterval('PT'.$delivery_minutes.'M'));
-
-                        $orders_data['order_date'] = $orders_data['created_at'];
-                        $orders_data['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
-                        $orders_data['delivery_time'] = $later_datetime->format('Y-m-d H:i:s');
-
-                    }else if($orders_data['order_type'] == 5){
-
-                        $my_date = DateTime::createFromFormat('Y-m-d h:i A', $orders_data['schedule_date'].' '.$orders_data['schedule_time']);
-                        $my_date2 = DateTime::createFromFormat('Y-m-d h:i A', $orders_data['schedule_date'].' '.$orders_data['schedule_time']);
-                        $pickup_time = $my_date->sub(new DateInterval('PT'.$delivery_minutes.'M'));
-
-                        $orders_data['order_date'] = $orders_data['created_at'];
-                        $orders_data['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
-                        $orders_data['delivery_time'] = $my_date2->format('Y-m-d H:i:s');
-
+                    if($orders_data['created_at'] != ''){
+                        $order_created = strtotime($orders_data['created_at']);
+                        $date = DateTime::createFromFormat('Y-m-d H:i:s', $orders_data['created_at'])->format('j M, Y');
+                        $time = DateTime::createFromFormat('Y-m-d H:i:s', $orders_data['created_at'])->format('h:i A');
                     }else{
-
-                        $orders_data['pickup_time'] = '';
-                        $orders_data['delivery_time'] = '';
+                        $date = DateTime::createFromFormat('Y-m-d', $orders_data['schedule_date'])->format('j M, Y');
+                        $time = $orders_data['schedule_time'];
                     }
+
+                    $order_time = $date.' at '.$time;
+                    $orders_data['order_time'] = $order_time;
+
+
                     $sql_select = array(
                                     't2.name',
                                     't1.quantity',

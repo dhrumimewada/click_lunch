@@ -10,6 +10,7 @@ button:focus {outline: 0;}
 .modal form .form-group label {text-transform: uppercase; margin-bottom: 15px; font-weight: 600;}
 #registerFormModal .form-group label {text-transform: uppercase; margin-bottom: 5px; font-weight: 600;}
 .modal form .form-group {margin-bottom: 40px;}
+#addNewAddressModal form .form-group {margin-bottom: 26px;}
 #registerFormModal .form-group {margin-bottom: 12px;}
 .modal-dialog .modal-content .modal-title {font-weight: 600;}
 .modal-open {overflow: auto;}
@@ -197,13 +198,13 @@ button:focus {outline: 0;}
 .modal-with-logo .modalform {border-radius: .3rem; padding: 30px 0 40px; margin-bottom: 40px;}
 .add-new-address-block .form-control {border-width: 0 0 1px 0; border-style: solid; border-color: #404040; border-radius: 0; color: #404040; font-size: 20px; padding-left: 0;}
 .add-new-address-block [type="radio"]:checked, .add-new-address-block [type="radio"]:not(:checked) {position: absolute; left: -9999px;}
-.add-new-address-block [type="radio"]:checked + label, .add-new-address-block [type="radio"]:not(:checked) + label{position: relative; padding-left: 42px; cursor: pointer; line-height: 28px; display: inline-block; color: #121212;}
+.add-new-address-block [type="radio"]:checked + label, .add-new-address-block [type="radio"]:not(:checked) + label{position: relative; padding-left: 34px; cursor: pointer; line-height: 28px; display: inline-block; color: #121212;}
 .add-new-address-block [type="radio"]:checked + label:before, .add-new-address-block [type="radio"]:not(:checked) + label:before {content: ''; position: absolute; left: 0; top: 0; width: 28px; height: 28px; border: 3px solid #2e2d4d; border-radius: 100%; background: #fff;}
 .add-new-address-block [type="radio"]:checked + label:after, .add-new-address-block [type="radio"]:not(:checked) + label:after {content: ''; width: 20px; height: 20px; background: #2e2d4d; position: absolute; top: 4px; left: 4px; border-radius: 100%; -webkit-transition: all 0.2s ease; transition: all 0.2s ease;}
 .add-new-address-block [type="radio"]:not(:checked) + label:after {opacity: 0; -webkit-transform: scale(0); transform: scale(0);}
 .add-new-address-block [type="radio"]:checked + label:after {opacity: 1; -webkit-transform: scale(1); transform: scale(1);}
 .add-new-address-block {color: #9b9b9b; font-size: 20px;}
-.add-new-address-block .form-check {padding-left: 0; margin-right: 30px;}
+.add-new-address-block .form-check {padding-left: 0; margin-right: 15px;}
 .add-new-address-block .form-check:last-child {margin-right: 0;}
 .add-new-address-block .form-control::-webkit-input-placeholder {color: #404040;}
 .add-new-address-block .form-control::-moz-placeholder {color: #404040;}

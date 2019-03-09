@@ -25,7 +25,7 @@
             }
         },
         submitHandler: function(form) {
-        	// var result = forgot();
+        	 var result = forgot();
         	// console.log(result);
         }
     });
@@ -35,22 +35,17 @@
         return this.optional(element) || /^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i.test(value);
     });
 
-    function login() {
+    function forgot() {
     
         $("#wait").css("display", "block");
-        //$("#register-btn").attr("disabled", true);
-
-        var login_customer_url = 'login-customer';
-
-        var email =$('#login_email').val();
-        var password =$('#login_password').val();
+        var forgot_password_customer_url = 'forgot-password-customer';
+        var email =$('#forgot_email').val();
 
         $.ajax({
-                url: login_customer_url,
+                url: forgot_password_customer_url,
                 type: "POST",
                 data:{
-                    email:email,
-                    password:password
+                    email:email
                 },
                 success: function (returnData) {
                     //returnData = $.parseJSON(returnData);
@@ -58,20 +53,17 @@
                     $("#wait").css("display", "none");
                     if(returnData == '1'){
                         console.log('account does not exists');
-                        $(".validation-login-email").append('<label id="login_email-error" class="validation-error-label" for="register_email">Your account is does not exists. Click on <b>Register</b> to create your account.</label>');
+                        $(".validation-forgot-email").append('<label id="forgot_email-error" class="validation-error-label" for="forgot_email">Your account is does not exists. Click on <b>Register</b> to create your account.</label>');
                     }else if(returnData == '2'){
-                        console.log('password incorrect');
-                        $(".validation-login-password").append('<label id="login_password-error" class="validation-error-label" for="register_email">Inncorrect password. Click on <b>Forgot password</b> to recover your password.</label>');
+                        $(".validation-forgot-email").append('<label id="forgot_email-error" class="validation-error-label" for="forgot_email">Error into sending mail. Please try again later.</label>');
                     }else{
-                        console.log(returnData);
-                        console.log('else');
-                        $('#loginFormModal').modal('toggle');
+                        $('#forgotFormModal').modal('toggle');
                         swal(
-                            'Logged in!',
-                            'You are successfully logged in into clicklunch',
+                            'Mail sent!',
+                            'Recovery mail is sent to your e-mail',
                             'success'
                         )
-                        $('#login-form')[0].reset();
+                        $('#forgot-form')[0].reset();
                         return true;
                     }
                     

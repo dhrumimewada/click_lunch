@@ -601,3 +601,6 @@ $config['website_assest'] = $config['base_url']."/web-assets/";
 
 $config['fcm_key'] = 'AIzaSyDuU86vWnkRQU22Ugwpyq5CmOTh6LMcm6s';
 
+$config['pickup_minutes'] = "20";
+$config['delivery_minutes'] = "40";
+

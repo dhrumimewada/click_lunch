@@ -75,10 +75,15 @@ $(document).ready(function (){
 
 
             $this = $(this);
-            row_id = get_dataid($this);
-            this_row = $this;
-
             order_name = $this.attr("data-ordername");
+            if (typeof order_id != "undefined" && order_id != ''){
+                row_id = order_id;
+            }else{
+                row_id = get_dataid($this);
+            }
+            
+            this_row = $this;
+            $('.order-id').text(order_name);
 
             $.ajax({
                 url: get_db_url,
@@ -143,6 +148,49 @@ $(document).ready(function (){
                 });
             }else{
                 $('#db-model .error').removeClass("d-none");
+            }
+        });
+
+        $(document).on('click',"#detail-db-model .submit", function(){
+            $this = $(this);
+            var db_id = $('#selct_db').val();
+            var db_name = $('#selct_db').find('option:selected').text();
+            var order_id = row_id;
+
+            console.log(db_id);
+            console.log(row_id);
+            console.log(db_name);
+            if (order_id !== null && order_id.length > 0 && db_id !== null && db_id.length > 0){
+
+                $.ajax({
+                    url: set_db_url,
+                    type: "POST",
+                    data:{
+                        db_id:db_id,
+                        order_id:order_id
+                    },
+                    success: function (returnData) {
+                        console.log(returnData);
+                        if (typeof returnData != "undefined")
+                        {
+                            $('#detail-db-model').modal('toggle');
+
+                                swal({
+                                    title: "Assigned!",
+                                    text: 'Order '+order_name+' Has Been Assigned To '+db_name+'.',
+                                    type: "success"
+                                }).then( function() {
+                                        window.location = back_url;
+                                });
+                            
+                        } 
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        console.log('error');
+                    }
+                });
+            }else{
+                $('#detail-db-model .error').removeClass("d-none");
             }
         });
     });

@@ -14,9 +14,9 @@ class Cart extends CI_Controller {
 		echo "Before destroy";
 		print_r($this->cart->contents());
 		echo "after destroy";
-		$this->cart->destroy();
-		echo "<pre>";
-		print_r($this->cart->contents());
+		// $this->cart->destroy();
+		// echo "<pre>";
+		// print_r($this->cart->contents());
 
 		// $insert_data = array(
   //   				'id' => "8d39e3679e0898c5292a7e59105bda96",
@@ -47,7 +47,35 @@ class Cart extends CI_Controller {
 
 	public function my_cart(){
 
+		$is_customer = $this->auth->is_customer();
+		$is_logged_in = $this->auth->is_logged_in();
+		if(is_logged_in && $is_customer){
 
+			if(isset($_SESSION['delivery_address_id']) && $_SESSION['delivery_address_id'] != ''){
+				$where = array('id' => decrypt($this->session->userdata('delivery_address_id')));
+		        $select = array('id','house_no','street','city','zipcode','latitude','longitude');
+		        $table = 'delivery_address';
+		        $default_address = get_data_by_filter($table,$select, $where);
+		        if(count($default_address[0]) > 0){
+		        	$output_data['default_address'] = $default_address[0];
+		        }
+
+			}else{
+				$where = array('customer_id' => $this->auth->get_user_id(), 'default_address' => 1);
+		        $select = array('id','house_no','street','city','zipcode','latitude','longitude');
+		        $table = 'delivery_address';
+		        $default_address = get_data_by_filter($table,$select, $where);
+		        if(count($default_address[0]) > 0){
+		        	$output_data['default_address'] = $default_address[0];
+		        }
+			}
+		}
+
+		$additional_recommendation = $this->welcome_model->additional_recommendation_items($this->cart->contents());
+		$output_data['additional_recommendation'] = $additional_recommendation;
+
+		$address_type = $this->config->item("address_type");
+		$output_data['address_type'] = $address_type;
 		$output_data['cart_contents'] = $this->cart->contents();
 		$output_data['cart_total'] = $this->cart->total();
 		$output_data['main_content'] = 'cart';
@@ -122,6 +150,16 @@ class Cart extends CI_Controller {
 				// This function add items into cart.
 				if($this->cart->insert($insert_data)){
 					//echo 'inserted';
+					$where = array('id' => $_POST['shop_id'], 'deleted_at' => NULL);
+			        $select = array('short_name');
+			        $table = 'shop';
+			        $short_name_data = get_data_by_filter($table,$select, $where);
+			        if(count($short_name_data[0]) > 0){
+			        	$shop_short_name = $short_name_data[0]['short_name'];
+			        	$this->session->set_userdata('shop_short_name',$shop_short_name);
+			        }
+
+					$this->session->set_userdata('cart_shop', $_POST['shop_id']);
 				}else{
 					//echo 'fail';
 				}
@@ -134,6 +172,17 @@ class Cart extends CI_Controller {
 	 //        print_r($this->cart->contents());
 	 //        exit;
 		redirect('cart');
+	}
+
+	public function get_recommendation_item_data(){
+		$data['item_variants'] = $this->welcome_model->get_item_variants($_POST['id']);
+
+		$select = array('id','name','IF(offer_price = "", price, offer_price) as price');
+		$where = array('id' => $_POST['id']);
+		$cart_contents = get_data_by_filter('item',$select,$where);
+		$data['cart_contents'] = $cart_contents[0];
+		echo json_encode($data);
+		exit;
 	}
 
 	public function get_cart_item_data(){
@@ -161,6 +210,120 @@ class Cart extends CI_Controller {
 		echo json_encode($data);
 		exit;
 		
+	}
+
+	public function add_recommendation_item_cart(){
+
+		$group = array();
+		foreach ($_POST['form_data'] as $key => $value) {
+			preg_match_all('!\d+!', $value['name'], $matches);
+			$group[$matches[0][0]][] = $value['value'];
+			//print_r($matches[0][0]);
+		}
+
+		$all_varients = array();
+		foreach ($group as $key => $value) {
+			foreach ($value as $key1 => $value1) {
+				array_push($all_varients, $value1);
+			}
+			
+		}
+
+		$all_varients_data = $this->welcome_model->get_variants($all_varients);
+		//print_r($all_varients_data);
+		$total_variants_price = 0.00;
+		// Sum of varients prices
+		foreach ($all_varients_data as $key => $value) {
+			$total_variants_price += number_format((float)$value['price'], 2, '.', '');
+		}
+
+		if($item_data['offer_price'] == ''){
+        	$price = $item_data['price'];
+        }else{
+        	$price = $item_data['offer_price'];
+        }
+		
+		$total_price = floatval($price) + floatval($total_variants_price);
+
+		$select = array('*');
+		$where = array('id' => $_POST['id']);
+		$item_data = get_data_by_filter('item',$select,$where);
+		$item_data = $item_data[0];
+
+		$group_data = array();
+		foreach ($group as $key => $value) {
+			$group_data[$key] = array();
+			foreach ($value as $key1 => $value1) {
+				$group_data[$key][] = $value1;
+			}
+		}
+
+		if(isset($group) && is_array($group) && !empty($group)){
+			$unique_id = md5($item_data['id'].serialize($group));
+		}else{
+			$unique_id = md5($item_data['id']);
+		}
+
+		$insert_data = array(
+							'id' => $unique_id,
+							'item_id' => $_POST['id'],
+							'name' => $item_data['name'],
+							'price' => number_format((float)$total_price, 2, '.', ''),
+							'item_price' => number_format((float)$price, 2, '.', ''),
+							'varient_price' => number_format((float)$total_variants_price, 2, '.', ''),
+							'qty' => 1,
+							'shop_id' => $item_data['shop_id'],
+							'picture' => $item_data['item_picture'],
+							'is_combo' => $item_data['is_combo'],
+							'group_data' => $group
+						);
+
+		if($this->cart->insert($insert_data)){
+			echo '1';
+			return true;
+		}else{
+			echo '0';
+			return false;
+		}
+
+		// echo json_encode($group);
+		// exit;
+	}
+
+	public function add_direct_recommendation_item_cart($item_id = NULL){
+		if(isset($item_id) && $item_id != '' && !is_null($item_id)){
+
+			$select = array('*');
+			$where = array('id' => $item_id);
+			$item_data = get_data_by_filter('item',$select,$where);
+			$item_data = $item_data[0];
+
+			if($item_data['offer_price'] == ''){
+	        	$price = $item_data['price'];
+	        }else{
+	        	$price = $item_data['offer_price'];
+	        }
+	        $total_variants_price = 0.00;
+
+
+			$unique_id = md5($item_id);
+			$insert_data = array(
+								'id' => $unique_id,
+								'item_id' => $item_id,
+								'name' => $item_data['name'],
+								'price' => number_format((float)$price, 2, '.', ''),
+								'item_price' => number_format((float)$price, 2, '.', ''),
+								'varient_price' => number_format((float)$total_variants_price, 2, '.', ''),
+								'qty' => 1,
+								'shop_id' => $item_data['shop_id'],
+								'picture' => $item_data['item_picture'],
+								'is_combo' => $item_data['is_combo'],
+								'group_data' => array()
+							);
+
+			$this->cart->insert($insert_data);
+			redirect(base_url() . "cart");
+		}
 	}
 
 	public function update_cart_item_data(){

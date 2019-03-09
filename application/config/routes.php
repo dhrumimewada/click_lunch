@@ -90,6 +90,7 @@ $route['vender-dashboard'] = 'vender/dashboard/vender_dashboard';
 $route['item-list'] = 'vender/item/item/index'; 
 $route['item-delete'] = 'vender/item/item/delete';
 $route['item-status'] = 'vender/item/item/active_deactive_item'; 
+$route['item-recommended'] = 'vender/item/item/recommended_item'; 
 $route['item-add'] = 'vender/item/item/post/Product'; 
 $route['item-update/(:any)'] = 'vender/item/item/put/$1'; 
 $route['item-update'] = 'vender/item/item/put'; 
@@ -293,7 +294,7 @@ $route['delivery-boy-status'] = 'dispatcher/delivery_boy/active_deactive_deliver
 $route['delivery-boy-update'] = 'dispatcher/delivery_boy/put';
 
 // Dispatcher
-$route['order-new'] = 'dispatcher/order/order_new';
+$route['order-single-assign'] = 'dispatcher/order/order_new';
 $route['order-status-update'] = 'dispatcher/order/order_status_update';
 $route['order-detail/(:any)'] = 'dispatcher/order/order_detail/$1';
 
@@ -329,6 +330,10 @@ $route['cart-destroy'] = 'web/cart/cart_destroy';
 $route['cart-item-delete'] = 'web/cart/cart_item_delete';
 $route['get-cart-item-data'] = 'web/cart/get_cart_item_data';
 $route['update-cart-item-data'] = 'web/cart/update_cart_item_data';
+$route['get-recommendation-item-data'] = 'web/cart/get_recommendation_item_data';
+$route['add-recommended-item-cart'] = 'web/cart/add_recommendation_item_cart';
+$route['add-direct-recommended-item-cart/(:any)'] = 'web/cart/add_direct_recommendation_item_cart/$1';
+
 $route['update-quantity'] = 'web/cart/update_quantity';
 $route['subscribe'] = 'web/welcome/subscribe';
 $route['faq'] = 'web/welcome/faq';
@@ -340,3 +345,12 @@ $route['email-check-availability'] = 'web/welcome/email_check_availability';
 $route['number-check-availability'] = 'web/welcome/number_check_availability';
 $route['register-customer'] = 'web/welcome/register_customer';
 $route['login-customer'] = 'web/welcome/login_customer';
+$route['forgot-password-customer'] = 'web/welcome/forgot_password_customer';
+$route['customer-logout'] = 'web/welcome/logout';
+
+$route['customer-add-address'] = 'web/profile/add_address';
+$route['choose-address'] = 'web/profile/all_address';
+$route['customer-set-address'] = 'web/profile/set_address';
+$route['my-delievry-address/(:any)'] = 'web/profile/my_delievry_address/$1';
+
+

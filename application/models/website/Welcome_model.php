@@ -180,4 +180,29 @@ class Welcome_model extends CI_Model {
 
 		return $return_value;
 	}
+
+	public function additional_recommendation_items($cart_data = array()){
+		$return_data = array();
+		if(isset($cart_data) && is_array($cart_data) && !empty($cart_data)){
+
+			$cart_products = array_unique(array_column($cart_data, 'item_id'));
+			$shop_id = array_unique(array_column($cart_data, 'shop_id'));
+
+			$this->db->select('*');
+			$this->db->from('item');
+			$this->db->where("deleted_at", NULL);
+			$this->db->where_not_in("id", $cart_products);
+			$this->db->where("is_active", 1);
+			$this->db->where("recommended", 1);
+			$this->db->where("shop_id",$shop_id[0]);
+			$this->db->limit(3);
+			$this->db->order_by("id", "desc");
+			$this->db->where("quantity !=",0);
+			$sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0){
+				$return_data = $sql_query->result_array();
+			}
+		}
+		return $return_data;
+	}
 }

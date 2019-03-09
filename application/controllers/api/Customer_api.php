@@ -2561,7 +2561,9 @@ class Customer_api extends REST_Controller {
                             if ($sql_query->num_rows() >= $promo_data->usage_limit){
                                 $response['status'] = false;
                                 $response['message'] = 'Invalid Promocode';
-                            }else{
+                            }
+                            else
+                            {
                                 $products_array = explode(',',$_POST['products']);
                                 $valid_promocodes = array();
                                 $valid = FALSE;
@@ -2625,7 +2627,7 @@ class Customer_api extends REST_Controller {
 
                                         break;
                                     default:
-                                        $valid = FALSE;
+                                    $valid = FALSE;
                                 }
 
                                 if($valid == TRUE){
@@ -2650,6 +2652,10 @@ class Customer_api extends REST_Controller {
                                     $response['promo_type'] = $promo_data->promo_type;
                                     $response['promocode_applied_products'] = $promocode_applied_products;
                                     $response['status'] = true;
+                                }else{
+                                    $response['promocode'] = $_POST['promocode'];
+                                    $response['valid_promocode'] = $valid;
+                                    $response['status'] = false;
                                 }
                             }                            
                         }
@@ -3184,7 +3190,7 @@ class Customer_api extends REST_Controller {
                                                             'schedule_time'=> $schedule_time,
                                                             'delivery_address_id'=> $order_data['delivery_address_id'],
 
-                                                            'order_status'=> 1,
+                                                            'order_status'=> 0,
                                                             'payment_status'=> 1,
                                                             'payment_mode'=> $order_data['payment_mode'],
                                                             'transaction_id'=> '' 

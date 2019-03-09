@@ -1,5 +1,5 @@
 <?php
-$back_link = base_url().'order-new';
+$back_link = base_url().'order-single-assign';
 ?>
 <style type="text/css" media="screen">
     .btn-danger{
@@ -8,6 +8,38 @@ $back_link = base_url().'order-new';
         border-color: #ec536c;
     }
 </style>
+<!-- The Modal -->
+<div class="modal" id="detail-db-model">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Assign Order To Delivery Boy (<span class="order-id">CL80</span>)</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+            <div class="form-group col-12">
+                <label class="required" for="group">List of Delivery Boys</label>
+                <div>
+                    <select class="select2 form-control" data-placeholder="Select Delivery Boy" name="selct_db" id='selct_db'>
+                    </select>
+                    <div class="text-danger d-none error">Please select delivery boy</div>
+                </div>
+          </div>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success submit">Assign</button>
+        </div>
+        
+      </div>
+    </div>
+</div>
 <div class="content">
     <div class="container-fluid">
 
@@ -55,21 +87,6 @@ $back_link = base_url().'order-new';
                                         </address>
                                     </div>
                                 </div>
-                                <!-- <div class="row">
-                                    <div class="col-6 m-t-30">
-                                        <address>
-                                            <strong>Payment Method:</strong><br>
-                                            Visa ending **** 4242<br>
-                                            jsmith@email.com
-                                        </address>
-                                    </div>
-                                    <div class="col-6 m-t-30 text-right">
-                                        <address>
-                                            <strong>Order Date:</strong><br>
-                                            October 7, 2016<br><br>
-                                        </address>
-                                    </div>
-                                </div> -->
                             </div>
                         </div>
 
@@ -210,7 +227,7 @@ $back_link = base_url().'order-new';
                                                 <button class="btn btn-danger waves-effect update-status" status-id='2'>Reject</button>
                                                 <?php
                                                 }elseif($is_dispatcher){ ?>
-                                                <button class="btn btn-primary waves-effect assign-db">Assign Delivery Boy</button>
+                                                <button class="btn btn-primary waves-effect assign-db" data-ordername='<?php echo 'CL'.$order_data['order']->id; ?>' title='Assign to Delivery Boy' data-popup='tooltip' data-toggle='modal' data-target='#detail-db-model'>Assign Delivery Boy</button>
                                                 <?php
                                                 }
                                                 ?>  
@@ -235,9 +252,11 @@ $back_link = base_url().'order-new';
 <script type="text/javascript" charset="utf-8" async defer>
     var order_status_update_url = "<?php echo base_url().'order-status-update'; ?>";
     var get_db_url = "<?php echo base_url().'fetch-db'; ?>";
-    var set_db_url = "";
+    var set_db_url = "<?php echo base_url().'set-db'; ?>";
     
     var redirect = '1';
     var order_id = "<?php echo $order_data['order']->id; ?>";
-    var index_url = "<?php echo base_url().'order-new'; ?>";
+    var index_url = "<?php echo base_url().'order-single-assign'; ?>";
+    
+    var back_url = "<?php echo base_url().'order-single-assign'; ?>";
 </script>

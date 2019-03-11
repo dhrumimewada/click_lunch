@@ -454,17 +454,17 @@ $( document ).ready(function() {
     });
 
     // Hours Delivery- Start
-    var delivery_morning_from_option = delivery_morning_from.toString();
-    var delivery_morning_to_option = delivery_morning_to.toString();
+    // var delivery_morning_from_option = delivery_morning_from.toString();
+    // var delivery_morning_to_option = delivery_morning_to.toString();
 
-    $('#delivery_morning_from option[value="'+delivery_morning_from_option+'"]').attr('selected', 'selected');
-    $('#delivery_morning_to option[value="'+delivery_morning_to_option+'"]').attr('selected', 'selected');
+    // $('#delivery_morning_from option[value="'+delivery_morning_from_option+'"]').attr('selected', 'selected');
+    // $('#delivery_morning_to option[value="'+delivery_morning_to_option+'"]').attr('selected', 'selected');
 
-    var delivery_evening_from_option = delivery_evening_from.toString();
-    var delivery_evening_to_option = delivery_evening_to.toString();
+    // var delivery_evening_from_option = delivery_evening_from.toString();
+    // var delivery_evening_to_option = delivery_evening_to.toString();
 
-    $('#delivery_evening_from option[value="'+delivery_evening_from_option+'"]').attr('selected', 'selected');
-    $('#delivery_evening_to option[value="'+delivery_evening_to_option+'"]').attr('selected', 'selected');
+    // $('#delivery_evening_from option[value="'+delivery_evening_from_option+'"]').attr('selected', 'selected');
+    // $('#delivery_evening_to option[value="'+delivery_evening_to_option+'"]').attr('selected', 'selected');
     // hours Delivery - End
 
     // Delivery - Order by hours - start

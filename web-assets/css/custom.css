@@ -504,6 +504,10 @@ li.dropdown.notification-list.last-div:before{
 }
 .bg-danger{background-color: #ff0000 !important;}
 .error-item{ font-size: 12px; }
+.form-group label.required:after {
+    content: "*";
+    color: #ec536c;
+}
 /* Scroll */
 /* width */
 ::-webkit-scrollbar {

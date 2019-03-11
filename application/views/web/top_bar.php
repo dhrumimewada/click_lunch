@@ -97,8 +97,8 @@ if($is_customer){
                                             <span>My Profile</span></a>
 
                                             <div class="dropdown-menu  drop-box" aria-labelledby="navbarDropdownMenuLink">
-                                                <a class="dropdown-item" href="<?php echo BASE_URL(); ?>welcome"><i class="mdi mdi-account-circle m-r-5"></i> Contact Information</a>
-                                                <a class="dropdown-item" href="<?php echo BASE_URL(); ?>welcome"><i class="mdi mdi-account-circle m-r-5"></i> Payment Methods</a>                                                
+                                                <a class="dropdown-item" href="<?php echo BASE_URL(); ?>contact-info"><i class="mdi mdi-account-circle m-r-5"></i> Contact Information</a>
+                                                <a class="dropdown-item" href="<?php echo BASE_URL(); ?>customer-payment-setting"><i class="mdi mdi-account-circle m-r-5"></i> Payment Methods</a>                                                
                                             </div>
                                         </li> 
 

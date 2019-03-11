@@ -3337,6 +3337,9 @@ class Customer_api extends REST_Controller {
 
                                                             $order_data_edited['promo_amount'] = number_format((float)$promo_discount, 2, '.', '');
                                                             $order_data_edited['total'] = number_format((float)$total, 2, '.', '');
+
+                                                            $order_data_edited['QR_code'] = $this->generate_qr_code('CL'.$order_id);
+
                                                             $this->db->where('id',$order_id);  
                                                             $this->db->update('orders', $order_data_edited);
 
@@ -3353,6 +3356,7 @@ class Customer_api extends REST_Controller {
                                                             // $response['product_data'] = $order_products_array;
 
                                                             $response['order'] = true;    
+                                                            $response['order_id'] = $order_id;    
 
                                                         }else{
                                                             $response['status'] = false;
@@ -3474,6 +3478,96 @@ class Customer_api extends REST_Controller {
             $response['message'] = $errorPost;
         }
         $this->response($response);
+    }
+
+    public function order_detail_post(){
+        $postFields['order_id'] = $_POST['order_id']; 
+        if(empty($errorPost)){
+            $where = array('id' => intval($_POST['order_id']));
+            $order = (array)$this->db->get_where('orders',$where)->row();
+            if(empty($order)){
+                $response['status'] = false;
+                $response['message'] = 'Order not found';    
+            }else{
+                $sql_select = array(
+                                't1.id',
+                                't1.total',
+                                't2.username',
+                                't1.order_type',
+                                'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
+                                't4.latitude as address_latitude',
+                                't4.longitude as address_longitude',
+                                't3.shop_name',
+                                't3.profile_picture',
+                                't3.address as shop_address',
+                                't3.latitude as shop_latitude',
+                                't3.longitude as shop_longitude',
+                                't3.profile_picture as shop_picture',
+                                't1.payment_mode',
+                                't1.subtotal',
+                                't1.promo_amount',
+                                'ROUND((((t1.subtotal + t1.promo_amount) * t1.tax) / 100), 2) as tax_amount',
+                                'ROUND((((t1.subtotal + t1.promo_amount) * t1.service_charge) / 100), 2) as service_charge_amount',
+                                't1.delivery_charges',
+                                't1.total',
+                                'IF(t1.order_type=5, t1.schedule_date, "") as schedule_date',
+                                'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
+                                'IF(t1.order_type=2, t1.later_time, "") as later_time',
+                                't1.created_at',
+                                't1.QR_code'
+                                // 'IF(t1.order_type=2, t1.schedule_date, "") as schedule_date',
+                                // 'IF(t1.order_type=2, t1.schedule_time, "") as schedule_time',
+                                // 'IF(t1.order_type=1, t1.created_at, "") as created_at'
+                );
+                $this->db->select($sql_select);
+
+                $this->db->from('orders t1');
+                $this->db->join('customer t2', 't1.customer_id = t2.id','left');
+                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+                $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
+
+                $this->db->where('t1.id', $_POST['order_id']);
+                //$this->db->where('t1.order_status', 4);
+
+                // $this->db->group_start();
+                //     $this->db->where('t1.order_type', 1);
+                //     $this->db->or_where('t1.order_type', 2);
+                // $this->db->group_end();
+
+                $sql_query = $this->db->get();
+
+                if ($sql_query->num_rows() > 0){
+                    $orders_data = (array)$sql_query->row();
+                    $orders_data['rating'] = '3.5';
+
+                    $sql_select = array(
+                                    't2.name',
+                                    't1.quantity',
+                                    't1.total_product_price'
+                    );
+
+                    $this->db->select($sql_select);
+                    $this->db->from('order_items t1');
+                    $this->db->where('t1.order_id', $orders_data['id']);
+                    $this->db->join('item t2', 't1.item_id = t2.id','left');
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $orders_data['products'] = $sql_query->result_array();
+                    }    
+                    $response['orders_data'] = $orders_data;       
+                    $response['status'] = TRUE;             
+                }else{
+                    $response['message'] = 'Order data not found';                  
+                    $response['status'] = FALSE; 
+                }
+            }
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+
+        $errorPost = $this->ValidatePostFields($postFields);
     }
 
     public function search_post(){
@@ -3600,6 +3694,31 @@ class Customer_api extends REST_Controller {
             $response['status'] = false;
             $response['message'] = $errorPost;
         }
+        $this->response($response);
+    }
+
+    public function generate_qr_code($data_string = NULL){
+        $return_data = NULL;
+        if(isset($data_string) && !is_null($data_string)){
+
+            $unique_code = $data_string.'_'.time();
+            $googleapis = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=".$unique_code."&choe=UTF-8";
+            $file = file_get_contents($googleapis);
+
+            $path = FCPATH . $this->config->item("qr_code_path").'/'.$unique_code.'.png';
+            if(file_put_contents($path, $file)){
+                $return_data = $unique_code.".png";
+            }else{
+                $return_data = '';
+            }
+            
+        }
+        return $return_data;
+    }
+
+    public function test_post(){
+        $img_mae = $this->generate_qr_code($_POST['data']);
+        $response['img_mae'] = $img_mae;
         $this->response($response);
     }
 

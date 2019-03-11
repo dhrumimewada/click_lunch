@@ -62,10 +62,10 @@ class Vender_profile extends CI_Controller {
 					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|max_length[255]'),
 					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|max_length[255]'),
 
-					array('field' => 'delivery_morning_from', 'label' => 'from time', 'rules' => 'trim|required'),
-					array('field' => 'delivery_morning_to', 'label' => 'to time', 'rules' => 'trim|required'),
-					array('field' => 'delivery_evening_from', 'label' => 'from time', 'rules' => 'trim|required'),
-					array('field' => 'delivery_evening_to', 'label' => 'to time', 'rules' => 'trim|required'),
+					// array('field' => 'delivery_morning_from', 'label' => 'from time', 'rules' => 'trim|required'),
+					// array('field' => 'delivery_morning_to', 'label' => 'to time', 'rules' => 'trim|required'),
+					// array('field' => 'delivery_evening_from', 'label' => 'from time', 'rules' => 'trim|required'),
+					// array('field' => 'delivery_evening_to', 'label' => 'to time', 'rules' => 'trim|required'),
 
 					array('field' => 'delivery_time', 'label' => 'delivery time', 'rules' => 'trim|required'),
 					array('field' => 'order_by_time', 'label' => 'order by time', 'rules' => 'trim|required'),

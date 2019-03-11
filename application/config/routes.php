@@ -353,4 +353,9 @@ $route['choose-address'] = 'web/profile/all_address';
 $route['customer-set-address'] = 'web/profile/set_address';
 $route['my-delievry-address/(:any)'] = 'web/profile/my_delievry_address/$1';
 
+$route['contact-info'] = 'web/profile/update_profile';
+$route['reset-password'] = 'web/profile/update_password';
+$route['customer-payment-setting'] = 'web/profile/payment_setting';
+$route['payment-card-delete'] = 'web/profile/payment_card_delete';
+
 

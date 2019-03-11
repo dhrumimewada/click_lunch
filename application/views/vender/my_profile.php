@@ -422,7 +422,7 @@ $delivery_evening_to = $delivery['evening']['to'];
                                     <h4 class="mt-0 mb-0 header-title">Restaurant Delivery Hours</h4>
                                     <hr class="mt-1 mb-3">
                                 </div>
-                                <div class="col-lg-3">
+                                <!-- <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="required" for="delivery_morning_from">Morning From Time</label>
                                         <select class="select2 form-control hours_from_time" name="delivery_morning_from" id="delivery_morning_from">
@@ -466,7 +466,7 @@ $delivery_evening_to = $delivery['evening']['to'];
                                             <?php echo form_error('delivery_evening_to'); ?>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
 
                             <div class="row">
@@ -931,10 +931,10 @@ $google_key = $this->config->item("google_key");
     var from_time_selected = '<?php echo $from_time_selected; ?>';
     var to_time_selected = '<?php echo $to_time_selected; ?>';
 
-    var delivery_morning_from = '<?php echo $delivery_morning_from; ?>';
-    var delivery_morning_to = '<?php echo $delivery_morning_to; ?>';
-    var delivery_evening_from = '<?php echo $delivery_evening_from; ?>';
-    var delivery_evening_to = '<?php echo $delivery_evening_to; ?>';
+    // var delivery_morning_from = '<?php //echo $delivery_morning_from; ?>';
+    // var delivery_morning_to = '<?php //echo $delivery_morning_to; ?>';
+    // var delivery_evening_from = '<?php //echo $delivery_evening_from; ?>';
+    // var delivery_evening_to = '<?php //echo $delivery_evening_to; ?>';
 
     var delivery_time = '<?php echo $vender_detail->delivery_time; ?>';
     var order_by_time = '<?php echo $vender_detail->order_by_time; ?>';

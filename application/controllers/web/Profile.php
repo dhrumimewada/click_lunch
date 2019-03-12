@@ -114,6 +114,48 @@ class Profile extends CI_Controller {
 		} 
 	}
 
+	public function validate_card_number($card_number = NULL, $card_type = NULL) {
+
+		$valid = validate_card($card_number);
+		if($valid == FALSE){
+			$this->form_validation->set_message('validate_card_number', 'The card number is incorrect');
+			return FALSE;
+		}else{
+			$card_types = array('1' => 'visa', '2' => 'mastercard', '3' => 'amex', '4' => 'jcb', '5' => 'dinnerclub', '6' => 'discover');
+			$my_card_type = $card_types[$card_type];
+			$card_type = validate_customer_card($card_number);
+			if($card_type != '' && $card_type == $my_card_type){
+				return TRUE;
+			}else{
+				$this->form_validation->set_message('validate_card_number', 'The card number is incorrect');
+				return FALSE;
+			}
+		}
+	}
+
+	public function validate_expiry_date($expiry_date = NULL){
+		$expiry_date_array = explode('/',$expiry_date);
+
+		if(isset($expiry_date) && $expiry_date != '' && !is_null($expiry_date) && checkdate($expiry_date_array[0],'01',$expiry_date_array[1])){
+            
+            $expiry_date_obj = DateTime::createFromFormat('d/m/Y H:i:s', "01/" . $expiry_date_array[0] . "/" .  $expiry_date_array[1]." 00:00:00");
+            $expiry_date_obj = new DateTime($expiry_date_obj->format("Y/m/t"));
+
+            $my_date = date('d/m/Y');
+            $today = DateTime::createFromFormat('d/m/Y H:i:s', $my_date ." 00:00:00");
+
+            if($expiry_date_obj >= $today){
+                return TRUE;
+            }else{
+            	$this->form_validation->set_message('validate_expiry_date', 'Your card is expired');
+				return FALSE;
+            }
+        }else{
+        	$this->form_validation->set_message('validate_expiry_date', 'The expiry date is invalid');
+			return FALSE;
+        }
+	}
+
 	public function update_password(){
 		$this->auth->clear_messages();
 		$this->load->library('form_validation');
@@ -148,7 +190,7 @@ class Profile extends CI_Controller {
 		$this->load->view('web/template',$data);
 	}
 
-	public function payment_setting(){
+	public function payment_setting($id = NULL){
 		$this->auth->clear_messages();
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
@@ -158,24 +200,39 @@ class Profile extends CI_Controller {
 
 				$validation_rules = array(
 					
-					array('field' => 'username', 'label' => 'full name', 'rules' => 'trim|required|callback_customAlpha|min_length[3]|max_length[50]'),
-					array('field' => 'mobile_number', 'label' => 'mobile number', 'rules' => 'trim|required|min_length[12]|max_length[12]'),
-					array('field' => 'dob', 'label' => 'date of birth', 'rules' => 'trim|required'),
-					array('field' => 'gender', 'label' => 'gender', 'rules' => 'trim|required')
+					array('field' => 'card_holder_name', 'label' => 'card holder name', 'rules' => 'trim|required|callback_customAlpha|min_length[3]|max_length[50]'),
+					array('field' => 'nickname', 'label' => 'nick name', 'rules' => 'trim|callback_customAlpha|min_length[3]|max_length[50]'),
+					array('field' => 'card_number', 'label' => 'card number', 'rules' => 'trim|required|is_natural|min_length[13]|max_length[19]|callback_validate_card_number[' . $this->input->post("card_type") . ']'),
+					array('field' => 'expiry_date', 'label' => 'expiry date', 'rules' => 'trim|required|callback_validate_expiry_date'),
+					array('field' => 'cvv', 'label' => 'cvv', 'rules' => 'trim|required|is_natural|min_length[3]|max_length[4]'),
+					array('field' => 'card_type', 'label' => 'card type', 'rules' => 'trim|required|is_natural')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
-				echo "11";
-				exit;
+				
+				if ($this->form_validation->run() === true) {
+					if($this->profile_model->add_card()){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "customer-payment-setting");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "customer-payment-setting");
+					}	
+				} 
 			}
 		}
 
-		$where = array('customer_id' => $this->auth->get_user_id(), 'deleted_at' => NULL);
-        $select = array('id','display_number','expiry_date','card_type');
-        $table = 'customer_payment_card';
-        $payment_card_data = get_data_by_filter($table,$select, $where);
-
+        $payment_card_data = $this->profile_model->get_cards();
         $data['payment_cards'] = $payment_card_data;
+
+        if(isset($id) && !is_null($id) && $id != ''){
+        	$my_payment_card = $this->profile_model->get_cards(decrypt($id));
+        	$data['my_payment_card'] = $my_payment_card;
+
+        	// echo "<pre>";
+        	// print_r($data);
+        	// exit;
+        }
 
 		$data['main_content'] = "payment_setting";
 		$this->load->view('web/template',$data);
@@ -263,6 +320,32 @@ class Profile extends CI_Controller {
 		// print_r($this->session->userdata('delivery_address_id'));
 		// exit;
 		redirect(base_url() . "cart");
+	}
+
+	public function change_location(){
+
+		if (isset($_POST) && !empty($_POST)){
+			if($this->profile_model->set_as_defualt_address()){
+				$this->session->set_flashdata($this->auth->get_messages_array());
+				redirect(base_url() . "change-location");
+			}else{
+				$this->session->set_flashdata($this->auth->get_messages_array());
+				redirect(base_url() . "change-location");
+			}
+		}
+
+		$where = array('customer_id' => $this->auth->get_user_id(), 'deleted_at' => NULL);
+        $select = array('id','default_address','house_no','street','city','zipcode','latitude','longitude','address_type');
+        $table = 'delivery_address';
+        $customer_addresses = get_data_by_filter($table,$select, $where);
+
+        $address_type = $this->config->item("address_type");
+
+        $output_data["customer_addresses"] = $customer_addresses;
+        $output_data["address_type"] = $address_type;
+
+        $output_data['main_content'] = 'change_location';
+		$this->load->view('web/template',$output_data);
 	}
 
 	public function unset_d(){

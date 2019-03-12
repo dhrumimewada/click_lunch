@@ -379,7 +379,7 @@ if(isset($_SESSION['shop_short_name']) && $_SESSION['shop_short_name'] != ''){
 	var add_recommended_item_cart_url = "<?php echo base_url().'add-recommended-item-cart'; ?>";
 
 	var add_direct_to_cart_url = "<?php echo base_url().'add-direct-recommended-item-cart'; ?>";
-
+	var checkout_url = "<?php echo base_url().'checkout'; ?>";
 	console.log(defualt_delivery_address_id);
 	console.log(cart_contents_data);
 </script>

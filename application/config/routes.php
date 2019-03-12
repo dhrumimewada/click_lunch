@@ -356,6 +356,10 @@ $route['my-delievry-address/(:any)'] = 'web/profile/my_delievry_address/$1';
 $route['contact-info'] = 'web/profile/update_profile';
 $route['reset-password'] = 'web/profile/update_password';
 $route['customer-payment-setting'] = 'web/profile/payment_setting';
+$route['customer-payment-setting/(:any)'] = 'web/profile/payment_setting/$1';
 $route['payment-card-delete'] = 'web/profile/payment_card_delete';
+
+$route['change-location'] = 'web/profile/change_location';
+$route['checkout'] = 'web/cart/checkout';
 
 

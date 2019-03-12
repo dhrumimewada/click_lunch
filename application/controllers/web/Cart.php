@@ -14,6 +14,7 @@ class Cart extends CI_Controller {
 		echo "Before destroy";
 		print_r($this->cart->contents());
 		echo "after destroy";
+		print_r($_SESSION);
 		// $this->cart->destroy();
 		// echo "<pre>";
 		// print_r($this->cart->contents());
@@ -237,6 +238,11 @@ class Cart extends CI_Controller {
 			$total_variants_price += number_format((float)$value['price'], 2, '.', '');
 		}
 
+		$select = array('*');
+		$where = array('id' => $_POST['id']);
+		$item_data = get_data_by_filter('item',$select,$where);
+		$item_data = $item_data[0];
+
 		if($item_data['offer_price'] == ''){
         	$price = $item_data['price'];
         }else{
@@ -244,11 +250,6 @@ class Cart extends CI_Controller {
         }
 		
 		$total_price = floatval($price) + floatval($total_variants_price);
-
-		$select = array('*');
-		$where = array('id' => $_POST['id']);
-		$item_data = get_data_by_filter('item',$select,$where);
-		$item_data = $item_data[0];
 
 		$group_data = array();
 		foreach ($group as $key => $value) {
@@ -407,5 +408,63 @@ class Cart extends CI_Controller {
 			echo FALSE;
 			return false;
 		}	
+	}
+
+	public function checkout(){
+		$tax = '';
+        $this->db->select('data');
+        $this->db->where("name", 'tax');
+        $this->db->from('setting');
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+            $tax_data = $sql_query->row();
+            $tax = $tax_data->data;
+        }
+
+		$output_data['cart_contents'] = $this->cart->contents();
+		$output_data['cart_total'] = $this->cart->total();
+		$output_data['tax'] = $tax;
+
+		$shop_id = '';
+		$service_charge = '';
+		$subtotal = 0;
+		foreach ($this->cart->contents() as $key => $value) {
+			$shop_id = $value['shop_id'];
+			break;
+		}
+		$this->db->select('service_charge');
+        $this->db->where("id", $shop_id);
+        $this->db->from('shop');
+        $sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+            $shop_data = $sql_query->row();
+            $service_charge = $shop_data->service_charge;
+        }
+        $output_data['service_charge'] = $service_charge;
+        $address_id = decrypt($_SESSION['delivery_address_id']);
+
+        if(isset($_SESSION['delivery_fee'])){
+			$delivery_fee = $_SESSION['delivery_fee'];
+        }else{
+        	$delivery_fee = $this->welcome_model->fetch_delivery_charge($shop_id, $address_id);
+        }
+        
+        if($delivery_fee == FALSE){
+        	$this->auth->set_error_message("Delivery is not available on this location");
+        	$this->session->set_flashdata($this->auth->get_messages_array());
+        	redirect(base_url() . "cart");
+        }
+        $output_data['delivery_fee'] = $delivery_fee;
+
+        $valid_promocodes = $this->welcome_model->fetch_promocode();
+        $output_data['promocodes'] = $valid_promocodes;
+        //echo "<pre>";
+         //print_r($valid_promocodes);
+        // print_r($address_id);
+        //var_dump($delivery_fee);
+       // exit;
+
+		$output_data['main_content'] = "checkout";
+		$this->load->view('web/template',$output_data);
 	}
 }

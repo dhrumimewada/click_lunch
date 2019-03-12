@@ -5,6 +5,30 @@ class Profile_model extends CI_Model {
 		parent::__construct();
 	}
 
+    public function get_cards($id = NULL){
+        $return_data = array();
+
+        $this->db->select('*');
+        $this->db->from('customer_payment_card');
+        $this->db->where("customer_id", $this->auth->get_user_id());
+        $this->db->where("deleted_at", NULL);
+        $this->db->order_by("id", "desc");
+
+        if (isset($id) && !is_null($id)) {
+            $this->db->where('id', $id);
+        }
+
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+            if (isset($id) && !is_null($id)) {
+                $return_data = $sql_query->row();
+            }else{
+                $return_data = $sql_query->result_array();
+            }
+        }
+        return $return_data;
+    }
+
 	public function add_address(){
 
 		$return_value = FALSE;
@@ -66,6 +90,34 @@ class Profile_model extends CI_Model {
 		return $return_value;
 	}
 
+    public function set_as_defualt_address(){
+
+        $this->db->trans_begin();
+        $return_value = FALSE;
+
+        $old_data_array = array('default_address' => 0);
+        $this->db->where('customer_id',$this->auth->get_user_id());
+        $this->db->where('default_address',1);
+        $this->db->update('delivery_address',$old_data_array);
+
+        $data_array = array('default_address' => 1);
+        $this->db->where('customer_id',$this->auth->get_user_id());
+        $this->db->where('id',$this->input->post("address"));
+
+        $this->db->update('delivery_address',$data_array);
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $this->auth->set_error_message("Error into updating data");
+        } else {
+            $this->db->trans_commit();
+            $this->auth->set_status_message("Change location successfully");
+            $return_value = TRUE;
+        }
+
+        return $return_value;
+    }
+
     public function update_profile($modal_data = NULL) {
         $this->db->trans_begin();
         $return_value = FALSE;
@@ -111,6 +163,47 @@ class Profile_model extends CI_Model {
         } else {
             $this->db->trans_commit();
             $this->auth->set_status_message("Profile updated successfully");
+            $return_value = TRUE;
+        }
+
+        return $return_value;
+    }
+
+    public function add_card(){
+
+        $this->db->trans_begin();
+        $return_value = FALSE;
+
+        $payment_card_data = array(
+                            'customer_id' => $this->auth->get_user_id(),
+                            'card_holder_name' => addslashes($this->input->post("card_holder_name")),
+                            'card_number' => encrypt($this->input->post("card_number")),
+                            'display_number' => 'XXXX XXXX XXXX '.substr($this->input->post("card_number"), -4),
+                            'expiry_date' => encrypt($this->input->post("expiry_date")),
+                            'cvv' => encrypt($this->input->post("cvv")),
+                            'card_type' => intval($this->input->post("card_type"))
+                        );
+        if(isset($_POST['nickname'])){
+            $payment_card_data['nickname'] = addslashes($this->input->post("nickname"));
+        }
+
+        if(isset($_POST['card_id'])){
+            $this->db->where('id',intval($this->input->post("card_id")));
+            $this->db->update('customer_payment_card',$payment_card_data);
+        }else{
+            $this->db->insert('customer_payment_card',$payment_card_data);
+        }
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $this->auth->set_error_message("Error into inserting data");
+        } else {
+            $this->db->trans_commit();
+            if(isset($_POST['card_id'])){
+                $this->auth->set_status_message("Payment card updated successfully");
+            }else{
+                $this->auth->set_status_message("Payment card added successfully");
+            }
             $return_value = TRUE;
         }
 

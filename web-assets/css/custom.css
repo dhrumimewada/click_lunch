@@ -508,6 +508,9 @@ li.dropdown.notification-list.last-div:before{
     content: "*";
     color: #ec536c;
 }
+.modal-content.offer-pop-box{
+    margin-top: 90px;
+}
 /* Scroll */
 /* width */
 ::-webkit-scrollbar {

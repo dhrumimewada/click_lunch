@@ -62,11 +62,7 @@ $delivery_evening_to = $delivery['evening']['to'];
         <!-- end row -->
         <div class="row">
             <div class="col-lg-12">
-                <?php echo get_msg();
-                // echo '<pre>';
-                //  print_r($vender_cuisine_detail);
-
-                ?>
+                <?php echo get_msg();?>
             </div>
         </div>
 

@@ -193,7 +193,7 @@ button:focus {outline: 0;}
 /* DELIVERY ADDRESS */
 .delivery-address-block {padding: 20px 20px;}
 .delivery-address-block .select-delivery-address-block .delivery-address {margin-bottom: 15px; margin-top: 15px;}
-.delivery-address-block .select-delivery-address-wrapper {min-height: 600px;}
+/* .delivery-address-block .select-delivery-address-wrapper {min-height: 600px;} */
 .modal-with-logo .modal-body {padding: 0;}
 .modal-with-logo .modalform {border-radius: .3rem; padding: 30px 0 40px; margin-bottom: 40px;}
 .add-new-address-block .form-control {border-width: 0 0 1px 0; border-style: solid; border-color: #404040; border-radius: 0; color: #404040; font-size: 20px; padding-left: 0;}
@@ -351,16 +351,22 @@ button:focus {outline: 0;}
 .add-card-block #add-card-form .form-group {margin-bottom: 30px;}
 .add-card-block .add-card-button .add-card-btn {height: 50px; font-size: 20px; text-transform: none; min-width: 260px; border-radius: 15px;}
 .add-card-block .select-card .form-check .form-check-label {background-color: #F2F2F2; box-shadow: 0px 2px 4px 1px rgba(0,0,0,0.2); width: 80px; height: 55px; display: flex; justify-content: center; align-items: center; border-radius: 8px;}
-.add-card-block .select-card {margin-bottom: 30px !important;}
+.add-card-block .select-card div{ margin: 5px 0; }
 .add-card-block .select-card .form-check {max-width: 80px; padding: 0; margin-right: 25px;}
 .add-card-block .select-card .form-check [type="radio"] {margin: 0; padding: 0; appearance: none; -moz-appearance: none; -webkit-appearance: none;}
 .add-card-block .select-card .form-check [type="radio"]:not(:checked) + label {box-shadow: none;}
-.add-card-block .select-card .form-check [type="radio"]:checked + label.visa {background: #F2F2F2 url(../images/visa-logo.png) no-repeat scroll center/auto auto;}
-.add-card-block .select-card .form-check [type="radio"]:checked + label.master-card {background: #F2F2F2 url(../images/master-card.png) no-repeat scroll center/auto auto;}
-.add-card-block .select-card .form-check [type="radio"]:checked + label.american-express {background: #F2F2F2 url(../images/american-express.png) no-repeat scroll center/auto auto;}
-.visa {background: #F2F2F2 url(../images/visa-grey.png) no-repeat scroll center/auto auto; }
-.master-card {background: #F2F2F2 url(../images/master-card-grey.png) no-repeat scroll center/auto auto; }
-.american-express {background: #F2F2F2 url(../images/american-express-grey.png) no-repeat scroll center/auto auto; }
+.add-card-block .select-card .form-check [type="radio"]:checked + label.visa {background: #F2F2F2 url(../images/card-icons/visa-logo.png) no-repeat scroll center/auto auto;}
+.add-card-block .select-card .form-check [type="radio"]:checked + label.master-card {background: #F2F2F2 url(../images/card-icons/master-card.png) no-repeat scroll center/auto auto;}
+.add-card-block .select-card .form-check [type="radio"]:checked + label.american-express {background: #F2F2F2 url(../images/card-icons/american-express.png) no-repeat scroll center/auto auto;}
+.add-card-block .select-card .form-check [type="radio"]:checked + label.diners {background: #F2F2F2 url(../images/card-icons/diners.png) no-repeat scroll center/auto auto;}
+.add-card-block .select-card .form-check [type="radio"]:checked + label.discover {background: #F2F2F2 url(../images/card-icons/discover.png) no-repeat scroll center/auto auto;}
+.add-card-block .select-card .form-check [type="radio"]:checked + label.jcb {background: #F2F2F2 url(../images/card-icons/jcb.png) no-repeat scroll center/auto auto;}
+.visa {background: #F2F2F2 url(../images/card-icons/visa-grey.png) no-repeat scroll center/auto auto; }
+.master-card {background: #F2F2F2 url(../images/card-icons/master-card-grey.png) no-repeat scroll center/auto auto; }
+.american-express {background: #F2F2F2 url(../images/card-icons/american-express-grey.png) no-repeat scroll center/auto auto; }
+.diners {background: #F2F2F2 url(../images/card-icons/diners-gray.png) no-repeat scroll center/auto auto; }
+.discover {background: #F2F2F2 url(../images/card-icons/discover-gray.png) no-repeat scroll center/auto auto; }
+.jcb {background: #F2F2F2 url(../images/card-icons/jcb-gray.png) no-repeat scroll center/auto auto; }
 .add-card-block > .row {margin-bottom: 80px !important;}
 .add-card-block.white-bg {padding: 50px 30px 40px;}
 
@@ -619,7 +625,7 @@ img.hover-icon {
 .offer-txt input { padding: 10px 20px;}
 .select-or b { font-size: 18px; color: #000000ad;}
 .select-or h6 { font-size: 20px; font-weight: 600; text-transform: capitalize; text-align: left; margin: 20px 0 20px;}
-.select-promocode { height: 550px; padding: 0px 20px 30px; background-color: #fff; box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.1); border-radius: 15px; padding: 15px 15px 15px 25px; margin-bottom: 40px; height: 550px; -ms-overflow-style: none; overflow: auto; scrollbar-width: none; -ms-overflow-style:none;}
+.select-promocode { padding: 0px 20px 30px; background-color: #fff; box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.1); border-radius: 15px; padding: 15px 15px 15px 25px; margin-bottom: 40px; -ms-overflow-style: none; overflow: auto; scrollbar-width: none; -ms-overflow-style:none;}
 .select-promocode-box .form-check label{ display: block; line-height: 24px}
 .select-promocode-box .form-check span { font-size: 13px;}
 .select-promocode-box .form-check { padding-left: 0; padding-right: 30px; text-align: left;}

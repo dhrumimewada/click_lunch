@@ -136,7 +136,7 @@ if($is_customer){
                                         </li>
                                         <li class="nav-item dropdown drop-down-icon">
                                             <div class="sub-list">
-                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
+                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>change-location">
                                                     <img src="<?php echo $assets; ?>images/Change-Location.png">
                                                     <span>Change Location</span>
                                                 </a>

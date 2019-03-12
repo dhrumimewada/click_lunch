@@ -118,12 +118,12 @@ $(function () {
                 var FromEndDate = new Date();
                 var ToEndDate = new Date();
 
-                 if($("#expiryDate").length)
+                 if($("#expiry_date").length)
                 {
-                    $('#expiryDate').datepicker({
+                    $('#expiry_date').datepicker({
                         autoclose: true,
                         minViewMode: 1,
-                        format: 'mm/yy'
+                        format: 'mm/yyyy'
                     }).on('changeDate', function(selected){
                             startDate = new Date(selected.date.valueOf());
                             startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));

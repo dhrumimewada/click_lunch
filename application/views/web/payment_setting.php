@@ -34,11 +34,11 @@ $home_link = base_url().'welcome';
 										}else if($value['card_type'] == 3){
 											$img_name = 'american-express.png';
 										}else if($value['card_type'] == 4){
-											$img_name = 'jcb.png';
-										}else if($value['card_type'] == 5){
 											$img_name = 'diners.png';
-										}else if($value['card_type'] == 6){
+										}else if($value['card_type'] == 5){
 											$img_name = 'discover.png';
+										}else if($value['card_type'] == 6){
+											$img_name = 'jcb.png';
 										}else{
 											$img_name = '';
 										}

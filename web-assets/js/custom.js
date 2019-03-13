@@ -71,46 +71,12 @@ jQuery(function() {
 
 jQuery(function() {
 
-    $(document).ready(function(){
-
-      $(".deliver-now").click(function(){
-        $(".select-time").hide();
-      });
-
-      $(".deliver-later").click(function(){
-        $(".select-time").show();
-      });
-    });
-
-
-});
-
-jQuery(function() {
-
     if($('#userdob').length)
     {
         $('#userdob').datepicker();
     }
 });
 
-jQuery(function() {
-
-    if($(".time_element").length)
-    {
-         $(".time_element").timepicki({
-
-           /* show_meridian:false,*/
-            min_hour_value:0,
-            max_hour_value:23,
-            step_size_minutes:15,
-            overflow_minutes:true,
-            increase_direction:'up',
-            disable_keyboard_mobile: true
-            
-        });
-     }
-
-});
 
 $(function () {
                 var startDate = new Date();

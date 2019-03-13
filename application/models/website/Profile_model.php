@@ -209,4 +209,64 @@ class Profile_model extends CI_Model {
 
         return $return_value;
     }
+
+    public function add_card_with_returnid(){
+
+        $this->db->trans_begin();
+        $return_value = 0;
+
+        $payment_card_data = array(
+                            'customer_id' => $this->auth->get_user_id(),
+                            'card_holder_name' => addslashes($this->input->post("card_holder_name")),
+                            'card_number' => encrypt($this->input->post("card_number")),
+                            'display_number' => 'XXXX XXXX XXXX '.substr($this->input->post("card_number"), -4),
+                            'expiry_date' => encrypt($this->input->post("expiry_date")),
+                            'cvv' => encrypt($this->input->post("cvv")),
+                            'card_type' => intval($this->input->post("card_type"))
+                        );
+        if(isset($_POST['nickname'])){
+            $payment_card_data['nickname'] = addslashes($this->input->post("nickname"));
+        }
+
+        $this->db->insert('customer_payment_card',$payment_card_data);
+        $insert_id = $this->db->insert_id();
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $this->auth->set_error_message("Error into inserting data");
+        } else {
+            $this->db->trans_commit();
+            $this->auth->set_status_message("Payment card added successfully");
+            $return_value = $insert_id;
+        }
+
+        return $return_value;
+    }
+
+    public function get_promocode_data(){
+        $return_data = array();
+        $id = decrypt($this->input->post("id"));
+        $this->db->select('*');
+        $this->db->where('id', $id);
+        $this->db->from('promocode');
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+            $promocode = (array)$sql_query->row();
+            if($promocode['promo_type'] == 1){
+                $this->db->select('product_id');
+                $this->db->where('promocode_id', $id);
+                $this->db->from('promocode_valid_product');
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $applied_on_products = $sql_query->result_array();
+                    $promocode['applied_on_products'] = array_column($applied_on_products, 'product_id');
+                }else{
+                    $promocode['applied_on_products'] = array();
+                }
+            }else{
+                $promocode['applied_on_products'] = array();
+            }
+            $return_data = $promocode;
+        }
+        return $return_data;
+    }
 }

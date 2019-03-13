@@ -296,6 +296,44 @@ function validate_customer_card($card_number = NULL){
 
 }
 
+function validate_expiry_date($expiry_date = NULL){
+	$expiry_date_array = explode('/',$expiry_date);
+
+	if(isset($expiry_date) && $expiry_date != '' && !is_null($expiry_date) && checkdate($expiry_date_array[0],'01',$expiry_date_array[1])){
+        
+        $expiry_date_obj = DateTime::createFromFormat('d/m/Y H:i:s', "01/" . $expiry_date_array[0] . "/" .  $expiry_date_array[1]." 00:00:00");
+        $expiry_date_obj = new DateTime($expiry_date_obj->format("Y/m/t"));
+
+        $my_date = date('d/m/Y');
+        $today = DateTime::createFromFormat('d/m/Y H:i:s', $my_date ." 00:00:00");
+
+        if($expiry_date_obj >= $today){
+            return TRUE;
+        }else{
+			return FALSE;
+        }
+    }else{
+		return FALSE;
+    }
+}
+
+function validate_card_number($card_number = NULL, $card_type = NULL) {
+
+	$valid = validate_card($card_number);
+	if($valid == FALSE){
+		return FALSE;
+	}else{
+		$card_types = array('1' => 'visa', '2' => 'mastercard', '3' => 'amex', '4' => 'dinnerclub', '5' => 'discover', '6' => 'jcb');
+		$my_card_type = $card_types[$card_type];
+		$card_type = validate_customer_card($card_number);
+		if($card_type != '' && $card_type == $my_card_type){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+}
+
 function get_card_type($str, $format = 'string'){
     if (empty($str)){
         return false;

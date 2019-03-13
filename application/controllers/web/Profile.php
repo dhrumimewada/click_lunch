@@ -351,4 +351,41 @@ class Profile extends CI_Controller {
 	public function unset_d(){
 		$this->session->set_userdata('delivery_address_id', '');
 	}
+
+	public function add_card(){
+		if (isset($_POST) && !empty($_POST)){
+
+			if(validate_expiry_date($_POST['expiry_date'])){
+				if(validate_card_number($_POST['card_number'], $_POST['card_type'])){
+					if($_POST['card_type'] == 3 && strlen($_POST['cvv']) != 4){
+						echo json_encode(array("is_success" => false, 'message' => 'Invalid CVV'));
+						return TRUE;
+					}else{
+						$id = $this->profile_model->add_card_with_returnid();
+						if($id != 0 && isset($id)){
+							echo json_encode(array("is_success" => true, 'message' => 'Payment card added successfully', 'id' => $id));
+							return TRUE;
+						}else{
+							echo json_encode(array("is_success" => false, 'message' => 'Error into inserting card'));
+							return TRUE;
+						}
+					}
+				}else{
+					echo json_encode(array("is_success" => false, 'message' => 'Invalid card'));
+					return TRUE;
+				}
+			}else{
+				echo json_encode(array("is_success" => false, 'message' => 'Invalid expiry date'));
+				return TRUE;
+			}	
+		}else{
+			return false;
+		}
+	}
+
+	public function get_promocode_data(){
+		$promocode_data = $this->profile_model->get_promocode_data();
+		echo json_encode(array("is_success" => true, 'data' => $promocode_data));
+		return TRUE;
+	}
 }

@@ -361,5 +361,9 @@ $route['payment-card-delete'] = 'web/profile/payment_card_delete';
 
 $route['change-location'] = 'web/profile/change_location';
 $route['checkout'] = 'web/cart/checkout';
+$route['apply-promocode/(:any)'] = 'web/cart/set_promocode/$1';
+$route['promocode-remove'] = 'web/cart/promocode_remove';
+$route['add-card'] = 'web/profile/add_card';
+$route['get-promocode-data'] = 'web/profile/get_promocode_data';
 
 

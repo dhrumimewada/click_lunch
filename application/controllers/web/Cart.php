@@ -7,6 +7,7 @@ class Cart extends CI_Controller {
 		parent::__construct();
 		$this->load->library('cart');
 		$this->load->model("website/welcome_model");
+		$this->load->model("website/profile_model");
 	}
 
 	public function cart_destroy(){
@@ -447,6 +448,7 @@ class Cart extends CI_Controller {
 			$delivery_fee = $_SESSION['delivery_fee'];
         }else{
         	$delivery_fee = $this->welcome_model->fetch_delivery_charge($shop_id, $address_id);
+        	$this->session->set_userdata('delivery_fee', $delivery_fee);
         }
         
         if($delivery_fee == FALSE){
@@ -458,13 +460,31 @@ class Cart extends CI_Controller {
 
         $valid_promocodes = $this->welcome_model->fetch_promocode();
         $output_data['promocodes'] = $valid_promocodes;
-        //echo "<pre>";
-         //print_r($valid_promocodes);
-        // print_r($address_id);
-        //var_dump($delivery_fee);
-       // exit;
+
+        $customer_cards = $this->profile_model->get_cards();
+        $output_data['cards'] = $customer_cards;
+
+        // echo "<pre>";
+        // print_r($output_data['applied_promocode']);
+        // exit;
 
 		$output_data['main_content'] = "checkout";
 		$this->load->view('web/template',$output_data);
+	}
+
+	public function set_promocode($promocode = NULL){
+		$this->session->set_userdata('promocode', $promocode);
+		redirect(base_url() . "checkout");
+	}
+
+	public function promocode_remove(){
+		if (isset($_POST) && !empty($_POST)){
+			if (isset($_POST['remove'])){
+				$this->session->unset_userdata('promocode');
+			}else{
+
+			}
+			redirect(base_url() . "checkout");
+		}
 	}
 }

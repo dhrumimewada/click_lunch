@@ -679,6 +679,81 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
+    public function edit_delivery_address_post(){
+        $postFields['address_id'] = $_POST['address_id']; 
+        $postFields['house_no'] = $_POST['house_no']; 
+        $postFields['street'] = $_POST['street']; 
+        $postFields['city'] = $_POST['city']; 
+        $postFields['zipcode'] = $_POST['zipcode']; 
+        $postFields['address_type'] = $_POST['address_type']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['address_id'],'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('delivery_address',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'Address not found';
+            }else{
+
+                $delivery_address_data = array(
+                    'house_no' => $_POST['house_no'],
+                    'city' => $_POST['city'],
+                    'street' => $_POST['street'],
+                    'zipcode' => $_POST['zipcode'],
+                    'address_type' => $_POST['address_type']
+                );
+
+                if(isset($_POST['delivery_instruction'])){
+                    $delivery_address_data['delivery_instruction'] = $_POST['delivery_instruction'];
+                }
+                if(isset($_POST['nickname'])){
+                    $delivery_address_data['nickname'] = $_POST['nickname'];
+                }
+
+                $house_no = str_replace(" ","+",trim($_POST['house_no']));
+                $street = str_replace(" ","+",trim($_POST['street']));
+                $city = str_replace(" ","+",trim($_POST['city']));
+                $zipcode = str_replace(" ","+",trim($_POST['zipcode']));
+
+                $address = $house_no."+".$street."+".$city."+".$zipcode;
+
+                $google_key = $this->config->item('google_key');
+                $json = file_get_contents("https://maps.google.com/maps/api/geocode/json?address=$address&key=$google_key");
+                $json = json_decode($json);
+
+                $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+                $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+
+                if(isset($lat) && $lat != "" && isset($long) && $long != ""){
+                    $delivery_address_data['latitude'] = $lat;
+                    $delivery_address_data['longitude'] = $long;
+
+                    $this->db->where('id',$_POST['address_id']);
+
+                    if($this->db->update('delivery_address',$delivery_address_data)){
+                        $response['status'] = true;
+                        $response['message'] = 'Delivery address updated successfully';
+                    }else{
+                        $response['status'] = false;
+                        $response['message'] = 'Server encountered an error. Please try again';
+                    }
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Sorry, We could not fetch location. Please enter correct address';
+                }
+                
+            }
+            
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
     public function set_default_address_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['address_id'] = $_POST['address_id']; 

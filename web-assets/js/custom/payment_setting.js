@@ -24,7 +24,7 @@
             },
             nickname:{
                 required: false,
-                alpha:true,
+                alpha:false,
                 minlength:3,
                 maxlength:50,
                 normalizer: function (value) {

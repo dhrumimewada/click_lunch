@@ -195,7 +195,7 @@ button:focus {outline: 0;}
 .delivery-address-block .select-delivery-address-block .delivery-address {margin-bottom: 15px; margin-top: 15px;}
 /* .delivery-address-block .select-delivery-address-wrapper {min-height: 600px;} */
 .modal-with-logo .modal-body {padding: 0;}
-.modal-with-logo .modalform {border-radius: .3rem; padding: 30px 0 40px; margin-bottom: 40px;}
+.modal-with-logo .modalform {border-radius: .3rem; padding: 30px 0 0px; margin-bottom: 30px;}
 .add-new-address-block .form-control {border-width: 0 0 1px 0; border-style: solid; border-color: #404040; border-radius: 0; color: #404040; font-size: 20px; padding-left: 0;}
 .add-new-address-block [type="radio"]:checked, .add-new-address-block [type="radio"]:not(:checked) {position: absolute; left: -9999px;}
 .add-new-address-block [type="radio"]:checked + label, .add-new-address-block [type="radio"]:not(:checked) + label{position: relative; padding-left: 34px; cursor: pointer; line-height: 28px; display: inline-block; color: #121212;}
@@ -252,7 +252,7 @@ button:focus {outline: 0;}
 .add-new-card-popup a:after {content: ''; background: transparent url('../images/add.png') no-repeat scroll center/100% auto; width: 25px; height: 25px; display: inline-block; float: right; margin-top: 3px;}
 .modal-body.add-card-block #add-card-form .form-group > label {text-transform: none; font-size: 20px;}
 .modal-body.add-card-block #add-card-form .form-group:last-child {margin-bottom: 0;}
-.modal-with-logo .add-card-block .modalform {padding: 30px 0 0;}
+/* .modal-with-logo .add-card-block .modalform {padding: 30px 0 0;} */
 .confirm-order-detail .table thead {background-color: #F7F7F7;}
 .confirm-order-detail .table thead tr th {color: #afafaf; font-weight: 500; font-size: 20px;}
 .confirm-order-detail .table tbody .inner-table.table {box-shadow: 0px 0px 8px 2px rgba(0,0,0,0.1); width: 95%; margin: 0 auto 8px;}
@@ -346,7 +346,7 @@ button:focus {outline: 0;}
 .add-card-block .card-block .card-buttons {width: 465px; max-width: 100%;}
 .add-card-block .card-block .card-buttons .cardedit {background-color: #2E2D4D; margin-right: 20px;}
 .add-card-block .card-block .card-buttons .carddelete {background-color: #FE0000;}
-.add-card-block #add-card-form .form-group > label {font-size: 22px; font-weight: 600; margin-bottom: 20px;}
+.add-card-block #add-card-form .form-group > label {font-size: 22px; font-weight: 600; margin-bottom: 0px;}
 .add-card-block #add-card-form .form-group .form-control {border: 0; border-bottom: 2px solid #000; border-radius: 0; font-size: 20px; padding-left: 0;}
 .add-card-block #add-card-form .form-group {margin-bottom: 30px;}
 .add-card-block .add-card-button .add-card-btn {height: 50px; font-size: 20px; text-transform: none; min-width: 260px; border-radius: 15px;}

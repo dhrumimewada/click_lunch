@@ -143,7 +143,7 @@ $img_path = base_url().'web-assets/images/card-icons/';
 					<div class="row m-0">
 						<div class="col-md-6 text-center coupon-and-offers">
 							<form class="coupon-form d-flex align-items-center">
-                                <input type="text" name="coupon-code" class="form-control applied-promo" id="couponCode" placeholder="Enter a promocode" value="">
+                                <input type="text" name="coupon-code" class="form-control text-uppercase applied-promo" id="couponCode" placeholder="Enter a promocode" autocomplete="off" >
                                 <input type="button" name="apply" value="Apply" id="apply-promo" class="check-coupon-btn red-btn" data-name="apply">
 							</form>
                             <a href="#offer-pop" class="view-offers" data-toggle="modal">View Offers</a>
@@ -151,17 +151,17 @@ $img_path = base_url().'web-assets/images/card-icons/';
 						<div class="col-md-6" id="deliver">
 							<div class="delivery-address d-flex justify-content-around">
 								<div class="form-check deliver-now">
-									<input class="form-check-input" type="radio" name="deliveroption" id="deliverOption1" value="now" checked>
+									<input class="form-check-input" type="radio" name="deliveroption" id="deliverOption1" value="1" checked>
 									<label class="form-check-label" for="deliverOption1">Deliver Now</label>
 								</div>
 								<div class="form-check deliver-later">
-									<input class="form-check-input" type="radio" name="deliveroption" id="deliverOption2" value="later">
+									<input class="form-check-input" type="radio" name="deliveroption" id="deliverOption2" value="2">
 									<label class="form-check-label" for="deliverOption2">Deliver Later</label>
 								</div>
 							</div>
 							<div class="select-time">
                                 <label for="input_starttime">Select Delivery Time</label>
-                                <input type="text" name="timepicker" class="time_element" placeholder="00:00" />
+                                <input type="text" name="timepicker" id="deliver_time" class="time_element" placeholder="00:00" />
 							</div>
                             <div class="select-instead">
                                 <div class="md-form text-center">
@@ -172,17 +172,17 @@ $img_path = base_url().'web-assets/images/card-icons/';
                         <div class="col-md-6" id="takeout" style="display: none;">
                             <div class="delivery-address d-flex justify-content-around">
                                 <div class="form-check deliver-now">
-                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption3" value="now">
+                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption3" value="3">
                                     <label class="form-check-label" for="deliverOption3">Takeout</label>
                                 </div>
                                 <div class="form-check deliver-later">
-                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption4" value="later">
+                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption4" value="4">
                                     <label class="form-check-label" for="deliverOption4">Takeout Later</label>
                                 </div>
                             </div>
                             <div class="select-time">   
                                 <label for="input_starttime">Select Pickup Time</label>                        
-                                <input type="text" name="timepicker" class="time_element" placeholder="00:00" />
+                                <input type="text" name="timepicker" id="takeout_time" class="time_element" placeholder="00:00" />
                             </div>
                             <div class="select-instead">
                                 <div class="md-form text-center">
@@ -224,7 +224,7 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                                 </div>
                                                 <div class="order-product-price col-3 text-right col-md-3 p-0">
                                                     <?php
-                                                    echo '&#36; '.number_format((float)$value['price'], 2, '.', '');
+                                                    echo '&#36; '.number_format((float)$value['subtotal'], 2, '.', '');
                                                     ?>
                                                 </div>                                                
                                             </div>
@@ -246,8 +246,8 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                             <div class="order-product-title col-9 col-md-9 p-0">Promo Discount</div>
                                             <div class="order-product-price col-3 text-right col-md-3 p-0 text-success">-
                                                 <?php
-                                                $promo = 22;
-                                                echo '&#36; '.number_format((float)$promo, 2, '.', '');
+                                                $promo_amount = 0;
+                                                echo '&#36; <span id="promo_amount">'.number_format((float)$promo_amount, 2, '.', '').'</span>';
                                                 ?>
                                             </div>
                                         </div>
@@ -256,7 +256,7 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                             <div class="order-product-price col-3 text-right col-md-3 p-0">+
                                                 <?php
                                                 $delivery_amount = ($subtotal * $delivery_fee) / 100;
-                                                echo '&#36; '.number_format((float)$delivery_amount, 2, '.', '');
+                                                echo '&#36; <span id="delivery_amount">'.number_format((float)$delivery_amount, 2, '.', '').'</span>';
                                                 ?>
                                             </div>
                                         </div>
@@ -265,7 +265,7 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                             <div class="order-product-price col-3 text-right col-md-3 p-0">+ 
                                                 <?php
                                                 $tax_amount = ($subtotal * $tax) / 100;
-                                                echo '&#36; '.number_format((float)$tax_amount, 2, '.', '');
+                                                echo '&#36; <span id="tax_amount">'.number_format((float)$tax_amount, 2, '.', '').'</span>';
                                                 ?>
                                             </div>
                                         </div>
@@ -274,7 +274,7 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                             <div class="order-product-price col-3 text-right col-md-3 p-0">+
                                                 <?php
                                                 $service_charge_amount = ($subtotal * $service_charge) / 100;
-                                                echo '&#36; '.number_format((float)$service_charge_amount, 2, '.', '');
+                                                echo '&#36; <span id="service_charge_amount">'.number_format((float)$service_charge_amount, 2, '.', '').'</span>';
                                                 ?>
                                             </div>
                                         </div>
@@ -283,7 +283,12 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                     <div class="total-amount">
                                         <div class="row m-0">
                                             <div class="order-product-total-amount-title col-9 col-md-9 p-0">Total Amount</div>
-                                            <div class="order-product-total-amount col-3 col-md-3 p-0">$ 326.8</div>
+                                            <div class="order-product-total-amount col-3 col-md-3 p-0">
+                                                <?php
+                                                $total = ($subtotal) + $delivery_amount + $tax_amount + $service_charge_amount;
+                                                echo '&#36; <span id="total">'.number_format((float)$total, 2, '.', '').'</span>';
+                                                ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -396,4 +401,10 @@ $img_path = base_url().'web-assets/images/card-icons/';
 
     var get_promocode_data_url = "<?php echo base_url().'get-promocode-data'; ?>";
     var subtotal = "<?php echo $subtotal; ?>";
-</script>
+    var tax = "<?php echo $tax; ?>";
+    var service_charge = "<?php echo $service_charge; ?>";
+
+    var delivery_amount = "<?php echo $delivery_amount; ?>";
+
+    var validate_promocode_url = "<?php echo base_url().'validate-promocode'; ?>";
+</script> 

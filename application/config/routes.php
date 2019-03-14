@@ -365,5 +365,6 @@ $route['apply-promocode/(:any)'] = 'web/cart/set_promocode/$1';
 $route['promocode-remove'] = 'web/cart/promocode_remove';
 $route['add-card'] = 'web/profile/add_card';
 $route['get-promocode-data'] = 'web/profile/get_promocode_data';
+$route['validate-promocode'] = 'web/welcome/validate_promocode';
 
 

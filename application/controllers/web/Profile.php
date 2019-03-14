@@ -382,10 +382,64 @@ class Profile extends CI_Controller {
 			return false;
 		}
 	}
-
+	
 	public function get_promocode_data(){
-		$promocode_data = $this->profile_model->get_promocode_data();
-		echo json_encode(array("is_success" => true, 'data' => $promocode_data));
+		$promocode = $this->profile_model->get_promocode_data();
+
+		$all_sub_total = 0;
+		$cart_items = array();
+		foreach ($this->cart->contents() as $key => $value) {
+			array_push($cart_items, $value['item_id']);
+			$all_sub_total += $value['subtotal'];
+		}
+
+		// check all conditions
+		$promo_amount = 0;
+		if($promocode['promo_type'] == 1){
+
+			$real_cart_data = array();
+			foreach ($this->cart->contents() as $key => $value) {
+				$real_cart_data[$value['item_id']] += $value['subtotal'];
+			}
+			$items = array_keys($real_cart_data);
+
+			$matched_products = array_intersect($items,$promocode['applied_on_products']);
+			$product_price = array();
+			$cart_products = array();
+			$count  = 0;
+
+			foreach ($real_cart_data as $key => $value){
+				foreach ($matched_products as $key1 => $value1) {
+					if($value1 == $key){
+						if($promocode['discount_type'] == 0){
+							// if subtotal of single item - apply promo
+							if($value <  $promocode['amount']){
+								$promo_amount += $value;
+							}else{
+								$promo_amount += $promocode['amount'];
+							}
+						}else{
+							$promo_amount += ($value * $promocode['amount']) / 100;
+						}
+					}
+				}
+			}
+		}else{
+			if($promocode['discount_type'] == 0){
+				$promo_amount = $promocode['amount'];
+				if($promo_amount > $all_sub_total){
+					$promo_amount = $all_sub_total;
+				}
+			}else{
+				$promo_amount = ($all_sub_total * $promocode['amount']) / 100;
+				if($promo_amount > $promocode['max_disc']){
+					$promo_amount = $promocode['max_disc'];
+				}
+			}
+		}
+
+		//echo json_encode(array('data' => $promocode, 'cart_products' => $cart_products));
+		echo json_encode(array('data' => $promocode, 'promo_amount' => $promo_amount));
 		return TRUE;
 	}
 }

@@ -244,16 +244,16 @@ class Profile_model extends CI_Model {
 
     public function get_promocode_data(){
         $return_data = array();
-        $id = decrypt($this->input->post("id"));
+        $promocode = $this->input->post("promocode");
         $this->db->select('*');
-        $this->db->where('id', $id);
+        $this->db->where('promocode', $promocode);
         $this->db->from('promocode');
         $sql_query = $this->db->get();
         if ($sql_query->num_rows() > 0){
             $promocode = (array)$sql_query->row();
             if($promocode['promo_type'] == 1){
                 $this->db->select('product_id');
-                $this->db->where('promocode_id', $id);
+                $this->db->where('promocode_id', $promocode['id']);
                 $this->db->from('promocode_valid_product');
                 $sql_query = $this->db->get();
                 if ($sql_query->num_rows() > 0){

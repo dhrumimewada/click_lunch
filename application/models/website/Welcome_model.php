@@ -3,6 +3,7 @@
 class Welcome_model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
+		$this->load->library('cart');
 	}
 
 	public function get_shops($short_name = NULL){

@@ -298,6 +298,19 @@ class Welcome extends CI_Controller {
 		return TRUE;
 	}
 
+	public function validate_promocode(){
+		$valid_promocodes = $this->welcome_model->fetch_promocode();
+		$promocodes = array_column($valid_promocodes, 'promocode');
+		if(in_array(strtoupper($_POST['promocode']),$promocodes)){
+			echo json_encode(array("is_success" => true, "promocode" => $_POST['promocode'], 'arra' => $promocodes));
+			return TRUE;
+		}else{
+			echo json_encode(array("is_success" => false, "promocode" => $_POST['promocode'], 'arra' => $promocodes));
+			return false;
+		}
+	}
+
+
 	public function weekly_planner()
 	{
 		$this->load->view('web/weekly-planner');

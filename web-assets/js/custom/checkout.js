@@ -15,39 +15,36 @@ $(document).on('click','.apply-promo',function(){
 	console.log("Promocode applied!");
 	$("#promocode-div").show();
 
-	$.ajax({
-            url: get_promocode_data_url,
-            type: "POST",
-            data:{
-                id:data_id
-            },
-            success: function (returnData) {
-            	returnData = $.parseJSON(returnData);
-                console.log(returnData);
-
-                if(returnData.promo_type == 2){
-                	if(returnData.discount_type == 0){
-	                	promo_amount = returnData.amount;
-	                }else{
-	                	promo_amount = (subtotal * returnData.amount) / 100;
-	                }
-                }else{
-                	
-                }
-                
-            }
-        });
+    apply_promocode(data_name);
 
 
 });
 
 $(document).on('click','#apply-promo',function(){
 	$this = $(this);
-	var data_name = $(this).data('name');
+	var data_name = $(this).attr('data-name');
 
+    if($('.applied-promo').val() == ''){
+        swal(
+            'Promocode field is empty!',
+            'Please enter promocode to apply',
+            'warning'
+        )
+        return false;
+    }
 	// Remove Promocode
 	if(data_name == 'remove'){
-		console.log("Promocode removed!");
+		console.log("Promocode removed!1");
+
+        var tax_amount = (parseFloat(subtotal) * parseFloat(tax)) / 100;
+        $('#tax_amount').text(Number(tax_amount).toFixed(2));
+
+        var service_charge_amount = (parseFloat(subtotal) * parseFloat(service_charge)) / 100;
+        $('#service_charge_amount').text(Number(service_charge_amount).toFixed(2));
+
+        var total = parseFloat(subtotal) + parseFloat(delivery_amount) + parseFloat(tax_amount) + parseFloat(service_charge_amount);
+        $('#total').text(Number(total).toFixed(2));
+
 		$('#apply-promo').attr('data-name', 'apply');
 		$(".view-offers").show();
 		$("#apply-promo").prop('value', 'Apply');
@@ -57,11 +54,106 @@ $(document).on('click','#apply-promo',function(){
 		$("#promocode-div").hide();
 
 	}else{
-		console.log("Promocode applied!");
-		$("#promocode-div").show();
+		console.log("Promocode applied!1");
+        var abc = validate_promocode($('.applied-promo').val());
+        console.log(abc);
+        //return false;
+        // if(validate_promocode($('.applied-promo').val()) == true){
+        //     $("#promocode-div").show();
+        //     apply_promocode($('.applied-promo').val());
+        // }else{
+        //     swal(
+        //         'Promocode '+$('.applied-promo').val().toUpperCase()+' is invalid!',
+        //         'Please try another one',
+        //         'warning'
+        //     )
+        //     return false;
+        // }
+		
+        
 		// validate & apply promocode
 	}
 });
+
+function validate_promocode(data_name) {
+    $.ajax({
+            url: validate_promocode_url,
+            type: "POST",
+            data:{
+                promocode:data_name
+            },
+            success: function (returnData) {
+                returnData = $.parseJSON(returnData);
+                if (typeof returnData != "undefined"){
+                    if(returnData.is_success){
+
+                        $('.applied-promo').val(data_name);
+                        $('.applied-promo').attr('readonly', true);
+
+                        $("#apply-promo").prop('value', 'Remove');
+                        $(".view-offers").hide();
+
+                        $('#apply-promo').attr('data-name', 'remove');
+                        console.log("Promocode applied!");
+                        $("#promocode-div").show();
+
+                        apply_promocode($('.applied-promo').val());
+
+                    }else{
+
+                       swal(
+                            'Promocode '+$('.applied-promo').val().toUpperCase()+' is invalid!',
+                            'Please try another one',
+                            'warning'
+                        )
+                       return false;
+                    }
+                }
+                
+            },
+            error: function (xhr, ajaxOptions, thrownError){
+                return false;
+            }
+        });
+
+    
+}
+function apply_promocode(data_name) {
+    $.ajax({
+            url: get_promocode_data_url,
+            type: "POST",
+            data:{
+                promocode:data_name
+            },
+            success: function (returnData) {
+                returnData = $.parseJSON(returnData);
+
+                if (typeof returnData != "undefined"){
+                    var promo_amount = Number(returnData.promo_amount).toFixed(2);
+                    $('#promo_amount').text(promo_amount);
+
+                    var new_sub_total = parseFloat(subtotal) - parseFloat(promo_amount);
+                    var tax_amount = (parseFloat(new_sub_total) * parseFloat(tax)) / 100;
+                    $('#tax_amount').text(Number(tax_amount).toFixed(2));
+
+                    var service_charge_amount = (parseFloat(new_sub_total) * parseFloat(service_charge)) / 100;
+                    $('#service_charge_amount').text(Number(service_charge_amount).toFixed(2));
+
+                    var total = parseFloat(new_sub_total) + parseFloat(delivery_amount) + parseFloat(tax_amount) + parseFloat(service_charge_amount);
+                    $('#total').text(Number(total).toFixed(2));
+
+                    swal(
+                        'Promocode applied',
+                        'Promocode '+data_name.toUpperCase()+' is applied successfully',
+                        'success'
+                    )
+
+                    return true;
+                }
+                
+            }
+        });
+}
 
 $(document).on('click','#takeout-instead',function(){
 	$("#takeout").show();
@@ -80,6 +172,29 @@ $(document).on('click','.deliver-now',function(){
 });
 $(document).on('click','.deliver-later',function(){
 	$(".select-time").show();
+});
+
+$(document).on('click','#placeorder',function(){
+    if($("input[name='deliveroption']:checked")){
+        if( (($("input[name='deliveroption']:checked").val() == 2) && ($('#deliver_time').val() == '')) ||  (($("input[name='deliveroption']:checked").val() == 4) && ($('#takeout_time').val() == '')) ){
+            swal(
+                'Please select delivery or takeout time',
+                'Order time is required',
+                'warning'
+            )
+            return false;
+        }else{
+            console.log("checkout");
+        }
+        
+    }else{
+        swal(
+            'Please select delivery or takeout',
+            'Order type is required',
+            'warning'
+        )
+       return false;
+    }
 });
 
 $( document ).ready(function(){

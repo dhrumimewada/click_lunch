@@ -324,7 +324,7 @@ if(isset($_SESSION['shop_short_name']) && $_SESSION['shop_short_name'] != ''){
 						</div>
 						<div class="col-md-12">
 							<label>Address Type</label>
-							<div class="row m-0 d-flex">
+							<div class="row m-0 mb-2 d-flex">
 								<?php
 								if(isset($address_type) && is_array($address_type) && !empty($address_type)){
 									foreach ($address_type as $key => $value) {

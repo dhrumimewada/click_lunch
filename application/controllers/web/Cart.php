@@ -465,7 +465,7 @@ class Cart extends CI_Controller {
         $output_data['cards'] = $customer_cards;
 
         // echo "<pre>";
-        // print_r($output_data['applied_promocode']);
+        // print_r($valid_promocodes);
         // exit;
 
 		$output_data['main_content'] = "checkout";

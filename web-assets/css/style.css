@@ -271,8 +271,8 @@ button:focus {outline: 0;}
 .confirm-order-detail .order-product-title {font-size: 18px; font-weight: 600;}
 .confirm-order-detail .order-product-price {font-size: 18px; font-weight: 600;}
 .confirm-order-final-list {padding: 20px 34px;}
-.confirm-order-final-list .order-product-price span:first-child {text-decoration: line-through; margin-right: 5px;}
-.confirm-order-final-list .order-product-price span:last-child {color: #16B000;}
+/* .confirm-order-final-list .order-product-price span:first-child {text-decoration: line-through; margin-right: 5px;} */
+/* .confirm-order-final-list .order-product-price span:last-child {color: #16B000;} */
 .confirm-order-detail .total-amount {background-color: #EFEFEF;}
 .confirm-order-detail .total-amount > .row {height: 75px; align-items: center; padding: 0 34px;}
 .confirm-order-detail .total-amount .order-product-total-amount-title {font-size: 23px; font-weight: 900;}
@@ -910,7 +910,7 @@ div#accordion2 { margin: 0 0 50px;}
 .select-time .time_pick .prev, .next { cursor: pointer; width: 28%; border: transparent !important; margin: auto; background-position: 50% 50% !important;}
 .select-time .time, .select-time .mins, .select-time .meridian{ margin: 0 !important; float: none; display: inline-block; }
 .select-time { display: none; margin: 0 auto; width: 250px;}
-.select-time .time_pick input { text-align: center; border: none; border-bottom: 1px solid #d4d4d4; padding: 5px;     color: #9E9E9E;}
+.select-time .time_pick input { text-align: center; border: none; border-bottom: 1px solid #d4d4d4; padding: 5px;}
 .confirm-order form#paymentMethod { text-align: left;}
 .confirm-order { text-align: center;}
 .restaurant-detail-heart-logo {

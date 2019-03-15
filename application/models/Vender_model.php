@@ -109,6 +109,7 @@ class Vender_model extends CI_Model {
 		$user_data['charges_of_minimum_mile'] = number_format((float)$this->input->post("charges_of_minimum_mile"), 2, '.', '');
 		$user_data['delivery_charges_per_mile'] = number_format((float)$this->input->post("delivery_charges"), 2, '.', '');
 
+
 		$response = $this->db->insert("shop", $user_data);
 		$user_id = $this->db->insert_id();
 
@@ -132,6 +133,7 @@ class Vender_model extends CI_Model {
 		$this->db->where("emat_is_active", 1);
 		$sql_query = $this->db->get();
 		$return_data = $sql_query->row();
+
 
 		if (!isset($return_data) && empty($return_data)){
 			$this->auth->set_error_message("Email template not found. Error into sending mail.");

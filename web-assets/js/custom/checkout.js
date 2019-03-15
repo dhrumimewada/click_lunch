@@ -1,3 +1,4 @@
+var promocode_applied = '';
 $(document).on('click','.apply-promo',function(){
 
 	// Apply Promocode from modal
@@ -56,21 +57,6 @@ $(document).on('click','#apply-promo',function(){
 	}else{
 		console.log("Promocode applied!1");
         var abc = validate_promocode($('.applied-promo').val());
-        console.log(abc);
-        //return false;
-        // if(validate_promocode($('.applied-promo').val()) == true){
-        //     $("#promocode-div").show();
-        //     apply_promocode($('.applied-promo').val());
-        // }else{
-        //     swal(
-        //         'Promocode '+$('.applied-promo').val().toUpperCase()+' is invalid!',
-        //         'Please try another one',
-        //         'warning'
-        //     )
-        //     return false;
-        // }
-		
-        
 		// validate & apply promocode
 	}
 });
@@ -148,6 +134,8 @@ function apply_promocode(data_name) {
                         'success'
                     )
 
+                    promocode_applied = data_name;
+
                     return true;
                 }
                 
@@ -184,7 +172,90 @@ $(document).on('click','#placeorder',function(){
             )
             return false;
         }else{
-            console.log("checkout");
+
+            if($("input[name='deliveroption']:checked").val() == 2){
+                var later_time =  $('#deliver_time').val();
+            }else if($("input[name='deliveroption']:checked").val() == 4){
+                var later_time =  $('#takeout_time').val();
+            }else{
+                var later_time = '';
+            }
+
+            if(later_time != ''){
+                
+                var today = new Date();
+                
+                var dd = today.getDate();
+                var mm = today.getMonth() + 1; //January is 0!
+
+                var yyyy = today.getFullYear();
+                if (dd < 10) {
+                  dd = '0' + dd;
+                } 
+                if (mm < 10) {
+                  mm = '0' + mm;
+                } 
+                var my_date = mm + '/' + dd + '/' + yyyy;
+                var my_date2 = my_date+' '+later_time;
+                var later_time_obj = my_date2.toString();
+                var later_obj = Date.parse(later_time_obj);
+                var today_plus_30min = today.getTime() + (30 * 60000);
+
+                // console.log(later_obj);
+                // console.log(today.getTime() + (30 * 60000));
+
+                if(later_obj <= today_plus_30min){
+                    swal(
+                        'Deliver/takeout time invalid',
+                        'Please select deliver/takout now if you want order into 30 min from now or select time later from 30 mins now',
+                        'warning'
+                    )
+                    return false;
+                }
+            }
+            var order_type =  $("input[name='deliveroption']:checked").val();
+            var payment_type = $("input[name='payment_card']:checked").attr('data-payment-type');
+            var card_id = '';
+            if(payment_type == 0){
+                card_id = $("input[name='payment_card']:checked").val();
+            }
+
+            // console.log(order_type);
+            // return false;
+
+            $.ajax({
+                url: place_order_url,
+                type: "POST",
+                data:{
+                    later_time:later_time,
+                    order_type:order_type,
+                    promocode:promocode_applied,
+                    payment_type:payment_type,
+                    card_id:card_id,
+                    delivery_amount:delivery_amount,
+                    tax:tax,
+                    service_charge:service_charge
+                },
+                success: function (returnData) {
+                    returnData = $.parseJSON(returnData);
+                    console.log(returnData);
+                    if (typeof returnData != "undefined"){
+                        if(returnData.is_success == false){
+                            swal(
+                                'Please update your cart',
+                                returnData.message,
+                                'warning'
+                            )
+                            return false;
+                        }else{
+                            console.log("checkout");
+                            $('#orderSuccessful').modal('show');
+                            return true;
+                        }
+                        
+                    }
+                }
+            });
         }
         
     }else{
@@ -404,6 +475,7 @@ $( document ).ready(function(){
 						    type: "success"
 						 }).then(function(){
 						 	$('#addCardModal').modal('hide');
+                            $('#add-card-form').trigger( "reset" );
 						 });
 
                 	}else{

@@ -855,7 +855,7 @@ a#dropdownMenuLink { position: relative;  padding: 9px 20px;}
 .confirm-order-detail-box::-webkit-scrollbar {  width: 0;  background: transparent;}
 .confirm-order-detail-box { height: 432px; overflow: auto;  scrollbar-width: none;  -ms-overflow-style:none;}
 .card-payment .multi-collapse::-webkit-scrollbar {  width: 0;  background: transparent;}
-.card-payment .multi-collapse { margin-top: 20px;  height: 233px;  overflow: auto;  scrollbar-width: none;  -ms-overflow-style:none;}
+.card-payment .multi-collapse { margin-top: 20px;  overflow: auto;  scrollbar-width: none;  -ms-overflow-style:none;}
 
 
 .forgot-inner{ text-align: center; }

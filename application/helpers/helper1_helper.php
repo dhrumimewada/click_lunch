@@ -367,7 +367,7 @@ function send_push($device_type = '',$device_token = '', $push_title = '', $push
         $key = $CI->config->item('fcm_key');
         define('API_ACCESS_KEY', $key);
 
-        if($device_type == 'IOS' || $device_type == 'ios'){
+        if($device_type == 2){
 
             $push_data = array('message' => $push_message);
 

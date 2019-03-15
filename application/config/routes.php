@@ -360,11 +360,12 @@ $route['customer-payment-setting/(:any)'] = 'web/profile/payment_setting/$1';
 $route['payment-card-delete'] = 'web/profile/payment_card_delete';
 
 $route['change-location'] = 'web/profile/change_location';
-$route['checkout'] = 'web/cart/checkout';
+$route['checkout'] = 'web/checkout';
 $route['apply-promocode/(:any)'] = 'web/cart/set_promocode/$1';
 $route['promocode-remove'] = 'web/cart/promocode_remove';
-$route['add-card'] = 'web/profile/add_card';
-$route['get-promocode-data'] = 'web/profile/get_promocode_data';
-$route['validate-promocode'] = 'web/welcome/validate_promocode';
+$route['add-card'] = 'web/checkout/add_card';
+$route['get-promocode-data'] = 'web/checkout/get_promocode_data';
+$route['validate-promocode'] = 'web/checkout/validate_promocode';
+$route['place-order'] = 'web/checkout/place_order';
 
 

@@ -31,7 +31,11 @@ class Vender extends CI_Controller {
 
 	public function sendmail()
 	{
-		$this->load->view('email_templates/activation_mail');
+		//$this->load->view('email_templates/activation_mail');
+		$abc = sendmail($from='dhrumi@yopmaol.com', $to = 'dhrumi2@yopmaol.com', $subject = 'test m', $message = 'msss');
+		echo "<pre>";
+		print_r($abc);
+		exit;
 	}
 
 	public function customAlpha($str) {
@@ -493,10 +497,14 @@ class Vender extends CI_Controller {
 
 					if ($file_upload){
 
+						// $data = $this->vender_model->post($modal_data);
 						// echo "<pre>";
 						// print_r($_POST);
+						// print_r($this->auth->get_messages_array());
 						// exit;
+
 						if($this->vender_model->post($modal_data)){
+
 							$this->session->set_flashdata($this->auth->get_messages_array());
 							redirect(base_url() . "vender-list");
 						}else{

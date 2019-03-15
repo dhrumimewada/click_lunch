@@ -4,6 +4,32 @@ $image_base_url = base_url().'web-assets/images/';
 $img_path = base_url().'web-assets/images/card-icons/';
 ?>
 
+<!-- Order Successful Modal  -->
+<div class="modal fade pop-form" id="orderSuccessful" tabindex="-1" role="dialog" aria-labelledby="orderSuccessful" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="pop-img">
+            <img src="<?php echo $image_base_url; ?>click-lunch-logo-white.png">
+        </div>
+       
+      </div>
+      <div class="modal-body text-center">
+            <div class="successful-img">
+                <img src="<?php echo $image_base_url; ?>payment-successful.png">
+            </div>
+            <div class="successful-txt">
+                <h6>Order successfully placed</h6>
+                <p>Estimated delivery time:- 1hours 05 minutes</p>              
+            </div>
+      </div>
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="close-btn"><img src="<?php echo $image_base_url; ?>popup-checked.png"></span>
+        </button>
+    </div>
+  </div>
+</div>
+
 <!-- Add New Credit Card Modal -->
 <div class="modal fade modal-with-logo" id="addCardModal" tabindex="-1" role="dialog" aria-labelledby="addCardModalLabelLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -255,7 +281,8 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                             <div class="order-product-title col-9 col-md-9 p-0">Delivery Fee</div>
                                             <div class="order-product-price col-3 text-right col-md-3 p-0">+
                                                 <?php
-                                                $delivery_amount = ($subtotal * $delivery_fee) / 100;
+                                                //$delivery_amount = ($subtotal * $delivery_fee) / 100;
+                                                $delivery_amount = $delivery_fee;
                                                 echo '&#36; <span id="delivery_amount">'.number_format((float)$delivery_amount, 2, '.', '').'</span>';
                                                 ?>
                                             </div>
@@ -297,96 +324,107 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                 <div class="payment-mode">
                                     <h4>Select Mode of Payment</h4>
                                     <div class="payment-mode-detail">
+                                        <?php
+                                        if(isset($payment_apple_pay) && $payment_apple_pay == true){
+                                        ?>
                                         <div class="form-check row m-0 apple-pay p-0">
                                             <div class="col-md-10 p-0"><img src="<?php echo base_url().'web-assets/images/apple-play.png'; ?>" /></div>
-                                            <input class="form-check-input col-md-2 p-0" type="radio" name="pay" id="applepay" value="applepay">
+                                            <input class="form-check-input col-md-2 p-0" type="radio" name="payment_card" id="applepay" value="applepay" checked data-payment-type="1">
                                             <label class="form-check-label" for="applepay"></label>
                                         </div>
+                                        <?php
+                                        }
+                                        if(isset($payment_google_pay) && $payment_google_pay == true){
+                                        ?>
 
                                         <div class="form-check row m-0 google-pay p-0">
                                             <div class="col-md-10 p-0"><img src="<?php echo base_url().'web-assets/images/google-play.png'; ?>" /></div>
-                                            <input class="form-check-input col-md-2 p-0" type="radio" name="pay" id="googlepay" value="googlepay">
+                                            <input class="form-check-input col-md-2 p-0" type="radio" name="payment_card" id="googlepay" value="googlepay" checked data-payment-type="2">
                                             <label class="form-check-label" for="googlepay"></label>
                                         </div>
 
+                                        <?php
+                                        }
+                                        if(isset($payment_card) && $payment_card == true){
+                                        ?>
                                         <div class="credit-card card-payment">
                                             <div class="credit-card-collapse">Credit Card / Debit Card</div>
-                                            <?php
-                                            if(isset($cards) && is_array($cards) && !empty($cards)){
-                                            ?>
                                             <div class="row">
                                                 <div class="col">
                                                     <div class="collapse multi-collapse show" id="creditCard">
                                                         <div class="card card-body">
                                                             <?php
-                                                            foreach ($cards as $key => $value) {
-                                                                if($key == 0){
-                                                                    $checked = 'checked';
-                                                                }else{
-                                                                    $checked =  '';
-                                                                }
-                                                            ?>
-                                                            <div class="row m-0 card-option">
-                                                                <?php
-                                                                if($value['card_type'] == 1){
-                                                                    $img_name = 'visa-logo.png';
-                                                                }else if($value['card_type'] == 2){
-                                                                    $img_name = 'master-card.png';
-                                                                }else if($value['card_type'] == 3){
-                                                                    $img_name = 'american-express.png';
-                                                                }else if($value['card_type'] == 4){
-                                                                    $img_name = 'diners.png';
-                                                                }else if($value['card_type'] == 5){
-                                                                    $img_name = 'discover.png';
-                                                                }else if($value['card_type'] == 6){
-                                                                    $img_name = 'jcb.png';
-                                                                }else{
-                                                                    $img_name = '';
-                                                                }
+                                                            if(isset($cards) && is_array($cards) && !empty($cards)){
+                                                                foreach ($cards as $key => $value) {
+                                                                    if($key == 0){
+                                                                        $checked = 'checked';
+                                                                    }else{
+                                                                        $checked =  '';
+                                                                    }
                                                                 ?>
-
-                                                                <div class="card-logo col-md-2"><img src="<?php echo $img_path.$img_name; ?>" style="object-fit: scale-down;" class="w-100"/></div>
-                                                                <div class="card-detail col-md-8">
+                                                                <div class="row m-0 card-option">
                                                                     <?php
-                                                                    $card_types = array('1' => 'Visa Classic', '2' => 'MasterCard', '3' => 'American Express', '4' => 'Diners Club', '5' => 'Discover', '6' => 'JCB');
-                                                                    $my_card_type = $card_types[$value['card_type']];
+                                                                    if($value['card_type'] == 1){
+                                                                        $img_name = 'visa-logo.png';
+                                                                    }else if($value['card_type'] == 2){
+                                                                        $img_name = 'master-card.png';
+                                                                    }else if($value['card_type'] == 3){
+                                                                        $img_name = 'american-express.png';
+                                                                    }else if($value['card_type'] == 4){
+                                                                        $img_name = 'diners.png';
+                                                                    }else if($value['card_type'] == 5){
+                                                                        $img_name = 'discover.png';
+                                                                    }else if($value['card_type'] == 6){
+                                                                        $img_name = 'jcb.png';
+                                                                    }else{
+                                                                        $img_name = '';
+                                                                    }
                                                                     ?>
-                                                                    <div class="card-text">
-                                                                        <?php echo $my_card_type; ?>
+
+                                                                    <div class="card-logo col-md-2"><img src="<?php echo $img_path.$img_name; ?>" style="object-fit: scale-down;" class="w-100"/></div>
+                                                                    <div class="card-detail col-md-8">
+                                                                        <?php
+                                                                        $card_types = array('1' => 'Visa Classic', '2' => 'MasterCard', '3' => 'American Express', '4' => 'Diners Club', '5' => 'Discover', '6' => 'JCB');
+                                                                        $my_card_type = $card_types[$value['card_type']];
+                                                                        ?>
+                                                                        <div class="card-text">
+                                                                            <?php echo $my_card_type; ?>
+                                                                        </div>
+                                                                        <div class="card-number">
+                                                                            <?php echo $value['display_number']; ?>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="card-number">
-                                                                        <?php echo $value['display_number']; ?>
+                                                                    <div class="form-check col-md-2">
+                                                                        <input class="form-check-input" type="radio" name="payment_card" id="<?php echo $value['id']; ?>" value="<?php echo $value['id']; ?>"  <?php echo $checked; ?> data-payment-type="0">
+                                                                        <label class="form-check-label" for="<?php echo $value['id']; ?>"></label>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-check col-md-2">
-                                                                    <input class="form-check-input" type="radio" name="payment_card" id="<?php echo $value['id']; ?>" value="<?php echo $value['id']; ?>"  <?php echo $checked; ?> >
-                                                                    <label class="form-check-label" for="<?php echo $value['id']; ?>"></label>
-                                                                </div>
-                                                            </div>
-                                                            <?php
+                                                                <?php
+                                                                }
                                                             }
                                                             ?>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <?php
-                                            }
-                                            ?>
                                         </div>
                                         <div class="row m-0">
                                             <div class="add-new-card-popup">
                                                 <a href="javascript:void(0)" data-toggle="modal" data-target="#addCardModal">Add New Credit Card / Debit Card</a>
                                             </div>
                                         </div>
+                                        <?php
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-actions d-flex justify-content-between">
                             <a href="<?php echo $cart_link; ?>"name="backtocart" class="white-btn backtocart-btn" id="backtocart">Back to cart</a>
-                            <input type="button" name="placeorder" class="small-red-btn placeorder-btn pointer" id="placeorder" value="Place order" data-toggle="modal" data-target="#orderSuccessful">
+                            <input type="button" name="placeorder" class="small-red-btn placeorder-btn pointer" id="placeorder" value="Place order">
                         </div>
+                        <?php // echo "<pre>"; print_r($_SESSION); ?>
                     </form>
                 </div>
 			</div>
@@ -407,4 +445,5 @@ $img_path = base_url().'web-assets/images/card-icons/';
     var delivery_amount = "<?php echo $delivery_amount; ?>";
 
     var validate_promocode_url = "<?php echo base_url().'validate-promocode'; ?>";
+    var place_order_url = "<?php echo base_url().'place-order'; ?>";
 </script> 

@@ -3219,7 +3219,7 @@ class Customer_api extends REST_Controller {
                                                 }
                                                 if($varient_error == FALSE){
 
-                                                    // if varient exists
+                                                    // if varient exists true
                                                     $error = '';
                                                     if(($order_data['order_type'] == 2) || ($order_data['order_type'] == 4)){
                                                         if(isset($order_data['later_time']) && $order_data['later_time'] != ''){

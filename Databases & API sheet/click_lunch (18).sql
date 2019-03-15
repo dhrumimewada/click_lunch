@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 09, 2019 at 08:29 AM
+-- Generation Time: Mar 15, 2019 at 12:54 PM
 -- Server version: 5.6.41
 -- PHP Version: 7.0.32
 
@@ -227,7 +227,7 @@ INSERT INTO `customer` (`id`, `email`, `password`, `profile_picture`, `username`
 (6, 'DullRat@mailinator.com', '$2y$10$s5xq4SSBkVvXZow/pR6f9.mNUDyTNaonrZSsLwjTNPI27tahx3ASO', 'customer_1546514755.jpg', 'Dhrumi SS', 'city center 2, science city', '8866541254', '1996-02-14', '', 0, '', 0, '', 1, '2019-01-03 06:55:55', '2019-01-22 07:36:53', NULL, '1', '42.34797469999999', '-71.08792840000001', '995e6926a53e0f52141048894f2c11324eb373c4', '', 1, 1, 1),
 (25, 'PieThunder@mailinator.com', '$2y$10$TJ0cFGhfYRvD.9OSimFFAekIE4ZLFHiUi0SKaZmemq4p9fGp1m7BG', 'customer_1548150942.jpg', 'Dhrumi SS', 'Dallas-Fort Worth Metropolitan Area, TX, USA', '8866541254', '1996-02-14', '', 1, 'hjhjkhjkhjkhkj', 0, '', 1, '2019-01-09 01:35:17', '2019-01-22 09:55:42', NULL, '1', '121212', '1212154', 'f59c153f1b0653cd0b04228d133252259d027c74', '', 0, 1, 1),
 (32, 'vinodkummar@yahoo.com', '$2y$10$qwBontvpGvQkgoMmf7zhKO.wZj1htnE0rUHE4bMvUOxuQ2MjPQbme', 'customer_1547811554.jpg', 'Vinodkummar', '#5,1 floor,1 main road,rama chandra pura', '900 859 9119', '2001-01-08', '', 0, '', 0, '', 1, '2019-01-14 07:22:20', '2019-01-17 10:29:52', NULL, '0', '', '', '', '', 1, 1, 1),
-(33, 'developer.eww@gmail.com', '$2y$10$aa.zH3/GXVhn4BNskycVWu0iRr3Xw2rYLTz1g5hdplV6Y95buGuFu', 'customer_1551337791.jpg', 'Mayur Two', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '333-222-1111', '2000-12-08', '', 0, 'e1bOPXL_JHs:APA91bEMNyu02LaBbQuePY2N7vZUMVdDRHVckhL4TrkavcHQ2JWdcuhNV7iXrrDv_QOxeg6LAykUCD-IBVy6fsiCqj0UJhQ7cc5nL60LI__qa3qkZv51zcGUXfJRKow_eVTg5l7BAWgR', 0, '', 1, '2019-01-21 11:40:41', '2019-03-08 05:39:28', NULL, '0', '23.0727593', '72.5163272', 'b660c73941cee4ed06cb455cc620be5d0eb40a94', '', 1, 1, 0),
+(33, 'developer.eww@gmail.com', '$2y$10$aa.zH3/GXVhn4BNskycVWu0iRr3Xw2rYLTz1g5hdplV6Y95buGuFu', 'customer_1551337791.jpg', 'Mayur Two', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '333-222-1111', '2000-12-08', '', 0, 'e3F1-dW5MF8:APA91bFpQ8DIhg_s5UFg8rRER1m7cyYdrDfUunMtJPfiF36p2Yz_xfHYVjDtKc2c9JyrxWdzVY-t1m22NdiUshR9OU1kbBHIwIEp_Pm1k2LdB149KHbpw-_a7bE7Ytk9EyZtqr0PrXSm', 0, '', 1, '2019-01-21 11:40:41', '2019-03-08 05:39:28', NULL, '0', '23.072739', '72.5162995', 'b660c73941cee4ed06cb455cc620be5d0eb40a94', '', 1, 1, 0),
 (34, 'RhymePaladin@mailinator.com', '$2y$10$0LU.1X2e9RFtwmuRj7u2NeO1TlLB4UHPL3fw5PicVJVQLixo0eCT2', '', 'Paladin', '', '8866541254', '1996-02-14', '', 1, 'hjhjkhjkhjkhkj', 0, '', 0, '2019-01-23 11:37:07', NULL, NULL, '1', '13.666', '66.3333333', '', '487a25ca64324b9504fc260da580f06938197cb5', 1, 1, 1),
 (35, 'Rehan@gmail.com', '$2y$10$ZrD6PhBniRrXQBr8rJ/K1./4RvOPNExosmqA8owjy/7GuYPXW8OoK', 'customer_1548679677.jpeg', 'Rehan Hussein', '', '989898989898', '2019-01-28', '', 0, 'adsdasddasd', 0, '', 1, '2019-01-28 08:59:31', '2019-03-02 08:49:49', NULL, '0', '121212', '1212154', '', '', 0, 1, 0),
 (36, 'pooja@excellentwebworld.in', '$2y$10$lmY8XIuPSNGwDoxNHjwFd.XsfXeS.Q9KHOm0PSciYzx5H/5BvSsjS', 'customer_1551427005.jpg', 'Pooja', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '777-807-5528', '2019-03-30', '', 0, 'fAQoL84MV60:APA91bGFDEWSxdbWd2kFlGi2iSzBW2k-PcxeRUoj3Q2H3_yghSi6bcDzqmbVUKnGJxi9_ec5fp30dL6fI7hY76FZV1XoZNB_NKQcb185tSoQuq4zyM2a3sZ6IoNIcybybMyQwoeK27JO', 0, '', 1, '2019-03-01 06:14:02', '2019-03-02 07:03:35', NULL, '1', '23.0727509', '72.5163357', '', '', 1, 1, 1),
@@ -235,14 +235,29 @@ INSERT INTO `customer` (`id`, `email`, `password`, `profile_picture`, `username`
 (38, 'developer.ewweww2@gmail.com', '$2y$10$GbJgiU7VHBgoHOaL5JRq4O3G3Z47f5KUWpWO3mGpcjUPlIx953j06', '', 'Saurav', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '111-111-1111', '1996-12-12', '', 0, 'ej1d0qJEZsU:APA91bGBLPdUqLEMJaDUYAs0o27Vu7JLLa3rStanyp2RZn8NZwEncRRNTegQvap7YfU3IwZ_3GnAM-qGbmlhX9dHb2Wzx6WXFvSB5csgCbnHcLGINEbBcskGM8NIs_DhkNNh6LBTw_BB', 0, '', 0, '2019-03-01 06:37:32', NULL, NULL, '0', '23.0727664', '72.5163406', '', '9fc031ca9c43028a29a6d1e16d8bafcc65f52c07', 1, 1, 1),
 (39, 'dianahedlund123@gmail.com', '$2y$10$.u67p3.xpo5M33.WK4/kkuMfsMgTHAZhgSBhJ/wQ1P/Yx/6T7hzrO', '', 'Pooja', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '777-807-5528', '1994-12-25', '', 0, 'fAQoL84MV60:APA91bGFDEWSxdbWd2kFlGi2iSzBW2k-PcxeRUoj3Q2H3_yghSi6bcDzqmbVUKnGJxi9_ec5fp30dL6fI7hY76FZV1XoZNB_NKQcb185tSoQuq4zyM2a3sZ6IoNIcybybMyQwoeK27JO', 0, '', 1, '2019-03-01 06:48:38', NULL, NULL, '1', '23.07275', '72.5163385', '', '', 1, 1, 1),
 (40, 'r@r.com', '$2y$10$vWn4yoO9j80noylM8SmeJ.W0Enui99kvfTJvqof9WP0V0J6xPep5m', '', 'rj381', 'Sarvanad Society Opp. Ramdev Mandir, 14, CIMS Hospital Road, Ahmedabad, Gujarat 380060, India', '999-999-9999', '2019-03-01', '', 0, 'af8b52580c7e6f275ba5f99dd45d4881428e5b2e479fcbdc8c6a1c3f063f2442', 0, '', 0, '2019-03-01 12:09:57', NULL, NULL, '0', '23.07094709289872', '72.51622031254746', '', '5b73e1486c470f37e7a297b6d9576b0867bd3e2e', 1, 1, 1),
-(41, 'r@t.com', '$2y$10$PS0p2rCqnWCJdPdAIKhFGOquXaFOOK4Tnc0yDWoj98WdBk2sahG1y', '', 'rj381', 'Science City Rd, Sola, Ahmedabad, Gujarat 380059, India', '999-999-9999', '2019-03-01', '', 0, 'af8b52580c7e6f275ba5f99dd45d4881428e5b2e479fcbdc8c6a1c3f063f2442', 0, '', 1, '2019-03-01 12:14:11', NULL, NULL, '0', '23.07275086140834', '72.51638920803134', '', '', 1, 1, 1),
+(41, 'r@t.com', '$2y$10$PS0p2rCqnWCJdPdAIKhFGOquXaFOOK4Tnc0yDWoj98WdBk2sahG1y', '', 'rj381', 'Science City Rd, Sola, Ahmedabad, Gujarat 380059, India', '999-999-9999', '2019-03-01', '', 0, 'd6qLopAf8Qw:APA91bEbZnJLZYnRV2zisLEpJARvKJmKdybVblsm3Y2g5z_FEPx0ZwqJAZsh7bVrJ37P__7ADEVG6jZoFDNKDqqMv_e3NeYk8Tagu8LchO_efv-WZXLiFBvdA7JtQiCDTDKFZkZ5NoD8', 0, '', 1, '2019-03-01 12:14:11', NULL, NULL, '0', '23.0727523', '72.5163233', '', '', 1, 1, 1),
 (42, 'poojapanchal8512@gmail.com', '$2y$10$vbHV9Y2VbzhXyN7geFat5.ICRVq1mo6qa.Ed1.lPOuJgPi12Xdkk2', '', 'Alice', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '777-807-5528', '2019-04-19', '', 0, 'fAQoL84MV60:APA91bGFDEWSxdbWd2kFlGi2iSzBW2k-PcxeRUoj3Q2H3_yghSi6bcDzqmbVUKnGJxi9_ec5fp30dL6fI7hY76FZV1XoZNB_NKQcb185tSoQuq4zyM2a3sZ6IoNIcybybMyQwoeK27JO', 0, '', 1, '2019-03-04 05:31:21', NULL, NULL, '1', '23.07275', '72.5163385', '', '', 1, 1, 1),
 (43, 'dhrumi_cl@mailinator.com', '$2y$10$0fLYzRKhLakLC.OhZcQEyeW5wGLhcmTxex7xTkkYg8n7KxfEEDYky', '', 'Dhrumi Mewada', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '886-658-0502', '2015-02-01', '', 0, 'dvhmaXXa9OY:APA91bEWtwXyhYdcWERiXbLsMSv8UMmK_ZJ1qAjxydeMQUgFDRzZXkHxl8oI0Ww4d4bpIetX4VmdQzWD7rD6-S6TR8pOOIWb8MltRF6P8djOL3lE45Gb5zr0-9ceyALIZrCL279cEJEE', 0, '', 1, '2019-03-05 07:05:35', NULL, NULL, '1', '23.0727445', '72.5163463', '', '', 1, 1, 1),
 (44, 'BoogerDanger12@mailinator.com', '$2y$10$rbOqEIZxgXl7scZsYYoYneMJfX5voBiFFbRRxy9dUZGqQCiB7udn.', '', 'BoogerDanger test', '', '774 587 1458', '2019-03-05', '', 0, '', 0, '', 1, '2019-03-06 13:55:05', NULL, NULL, '0', '', '', '', '51189b74c7d0a99a7ee15977e958f280fdc5bd4b', 1, 1, 1),
-(45, 'sunvenk04@gmail.com', '$2y$10$v40GxBKVlCN8tvUSCnUmD.MZfByAoeUCxPMSkrCWULdKXln0UZ6j2', '', 'Sunitha', '25, 1st Cross Rd, Prakash Nagar, Rajaji Nagar, Bengaluru, Karnataka 560021, India', '990-236-6824', '1980-03-24', '', 0, 'cYJ9POWMV0U:APA91bF0ePsXE1bhJziPciKR1lH0-DxPz5_qd4InH8Ox3ICg5Qq7gEY1dv1ijjKoltoBCaxSGMJFGd06sBaqqljWK6HkrpuxVBcNhA9B0M9mldIv_HSSqrt8jvDOJAJ_cWpO0xhGRryz', 0, '', 1, '2019-03-07 02:27:30', '2019-03-07 15:39:35', NULL, '1', '12.9871987', '77.563529', '', '', 1, 1, 1),
+(45, 'sunvenk04@gmail.com', '$2y$10$bklAotvLCfBcT7eCblTVoO.MG2YZwl.SX3exRjiUBuPCLauvJ7may', '', 'Sunitha', '25, 1st Cross Rd, Prakash Nagar, Rajaji Nagar, Bengaluru, Karnataka 560021, India', '990-236-6824', '1980-03-24', '', 0, 'cYJ9POWMV0U:APA91bF0ePsXE1bhJziPciKR1lH0-DxPz5_qd4InH8Ox3ICg5Qq7gEY1dv1ijjKoltoBCaxSGMJFGd06sBaqqljWK6HkrpuxVBcNhA9B0M9mldIv_HSSqrt8jvDOJAJ_cWpO0xhGRryz', 0, '', 1, '2019-03-07 02:27:30', '2019-03-15 08:26:14', NULL, '1', '12.9873504', '77.5634626', '', '', 1, 1, 0),
 (46, 'kv@excellentwebworld.com', '$2y$10$LJmuYJ5WDcYFPsVyxrQr/eVyuH9yrqxEQH7vknl.K8nTAQUQfer.u', '', 'kvpatel', '', '999 835 9464', '1991-09-12', '', 0, '', 0, '', 1, '2019-03-07 12:06:20', NULL, NULL, '0', '', '', '', '', 1, 1, 1),
 (47, 'Belgians123@mailinator.com', '$2y$10$88QTuFa/NeNLP4EwQYRdzOP9Fe8DuMZrbwOeoK9YLCFVzQMpbmChi', '', 'Belgians', '', '565 655 6545', '2019-03-03', '', 0, '', 0, '', 1, '2019-03-07 13:44:53', NULL, NULL, '1', '', '', '', '', 1, 1, 1),
-(48, 'cl_customer@yopmail.com', '$2y$10$ls/3kHi7dW4Q93luykOjlenvb8UAGOUs1txLjV7lyKZH2HbvdeIpq', '', 'cl customer', '', '775 765 8768', '2019-03-04', '', 0, '', 0, '', 1, '2019-03-07 14:02:05', NULL, NULL, '0', '', '', '', '', 1, 1, 1);
+(48, 'cl_customer@yopmail.com', '$2y$10$ls/3kHi7dW4Q93luykOjlenvb8UAGOUs1txLjV7lyKZH2HbvdeIpq', 'customer_1552312125.jpg', 'Cl Customer', '', '775 765 8768', '2019-03-04', '', 1, 'fqIMGxz0PQg:APA91bEVujgp8ZCvd9Z-zJAa4PExqGOHTjoSocDvE1ASqA_0tARPjUuC4yhRv-F15WsWfsB8kMqhMmonO2fY1mcdAwJwwG_uXSnkYsMO4jtptA2KQJpc1jLBqYa2GHxmAbpinFgtMakB', 0, '', 1, '2019-03-07 14:02:05', '2019-03-11 13:48:45', NULL, '0', '', '', '', '', 1, 1, 1),
+(49, 'binal.nasit26@gmail.com', '$2y$10$yg8./q64sf4xCVYSN4NBz.orJB1QOLs0NzJgK3pDDjR3YhKQjqYem', '', ' binal', '', '7878616496', '0000-00-00', '', 0, 'f.bfdb', 1, ' ', 0, '2019-03-14 06:14:50', NULL, NULL, '1', '45.2356 ', '45.2365', '', '411a00341c7a68e64048edd852d16ef271738e38', 1, 1, 1),
+(50, 'bhavesh@excellentwebworld.info', '$2y$10$x1n/fZV/zohKHIX2Vb5mTeGZMIBmWuOgghAIGt0LbVLES9m51H3Om', '', ' binal', '', '7878616495', '0000-00-00', '', 0, ' ughujhiki', 1, ' ', 1, '2019-03-14 06:20:52', NULL, NULL, '1', '16.051253', ' 20.1223', '', '', 1, 1, 1),
+(51, 'binal.nasit@gmaill.co', '$2y$10$YWfoGaiBgJK4a1xARDfnduTESozRmnz8.XxBle7auW7/FBxwNd4AG', '', 'bcvbn', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '7878616)^^()$(;$,($', '0000-00-00', '', 0, '1234', 1, '1', 0, '2019-03-14 07:29:31', NULL, NULL, '1', '23.07269989776014', '72.5163995307786', '', '24834607ba023ebf2036d45d9e4079cfcbb60ed1', 1, 1, 1),
+(52, ' Rahul.bbit@gmail.com', '$2y$10$PYEY5QAJf.0Lsldbed0msuymOS.nvPwYgQRUUq/7gCvmbRVVgAjqG', '', ' rahul', '', ' 789067890', '0000-00-00', '', 0, ' 1234', 1, ' ', 0, '2019-03-14 07:39:08', NULL, NULL, ' ', ' 23.07271914349111', ' 72.51635833381914', '', '', 1, 1, 1),
+(53, ' rahul.bbit@gmail.comz', '$2y$10$3KnB665IcexMEQ5t0e/yLOs8FLFi.vxIpttKfX0pD5Wa7dcmYt6j2', '', ' rahul', '', ' 789067890z', '0000-00-00', '', 0, ' 1234', 1, ' ', 0, '2019-03-14 07:39:33', NULL, NULL, ' ', ' 23.07271914349111', ' 72.51635833381914', '', '', 1, 1, 1),
+(54, ' binal1@gmail.co', '$2y$10$fEZ9kW6Qin07rqn65LOFpu5kIp/SUc3nBeDkgYXYZIkDHFpeiOdmS', '', ' rahul', '', ' 789067890)5', '0000-00-00', '', 0, ' 1234', 1, ' ', 0, '2019-03-14 07:43:44', NULL, NULL, ' ', ' 23.07275994966755', ' 72.51635100537418', '', '', 1, 1, 1),
+(55, ' acns@gmail.com', '$2y$10$wLf5xGSS3ALZxPO5IGiX7eowIrhJL1SvTKW6Y97nO93Tw/XYLaPVK', '', ' rahul', '', ' 7890678967', '0000-00-00', '', 0, ' 1234', 1, ' ', 0, '2019-03-14 07:44:36', NULL, NULL, ' ', ' 23.07275994966755', ' 72.51635100537418', '', '', 1, 1, 1),
+(56, ' ravi@excellentwebworld.info', '$2y$10$gHMzQ1iIUYnYFrcAkCjwBO7R3X.Qk2HvkNafUgeOp55oMAXXWM4CC', '', ' rahul', '', ' 7890678562', '0000-00-00', '', 0, ' 1234', 1, ' ', 0, '2019-03-14 07:45:02', NULL, NULL, ' ', ' 23.07275994966755', ' 72.51635100537418', '', '', 1, 1, 1),
+(57, ' ravi@excellentweb.com', '$2y$10$h5XKCUElxpWwpmUHmcujFelT/xxi87V78eH7PP1ZR7V7FqfwiR9bK', '', ' rahul', '', ' 78906789652', '0000-00-00', '', 0, ' 1234', 1, ' ', 0, '2019-03-14 07:45:56', NULL, NULL, ' ', ' 23.07275994966755', ' 72.51635100537418', '', '', 1, 1, 1),
+(58, 'binal.nasit26@gmail.comq', '$2y$10$7Yr8MRklL8mG9nWfG55Md.vp.nZokObKSQi9quae3fnufD4kaAE8G', '', ' rahul', '', ' 7890678999652', '0000-00-00', '', 0, ' 1234', 1, ' ', 0, '2019-03-14 07:46:42', NULL, NULL, ' ', ' 23.07275994966755', ' 72.51635100537418', '', '08e0909fcec596c1dced2dde72179354d73df9dd', 1, 1, 1),
+(59, 'Rahul.eww@gmail.vom', '$2y$10$cELOe4fAF3zyMxq7VRFYqOnRwU2vkc/yYN238mnAXl/kmu0.QnBOK', '', 'rahul ', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '787879889^9', '0000-00-00', '', 0, '1234', 21, '2', 0, '2019-03-14 07:50:40', NULL, NULL, '1', '23.07267730888438', '72.51642493032185', '', '0100ce93520df4569fa85be8dcd6ada8bb0381a8', 1, 1, 1),
+(60, 'binal.excellentwebworld.info', '$2y$10$JseZGvNcsq9pgKL9gtMIcuO3IQFhbX0r2BLEBnDmgA9227NP0/q7S', '', ' rahul', '', ' 7890678999', '0000-00-00', '', 0, ' 1234', 16, ' ', 0, '2019-03-14 07:54:32', NULL, NULL, ' ', ' 23.07275994966755', ' 72.51635100537418', '', '', 1, 1, 1),
+(61, 'raji@excellentwebworld.info', '$2y$10$qpUzXhXPAmI.W53IR3vBXO30rP9eySQPrytArZ56RBj.AiDN0SJjq', '', ' rahul', '', ' 78906789997', '0000-00-00', '', 0, ' 1234', 168, ' ', 0, '2019-03-14 07:56:54', NULL, NULL, ' ', ' 23.07275994966755', ' 72.51635100537418', '', 'f3c6a4f0a1507b82c5b0e780a7bb174b51809bd8', 1, 1, 1),
+(62, 'raju@excellentwebworld.info', '$2y$10$yG4ZHEyjB9x8pKrWG4CYuuly/KSIQZZDbD9OkbiVfNPyGHRfMnNAO', '', ' rahul', '', ' 789067899976', '0000-00-00', '', 0, ' 1234', 1688, ' ', 0, '2019-03-14 07:57:11', NULL, NULL, ' ', ' 23.07275994966755', ' 72.51635100537418', '', '5f9b0f8041719b5bd28167312103dbbf76aceadd', 1, 1, 1),
+(63, 'raju.gupta@excellentwebworld.in', '$2y$10$UWvAYGjDtD1y.5M/RFAgluen5/IvU.UDwnK4U7P3mVsv.Jyj36Cou', 'customer_1552565735.jpg', ' rahul', '', '7878616496', '0000-00-00', '', 0, ' ughujhiki', 1688, ' ', 1, '2019-03-14 07:59:31', '2019-03-14 12:15:35', NULL, '1', '16.051253', ' 20.1223', '', '', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -308,7 +323,9 @@ INSERT INTO `customer_payment_card` (`id`, `customer_id`, `card_holder_name`, `c
 (36, 39, 'test', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'Y6WepXBjYg==', 'ZKKi', 'test', 1, '2019-03-02 08:21:13', NULL, NULL),
 (37, 36, 'test', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'Y6SepXBjYg==', 'ZKKi', 'test', 1, '2019-03-04 05:14:16', NULL, NULL),
 (38, 43, 'fyyf', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'Y6OepXBjYw==', 'ZaKh', 'hg', 1, '2019-03-05 07:24:34', NULL, NULL),
-(39, 42, 'test', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'Y6SepXBjYg==', 'ZKKi', 'test', 1, '2019-03-08 07:18:57', NULL, NULL);
+(39, 42, 'test', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'Y6SepXBjYg==', 'ZKKi', 'test', 1, '2019-03-08 07:18:57', NULL, NULL),
+(40, 48, 'cl me', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'Y6SepXBjYg==', 'ZKKi', 'test', 1, '2019-03-08 07:18:57', NULL, NULL),
+(41, 45, 'shubxjfj', 'aKOirHdqamympal2amhrpg==', 'XXXX XXXX XXXX 9686', 'Y6OepXBiaw==', 'aKan', 'ghsh', 2, '2019-03-13 10:18:18', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -342,40 +359,51 @@ CREATE TABLE `delivery_address` (
 INSERT INTO `delivery_address` (`id`, `customer_id`, `default_address`, `popular`, `house_no`, `street`, `city`, `zipcode`, `latitude`, `longitude`, `delivery_instruction`, `address_type`, `nickname`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (2, 25, 0, 0, 'f33', 'sursagar tower', '', '380016', '23.0680435', '-119.4179324', 'No inst ', '2', 'bunu', '2019-02-27 05:54:39', NULL, '2019-01-21 13:40:17'),
 (5, 25, 0, 0, 'f33', 'fgf', '', '380016', '36.778261', '-119.4179324', 'No inst ', '1', 'bunu', '2019-02-27 05:54:39', NULL, NULL),
-(6, 25, 1, 0, 'f3355', 'fgf', '', '380016', '36.778261', '-119.4179324', 'No inst ', '2', 'bunu', '2019-02-27 05:54:39', NULL, NULL),
-(7, 33, 0, 0, '20', 'kadi', 'patan', '38426', '36.778261', '-119.4179324', 'hey', '1', 'mayur', '2019-02-28 07:50:04', NULL, NULL),
+(6, 25, 0, 0, 'f3355', 'fgf', '', '380016', '36.778261', '-119.4179324', 'No inst ', '2', 'bunu', '2019-03-14 13:44:51', NULL, NULL),
+(7, 33, 0, 0, '20', 'kadi', 'patan', '38426', '36.778261', '-119.4179324', 'hey', '1', 'mayur', '2019-03-14 12:52:18', NULL, '2019-03-14 12:52:18'),
 (8, 6, 0, 0, 'f33', 'sursagar+tower', 'Ahmedabad', '380061', '23.0680435', '72.5307147', 'No inst ', '2', 'bunu', '2019-01-24 13:17:10', NULL, NULL),
-(9, 33, 0, 0, 'fhdy', 'cjig', 'gjkg', '95565', '36.778261', '-119.4179324', 'ncfh', '4', '', '2019-03-01 05:18:57', NULL, NULL),
-(10, 33, 0, 0, 'fjfj', 'cjjf', 'cjng', '56959', '36.778261', '-119.4179324', 'zv', '3', '', '2019-03-05 05:16:39', NULL, NULL),
+(9, 33, 0, 0, 'fhdy', 'cjig', 'gjkg', '95565', '36.778261', '-119.4179324', 'ncfh', '4', '', '2019-03-14 13:16:50', NULL, '2019-03-14 13:16:50'),
+(10, 33, 0, 0, 'fjfj', 'cjjf', 'cjng', '56959', '36.778261', '-119.4179324', 'zv', '3', '', '2019-03-14 13:14:59', NULL, '2019-03-14 13:14:59'),
 (11, 6, 0, 0, 'f33', 'sursagar tower', 'Ahmedabad', '380061', '23.0680435', '72.5307147', 'No inst ', '2', 'bunu', '2019-01-24 13:39:58', NULL, NULL),
 (13, 0, 0, 1, 'Excellent WebWorld', 'City Center', 'Ahmedabad', '380060', '23.0726414', '72.51423', 'San Francisco, in northern California, is a hilly city on the tip of a peninsula surrounded by the Pacific Ocean and San Francisco Bay', '1', 'Transbay Tower', '2019-02-18 07:06:00', NULL, NULL),
 (14, 35, 0, 0, '411', 'Science city', 'California', '12456', '36.778261', '-119.4179324', '', '3', '', '2019-01-30 10:19:15', NULL, NULL),
 (15, 35, 0, 0, '411', 'Science city', 'California', '12456', '36.778261', '-119.4179324', '', '3', '', '2019-01-31 10:03:35', NULL, NULL),
-(16, 35, 1, 0, 'f35', 'sursagar', 'ahmedabad', '380016', '23.0489074', '72.6058584', 'No inst ', '2', 'bunu', '2019-01-31 10:03:35', NULL, NULL),
-(17, 33, 0, 0, 'f35', 'sursagar', 'ahmedabad', '380016', '23.0489074', '72.6058584', 'No inst ', '2', 'bunu', '2019-02-26 07:48:38', NULL, NULL),
+(16, 35, 0, 0, 'f35', 'sursagar', 'ahmedabad', '380016', '23.0489074', '72.6058584', 'No inst ', '2', 'bunu', '2019-03-14 13:44:51', NULL, NULL),
+(17, 33, 0, 0, 'f35', 'sursagar', 'ahmedabad', '380016', '23.0489074', '72.6058584', 'No inst ', '2', 'bunu', '2019-03-14 13:25:03', NULL, '2019-03-14 13:25:03'),
 (18, 0, 0, 1, 'Salesforce', 'San Francisco', 'California', '94118', '42.3483041', '-71.08359259999997', 'San Francisco, in northern California, is a hilly city on the tip of a peninsula surrounded by the Pacific Ocean and San Francisco Bay', '1', 'Transbay Tower', '2019-01-31 10:06:03', NULL, NULL),
-(19, 33, 0, 0, 'f33', 'sursagar tower', 'ahmedabad', '380016', '23.0489074', '72.6058584', 'No inst ', '2', 'ggg', '2019-02-22 13:41:36', NULL, NULL),
-(20, 33, 0, 0, 'F-33', 'Sattadhar', 'Ahmedabad', '380061', '23.0672405', '72.5310504', '', '3', 'mayu', '2019-02-22 13:41:45', NULL, NULL),
-(21, 33, 0, 0, 'F-33', 'Sursagar tower, Sattadhar', 'Ahmedabad', '380061', '23.0674991', '72.5307456', '', '3', 'mayu', '2019-02-22 14:08:17', NULL, NULL),
-(22, 33, 0, 0, 'fjj33', 'ddd', 'gddfre', '38016', '35.1816448', '-89.7661527', 'No inst ', '2', 'ggg', '2019-02-18 10:41:27', NULL, NULL),
-(23, 33, 0, 0, '43', 'sattadhar', 'kadi', '38271', '23.0676233', '72.530006', '', '3', 'mayur', '2019-02-22 06:23:15', NULL, NULL),
-(24, 33, 0, 0, '65', 'sattadhar', 'kadi', '38426', '23.0670686', '72.5310495', '', '1', '', '2019-02-28 07:35:04', NULL, NULL),
-(25, 33, 0, 0, '803', 'South Ocean Boulevard', 'Myrtle Beach', '29579', '33.6781578', '-78.8950967', '', '4', '', '2019-02-22 08:50:18', NULL, NULL),
-(26, 33, 0, 0, '6', 'sttadhar', 'kadi', '38426', '23.0681595', '72.5292566', '', '1', '', '2019-03-01 05:48:41', NULL, NULL),
-(27, 33, 0, 0, '1', 'acv', 'kadi', '38555', '35.9186133', '-84.9609464', '', '4', '', '2019-03-01 05:20:58', NULL, NULL),
-(28, 33, 0, 0, '44', 'abc', 'abc', '57424', '45.024261', '-98.4500606', '', '3', '', '2019-03-01 05:20:23', NULL, NULL),
-(29, 33, 0, 0, '111', 'abc', 'abc', '36542', '30.2999788', '-87.6778378', 'No inst ', '2', 'ggg', '2019-03-01 05:20:50', NULL, NULL),
-(30, 33, 0, 0, '111', 'abc', 'abc', '57424', '45.024261', '-98.4500606', 'No inst ', '2', 'ggg', '2019-03-01 05:20:43', NULL, NULL),
-(31, 33, 0, 0, '55', 'avc', 'avc', '12345', '34.6769819', '-118.1862581', '', '4', '', '2019-03-01 05:20:37', NULL, NULL),
-(32, 37, 1, 0, '12', 'sattadhar ', 'Ahmedabad ', '38425', '23.0681595', '72.5292566', '', '3', '', '2019-03-01 09:47:52', NULL, NULL),
+(19, 33, 0, 0, 'f33', 'sursagar tower', 'ahmedabad', '38001', '23.0680435', '72.5307147', 'No inst ', '4', 'ggg', '2019-03-14 13:29:32', NULL, '2019-03-14 13:26:13'),
+(20, 33, 0, 0, 'F-33', 'Sattadhar', 'Ahmedabad', '380061', '23.0672405', '72.5310504', '', '3', 'mayu', '2019-03-14 13:25:14', NULL, '2019-03-14 13:25:14'),
+(21, 33, 0, 0, 'F-33', 'Sursagar tower, Sattadhar', 'Ahmedabad', '38006', '23.0674991', '72.5307456', '', '4', 'mayu', '2019-03-14 13:52:45', NULL, '2019-03-14 13:52:45'),
+(22, 33, 0, 0, 'fjj33', 'ddd', 'gddfre', '38016', '35.1816448', '-89.7661527', 'No inst ', '2', 'ggg', '2019-03-14 13:20:30', NULL, '2019-03-14 13:20:30'),
+(23, 33, 0, 0, '43', 'sattadhar', 'kadi', '38271', '23.0676233', '72.530006', '', '3', 'mayur', '2019-03-14 13:20:28', NULL, '2019-03-14 13:20:28'),
+(24, 33, 0, 0, '65', 'sattadhar', 'kadi', '38426', '23.0670686', '72.5310495', '', '1', '', '2019-03-14 13:20:26', NULL, '2019-03-14 13:20:26'),
+(25, 33, 0, 0, '803', 'South Ocean Boulevard', 'Myrtle Beach', '29579', '33.6781578', '-78.8950967', '', '4', '', '2019-03-14 13:52:50', NULL, '2019-03-14 13:52:50'),
+(26, 33, 0, 0, '6', 'sttadhar', 'kadi', '38426', '23.0681595', '72.5292566', '', '1', '', '2019-03-14 13:20:20', NULL, '2019-03-14 13:20:20'),
+(27, 33, 0, 0, '1', 'acv', 'kadi', '38555', '35.9186133', '-84.9609464', '', '4', '', '2019-03-14 13:20:16', NULL, '2019-03-14 13:20:16'),
+(28, 33, 0, 0, '44', 'abc', 'abc', '57424', '45.024261', '-98.4500606', '', '3', '', '2019-03-14 13:20:17', NULL, '2019-03-14 13:20:17'),
+(29, 33, 0, 0, '111', 'abc', 'abc', '36542', '30.2999788', '-87.6778378', 'No inst ', '2', 'ggg', '2019-03-14 13:20:05', NULL, '2019-03-14 13:20:05'),
+(30, 33, 0, 0, '111', 'abc', 'abc', '57424', '45.024261', '-98.4500606', 'No inst ', '2', 'ggg', '2019-03-14 13:20:07', NULL, '2019-03-14 13:20:07'),
+(31, 33, 0, 0, '175', '5th Ave', 'New York', '10010', '40.7411774', '-73.989664', '', '1', '', '2019-03-14 13:20:14', NULL, '2019-03-14 13:20:14'),
+(32, 37, 0, 0, '12', 'sattadhar ', 'Ahmedabad ', '38425', '23.0681595', '72.5292566', '', '3', '', '2019-03-14 13:44:51', NULL, NULL),
 (33, 36, 0, 0, '   ', '   ', '     ', '12345', '34.0410619', '-118.260189', '   ', '2', '', '2019-03-04 04:50:15', NULL, NULL),
 (34, 36, 0, 0, 'ahmedabad', 'ahmedabad', 'ahmedabad', '12345', '23.022505', '72.5713621', 'test', '3', 'test', '2019-03-04 04:50:17', NULL, NULL),
-(35, 36, 1, 0, 'ahmedabad', 'ahmedabad', 'ahmedabad', '12345', '23.022505', '72.5713621', 'test', '2', 'test', '2019-03-04 04:50:17', NULL, NULL),
-(36, 33, 1, 0, '203-206 city center', 'Opp shukan mall, Science City Rd, sola', 'Ahmedabad', '38006', '23.0714369', '72.5165479', '', '1', '', '2019-03-05 05:16:39', NULL, NULL),
-(37, 43, 0, 0, '199/2384, pratiksha apartment', 'sola road', 'ahmedabad', '38001', '23.0339859', '72.4742639', 'no instructions ', '3', 'my old home', '2019-03-05 07:22:30', NULL, NULL),
-(38, 43, 0, 0, 'saint mark Coptic orthodox church', 'Carolina forest Blvd, myrtle beach', 'South Carolina ', '29579', '33.7589978', '-78.9209908', 'not for now', '4', 'church', '2019-03-08 05:43:19', NULL, NULL),
-(39, 43, 1, 0, 'Salesforce', 'San Francisco', 'California', '94118', '42.3483041', '-71.08359259999997', 'San Francisco, in northern California, is a hilly city on the tip of a peninsula surrounded by the Pacific Ocean and San Francisco Bay', '1', 'Transbay Tower', '2019-03-08 05:44:40', NULL, NULL),
-(40, 45, 1, 0, '43445', 'cherry blossom lane', 'canton', '48488', '40.7989473', '-81.378447', '', '4', 'drgbgxv', '2019-03-08 10:28:16', NULL, NULL);
+(35, 36, 0, 0, 'ahmedabad', 'ahmedabad', 'ahmedabad', '12345', '23.022505', '72.5713621', 'test', '2', 'test', '2019-03-14 13:44:51', NULL, NULL),
+(36, 33, 0, 0, '203-206 city center', 'Opp shukan mall, Science City Rd, sola', 'Ahmedabad', '38006', '31.2826685', '-86.2555067', '', '4', '', '2019-03-14 14:14:32', NULL, NULL),
+(37, 43, 0, 0, '199/2384, pratiksha apartment', 'sola road', 'ahmedabad', '38001', '23.0339859', '72.4742639', 'no instructions ', '3', 'my old home', '2019-03-14 13:44:51', NULL, NULL),
+(38, 43, 0, 0, 'saint mark Coptic orthodox church', 'Carolina forest Blvd, myrtle beach', 'South Carolina ', '29579', '33.7589978', '-78.9209908', 'not for now', '4', 'church', '2019-03-12 05:18:00', NULL, NULL),
+(39, 43, 0, 0, 'Salesforce', 'San Francisco', 'California', '94118', '42.3483041', '-71.08359259999997', 'San Francisco, in northern California, is a hilly city on the tip of a peninsula surrounded by the Pacific Ocean and San Francisco Bay', '1', 'Transbay Tower', '2019-03-12 05:17:53', NULL, NULL),
+(40, 45, 1, 0, '43445', 'cherry blossom lane', 'canton', '48488', '40.7989473', '-81.378447', '', '4', 'drgbgxv', '2019-03-15 08:31:02', NULL, NULL),
+(41, 45, 0, 0, '57899', 'cherry wood lane', 'canton', '48488', '42.3032095', '-83.4693053', '', '1', 'dgihsbx', '2019-03-15 08:29:36', NULL, NULL),
+(42, 45, 0, 0, '43133', 'cherry wood lane', 'canton , Michigan', '48188', '42.3011048', '-83.4680535', '', '3', 'zhfghj', '2019-03-13 11:07:26', NULL, NULL),
+(43, 33, 0, 0, 'fhdy', 'cjig', 'gjkg', '95565', '40.4451891', '-124.0075476', 'ncfh', '3', '', '2019-03-14 13:20:35', NULL, '2019-03-14 13:20:35'),
+(44, 33, 0, 0, '203-206 city center', 'Opp shukan mall, Science City Rd, sola', 'Ahmedabad', '38006', '31.2826685', '-86.2555067', '', '3', '', '2019-03-14 13:24:49', NULL, '2019-03-14 13:24:49'),
+(45, 33, 0, 0, '1', 'acv', 'kadi', '38555', '35.9186133', '-84.9609464', '', '3', '', '2019-03-14 13:19:59', NULL, '2019-03-14 13:17:05'),
+(46, 33, 0, 0, '203-206 city center', 'Opp shukan mall, Science City Rd, sola', 'Ahmedabad', '38006', '31.2826685', '-86.2555067', '', '3', '', '2019-03-14 13:24:51', NULL, '2019-03-14 13:24:51'),
+(47, 33, 1, 0, '203-206 city center', 'Opp shukan mall, Science City Rd, sola', 'Ahmedabad', '38006', '31.2826685', '-86.2555067', '', '4', '', '2019-03-14 14:14:32', NULL, NULL),
+(48, 33, 0, 0, '203-206 city center', 'Opp shukan mall, Science City Rd, sola', 'Ahmedabad', '38006', '31.2826685', '-86.2555067', '', '4', '', '2019-03-14 13:24:55', NULL, '2019-03-14 13:24:55'),
+(49, 48, 0, 0, '1', 'Mecklenburg County', 'North Carolina', '28202', '35.2299431', '-80.8373539', '', '4', '', '2019-03-14 13:44:52', NULL, NULL),
+(50, 48, 1, 0, '1', 'Mecklenburg County', 'North Carolina', '28202', '35.2299431', '-80.8373539', '', '4', '', '2019-03-14 13:44:52', NULL, NULL),
+(51, 45, 0, 0, '76738', 'melburng county', 'north coralina', '54634', '43.5983864', '-90.4125181', '', '3', '', '2019-03-15 08:31:02', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -416,7 +444,7 @@ INSERT INTO `delivery_boy` (`id`, `email`, `password`, `cl_id`, `profile_picture
 (6, 'PieGeek@mailinator.com', '$2y$10$CYf7oiAPLbu/oA7QrLHUNeZPmFKbrZmGWd0YK5XapgQ031ngGQzuK', 'CL33', '', 'Pie Geek', '333 333 3333', '', 1, 'Kansas City', '26.4685668', '-81.76799640000002', '2019-01-23 11:10:19', '2019-02-01 05:43:35', NULL, '', ''),
 (7, 'Shabby@mailinator.com', '$2y$10$DzjXChZH73AsBEWFNbLmKOL4hwB1QZoXSiK/wEztLKdi3zSEZ1qPC', 'CL33', '', 'Shabby Dog', '777 777 7777', '', 1, 'Kansas City', '', '', '2019-01-23 11:11:41', NULL, NULL, '', ''),
 (8, 'ZanyThunder@mailinator.com', '$2y$10$6Y.XcJuLYA9WqPwbXREu2.GRHyg4OCKo5pdZ2JWs78sp20Y5iRHIO', 'CL33', '', 'Zany T Hunder', '774 587 1466', '', 2, 'Vienna, VA, USA', '38.9012225', '-77.26526039999999', '2019-01-23 11:33:04', '2019-02-07 05:45:00', NULL, '', ''),
-(9, 'dhrumi@reconmail.com', '$2y$10$oq/zjIL6zGuPK6xRahxHsOxtn0f9Yy/Dglx7w.nUstBe.OPQIR9tS', 'DB9', 'delivery_boy_1549962747.jpg', 'Dhrumi', '9874563210', '123456789', 1, 'Buckingham Palace', '0', '0', '2019-01-10 07:00:44', '2019-03-08 06:59:51', NULL, '0fab4a9b779f393f21dbf6e8fc43d0f674baf8b2', ''),
+(9, 'dhrumi@reconmail.com', '$2y$10$oq/zjIL6zGuPK6xRahxHsOxtn0f9Yy/Dglx7w.nUstBe.OPQIR9tS', 'DB9', 'delivery_boy_1552288161.jpeg', 'Dhrumi', '9874563210', 'fqIMGxz0PQg:APA91bEVujgp8ZCvd9Z-zJAa4PExqGOHTjoSocDvE1ASqA_0tARPjUuC4yhRv-F15WsWfsB8kMqhMmonO2fY1mcdAwJwwG_uXSnkYsMO4jtptA2KQJpc1jLBqYa2GHxmAbpinFgtMakB', 1, 'Buckingham Palace', '23.07275', '72.516343', '2019-01-10 07:00:44', '2019-03-13 04:40:30', NULL, '0fab4a9b779f393f21dbf6e8fc43d0f674baf8b2', ''),
 (10, 'thomas@gmail.com', '$2y$10$5YLRV0iAz6BTaD2N1QP/ju8co4eqWljBkhwuQdqI5A.SC9brzsVHK', '', 'delivery_boy_1549518890.jpg', 'Thomas', '456 778 8899', '', 1, 'Greensboro, NC, USA', '36.0726354', '-79.79197540000001', '2019-02-07 05:54:50', NULL, NULL, '', ''),
 (11, 'db2@yopmail.com', '$2y$10$Umi2xUIhIwDnSkpfpPWlQuvq7f.AXtYr0.Qq27NxpR9NzGL6cRhTG', 'DB11', 'delivery_boy_1552025401.jpg', 'Delivery Boy Brown', '546 456 4565', 'fiPXJr-eEFc:APA91bEf_PDnU-hNfc4scI1IoEbD_734v2g-QqpOTfin4RrJDQ1wPF_tMuMg2z9oKcz8Opb_iYq9Xjyqhm8zM1OUICuitITk8EtWE4eSQVyaIdAC_RTalRnR5jJqq0-44Z0tfi9iEp8Q', 1, 'Houston, TX, USA', '0.0', '0.0', '2019-03-08 06:00:38', '2019-03-08 06:10:01', NULL, '', '');
 
@@ -665,7 +693,7 @@ CREATE TABLE `orders` (
   `service_charge` varchar(11) NOT NULL COMMENT '%',
   `schedule_date` date NOT NULL,
   `schedule_time` varchar(255) NOT NULL,
-  `order_status` int(3) NOT NULL DEFAULT '0' COMMENT '0  - pending , 1 - accept by shop, 2 - reject by shop, 3 - assigned delivery_boy by dispatcher, 4 - accept by delivery_boy',
+  `order_status` int(3) NOT NULL DEFAULT '0' COMMENT '0  - pending, 1 - accept by shop, 2 - reject by shop, 3 - assigned delivery_boy by dispatcher, 4 - accept by delivery_boy, 5 - order picked, 6 - order delivered, 7 - order delivery fail',
   `delivery_address_id` int(11) NOT NULL,
   `delivery_boy_id` int(11) NOT NULL DEFAULT '0',
   `payment_status` int(3) NOT NULL DEFAULT '0' COMMENT '0- pending , 1- success, 2 - failed',
@@ -714,7 +742,30 @@ INSERT INTO `orders` (`id`, `customer_id`, `shop_id`, `order_type`, `later_time`
 (115, 36, 52, '1', '', '887.46', '1356.00', '1.50', '48', '500.00', '1.50', '2.00', '0000-00-00', '', 0, 35, 0, 1, 0, '', '', '2019-03-08 06:31:45', NULL, NULL),
 (116, 33, 52, '1', '', '6207.36', '5996.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', '', '2019-03-08 06:53:44', NULL, NULL),
 (117, 33, 52, '5', '', '81.20', '77.00', '1.50', '', '0.00', '1.50', '2.00', '2019-03-09', '11:30 PM', 4, 36, 9, 1, 0, '', '', '2019-03-08 08:00:09', NULL, NULL),
-(118, 33, 52, '5', '', '117.42', '112.00', '1.50', '', '0.00', '1.50', '2.00', '2019-03-12', '11:45 PM', 4, 36, 9, 1, 0, '', '', '2019-03-09 06:16:00', NULL, NULL);
+(118, 33, 52, '5', '', '117.42', '112.00', '1.50', '', '0.00', '1.50', '2.00', '2019-03-12', '11:45 PM', 4, 36, 9, 1, 0, '', '', '2019-03-09 06:16:00', NULL, NULL),
+(119, 33, 52, '1', '', '193.31', '187.00', '5.00', '', '0.00', '0.20', '0.50', '0000-00-00', '', 0, 17, 0, 1, 2, '', 'drygpHk=.png', '2019-03-11 05:58:51', NULL, NULL),
+(120, 33, 52, '1', '', '193.31', '187.00', '5.00', '', '0.00', '0.20', '0.50', '0000-00-00', '', 0, 17, 0, 1, 2, '', 'CL120_1552284107.png', '2019-03-11 06:01:47', NULL, NULL),
+(121, 33, 52, '1', '', '193.31', '187.00', '5.00', '', '0.00', '0.20', '0.50', '0000-00-00', '', 0, 17, 0, 1, 2, '', 'CL121_1552284695.png', '2019-03-11 06:11:35', NULL, NULL),
+(122, 33, 52, '1', '', '193.31', '187.00', '5.00', '', '0.00', '0.20', '0.50', '0000-00-00', '', 0, 17, 0, 1, 2, '', 'CL122_1552286386.png', '2019-03-11 06:39:46', NULL, NULL),
+(123, 33, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL123_1552300741.png', '2019-03-11 10:39:01', NULL, NULL),
+(124, 33, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL124_1552300770.png', '2019-03-11 10:39:30', NULL, NULL),
+(125, 33, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL125_1552301039.png', '2019-03-11 10:43:59', NULL, NULL),
+(126, 33, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL126_1552302183.png', '2019-03-11 11:03:03', NULL, NULL),
+(127, 43, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 37, 0, 1, 0, '', 'CL127_1552367891.png', '2019-03-12 05:18:11', NULL, NULL),
+(128, 43, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 37, 0, 1, 0, '', 'CL128_1552371789.png', '2019-03-12 06:23:09', NULL, NULL),
+(129, 43, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 37, 0, 1, 0, '', 'CL129_1552371897.png', '2019-03-12 06:24:57', NULL, NULL),
+(130, 43, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 37, 0, 1, 0, '', 'CL130_1552373554.png', '2019-03-12 06:52:34', NULL, NULL),
+(131, 33, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL131_1552373840.png', '2019-03-12 06:57:20', NULL, NULL),
+(132, 33, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL132_1552374219.png', '2019-03-12 07:03:39', NULL, NULL),
+(133, 33, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL133_1552374669.png', '2019-03-12 07:11:09', NULL, NULL),
+(134, 33, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL134_1552374785.png', '2019-03-12 07:13:05', NULL, NULL),
+(135, 33, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL135_1552381134.png', '2019-03-12 08:58:54', NULL, NULL),
+(136, 33, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL136_1552381778.png', '2019-03-12 09:09:38', NULL, NULL),
+(137, 33, 58, '1', '', '15.14', '12.00', '2.90', '', '0.00', '1.50', '0.50', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL137_1552381943.png', '2019-03-12 09:12:23', NULL, NULL),
+(138, 33, 62, '3', '', '158.27', '170.00', '2.20', '47', '17.00', '1.50', '0.50', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL138_1552381994.png', '2019-03-12 09:13:14', NULL, NULL),
+(139, 33, 52, '1', '', '59.46', '56.00', '1.50', '', '0.00', '1.50', '2.00', '0000-00-00', '', 0, 36, 0, 1, 0, '', 'CL139_1552383280.png', '2019-03-12 09:34:40', NULL, NULL),
+(140, 33, 58, '5', '', '16.17', '13.00', '2.90', '', '0.00', '1.50', '0.50', '2019-03-13', '8:26 PM', 0, 36, 0, 1, 0, '', 'CL140_1552391787.png', '2019-03-12 11:56:27', NULL, NULL),
+(141, 45, 58, '3', '', '72.67', '76.00', '2.90', '47', '7.60', '1.50', '0.50', '0000-00-00', '', 0, 42, 0, 1, 0, '', 'CL141_1552472304.png', '2019-03-13 10:18:24', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -781,7 +832,35 @@ INSERT INTO `order_items` (`id`, `order_id`, `item_id`, `item_price`, `variants_
 (158, 116, 32, '100.00', '64.00', 4, '656.00'),
 (159, 116, 19, '89.00', '0.00', 60, '5340.00'),
 (160, 117, 24, '77.00', '0.00', 1, '77.00'),
-(161, 118, 18, '56.00', '0.00', 2, '112.00');
+(161, 118, 18, '56.00', '0.00', 2, '112.00'),
+(162, 119, 32, '100.00', '17.00', 1, '117.00'),
+(163, 119, 33, '25.00', '10.00', 2, '70.00'),
+(164, 120, 32, '100.00', '17.00', 1, '117.00'),
+(165, 120, 33, '25.00', '10.00', 2, '70.00'),
+(166, 121, 32, '100.00', '17.00', 1, '117.00'),
+(167, 121, 33, '25.00', '10.00', 2, '70.00'),
+(168, 122, 32, '100.00', '17.00', 1, '117.00'),
+(169, 122, 33, '25.00', '10.00', 2, '70.00'),
+(170, 123, 18, '56.00', '0.00', 1, '56.00'),
+(171, 124, 18, '56.00', '0.00', 1, '56.00'),
+(172, 125, 18, '56.00', '0.00', 1, '56.00'),
+(173, 126, 18, '56.00', '0.00', 1, '56.00'),
+(174, 127, 18, '56.00', '0.00', 1, '56.00'),
+(175, 128, 18, '56.00', '0.00', 1, '56.00'),
+(176, 129, 18, '56.00', '0.00', 1, '56.00'),
+(177, 130, 18, '56.00', '0.00', 1, '56.00'),
+(178, 131, 18, '56.00', '0.00', 1, '56.00'),
+(179, 132, 18, '56.00', '0.00', 1, '56.00'),
+(180, 133, 18, '56.00', '0.00', 1, '56.00'),
+(181, 134, 18, '56.00', '0.00', 1, '56.00'),
+(182, 135, 18, '56.00', '0.00', 1, '56.00'),
+(183, 136, 18, '56.00', '0.00', 1, '56.00'),
+(184, 137, 27, '4.00', '8.00', 1, '12.00'),
+(185, 138, 31, '150.00', '20.00', 1, '170.00'),
+(186, 139, 18, '56.00', '0.00', 1, '56.00'),
+(187, 140, 27, '4.00', '9.00', 1, '13.00'),
+(188, 141, 30, '15.00', '0.00', 3, '45.00'),
+(189, 141, 27, '4.00', '11.50', 2, '31.00');
 
 -- --------------------------------------------------------
 
@@ -880,7 +959,40 @@ INSERT INTO `order_item_variant` (`id`, `order_item_id`, `variant_group_id`, `va
 (411, 158, 21, 87, '10.00'),
 (412, 158, 22, 90, '50.00'),
 (413, 158, 23, 94, '2.00'),
-(414, 158, 23, 101, '2.00');
+(414, 158, 23, 101, '2.00'),
+(415, 162, 21, 86, '5.00'),
+(416, 162, 22, 91, '0.00'),
+(417, 162, 23, 92, '10.00'),
+(418, 162, 23, 101, '2.00'),
+(419, 163, 22, 102, '10.00'),
+(420, 164, 21, 86, '5.00'),
+(421, 164, 22, 91, '0.00'),
+(422, 164, 23, 92, '10.00'),
+(423, 164, 23, 101, '2.00'),
+(424, 165, 22, 102, '10.00'),
+(425, 166, 21, 86, '5.00'),
+(426, 166, 22, 91, '0.00'),
+(427, 166, 23, 92, '10.00'),
+(428, 166, 23, 101, '2.00'),
+(429, 167, 22, 102, '10.00'),
+(430, 168, 21, 86, '5.00'),
+(431, 168, 22, 91, '0.00'),
+(432, 168, 23, 92, '10.00'),
+(433, 168, 23, 101, '2.00'),
+(434, 169, 22, 102, '10.00'),
+(435, 184, 16, 69, '6.00'),
+(436, 184, 19, 67, '2.00'),
+(437, 184, 20, 72, '0.00'),
+(438, 185, 17, 45, '10.00'),
+(439, 185, 18, 47, '10.00'),
+(440, 187, 12, 64, '1.00'),
+(441, 187, 16, 69, '6.00'),
+(442, 187, 19, 67, '2.00'),
+(443, 187, 20, 71, '0.00'),
+(444, 189, 12, 66, '2.00'),
+(445, 189, 16, 70, '6.50'),
+(446, 189, 19, 68, '3.00'),
+(447, 189, 20, 72, '0.00');
 
 -- --------------------------------------------------------
 
@@ -1148,7 +1260,7 @@ CREATE TABLE `shop` (
 --
 
 INSERT INTO `shop` (`id`, `email`, `password`, `shop_name`, `short_name`, `percentage`, `vender_name`, `shop_code`, `profile_picture`, `address`, `zip_code`, `city`, `state`, `country`, `latitude`, `longitude`, `about`, `contact_no1`, `contact_no2`, `website`, `facebook_link`, `twitter_link`, `pinterest_link`, `min_order`, `delivery_time`, `order_by_time`, `delivery_charges_per_mile`, `minimum_mile`, `charges_of_minimum_mile`, `payment_mode`, `tax_number`, `service_charge`, `device_type`, `device_token`, `broacher`, `takeout_delivery_status`, `status`, `remember_token`, `activation_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(52, 'sugar@mailinator.com', '$2y$10$2Qov5hbktXILNk8/EezJi.rakocg80gqr75xA7JIFLNVHLoLgQlvi', 'Ristretto - Behi', 'ristre', '10', 'Mr Ristretto', 'RIS52', 'vender_1541502113.jpg', 'Charlotte center city, Charlotte, NC, USA', '28202', 'Mecklenburg County', 'North Carolina', 'United States', '35.22723019999999', '-80.84608220000001', 'Your family will never guess that this fun twist on typical pizza uses up leftover pesto. Loaded with protein, hearty slices of this chicken pizza will fill them up fast!', '886 658 4541', '774 587 1466', 'https://www.zomato.com/ah', '', '', '', '100.00', '11:30 AM', '10:00 AM', '2.00', '2.00', '1.50', '0,1,2', '657-57-5765', '2.00', 0, '', 'brochure_1541502113.jpg', 3, 1, '6c0bf58d69c1a8adead8c7c158badc2f87430bf9', '', '2018-11-06 05:49:41', '2018-11-12 09:03:10', NULL),
+(52, 'sugar@mailinator.com', '$2y$10$2Qov5hbktXILNk8/EezJi.rakocg80gqr75xA7JIFLNVHLoLgQlvi', 'Ristretto - Behi', 'ristre', '10', 'Mr Ristretto', 'RIS52', 'vender_1541502113.jpg', 'Charlotte center city, Charlotte, NC, USA', '28202', 'Mecklenburg County', 'North Carolina', 'United States', '35.22723019999999', '-80.84608220000001', 'Your family will never guess that this fun twist on typical pizza uses up leftover pesto. Loaded with protein, hearty slices of this chicken pizza will fill them up fast!', '886 658 4541', '774 587 1466', 'https://www.zomato.com/ah', '', '', '', '100.00', '11:30 AM', '10:00 AM', '2.00', '2.00', '1.50', '0,1,2', '657-57-5765', '2.00', 0, '1234', 'brochure_1541502113.jpg', 3, 1, '6c0bf58d69c1a8adead8c7c158badc2f87430bf9', '', '2018-11-06 05:49:41', '2018-11-12 09:03:10', NULL),
 (53, 'palboy@mailinator.com', '', 'Test Shop', '', '10.50', 'Pal', 'TES53', 'vender_1541999590.jpg', 'Gota, Ahmedabad, Gujarat, India', '', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '11:30 AM', '10:00 AM', '1.50', '2.50', '2.20', '', '', '0.50', 0, '', '', 3, 0, '', '', '2018-11-12 00:43:10', NULL, NULL),
 (54, 'palcakes@mailinator.com', '$2y$10$9H2n2v7cI.lNp3E0JvAJoerpKhmOQxebMeWD2rnlcEETivT5B3nky', 'Git', '', '8.00', 'Frl', 'GIT54', '', 'Del\\\"hi, Ind\\\"ia', '', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '11:30 AM', '10:00 AM', '1.50', '2.50', '2.20', '2', '', '0.50', 0, '', '', 3, 2, '', '', '2018-11-12 09:06:52', '2018-11-23 00:41:26', NULL),
 (55, 'Cafe@eww.com', '', 'The Hytt Cafe', '', '10.00', 'Giop', 'THE55', '', 'Hynes Convention Center, Boston, MA, USA', '02115', 'Suffolk County', 'Massachusetts', 'United States', '42.34797469999999', '-71.08792840000001', '', '', '', '', '', '', '', '', '11:30 AM', '10:00 AM', '1.50', '2.50', '2.20', '', '', '0.50', 0, '', '', 3, 0, '', '', '2019-01-03 09:21:24', NULL, NULL),
@@ -1167,7 +1279,8 @@ INSERT INTO `shop` (`id`, `email`, `password`, `shop_name`, `short_name`, `perce
 (68, 'Stingo@tradermail.info', '$2y$10$jyWKXLh14gxxlD93JJjyq.NPUnvByej8bWVHr5akuh4rsIBwsXhBW', 'Stingo, Ace Hotel', 'stingo-ace-hotel', '', 'Stingo', 'STI68', 'vender_1549620927.jpg', 'Ace Hotel, Portland, OR, USA', '97205', 'Multnomah County', 'Oregon', 'United States', '45.52211399999999', '-122.681602', 'The Main Bar at Willy\\\'s Wine Bar is a private event venue available to hire in the City of London.\r\n\r\nIf there is one place in the City you need to experience, it?s Willy?s Wine Bar.\r\n\r\nThis is one of London?s most established wine bars in London. Not only is it bursting with tradition and charm, but it also plays host to some of London?s best wine quizzes and tastings.', '787 878 7878', '787 878 7878', 'https://www.zomato.com/ah', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', '5', '08:00 AM', '07:00 AM', '1.50', '2.50', '2.20', '0,1', '790-65-7575', '0.50', 0, '', '', 3, 1, '', '', '2019-02-08 10:13:18', '2019-02-13 13:25:33', NULL),
 (69, 'fire@devnullmail.com', '$2y$10$5iTn3WKnCn/z1LjrNeYca.7YmU0vhPKXqF9ZgYL3TQ0bya1DzcAAW', 'Nation Fire 2', 'nation-fire', '', 'Miss Boby', 'NAT69', '', 'King of Prussia, PA, USA', '19406', 'Montgomery County', 'Pennsylvania', 'United States', '', '', 'Your family will never guess that this fun twist on typical pizza uses up leftover pesto. Loaded with protein, hearty slices of this chicken pizza will fill them up fast!', '610 265 5794', '610 265 5794', 'https://www.simon.com/mall/king-of-prussia-mall', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', '150.00', '10:00 AM', '09:30 AM', '1.50', '12.00', '10.00', '0,1', '676-76-7676', '2.00', 0, '', '', 2, 1, '', '', '2019-03-02 08:09:51', '2019-03-02 08:11:10', NULL),
 (70, 'foody@letthemeatspam.com', '', 'Food Track', 'food-track', '', 'Miss Green', 'FOO70', '', 'H K Allen Parkway, Temple, TX, USA', '76502', 'Bell County', 'Texas', 'United States', '31.04998459999999', '-97.37216409999996', '', '777 777 7777', '', '', '', '', '', '', '', '', '2.00', '5.00', '5.00', '1,2', '777-77-7777', '', 0, '', '', 3, 0, '', 'a77ad09ca43d8ac2945bd81b8067b241d60444cf', '2019-03-04 05:17:57', NULL, '2019-03-04 05:19:07'),
-(71, 'ThumbBub88@mailinator.com', '', 'Mcdonalds', 'mcdonalds', '', 'Ffgdf', 'MUU71', '', 'F.S.C.J. Kent Campus, Jacksonville, FL, USA', '32205', 'Duval County', 'Florida', 'United States', '', '', '', '666 666 6655', '', '', '', '', '', '', '', '', '60.00', '6.00', '6.00', '0', '565-67-5675', '', 0, '', '', 3, 0, '', '15d88eb35fa90c9b123b37676381a10d70b46370', '2019-03-06 11:07:32', '2019-03-08 03:34:27', NULL);
+(71, 'ThumbBub88@mailinator.com', '', 'Mcdonalds', 'mcdonalds', '', 'Ffgdf', 'MUU71', '', 'F.S.C.J. Kent Campus, Jacksonville, FL, USA', '32205', 'Duval County', 'Florida', 'United States', '', '', '', '666 666 6655', '', '', '', '', '', '', '', '', '60.00', '6.00', '6.00', '0', '565-67-5675', '', 0, '', '', 3, 0, '', '15d88eb35fa90c9b123b37676381a10d70b46370', '2019-03-06 11:07:32', '2019-03-08 03:34:27', NULL),
+(76, 'rahul.bbit@gmail.comz', '', 'Dr Pizza', 'dr-pizza', '', 'Rahul', 'DRP76', '', '1109 Decatur Street, New Orleans, LA 70116, USA', '70116', 'Orleans Parish', 'Louisiana', 'United States', '29.9601404', '-90.05985670000001', '', '756 782 7928', '', '', '', '', '', '', '', '', '5.00', '3.00', '3.00', '1', '456-56-4564', '', 0, '', '', 3, 0, '', 'e508285af9500a5221824da3f5344b3b63ac59c9', '2019-03-15 06:09:24', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1318,7 +1431,12 @@ CREATE TABLE `shop_request` (
 
 INSERT INTO `shop_request` (`id`, `email`, `shop_name`, `address`, `contact_no`, `message`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'Cafe@eww.com', 'The Esplendido Cafe', 'Hynes Convention Center, Boston, MA, USA', '774587146677', 'am trying to format numbers in chartjs chart. I am getting this error on my console and the numbers are not visible on the chart', '2019-02-20 06:55:07', NULL, NULL),
-(3, 'developer.eww@gmail.com', 'Eww decvv', 'Nikol bapunagar', '9865321245', 'This is the test', '2019-03-08 13:19:34', NULL, NULL);
+(3, 'developer.eww@gmail.com', 'Eww decvv', 'Nikol bapunagar', '9865321245', 'This is the test', '2019-03-08 13:19:34', NULL, NULL),
+(4, ' binal.nasit26@gmail.com', ' Dr Pizza', ' Surat', ' 7567827928', 'abc', '2019-03-14 14:07:30', NULL, NULL),
+(5, ' binal.nasit26@gmail.comz', ' Dr Pizza', ' Surat', ' 7567827928', 'abc', '2019-03-15 05:21:30', NULL, NULL),
+(6, 'rahul.bbit@gmail.com', ' Dr Pizza', ' Surat', ' 7567827928', 'abc', '2019-03-15 05:25:10', NULL, NULL),
+(7, 'rahul.bbit@gmail.comz', ' Dr Pizza', ' Surat', ' 7567827928', 'abc', '2019-03-15 05:54:27', NULL, '2019-03-15 06:09:27'),
+(8, 'rahul.bbit@gmail.comb', ' Dr Pizza', ' Surat', ' 7567827928', '', '2019-03-15 06:23:01', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1743,19 +1861,19 @@ ALTER TABLE `cuisine`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `customer_payment_card`
 --
 ALTER TABLE `customer_payment_card`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `delivery_address`
 --
 ALTER TABLE `delivery_address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `delivery_boy`
@@ -1809,19 +1927,19 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
 
 --
 -- AUTO_INCREMENT for table `order_item_variant`
 --
 ALTER TABLE `order_item_variant`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=415;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=448;
 
 --
 -- AUTO_INCREMENT for table `payment_settings`
@@ -1875,7 +1993,7 @@ ALTER TABLE `setting`
 -- AUTO_INCREMENT for table `shop`
 --
 ALTER TABLE `shop`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `shop_availibality`
@@ -1899,7 +2017,7 @@ ALTER TABLE `shop_hours`
 -- AUTO_INCREMENT for table `shop_request`
 --
 ALTER TABLE `shop_request`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `state`

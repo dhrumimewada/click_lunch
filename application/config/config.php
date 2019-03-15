@@ -586,7 +586,8 @@ $config['protocol'] = "smtp";
 $config['smtp_host'] = "ssl://smtp.gmail.com";
 $config['smtp_port'] = "465";
 $config['smtp_user'] = 'developer.eww@gmail.com';
-$config['smtp_pass'] = 'Admin@123*';
+//$config['smtp_pass'] = 'Admin@123*';
+$config['smtp_pass'] = 'Developer@123*';
 $config['charset'] = "iso-8859-1";
 $config['mailtype'] = "html";
 

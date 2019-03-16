@@ -367,5 +367,6 @@ $route['add-card'] = 'web/checkout/add_card';
 $route['get-promocode-data'] = 'web/checkout/get_promocode_data';
 $route['validate-promocode'] = 'web/checkout/validate_promocode';
 $route['place-order'] = 'web/checkout/place_order';
+$route['order-success/(:any)'] = 'web/checkout/order_success/$1';
 
 

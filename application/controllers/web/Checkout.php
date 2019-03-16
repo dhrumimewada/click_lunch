@@ -474,4 +474,21 @@ class Checkout extends CI_Controller {
         }
         return $return_data;
     }
+
+    public function order_success($order_id = NULL){
+    	if(isset($order_id) && $order_id != ''){
+    	
+    		$order = $this->profile_model->order_detail($order_id);
+
+    		// echo '<pre>';
+    		// print_r($order);
+    		// exit;
+
+    		$output_data['order'] = $order;
+    		$output_data['main_content'] = "order_success";
+			$this->load->view('web/template',$output_data);
+    	}else{
+    		echo 'order id not found';
+    	}
+    }
 }

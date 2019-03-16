@@ -446,4 +446,5 @@ $img_path = base_url().'web-assets/images/card-icons/';
 
     var validate_promocode_url = "<?php echo base_url().'validate-promocode'; ?>";
     var place_order_url = "<?php echo base_url().'place-order'; ?>";
+    var order_success_url = "<?php echo base_url().'order-success'; ?>";
 </script> 

@@ -1,4 +1,6 @@
 var promocode_applied = '';
+var order_placed = false;
+var order_id = '';
 $(document).on('click','.apply-promo',function(){
 
 	// Apply Promocode from modal
@@ -162,6 +164,12 @@ $(document).on('click','.deliver-later',function(){
 	$(".select-time").show();
 });
 
+$(document).on('click','#orderSuccessful .close-btn',function(){
+    if(order_placed == true){
+        window.location.href = order_success_url+'/'+order_id;
+    }
+});
+
 $(document).on('click','#placeorder',function(){
     if($("input[name='deliveroption']:checked")){
         if( (($("input[name='deliveroption']:checked").val() == 2) && ($('#deliver_time').val() == '')) ||  (($("input[name='deliveroption']:checked").val() == 4) && ($('#takeout_time').val() == '')) ){
@@ -250,6 +258,8 @@ $(document).on('click','#placeorder',function(){
                         }else{
                             console.log("checkout");
                             $('#orderSuccessful').modal('show');
+                            order_placed = true;
+                            order_id = returnData.order_id;
                             return true;
                         }
                         

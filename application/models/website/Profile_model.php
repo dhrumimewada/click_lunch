@@ -269,4 +269,67 @@ class Profile_model extends CI_Model {
         }
         return $return_data;
     }
+
+    public function order_detail($id = NULL){
+        $return_data = array();
+        if(isset($id) && !is_null($id)){
+            $sql_select = array(
+                                't1.id',
+                                't1.total',
+                                't2.username',
+                                't1.order_type',
+                                'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
+                                't4.latitude as address_latitude',
+                                't4.longitude as address_longitude',
+                                't3.shop_name',
+                                't3.profile_picture',
+                                't3.address as shop_address',
+                                't3.latitude as shop_latitude',
+                                't3.longitude as shop_longitude',
+                                't3.profile_picture as shop_picture',
+                                't1.payment_mode',
+                                't1.subtotal',
+                                't1.promo_amount',
+                                'ROUND((((t1.subtotal + t1.promo_amount) * t1.tax) / 100), 2) as tax_amount',
+                                'ROUND((((t1.subtotal + t1.promo_amount) * t1.service_charge) / 100), 2) as service_charge_amount',
+                                't1.delivery_charges',
+                                't1.total',
+                                'IF(t1.order_type=5, t1.schedule_date, "") as schedule_date',
+                                'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
+                                'IF(t1.order_type=2, t1.later_time, "") as later_time',
+                                't1.created_at',
+                                't1.QR_code'
+                );
+                $this->db->select($sql_select);
+
+                $this->db->from('orders t1');
+                $this->db->join('customer t2', 't1.customer_id = t2.id','left');
+                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+                $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
+
+                $this->db->where('t1.id', $id);
+                $sql_query = $this->db->get();
+
+                if ($sql_query->num_rows() > 0){
+                    $return_data = (array)$sql_query->row();
+                    $return_data['rating'] = '3.5';
+
+                    $sql_select = array(
+                                    't2.name',
+                                    't1.quantity',
+                                    't1.total_product_price'
+                    );
+
+                    $this->db->select($sql_select);
+                    $this->db->from('order_items t1');
+                    $this->db->where('t1.order_id', $id);
+                    $this->db->join('item t2', 't1.item_id = t2.id','left');
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $return_data['products'] = $sql_query->result_array();
+                    }               
+                }
+        }
+        return $return_data;
+    }
 }

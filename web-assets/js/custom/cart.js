@@ -11,17 +11,23 @@ $(document).on('click','.product-cancel .mdi-close',function(){
                 data:{id:data_id},
                 success: function (returnData) {
                 	//console.log(returnData);
-                  	if(returnData == 1){
-                        var total = total_cart_amount - product_amount;
-                        $('.total_cart_amount').text(Number(total).toFixed(2));
+                    returnData = $.parseJSON(returnData);
+                    if (typeof returnData != "undefined"){
+                        if(returnData.is_success == true){
+                            var total = total_cart_amount - product_amount;
+                            $('.total_cart_amount').text(Number(total).toFixed(2));
 
-                  		$this.closest("tr").remove();
-                  		rowCount = $('#cart-table tr').length;
-                  		if(rowCount == 3){
-                  			$('#cart-table tr:last').remove();
-                  			$('#empty-cart').removeClass("d-none");
-                  		}
-                  	}
+                            $this.closest("tr").remove();
+                            rowCount = $('#cart-table tr').length;
+                            if(rowCount == 3){
+                                $('#cart-table tr:last').remove();
+                                $('#empty-cart').removeClass("d-none");
+                            } 
+                        }else{
+
+                        }
+                        $('.cart-icon .dot').text(returnData.total_cart_items);
+                    }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log('error');

@@ -104,7 +104,7 @@ if($is_customer){
 
                                         <li class="nav-item dropdown drop-down-icon">
                                             <div class="sub-list">
-                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
+                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>order-history">
                                                     <img src="<?php echo $assets; ?>images/Order-History.png">
                                                     <span>Order History</span>
                                                 </a>
@@ -166,10 +166,14 @@ if($is_customer){
                 </div>
                 <?php
                 }
+                $items = count($this->cart->contents());
                 ?>
                 <div class="header-link notification-list last-div">
-                    <a class="nav-link waves-effect p-0" href="<?php echo BASE_URL(); ?>welcome" role="button" aria-haspopup="false" aria-expanded="false">
+                    <a class="nav-link waves-effect cart-icon p-0" href="<?php echo BASE_URL(); ?>cart" role="button" aria-haspopup="false" aria-expanded="false">
+                        <span class="dot"><?php echo $items; ?></span>
                         <img src="<?php echo $assets; ?>images/Cart.png" />
+                        
+                        
                     </a>       
                 </div>              
             </div>

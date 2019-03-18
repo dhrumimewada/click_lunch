@@ -400,7 +400,7 @@ class Shop_ipad_api extends REST_Controller {
 	    $postFields['shop_name'] = $_POST['shop_name'];
 	    $postFields['address'] = $_POST['address'];
 	    $postFields['contact_no'] = $_POST['contact_no'];
-	    $postFields['message'] = $_POST['message'];	    	   
+	 //   $postFields['password'] = $_POST['password'];	    	   
 
 	    $errorPost = $this->ValidatePostFields($postFields);
 
@@ -414,7 +414,7 @@ class Shop_ipad_api extends REST_Controller {
 	    		$data['shop_name'] = $_POST['shop_name'];
 	    		$data['address'] = $_POST['address'];
 	    		$data['contact_no'] = $_POST['contact_no'];
-	    		$data['message'] = $_POST['message'];
+	    	//	$data['password'] = password_hash($_POST['password']);
 	    		$data['created_at'] = date('Y-m-d H:i:s');
 	    		$data['updated_at'] = NULL;
 	    		$data['deleted_at'] = NULL;

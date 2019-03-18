@@ -2687,8 +2687,6 @@ class Customer_api extends REST_Controller {
                                             $prev_orders_data = $sql_query->result_array();
                                             $prev_orders_ids = array_column($prev_orders_data, 'id');
 
-                                            $products_array = explode(',',$_POST['products']);
-
                                             // get ordered product
                                             $this->db->select('id'); 
                                             $this->db->where_in('order_id',$prev_orders_ids);  
@@ -2716,6 +2714,7 @@ class Customer_api extends REST_Controller {
                                         if ($sql_query->num_rows() > 0){
                                             $product_ids = $sql_query->result_array();
                                             $promocode_applied_products = array_column($product_ids, 'product_id');
+                                            $promocode_applied_products2 = array_intersect($products_array, $promocode_applied_products);
                                         }
                                     }
                                     $response['promocode_id'] = $promo_data->id;
@@ -2725,7 +2724,7 @@ class Customer_api extends REST_Controller {
                                     $response['discount_amount'] = $promo_data->amount;
                                     $response['max_discount_amount'] = $promo_data->max_disc;
                                     $response['promo_type'] = $promo_data->promo_type;
-                                    $response['promocode_applied_products'] = $promocode_applied_products;
+                                    $response['promocode_applied_products'] = $promocode_applied_products2;
                                     $response['status'] = true;
                                 }else{
                                     $response['promocode'] = $_POST['promocode'];
@@ -3219,7 +3218,7 @@ class Customer_api extends REST_Controller {
                                                 }
                                                 if($varient_error == FALSE){
 
-                                                    // if varient exists true
+                                                    // if varient exists
                                                     $error = '';
                                                     if(($order_data['order_type'] == 2) || ($order_data['order_type'] == 4)){
                                                         if(isset($order_data['later_time']) && $order_data['later_time'] != ''){
@@ -3361,9 +3360,7 @@ class Customer_api extends REST_Controller {
                                                                     $promocode_valid_products = $this->customer_api_model->get_promocode_valid_products($promocode_data->id);
                                                                     if(isset($promocode_valid_products) && !empty($promocode_valid_products)){
                                                                         $valid_products = array();
-                                                                        foreach ($promocode_valid_products as $key => $value) {
-                                                                            $valid_products[] = $value['product_id'];
-                                                                        }
+                                                                        $valid_products = array_column($promocode_valid_products, 'product_id');
                                                                         foreach ($order_data['products'] as $products_key => $products_value){
                                                                             if (in_array($products_value['product_id'], $valid_products)){
                                                                                 if($promocode_data->discount_type == 0){
@@ -3764,6 +3761,170 @@ class Customer_api extends REST_Controller {
             }else{
                 $response['status'] = false;
                 $response['message'] = 'Please type more for search';
+            }
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function order_history_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+            $where = array('id' => intval($_POST['customer_id']));
+            $customer = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($customer)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';    
+            }else{
+                $sql_select = array(
+                                't1.id',
+                                't1.total',
+                                't1.order_type',
+                                't1.order_status',
+                                't1.favourite',
+                                't3.shop_name',
+                                't3.address as shop_address',
+                                't3.profile_picture as shop_picture',
+                                't1.created_at'
+                );
+                $this->db->select($sql_select);
+
+                $this->db->from('orders t1');
+                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+
+                if(isset($_POST['cuisines']) && !is_null($_POST['cuisines']) && $_POST['cuisines'] != ''){
+                    $cuisines = explode(',', $_POST['cuisines']);
+                    $this->db->join('order_items t4', 't1.id = t4.order_id','left');
+                    $this->db->join('item t5', 't4.item_id = t5.id','left');
+                    $this->db->where_in('t5.cuisine_id',$cuisines);
+                    $response['cuisines'] = $cuisines;
+                }
+
+                if(isset($_POST['date']) && !is_null($_POST['date']) && $_POST['date'] != ''){
+                    $this->db->where('DATE(t1.created_at)', $_POST['date']);
+                }
+                $this->db->where('t1.customer_id',$_POST['customer_id']);
+                $this->db->order_by("t1.created_at", "desc");
+
+                $limit = 10; // messages per page
+                if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
+                    $start = $limit * ($_POST['page_number'] - 1);
+                    $this->db->limit($limit, $start);
+                }else{
+                    if(isset($_POST['keyword']) && !is_null($_POST['keyword']) && $_POST['keyword'] != ''){
+                        $this->db->where("t3.shop_name LIKE '%".$_POST['keyword']."%'");
+                    }else{
+                        $this->db->limit($limit);
+                    }
+                }
+
+                
+
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $orders_data = $sql_query->result_array();
+
+                    $response['orders'] = $orders_data;
+                    $response['status'] = TRUE;
+                }else{
+                    $response['message'] = 'No any order history found';                  
+                    $response['status'] = FALSE; 
+                }
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function favourite_orders_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+            $where = array('id' => intval($_POST['customer_id']));
+            $customer = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($customer)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';    
+            }else{
+                $sql_select = array(
+                                't1.id',
+                                't1.total',
+                                't1.order_type',
+                                't1.order_status',
+                                't3.shop_name',
+                                't3.address as shop_address',
+                                't3.profile_picture as shop_picture',
+                                't1.created_at'
+                );
+                $this->db->select($sql_select);
+
+                $this->db->from('orders t1');
+                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+
+                $this->db->where('t1.customer_id',$_POST['customer_id']);
+                $this->db->where('t1.favourite',1);
+                $this->db->order_by("t1.created_at", "desc");
+
+                $limit = 10; // messages per page
+                if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
+                    $start = $limit * ($_POST['page_number'] - 1);
+                    $this->db->limit($limit, $start);
+                }else{
+                    if(isset($_POST['keyword']) && !is_null($_POST['keyword']) && $_POST['keyword'] != ''){
+                        $this->db->where("t3.shop_name LIKE '%".$_POST['keyword']."%'");
+                    }else{
+                        $this->db->limit($limit);
+                    }
+                }
+                
+
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $orders_data = $sql_query->result_array();
+                    $response['orders'] = $orders_data;
+                    $response['status'] = TRUE;
+                }else{
+                    $response['message'] = 'No any order history found';                  
+                    $response['status'] = FALSE; 
+                }
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function favourite_add_remove_post(){
+        $postFields['order_id'] = $_POST['order_id'];
+        $postFields['favourite_status'] = $_POST['favourite'];
+
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+            $where = array('id' => intval($_POST['order_id']));
+            $customer = (array)$this->db->get_where('orders',$where)->row();
+            if(empty($customer)){
+                $response['status'] = false;
+                $response['message'] = 'Order not found';    
+            }else{
+                $update_data = array('favourite' => intval($_POST['favourite']));
+                $this->db->where('id', intval($_POST['order_id']));
+                if($this->db->update('orders', $update_data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Favourite order updated';    
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
             }
         }else{
             $response['status'] = false;

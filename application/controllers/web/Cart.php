@@ -13,7 +13,7 @@ class Cart extends CI_Controller {
 	public function cart_destroy(){
 		echo "<pre>";
 		echo "Before destroy";
-		print_r($this->cart->contents());
+		//print_r($this->cart->contents());
 		echo "after destroy";
 		print_r($_SESSION);
 		// $this->cart->destroy();
@@ -86,6 +86,11 @@ class Cart extends CI_Controller {
 
 	public function cart_add(){
 
+		// echo "<pre>";
+		// print_r($_POST);
+		// print_r($_SESSION);
+		// exit;
+
 		if(isset($_POST['item_id']) && !empty($_POST["item_id"])){
 			$this->db->select('id,shop_id,name,item_picture,is_combo,offer_price,price');
 	        $this->db->where("id",$_POST['item_id']);
@@ -95,6 +100,14 @@ class Cart extends CI_Controller {
 	        $sql_query = $this->db->get();
 	        if ($sql_query->num_rows() > 0){
 	        	$item_data = (array)$sql_query->row();
+
+	        	if (isset($_SESSION['cart_shop']) && $_SESSION['cart_shop'] != ''){
+	        		if($item_data['shop_id'] != $_SESSION['cart_shop']){
+	        			$this->cart->destroy();
+	        		}
+	        	}else{
+	        		$this->session->set_userdata('cart_shop', $_POST['shop_id']);
+	        	}
 
 	        	// get all varients array
 	        	$all_varients = array();
@@ -160,8 +173,6 @@ class Cart extends CI_Controller {
 			        	$shop_short_name = $short_name_data[0]['short_name'];
 			        	$this->session->set_userdata('shop_short_name',$shop_short_name);
 			        }
-
-					$this->session->set_userdata('cart_shop', $_POST['shop_id']);
 				}else{
 					//echo 'fail';
 				}
@@ -403,10 +414,12 @@ class Cart extends CI_Controller {
 
 	public function cart_item_delete(){
 		if($this->cart->remove($_POST['id'])){
-			echo TRUE;
-			return true;
+			$total_cart_items = count($this->cart->contents());
+			echo json_encode(array("is_success" => true, "total_cart_items" => $total_cart_items));
+			return TRUE;
 		}else{
-			echo FALSE;
+			$total_cart_items = count($this->cart->contents());
+			echo json_encode(array("is_success" => false, "total_cart_items" => $total_cart_items));
 			return false;
 		}	
 	}

@@ -369,4 +369,7 @@ $route['validate-promocode'] = 'web/checkout/validate_promocode';
 $route['place-order'] = 'web/checkout/place_order';
 $route['order-success/(:any)'] = 'web/checkout/order_success/$1';
 
+$route['order-history'] = 'web/profile/order_history';
+
+
 

@@ -352,4 +352,16 @@ class Profile extends CI_Controller {
 		$this->session->set_userdata('delivery_address_id', '');
 	}
 
+	public function order_history(){
+
+		$order = $this->profile_model->order_history();
+
+		// echo "<pre>";
+		// print_r($order);
+		// exit;
+		$output_data["order"] = $order;
+		$output_data['main_content'] = 'order_history';
+		$this->load->view('web/template',$output_data);
+	}
+
 }

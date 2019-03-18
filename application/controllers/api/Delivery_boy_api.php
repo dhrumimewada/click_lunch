@@ -417,6 +417,81 @@ class Delivery_boy_api extends REST_Controller {
         exit;
     }
 
+    public function send_custom_push_post(){
+        $postFields['order_id'] = $_POST['order_id'];
+        $postFields['customer_id'] = $_POST['customer_id'];
+        $postFields['message'] = $_POST['message'];
+
+        if(empty($errorPost)){
+            $where = array('id' => intval($_POST['customer_id']),'status' => '1', 'deleted_at' => NULL);
+            $user = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($user)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';
+            }else{
+                $where = array('id' => intval($_POST['order_id']), 'customer_id' => intval($_POST['customer_id']));
+                $order = (array)$this->db->get_where('orders',$where)->row();
+                if(empty($order)){
+                    $response['status'] = false;
+                    $response['message'] = 'Order not found';    
+                }else{
+                    $device_type = $user['device_type'];
+                    $device_token = $user['device_token'];
+
+                    if($device_type != '' && $device_token != '' && (($device_type == 1) || ($device_type == 2)) ){
+                        $push_title = 'New message for order: CL'.$_POST['order_id'];
+                        $push_data = array(
+                            'order_id' => $_POST['order_id'],
+                            'message' => $_POST['message']
+                        );
+                        $push_type = 'order_notification';
+                        $result = send_push($device_type,$device_token, $push_title, $push_data, $push_type);
+                        $response['status'] = true;
+                        $response['message'] = 'Notification sent';
+                    }else{
+                        $response['status'] = true;
+                        $response['message'] = 'Customer device not found';
+                    }
+                }
+            }
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+        $errorPost = $this->ValidatePostFields($postFields);
+    }
+
+    public function order_status_update_post(){
+        $postFields['order_id'] = $_POST['order_id'];
+        $postFields['status'] = $_POST['status'];
+
+        if(empty($errorPost)){
+
+            $where = array('id' => intval($_POST['order_id']));
+            $order = (array)$this->db->get_where('orders',$where)->row();
+            if(empty($order)){
+                $response['status'] = false;
+                $response['message'] = 'Order not found';    
+            }else{
+                $data = array('order_status' => intval($_POST['status']));
+                $this->db->where('id',$_POST['order_id']);
+                if($this->db->update('orders',$data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Order updated successfully';
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            }
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+        $errorPost = $this->ValidatePostFields($postFields);
+    }
+
     public function order_action_post(){
         $postFields['order_id'] = $_POST['order_id']; 
         $postFields['accept_reject'] = $_POST['accept_reject']; 
@@ -777,6 +852,7 @@ class Delivery_boy_api extends REST_Controller {
                 $sql_select = array(
                                 't1.id',
                                 't1.total',
+                                't1.customer_id',
                                 't2.username',
                                 't1.order_type',
                                 'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
@@ -895,6 +971,8 @@ class Delivery_boy_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
     }
+
+
 
     public function send_mail2($to,$subject,$message){
 

@@ -228,7 +228,12 @@ $(document).on('click','#placeorder',function(){
                 card_id = $("input[name='payment_card']:checked").val();
             }
 
-            // console.log(order_type);
+            // console.log('promocode_applied'+promocode_applied+' ');
+            // console.log('payment_type'+payment_type+'   ');
+            // console.log('card_id'+card_id+' ');
+            // console.log('delivery_amount'+delivery_amount+' ');
+            // console.log('tax'+tax+' ');
+            // console.log('service_charge'+service_charge+'   ');
             // return false;
 
             $.ajax({
@@ -246,7 +251,8 @@ $(document).on('click','#placeorder',function(){
                 },
                 success: function (returnData) {
                     returnData = $.parseJSON(returnData);
-                    console.log(returnData);
+                     console.log(returnData);
+                    // return false;
                     if (typeof returnData != "undefined"){
                         if(returnData.is_success == false){
                             swal(

@@ -4,7 +4,11 @@ $home_link = base_url().'welcome';
 <div id="content">
 	<div class="place-order-wrapper grey-bg">
 		<div class="container">
+			
 			<div class="order-detail">
+				<?php
+				if(isset($order) && is_array($order) && !empty($order)){
+				?>
 				<div class="order-top-title">
 					<div class="row top-heading">
 						<div class="col-sm-6">
@@ -60,41 +64,50 @@ $home_link = base_url().'welcome';
 								<div class="order-item">
 									<table>
 										<tbody class="table-list">
+											<?php
+											foreach ($order['products'] as $key => $value) {
+											?>
 											<tr>
-												<th>JR. Chiken Burger</th>
-												<td>$56.00</td>
+												<th><?php echo $value['name']; ?></th>
+												<td>&#36;<?php echo $value['total_product_price']; ?></td>
 											</tr>
-											<tr>
-												<th>Goat Cheese chorizo roll21</th>
-												<td>$56.00</td>
-											</tr>
-											<tr>
-												<th>JR. Chiken Burger</th>
-												<td>$56.00</td>
-											</tr>
-											<tr>
-												<th>Goat Cheese chorizo roll21</th>
-												<td>$56.00</td>
-											</tr>
+											<?php
+											}
+											?>
 										</tbody>
 									</table>
 									<table>
 										<tbody class="list-tax">
 											<tr>
-												<th>service fee</th>
-												<td>&#36;5.00</td>
+												<th>Subtotal</th>
+												<td>&#36;<?php echo $order['subtotal']; ?></td>
+											</tr>
+											<?php
+											if(isset($order['promo_amount']) && $order['promo_amount'] != ''){
+												?>
+											<tr>
+												<th>Promo Amount</th>
+												<td class="text-success">- &#36;<?php echo $order['promo_amount']; ?></td>
+											</tr>
+											<?php
+											}
+											?>
+											
+											<tr>
+												<th>TAX</th>
+												<td>&#36;<?php echo $order['tax_amount']; ?></td>
 											</tr>
 											<tr>
-												<th>Tax</th>
-												<td>$10.00</td>
+												<th>Service Charge</th>
+												<td>&#36;<?php echo $order['service_charge_amount']; ?></td>
 											</tr>
 											<tr>
-												<th>Discount</th>
-												<td>$5.00</td>
+												<th>Delivery Charge</th>
+												<td>&#36;<?php echo $order['delivery_charges']; ?></td>
 											</tr>
 											<tr>
-												<th class="list-total">total</th>
-												<td class="list-total">$234.00</td>
+												<th class="list-total">Total</th>
+												<td class="list-total">&#36;<?php echo $order['total']; ?></td>
 											</tr>
 										</tbody>
 									</table>
@@ -112,6 +125,13 @@ $home_link = base_url().'welcome';
 						</div>
 					</div>											
 				</div>	
+				<?php
+				}else{
+				?>
+				<div class="alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>Order detail not found.</div>
+				<?php
+				}
+				?>
 				<div class="form-actions d-flex justify-content-center">
 					<a href="<?php echo $home_link; ?>"name="backtocart" class="white-btn backtocart-btn" id="backtocart">Back to Home</a>
 				</div>			

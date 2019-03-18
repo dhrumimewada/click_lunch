@@ -329,19 +329,20 @@ class Checkout extends CI_Controller {
                     		}
                     	}
                 	}
+
+                	$total_product_price = ($item_price + $varients_price) * $value['qty'];
+
+	                $product_data_edited = 
+	                        array(
+	                            'variants_price' => number_format((float)$varients_price, 2, '.', ''),
+	                            'total_product_price' => number_format((float)$total_product_price, 2, '.', '')
+	                        );
+	                $this->db->where('id',$product_insert_id); 
+	                $this->db->update('order_items', $product_data_edited);
+
+	                $sub_total += $total_product_price;
+
                 }
-
-                $total_product_price = ($item_price + $varients_price) * $value['qty'];
-
-                $product_data_edited = 
-                        array(
-                            'variants_price' => number_format((float)$varients_price, 2, '.', ''),
-                            'total_product_price' => number_format((float)$total_product_price, 2, '.', '')
-                        );
-                $this->db->where('id',$product_insert_id); 
-                $this->db->update('order_items', $product_data_edited);
-
-                $sub_total += $total_product_price;
             }
 
             $sub_total = number_format((float)$sub_total, 2, '.', '');
@@ -380,13 +381,13 @@ class Checkout extends CI_Controller {
 	                }
 	            }else{
 	                $promocode_valid_products = $this->customer_api_model->get_promocode_valid_products($promocode_data->id);
+
 	                if(isset($promocode_valid_products) && !empty($promocode_valid_products)){
 	                    $valid_products = array();
-	                    foreach ($promocode_valid_products as $key => $value) {
-	                        $valid_products[] = $value['product_id'];
-	                    }
-	                    foreach ($order_data['products'] as $products_key => $products_value){
-	                        if (in_array($products_value['product_id'], $valid_products)){
+	                    $valid_products = array_column($promocode_valid_products, 'product_id');
+
+	                    foreach ($cart_contents as $cart_key => $cart_value){
+	                        if (in_array($cart_value['item_id'], $valid_products)){
 	                            if($promocode_data->discount_type == 0){
 	                                // flat
 	                                $promo_discount += $promocode_data->amount;
@@ -394,7 +395,7 @@ class Checkout extends CI_Controller {
 	                                // perc
 	                                $total_product_price = 0;
 	                                $this->db->select('total_product_price'); 
-	                                $this->db->where('item_id',$products_value['product_id']); 
+	                                $this->db->where('item_id',$cart_value['item_id']); 
 	                                $this->db->where('order_id',$order_id); 
 	                                $this->db->from('order_items');
 	                                $sql_query = $this->db->get();
@@ -417,13 +418,13 @@ class Checkout extends CI_Controller {
 	        $sub_total2 = floatval($sub_total) - floatval($promo_discount);
             $sub_total2 = number_format((float)$sub_total2, 2, '.', '');
 
-            $tax = (floatval($sub_total2) * floatval($order_data['tax'])) / 100;
+            $tax = (floatval($sub_total2) * floatval($_POST['tax'])) / 100;
             $tax = number_format((float)$tax, 2, '.', '');
 
-            $service_charge = (floatval($sub_total2) * floatval($order_data['service_charge'])) / 100;
+            $service_charge = (floatval($sub_total2) * floatval($_POST['service_charge'])) / 100;
             $service_charge = number_format((float)$service_charge, 2, '.', '');
 
-            $delivery_charges = number_format((float)$order_data['delivery_charges'], 2, '.', '');
+            $delivery_charges = number_format((float)$_POST['delivery_amount'], 2, '.', '');
 
 
             $total = $sub_total2 + $tax + $service_charge + $delivery_charges;
@@ -435,6 +436,8 @@ class Checkout extends CI_Controller {
 
             $this->db->where('id',$order_id);  
             $this->db->update('orders', $order_data_edited);
+
+            $this->cart->destroy();
 
             echo json_encode(array("is_success" => true, "order_id" => $order_id , 'message' => 'Order sucess'));
 			return TRUE;
@@ -483,7 +486,6 @@ class Checkout extends CI_Controller {
     		// echo '<pre>';
     		// print_r($order);
     		// exit;
-
     		$output_data['order'] = $order;
     		$output_data['main_content'] = "order_success";
 			$this->load->view('web/template',$output_data);

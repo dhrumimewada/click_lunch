@@ -332,4 +332,60 @@ class Profile_model extends CI_Model {
         }
         return $return_data;
     }
+
+    public function order_history(){
+        
+        $return_data = array();
+
+        $sql_select = array(
+                        't1.id',
+                        't1.total',
+                        't1.order_type',
+                        't1.order_status',
+                        't1.favourite',
+                        't3.shop_name',
+                        't3.address as shop_address',
+                        't3.profile_picture as shop_picture',
+                        't1.created_at'
+        );
+        $this->db->select($sql_select);
+
+        $this->db->from('orders t1');
+        $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+
+        // if(isset($_POST['cuisines']) && !is_null($_POST['cuisines']) && $_POST['cuisines'] != ''){
+        //     $cuisines = explode(',', $_POST['cuisines']);
+        //     $this->db->join('order_items t4', 't1.id = t4.order_id','left');
+        //     $this->db->join('item t5', 't4.item_id = t5.id','left');
+        //     $this->db->where_in('t5.cuisine_id',$cuisines);
+        //     $response['cuisines'] = $cuisines;
+        // }
+
+        // if(isset($_POST['date']) && !is_null($_POST['date']) && $_POST['date'] != ''){
+        //     $this->db->where('DATE(t1.created_at)', $_POST['date']);
+        // }
+        $this->db->where('t1.customer_id',$this->auth->get_user_id());
+        $this->db->order_by("t1.created_at", "desc");
+
+        // $limit = 10; // messages per page
+        // if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
+        //     $start = $limit * ($_POST['page_number'] - 1);
+        //     $this->db->limit($limit, $start);
+        // }else{
+        //     if(isset($_POST['keyword']) && !is_null($_POST['keyword']) && $_POST['keyword'] != ''){
+        //         $this->db->where("t3.shop_name LIKE '%".$_POST['keyword']."%'");
+        //     }else{
+        //         $this->db->limit($limit);
+        //     }
+        // }
+
+        
+
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+            $return_data = $sql_query->result_array();
+        }
+
+        return $return_data;
+    }
 }

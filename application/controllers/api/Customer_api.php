@@ -248,6 +248,95 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
+    public function social_login_post(){
+        $postFields['social_id'] = $_POST['social_id'];  
+        $postFields['social_type'] = $_POST['social_type'];  
+
+        $postFields['username'] = $_POST['username'];        
+        $postFields['email'] = $_POST['email'];        
+        $postFields['mobile_number'] = $_POST['mobile_number']; 
+        $postFields['date_of_birth'] = $_POST['date_of_birth']; 
+        $postFields['gender'] = $_POST['gender']; 
+        $postFields['device_token'] = $_POST['device_token']; 
+        $postFields['device_type'] = $_POST['device_type']; 
+        $postFields['latitude'] = $_POST['latitude'];
+        $postFields['longitude'] = $_POST['longitude'];   
+   
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+
+            $where1 = array('social_id' => intval($_POST['social_id']),'social_type' => intval($_POST['social_type']), 'deleted_at' => NULL);
+            $user_exists = $this->db->get_where('customer',$where1)->row();
+
+            if(empty($user_exists)){
+
+                $where = array('email' => $_POST['email'], 'deleted_at' => NULL);
+                $user_exists_email = $this->db->get_where('customer',$where)->row();
+
+                if(empty($user_exists_email)){
+
+                    $user = array( 
+                            'username' => $_POST['username'], 
+                            'email'=> $_POST['email'], 
+                            'password' => '',
+                            'status' => 1,
+                            'device_token'=> $_POST['device_token'], 
+                            'device_type'=> $_POST['device_type'], 
+                            'mobile_number'=> $_POST['mobile_number'],
+                            'gender'=> $_POST['gender'],
+                            'dob'=> $_POST['date_of_birth'],
+                            'social_id'=> intval($_POST['social_id']),
+                            'social_type'=> intval($_POST['social_type'])
+                        );
+
+                    if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != "0" && !is_null($_POST['latitude']) && !is_null($_POST['longitude'])){
+
+                        $google_api_key = $this->config->item("google_key");
+                        $geocodeFromLatLong = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?latlng='.$_POST['latitude'].','.$_POST['longitude'].'&key='.$google_api_key);
+                        $output = json_decode($geocodeFromLatLong);
+                        $status = $output->status;
+
+                        $address = ($status=="OK")?$output->results[1]->formatted_address:'';
+
+                        $user['latitude'] = $_POST['latitude'];
+                        $user['longitude'] = $_POST['longitude'];
+                        $user['address'] = $address;
+                    }
+
+                    $this->db->insert('customer', $user);
+                    $insert_id = $this->db->insert_id();
+                    
+                    $where = array('id' => $insert_id);
+                    $user_data = $this->db->get_where('customer',$where)->row();
+
+                    $response['status'] = true;
+                    $response['profile'] = $user_data;
+
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Email id linked with social is already registered in clicklunch.';
+                }
+
+            }else{
+
+                if(isset($_POST['latitude']) && $_POST['latitude'] != "" && !is_null($_POST['latitude']) && isset($_POST['longitude']) && $_POST['longitude'] != "" && !is_null($_POST['longitude'])){
+                    $data = array('latitude' => $_POST['latitude'], 'longitude' => $_POST['longitude']);
+                    $this->db->where('id',intval($user_exists->id));
+                    $this->db->update('customer',$data);
+                }
+                
+                $where = array('id' => intval($user_exists->id));
+                $user = (array)$this->db->get_where('customer',$where)->row();
+                $response['status'] = true;
+                $response['profile'] = $user;
+            }
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
     public function logout_post(){
         
         $postFields['customer_id'] = $_POST['customer_id'];
@@ -1668,281 +1757,6 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    public function fetch_promocode_old_post(){
-        $postFields['customer_id'] = $_POST['customer_id']; 
-        $postFields['shop_id'] = $_POST['shop_id']; 
-        $postFields['total_amount'] = $_POST['total_amount']; 
-        $postFields['products'] = $_POST['products']; 
-
-        $errorPost = $this->ValidatePostFields($postFields);
-
-        if(empty($errorPost)){
-
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
-            }else{
-
-                $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
-                $shop = (array)$this->db->get_where('shop',$where)->row();
-                if(empty($shop)){
-                    $response['status'] = false;
-                    $response['message'] = 'Restaurant not found';
-                }else{
-                    $today = date('Y-m-d');
-                    $products_array = explode(',',$_POST['products']);
-                    $valid_promocodes = array();
-
-                    // Get All customer promocode - GROUP 4
-                    $this->db->select('*'); 
-
-                    $this->db->group_start();
-                        $this->db->where('shop_id',$_POST['shop_id']);  
-                        $this->db->where('group_type',4);  
-                    $this->db->group_end();
-
-                    $this->db->or_group_start();
-                        $this->db->where('shop_id','');  
-                        $this->db->where('group_type',4);  
-                    $this->db->group_end();
-
-                    $this->db->group_start();
-                        $this->db->where('from_date <=', $today);
-                        $this->db->where('to_date >=', $today);
-                    $this->db->group_end();
-
-                    $this->db->group_start();
-                        $this->db->where('promo_min_order_amount', '');
-                        $this->db->or_where('promo_min_order_amount <=', floatval($_POST['total_amount']));
-                    $this->db->group_end();
-
-                    $this->db->where('status',1);  
-                    $this->db->where('deleted_at',NULL);  
-                    $this->db->from('promocode'); 
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $all_customer_promocode = $sql_query->result_array();
-                        foreach ($all_customer_promocode as $key => $value) {
-                            // if product based promocode added by shop
-                            if(($value['shop_id'] != '') && ($value['promo_type'] == 1)){
-                                $this->db->select('product_id'); 
-                                $this->db->where('promocode_id',$value['id']);  
-                                $this->db->where_in('product_id',$products_array);  
-                                $this->db->from('promocode_valid_product'); 
-                                $sql_query = $this->db->get();
-                                if ($sql_query->num_rows() <= 0){
-                                    unset($all_customer_promocode[$key]);
-                                }
-                            }
-                        }
-                        foreach ($all_customer_promocode as $key => $value){
-                            array_push($valid_promocodes, $all_customer_promocode[$key]);
-                        }
-                    }
-
-                    // Get promocode ( added by admin for group of shops) GROUP 5
-                    $this->db->select('t2.*'); 
-                    $this->db->where('t1.shop_id',$_POST['shop_id']);  
-                    $this->db->where('t2.group_type',5);  
-                    $this->db->from('promocode_shops t1');
-                    $this->db->join('promocode t2', 't1.promocode_id = t2.id', "right join");
-
-                    $this->db->group_start();
-                        $this->db->where('t2.from_date <=', $today);
-                        $this->db->where('t2.to_date >=', $today);
-                    $this->db->group_end();
-
-                    $this->db->where('t2.status',1);  
-                    $this->db->where('t2.shop_id','');  
-                    $this->db->where('t2.deleted_at',NULL);  
-
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $group_of_shops_promocode = $sql_query->result_array();
-                        foreach ($group_of_shops_promocode as $key => $value) {
-                            if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
-                                unset($group_of_shops_promocode[$key]);
-                            }
-                        }
-                        foreach ($group_of_shops_promocode as $key => $value){
-                            array_push($valid_promocodes, $group_of_shops_promocode[$key]);
-                        }
-                    }
-
-                    // Get customer total completed order
-                    $where = array('customer_id' => $_POST['customer_id'], 'order_status' => 1);
-                    $select = array('id');
-                    $table = 'orders';
-                    $customer_total_orders_array = get_data_by_filter($table,$select, $where);
-                    $customer_total_orders = count($customer_total_orders_array);
-                    $X_ordered_promocode = array();
-
-                    // Get promocode ( Number of X ordered Customers - order based) GROUP 6 (Admin)
-                    $this->db->select('*'); 
-                    $this->db->where('shop_id','');  
-                    $this->db->where('group_type',6);  
-
-                    $this->db->group_start();
-                        $this->db->where('from_date <=', $today);
-                        $this->db->where('to_date >=', $today);
-                    $this->db->group_end();
-
-                    $this->db->where('min_no_of_orders <=', $customer_total_orders);  
-                    $this->db->where('status',1);  
-                    $this->db->where('deleted_at',NULL);  
-                    $this->db->from('promocode'); 
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $X_ordered_promocode = $sql_query->result_array();
-                        foreach ($X_ordered_promocode as $key => $value) {
-                            if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
-                                unset($X_ordered_promocode[$key]);
-                            }
-                        }
-                        foreach ($X_ordered_promocode as $key => $value){
-                            array_push($valid_promocodes, $X_ordered_promocode[$key]);
-                        }
-                    }
-
-                    // If no any ordered from any shop - promocode by admin - GROUP 1
-                    $new_customer_for_admin_promocode = array();
-                    if($customer_total_orders <= 0){
-                        $this->db->select('*'); 
-                        $this->db->where('shop_id','');  
-                        $this->db->where('group_type',1);  
-
-                        $this->db->group_start();
-                            $this->db->where('from_date <=', $today);
-                            $this->db->where('to_date >=', $today);
-                        $this->db->group_end();
-
-                        $this->db->where('status',1);  
-                        $this->db->where('deleted_at',NULL);  
-                        $this->db->from('promocode'); 
-                        $sql_query = $this->db->get();
-                        if ($sql_query->num_rows() > 0){
-                            $new_customer_for_admin_promocode = $sql_query->result_array();
-                            foreach ($new_customer_for_admin_promocode as $key => $value) {
-                                if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
-                                    unset($new_customer_for_admin_promocode[$key]);
-                                }
-                            }
-                            foreach ($new_customer_for_admin_promocode as $key => $value){
-                                array_push($valid_promocodes, $new_customer_for_admin_promocode[$key]);
-                            }
-                        }
-                    }
-
-                    // Get customer total completed order for this shop
-                    $where = array('customer_id' => $_POST['customer_id'],'shop_id' => $_POST['shop_id'], 'order_status' => 1);
-                    $select = array('id');
-                    $table = 'orders';
-                    $customer_total_shop_orders_array = get_data_by_filter($table,$select, $where);
-                    $customer_total_shop_orders = count($customer_total_shop_orders_array);
-                    $X_shop_ordered_promocode = array();
-
-                    // Get promocode ( Number of X ordered Customers - order based) GROUP 6 (shop)
-                    $this->db->select('*'); 
-                    $this->db->where('shop_id',$_POST['shop_id']);  
-                    $this->db->where('group_type',6);  
-
-                    $this->db->group_start();
-                        $this->db->where('from_date <=', $today);
-                        $this->db->where('to_date >=', $today);
-                    $this->db->group_end();
-
-                    $this->db->where('min_no_of_orders <=', $customer_total_shop_orders);  
-                    $this->db->where('status',1);  
-                    $this->db->where('deleted_at',NULL);  
-                    $this->db->from('promocode'); 
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $X_shop_ordered_promocode = $sql_query->result_array();
-
-                        foreach ($X_shop_ordered_promocode as $key => $value) {
-                            if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
-                                unset($X_shop_ordered_promocode[$key]);
-                            }else{
-
-                                // if product based promocode
-                                if($value['promo_type'] == 1){
-                                    $this->db->select('product_id'); 
-                                    $this->db->where('promocode_id',$value['id']);  
-                                    $this->db->where_in('product_id',$products_array);  
-                                    $this->db->from('promocode_valid_product'); 
-                                    $sql_query = $this->db->get();
-                                    if ($sql_query->num_rows() <= 0){
-                                        unset($X_shop_ordered_promocode[$key]);
-                                    }
-                                }
-                            }
-                        }
-                        foreach ($X_shop_ordered_promocode as $key => $value){
-                            array_push($valid_promocodes, $X_shop_ordered_promocode[$key]);
-                        }
-                    }
-
-                    // If no any ordered from this shop - promocode by shop - GROUP 1
-                    $new_customer_for_shop_promocode = array();
-                    if($customer_total_shop_orders <= 0){
-                        $this->db->select('*'); 
-                        $this->db->where('shop_id',$_POST['shop_id']);  
-                        $this->db->where('group_type',1);  
-
-                        $this->db->group_start();
-                            $this->db->where('from_date <=', $today);
-                            $this->db->where('to_date >=', $today);
-                        $this->db->group_end();
-
-                        $this->db->where('status',1);  
-                        $this->db->where('deleted_at',NULL);  
-                        $this->db->from('promocode'); 
-                        $sql_query = $this->db->get();
-                        if ($sql_query->num_rows() > 0){
-                            $new_customer_for_shop_promocode = $sql_query->result_array();
-                            foreach ($new_customer_for_shop_promocode as $key => $value) {
-                                if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
-                                    unset($new_customer_for_shop_promocode[$key]);
-                                }else{
-
-                                    // if product based promocode
-                                    if($value['promo_type'] == 1){
-                                        $this->db->select('product_id'); 
-                                        $this->db->where('promocode_id',$value['id']);  
-                                        $this->db->where_in('product_id',$products_array);  
-                                        $this->db->from('promocode_valid_product'); 
-                                        $sql_query = $this->db->get();
-                                        if ($sql_query->num_rows() <= 0){
-                                            unset($new_customer_for_shop_promocode[$key]);
-                                        }
-                                    }
-
-                                }
-                            }
-                            foreach ($new_customer_for_shop_promocode as $key => $value){
-                                array_push($valid_promocodes, $new_customer_for_shop_promocode[$key]);
-                            }
-                        }
-                    }
-
-                    // GROUP 7 PROMOCODES ARE PENDING - waiting for order
-
-                    //$response['promocode_all_customer'] = $all_customer_promocode;
-                    //$response['group_of_shops_promocode'] = $group_of_shops_promocode;
-                    $response['valid_promocodes'] = $valid_promocodes;
-                    $response['status'] = true;
-                }
-            }
-            
-        }else{
-            $response['status'] = false;
-            $response['message'] = $errorPost;
-        }
-        $this->response($response);
-    }
-
     public function fetch_promocode_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['shop_id'] = $_POST['shop_id']; 
@@ -2047,7 +1861,7 @@ class Customer_api extends REST_Controller {
                     }
 
                     // Get customer total completed order
-                    $where = array('customer_id' => $_POST['customer_id'], 'order_status' => 5);
+                    $where = array('customer_id' => $_POST['customer_id'], 'order_status' => 6);
                     $select = array('id');
                     $table = 'orders';
                     $customer_total_orders_array = get_data_by_filter($table,$select, $where);
@@ -2132,7 +1946,7 @@ class Customer_api extends REST_Controller {
                     }else{
 
                         // Get customer total completed order for this shop
-                        $where = array('customer_id' => $_POST['customer_id'],'shop_id' => $_POST['shop_id'], 'order_status' => 5);
+                        $where = array('customer_id' => $_POST['customer_id'],'shop_id' => $_POST['shop_id'], 'order_status' => 6);
                         $select = array('id');
                         $table = 'orders';
                         $customer_total_shop_orders_array = get_data_by_filter($table,$select, $where);
@@ -2263,316 +2077,6 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    public function validate_promocode_old_post(){
-        $postFields['customer_id'] = $_POST['customer_id']; 
-        $postFields['shop_id'] = $_POST['shop_id']; 
-        $postFields['total_amount'] = $_POST['total_amount']; 
-        $postFields['products'] = $_POST['products']; 
-        $postFields['promocode'] = $_POST['promocode']; 
-
-        $errorPost = $this->ValidatePostFields($postFields);
-
-        if(empty($errorPost)){
-
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
-            }else{
-
-
-
-                $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
-                $shop = (array)$this->db->get_where('shop',$where)->row();
-                if(empty($shop)){
-                    $response['status'] = false;
-                    $response['message'] = 'Restaurant not found';
-                }else{
-                    $today = date('Y-m-d');
-                    $products_array = explode(',',$_POST['products']);
-                    $valid_promocodes = array();
-
-                    // Get All customer promocode - GROUP 4
-                    $this->db->select('*'); 
-
-                    $this->db->group_start();
-                        $this->db->where('shop_id',$_POST['shop_id']);  
-                        $this->db->where('group_type',4);  
-                    $this->db->group_end();
-
-                    $this->db->or_group_start();
-                        $this->db->where('shop_id','');  
-                        $this->db->where('group_type',4);  
-                    $this->db->group_end();
-
-                    $this->db->group_start();
-                        $this->db->where('from_date <=', $today);
-                        $this->db->where('to_date >=', $today);
-                    $this->db->group_end();
-
-                    $this->db->where('status',1);  
-                    $this->db->where('deleted_at',NULL);  
-                    $this->db->from('promocode'); 
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $all_customer_promocode = $sql_query->result_array();
-                        foreach ($all_customer_promocode as $key => $value) {
-                            if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
-                                unset($all_customer_promocode[$key]);
-                            }else{
-                                // if product based promocode added by shop
-                                if(($value['shop_id'] != '') && ($value['promo_type'] == 1)){
-                                    $this->db->select('product_id'); 
-                                    $this->db->where('promocode_id',$value['id']);  
-                                    $this->db->where_in('product_id',$products_array);  
-                                    $this->db->from('promocode_valid_product'); 
-                                    $sql_query = $this->db->get();
-                                    if ($sql_query->num_rows() <= 0){
-                                        unset($all_customer_promocode[$key]);
-                                    }
-                                }
-                            }
-                        }
-                        foreach ($all_customer_promocode as $key => $value){
-                            array_push($valid_promocodes, $all_customer_promocode[$key]);
-                        }
-                    }
-
-                    // Get promocode ( added by admin for group of shops) GROUP 5
-                    $this->db->select('t2.*'); 
-                    $this->db->where('t1.shop_id',$_POST['shop_id']);  
-                    $this->db->where('t2.group_type',5);  
-                    $this->db->from('promocode_shops t1');
-                    $this->db->join('promocode t2', 't1.promocode_id = t2.id', "right join");
-
-                    $this->db->group_start();
-                        $this->db->where('t2.from_date <=', $today);
-                        $this->db->where('t2.to_date >=', $today);
-                    $this->db->group_end();
-
-                    $this->db->where('t2.status',1);  
-                    $this->db->where('t2.shop_id','');  
-                    $this->db->where('t2.deleted_at',NULL);  
-
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $group_of_shops_promocode = $sql_query->result_array();
-                        foreach ($group_of_shops_promocode as $key => $value) {
-                            if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
-                                unset($group_of_shops_promocode[$key]);
-                            }
-                        }
-                        foreach ($group_of_shops_promocode as $key => $value){
-                            array_push($valid_promocodes, $group_of_shops_promocode[$key]);
-                        }
-                    }
-
-                    // Get customer total completed order
-                    $where = array('customer_id' => $_POST['customer_id'], 'order_status' => 1);
-                    $select = array('id');
-                    $table = 'orders';
-                    $customer_total_orders_array = get_data_by_filter($table,$select, $where);
-                    $customer_total_orders = count($customer_total_orders_array);
-                    $X_ordered_promocode = array();
-
-                    // Get promocode ( Number of X ordered Customers - order based) GROUP 6 (Admin)
-                    $this->db->select('*'); 
-                    $this->db->where('shop_id','');  
-                    $this->db->where('group_type',6);  
-
-                    $this->db->group_start();
-                        $this->db->where('from_date <=', $today);
-                        $this->db->where('to_date >=', $today);
-                    $this->db->group_end();
-
-                    $this->db->where('min_no_of_orders <=', $customer_total_orders);  
-                    $this->db->where('status',1);  
-                    $this->db->where('deleted_at',NULL);  
-                    $this->db->from('promocode'); 
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $X_ordered_promocode = $sql_query->result_array();
-                        foreach ($X_ordered_promocode as $key => $value) {
-                            if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
-                                unset($X_ordered_promocode[$key]);
-                            }
-                        }
-                        foreach ($X_ordered_promocode as $key => $value){
-                            array_push($valid_promocodes, $X_ordered_promocode[$key]);
-                        }
-                    }
-
-                    // If no any ordered from any shop - promocode by admin - GROUP 1
-                    $new_customer_for_admin_promocode = array();
-                    if($customer_total_orders <= 0){
-                        $this->db->select('*'); 
-                        $this->db->where('shop_id','');  
-                        $this->db->where('group_type',1);  
-
-                        $this->db->group_start();
-                            $this->db->where('from_date <=', $today);
-                            $this->db->where('to_date >=', $today);
-                        $this->db->group_end();
-
-                        $this->db->where('status',1);  
-                        $this->db->where('deleted_at',NULL);  
-                        $this->db->from('promocode'); 
-                        $sql_query = $this->db->get();
-                        if ($sql_query->num_rows() > 0){
-                            $new_customer_for_admin_promocode = $sql_query->result_array();
-                            foreach ($new_customer_for_admin_promocode as $key => $value) {
-                                if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
-                                    unset($new_customer_for_admin_promocode[$key]);
-                                }
-                            }
-                            foreach ($new_customer_for_admin_promocode as $key => $value){
-                                array_push($valid_promocodes, $new_customer_for_admin_promocode[$key]);
-                            }
-                        }
-                    }
-
-                    // Get customer total completed order for this shop
-                    $where = array('customer_id' => $_POST['customer_id'],'shop_id' => $_POST['shop_id'], 'order_status' => 1);
-                    $select = array('id');
-                    $table = 'orders';
-                    $customer_total_shop_orders_array = get_data_by_filter($table,$select, $where);
-                    $customer_total_shop_orders = count($customer_total_shop_orders_array);
-                    $X_shop_ordered_promocode = array();
-
-                    // Get promocode ( Number of X ordered Customers - order based) GROUP 6 (shop)
-                    $this->db->select('*'); 
-                    $this->db->where('shop_id',$_POST['shop_id']);  
-                    $this->db->where('group_type',6);  
-
-                    $this->db->group_start();
-                        $this->db->where('from_date <=', $today);
-                        $this->db->where('to_date >=', $today);
-                    $this->db->group_end();
-
-                    $this->db->where('min_no_of_orders <=', $customer_total_shop_orders);  
-                    $this->db->where('status',1);  
-                    $this->db->where('deleted_at',NULL);  
-                    $this->db->from('promocode'); 
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $X_shop_ordered_promocode = $sql_query->result_array();
-
-                        foreach ($X_shop_ordered_promocode as $key => $value) {
-                            if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
-                                unset($X_shop_ordered_promocode[$key]);
-                            }else{
-
-                                // if product based promocode
-                                if($value['promo_type'] == 1){
-                                    $this->db->select('product_id'); 
-                                    $this->db->where('promocode_id',$value['id']);  
-                                    $this->db->where_in('product_id',$products_array);  
-                                    $this->db->from('promocode_valid_product'); 
-                                    $sql_query = $this->db->get();
-                                    if ($sql_query->num_rows() <= 0){
-                                        unset($X_shop_ordered_promocode[$key]);
-                                    }
-                                }
-                            }
-                        }
-                        foreach ($X_shop_ordered_promocode as $key => $value){
-                            array_push($valid_promocodes, $X_shop_ordered_promocode[$key]);
-                        }
-                    }
-
-                    // If no any ordered from this shop - promocode by shop - GROUP 1
-                    $new_customer_for_shop_promocode = array();
-                    if($customer_total_shop_orders <= 0){
-                        $this->db->select('*'); 
-                        $this->db->where('shop_id',$_POST['shop_id']);  
-                        $this->db->where('group_type',1);  
-
-                        $this->db->group_start();
-                            $this->db->where('from_date <=', $today);
-                            $this->db->where('to_date >=', $today);
-                        $this->db->group_end();
-
-                        $this->db->where('status',1);  
-                        $this->db->where('deleted_at',NULL);  
-                        $this->db->from('promocode'); 
-                        $sql_query = $this->db->get();
-                        if ($sql_query->num_rows() > 0){
-                            $new_customer_for_shop_promocode = $sql_query->result_array();
-                            foreach ($new_customer_for_shop_promocode as $key => $value) {
-                                if(($value['promo_min_order_amount'] != '') && ($value['promo_min_order_amount'] > $_POST['total_amount'])){
-                                    unset($new_customer_for_shop_promocode[$key]);
-                                }else{
-
-                                    // if product based promocode
-                                    if($value['promo_type'] == 1){
-                                        $this->db->select('product_id'); 
-                                        $this->db->where('promocode_id',$value['id']);  
-                                        $this->db->where_in('product_id',$products_array);  
-                                        $this->db->from('promocode_valid_product'); 
-                                        $sql_query = $this->db->get();
-                                        if ($sql_query->num_rows() <= 0){
-                                            unset($new_customer_for_shop_promocode[$key]);
-                                        }
-                                    }
-
-                                }
-                            }
-                            foreach ($new_customer_for_shop_promocode as $key => $value){
-                                array_push($valid_promocodes, $new_customer_for_shop_promocode[$key]);
-                            }
-                        }
-                    }
-
-                    // GROUP 7 PROMOCODES ARE PENDING - waiting for order
-
-                    $valid = FALSE;
-                    $discount_type = '';
-                    $discount_amount = '';
-                    $promo_type = '';
-                    $valid_product = array();
-                    $vali_promocode = strtoupper($_POST['promocode']);
-                    foreach ($valid_promocodes as $key => $value) {
-                        if($vali_promocode == $value['promocode']){
-                            $valid = TRUE;
-                            $discount_type = $value['discount_type'];
-                            $discount_amount = $value['amount'];
-                            $promo_type = $value['promo_type'];
-                            $promo_id = $value['id'];
-                            if($value['promo_type'] == 1){
-                                $this->db->select('product_id');
-                                $this->db->where("shop_id",$value['shop_id']);
-                                $this->db->from("promocode_valid_product");
-                                $sql_query = $this->db->get();
-                                if ($sql_query->num_rows() > 0){
-                                    $valid_products = $sql_query->result_array();
-                                    foreach ($products_array as $key => $value) {
-                                        $valid_product[] = $value;
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    $response['promocode_id'] = $promo_id;
-                    $response['promocode'] = $_POST['promocode'];
-                    $response['valid_promocode'] = $valid;
-                    $response['discount_type'] = $discount_type;
-                    $response['discount_amount'] = $discount_amount;
-                    $response['promo_type'] = $promo_type;
-                    $response['valid_products'] = $valid_product;
-                    //$response['valid_promocodes'] = $valid_promocodes;
-                    $response['status'] = true;
-                }
-            }
-            
-        }else{
-            $response['status'] = false;
-            $response['message'] = $errorPost;
-        }
-        $this->response($response);
-    }
-
     public function validate_promocode_post(){
         $postFields['customer_id'] = $_POST['customer_id']; 
         $postFields['shop_id'] = $_POST['shop_id']; 
@@ -2629,7 +2133,8 @@ class Customer_api extends REST_Controller {
                             // check usage_limit
                             $this->db->select('id'); 
                             $this->db->where('customer_id',$_POST['customer_id']);  
-                            $this->db->where('order_status',5);  
+                            $success_order_status = array('0', '1', '3', '4', '5', '6');
+                            $this->db->where_in('order_status',$success_order_status);  
                             $this->db->where('promocode_id',$promo_data->id);  
                             $this->db->from('orders');
                             $sql_query = $this->db->get();
@@ -2667,7 +2172,7 @@ class Customer_api extends REST_Controller {
                                         $orders = $promo_data->min_no_of_orders;
                                         $this->db->select('id'); 
                                         $this->db->where('customer_id',$_POST['customer_id']);  
-                                        $this->db->where('order_status',5);  
+                                        $this->db->where('order_status',6);  
                                         $this->db->from('orders'); 
                                         $sql_query = $this->db->get();
                                         if ($sql_query->num_rows() >= intval($orders)){
@@ -2679,7 +2184,7 @@ class Customer_api extends REST_Controller {
                                         $this->db->select('id'); 
                                         $this->db->where('customer_id',$_POST['customer_id']);  
                                         $this->db->where('shop_id',$_POST['shop_id']);  
-                                        $this->db->where('order_status',5);  
+                                        $this->db->where('order_status',6);  
                                         $this->db->from('orders'); 
                                         $sql_query = $this->db->get();
 
@@ -2816,250 +2321,6 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    public function place_order_old_post(){
-       
-        $postFields['order_data'] = $_POST['order_data']; 
-
-        $errorPost = $this->ValidatePostFields($postFields);
-
-        if(empty($errorPost)){
-
-            $order_data =  json_decode($_POST['order_data'],true);
-
-            $postFields['customer_id'] = $order_data['customer_id']; 
-            $postFields['shop_id'] = $order_data['shop_id']; 
-            $postFields['order_type'] = $order_data['order_type']; 
-            $postFields['payment_mode'] = $order_data['payment_mode']; 
-            $postFields['payment_card_id'] = $order_data['payment_card_id']; 
-            $postFields['delivery_address_id'] = $order_data['delivery_address_id']; 
-            $postFields['products'] = $order_data['products']; 
-
-            $errorPost = $this->ValidatePostFields($postFields);
-            if(empty($errorPost)){
-                $where = array('id' => $order_data['customer_id'],'status' => '1', 'deleted_at' => NULL);
-                $user = (array)$this->db->get_where('customer',$where)->row();
-                if(empty($user)){
-                    $response['status'] = false;
-                    $response['message'] = 'User not found';
-                }else{
-                    $where = array('id' => $order_data['shop_id'],'status' => '1', 'deleted_at' => NULL);
-                    $shop = (array)$this->db->get_where('shop',$where)->row();
-                    if(empty($shop)){
-                        $response['status'] = false;
-                        $response['message'] = 'Restaurant not found';
-                    }else{
-                        $where = array('id' => $order_data['payment_card_id'],'deleted_at' => NULL);
-                        $customer_payment_card = (array)$this->db->get_where('customer_payment_card',$where)->row();
-                        if(empty($customer_payment_card)){
-                            $response['status'] = false;
-                            $response['message'] = 'Payment card does not exists';
-                        }else{
-                            $where = array('id' => $order_data['delivery_address_id'],'deleted_at' => NULL);
-                            $delivery_address = (array)$this->db->get_where('delivery_address',$where)->row();
-                            if(empty($delivery_address)){
-                                $response['status'] = false;
-                                $response['message'] = 'Delivery address does not exists';
-                            }else{
-                                $product_array = array_column($order_data['products'], 'product_id');
-                                $this->db->select('id,IF(offer_price = "", price, offer_price) as price'); 
-                                $this->db->where_in('id',$product_array); 
-                                $this->db->where('shop_id',$order_data['shop_id']); 
-                                $this->db->from('item'); 
-                                $sql_query = $this->db->get();
-                                if ($sql_query->num_rows() == count($product_array)){
-
-                                    $product_data_array = $sql_query->result_array();
-
-                                    // check group exists
-                                    $groups = array();
-                                    $group_variants_array = array();
-                                    foreach ($order_data['products'] as $product_key => $product_value) {
-                                        foreach ($product_value['variant_group'] as $group_key => $group_value) {
-                                            array_push($groups, $group_value['group_id']);
-                                            foreach ($group_value['variants'] as $variant_key => $variant_value) {
-                                                array_push($group_variants_array, $variant_value['variant_id']);
-                                            }
-                                        }
-                                    }
-                                    $groups = array_unique($groups);
-                                    $group_variants_array = array_unique($group_variants_array);
-
-                                    $this->db->select('id'); 
-                                    $this->db->where_in('id',$groups); 
-                                    $this->db->where('shop_id',$order_data['shop_id']); 
-                                    $this->db->where('deleted_at',NULL); 
-                                    $this->db->from('variant_group'); 
-                                    $sql_query = $this->db->get();
-                                    if ($sql_query->num_rows() == count($groups)){
-
-                                        // check varient exists
-                                        $this->db->select('id,price'); 
-                                        $this->db->where_in('id',$group_variants_array); 
-                                        $this->db->from('variant_items'); 
-                                        $sql_query = $this->db->get();
-                                        if ($sql_query->num_rows() == count($group_variants_array)){
-
-                                            $variants_array = $sql_query->result_array();
-
-                                            // if varient exists
-                                            if(($order_data['order_type'] == 2) || ($order_data['order_type'] == 4)){
-                                                $later_time = $order_data['later_time'];
-                                            }else{
-                                                $later_time = "";
-                                            }
-
-                                            $promocode_id = '';
-                                            if(isset($order_data['promocode_id']) && $order_data['promocode_id'] != "" && $order_data['promocode_id'] != "0" && !is_null($order_data['promocode_id'])){
-
-                                                $promocode_id = $order_data['promocode_id'];
-                                                $promocode_basic_data = $this->promocode_model->get_promocode($promocode_id);
-                                                $discounted_products = array();
-
-                                               
-                                                if($promocode_basic_data->promo_type == 1){
-                                                    $promocode_valid_products = $this->customer_api_model->get_promocode_valid_products($promocode_id);
-
-                                                    if(isset($promocode_valid_products) && !empty($promocode_valid_products)){
-                                                        foreach ($promocode_valid_products as $key => $value) {
-                                                            if (in_array($value['product_id'], $product_array)){
-                                                                array_push($discounted_products, $value['product_id']);
-                                                            }
-                                                        }
-                                                    }
-                                                }
-
-                                                if(isset($discounted_products) && !empty($discounted_products)){
-                                                    foreach ($discounted_products as $key => $value) {
-                                                        foreach ($product_data_array as $product_key => $product_value) {
-                                                            if($product_value['id'] == $value){
-                                                                if($promocode_basic_data->discount_type == 0){
-                                                                    $disc_amount = floatval($product_value['price']) - floatval($promocode_basic_data->amount);
-                                                                    $discounted_price = floatval($product_value['price']) - $disc_amount;
-                                                                    $product_data_array[$product_key]['price'] = number_format((float)$discounted_price, 2, '.', '');
-                                                                }else{
-                                                                    $disc_amount = (floatval($product_value['price']) / 100) * floatval($promocode_basic_data->amount);
-                                                                    $discounted_price = floatval($product_value['price']) - floatval($disc_amount);
-                                                                    $product_data_array[$product_key]['price'] = number_format((float)$discounted_price, 2, '.', '');
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                
-                                            }
-
-                                            $subtotal_amount = 0;
-                                            foreach ($product_data_array as $key => $value) {
-                                                $subtotal_amount += $value['price'];
-                                            }
-                                            foreach ($variants_array as $key => $value) {
-                                                $subtotal_amount += $value['price'];
-                                            }
-
-                                            $tax_amount = ($order_data['tax'] > 0)?(floatval($subtotal_amount) / 100) * floatval($order_data['tax']):0;
-                                            $service_charge_amount = ($order_data['service_charge'] > 0)?(floatval($subtotal_amount) / 100) * floatval($order_data['service_charge']):0;
-                                            $delivery_charges_amount = ($order_data['delivery_charges'] > 0)?(floatval($subtotal_amount) / 100) * floatval($order_data['delivery_charges']):0;
-                                            $total_amount += $subtotal_amount + $tax_amount + $service_charge_amount + $delivery_charges_amount;
-
-                                            $order = array( 
-                                                'customer_id' => $order_data['customer_id'], 
-                                                'shop_id'=> $order_data['shop_id'], 
-                                                'order_type'=> $order_data['order_type'], 
-                                                'later_time'=> $later_time,
-                                                'tax' => $order_data['tax'],
-                                                'service_charge' => $order_data['service_charge'],
-                                                'subtotal' => number_format((float)$subtotal_amount, 2, '.', ''),
-                                                'total' => number_format((float)$total_amount, 2, '.', ''),
-                                                'delivery_charges' => number_format((float)$order_data['delivery_charges'], 2, '.', ''),
-                                                'promocode_id'=> $promocode_id,
-                                                'order_status'=> 1,
-                                                'payment_status'=> 1,
-                                                'payment_mode'=> $order_data['payment_mode'],
-                                                'transaction_id'=> '',
-                                                'delivery_address_id'=> $order_data['delivery_address_id']
-                                            );
-
-                                            if($this->db->insert('orders', $order)){
-                                                $order_id = $this->db->insert_id();
-                                                $order['id'] = $order_id;
-
-                                                $products_price_array = $this->customer_api_model->get_products_price($product_array);
-
-                                                foreach ($order_data['products'] as $products_key => $products_value) {
-
-                                                    $data = array(
-                                                        'order_id' => $order_id,
-                                                        'item_id' => $products_value['product_id'],
-                                                        'quantity' => $products_value['qty'],
-                                                        'item_price' => $products_price_array[$products_value['product_id']]
-                                                    );
-
-                                                    $this->db->insert('order_items', $data);
-                                                    $insert_id = $this->db->insert_id();
-
-                                                    $variant_data = array();
-                                                    foreach ($variants_array as $key => $value) {
-                                                        $variant_data[$value['id']] = $value['price'];
-                                                    }
-                                                    foreach ($products_value['variant_group'] as $group_key => $group_value) {
-                                                        $group_id = $group_value['group_id'];
-                                                        foreach ($group_value['variants'] as $variants_key => $variants_value) {
-
-                                                            $variants_data = array(
-                                                                'order_item_id' => $insert_id,
-                                                                'variant_group_id' => $group_id,
-                                                                'variant_id' => $variants_value['variant_id'],
-                                                                'price' => $variant_data[$variants_value['variant_id']]
-                                                            );
-
-                                                            $this->db->insert('order_item_variant', $variants_data);
-                                                        }
-                                                    }
-                                                }
-                                                $response['status'] = true;
-                                                $response['order'] = $order;
-                                                //$response['discounted_products'] = $discounted_products;
-                                                // $response['product_data_array'] = $product_data_array;
-                                                // $response['variants_array'] = $variants_array;
-
-                                            }else{
-                                                $response['status'] = false;
-                                                $response['message'] = 'Server encountered an error. please try again';
-                                            }
-
-
-                                        }else{
-                                            $response['status'] = false;
-                                            $response['message'] = 'Varient of group not found. Please refresh the cart.'; 
-                                        }  
-                                    }else{
-                                        $response['status'] = false;
-                                        $response['message'] = 'Product group not found. Please refresh the cart.'; 
-                                    }
-
-                                }else{
-                                    $response['status'] = false;
-                                    $response['message'] = 'Product not found. Please refresh the cart.'; 
-                                }
-                            }
-                        }
-                    }
-                }
-            }else{
-                $response['status'] = false;
-                $response['message'] = $errorPost;
-            }
-
-            
-
-            
-        }else{
-            $response['status'] = false;
-            $response['message'] = $errorPost;
-        }
-        $this->response($response);
-    }
-
     public function place_order_post(){
         $postFields['order_data'] = $_POST['order_data']; 
         $errorPost = $this->ValidatePostFields($postFields);
@@ -3072,8 +2333,12 @@ class Customer_api extends REST_Controller {
             $postFields['shop_id'] = $order_data['shop_id']; 
             $postFields['order_type'] = $order_data['order_type']; 
             $postFields['payment_mode'] = $order_data['payment_mode']; 
-            $postFields['payment_card_id'] = $order_data['payment_card_id']; 
-            $postFields['delivery_address_id'] = $order_data['delivery_address_id']; 
+            $postFields['payment_card_id'] = $order_data['payment_card_id'];
+            if(isset($order_data['order_type']) && (($order_data['order_type'] == 1) || ($order_data['order_type'] == 2)|| ($order_data['order_type'] == 5))){
+                $postFields['delivery_address_id'] = $order_data['delivery_address_id']; 
+            }else{
+                $address_not_required = true;
+            }
             $postFields['tax'] = $order_data['tax']; 
             $postFields['service_charge'] = $order_data['service_charge']; 
             $postFields['amount'] = $order_data['amount']; 
@@ -3112,7 +2377,7 @@ class Customer_api extends REST_Controller {
                         $this->db->group_end();
 
                         $sql_query = $this->db->get();
-                        if ($sql_query->num_rows() > 0){
+                        if ($sql_query->num_rows() > 0 || $address_not_required == TRUE){
 
                             $this->db->select('id');
                             $this->db->from('customer_payment_card');
@@ -3157,7 +2422,7 @@ class Customer_api extends REST_Controller {
                                         }else{
                                             $order_type_error = TRUE;
                                         }
-                                    }elseif($order_data['order_type'] == 5) {
+                                    }elseif(($order_data['order_type'] == 5) || ($order_data['order_type'] == 6)) {
                                         if(isset($order_data['schedule_date']) && $order_data['schedule_date'] != '' && isset($order_data['schedule_time']) && $order_data['schedule_time'] != ''){
                                             $date = $order_data['schedule_date'];
                                             $time = $order_data['schedule_time'];
@@ -3236,7 +2501,7 @@ class Customer_api extends REST_Controller {
                                                         $promocode_id = '';
                                                     }
 
-                                                    if($order_data['order_type'] == 5){
+                                                    if(($order_data['order_type'] == 5) || ($order_data['order_type'] == 6)){
                                                         if(isset($order_data['schedule_date']) && $order_data['schedule_date'] != '' && isset($order_data['schedule_time']) && $order_data['schedule_time'] != ''){
                                                             $schedule_date = $order_data['schedule_date'];
                                                             $schedule_time = $order_data['schedule_time'];
@@ -3262,13 +2527,18 @@ class Customer_api extends REST_Controller {
                                                             'service_charge' => $order_data['service_charge'],
                                                             'schedule_date'=> $schedule_date,
                                                             'schedule_time'=> $schedule_time,
-                                                            'delivery_address_id'=> $order_data['delivery_address_id'],
 
                                                             'order_status'=> 0,
                                                             'payment_status'=> 1,
                                                             'payment_mode'=> $order_data['payment_mode'],
                                                             'transaction_id'=> '' 
                                                         );
+
+                                                        if($address_not_required == true){
+                                                            $data['delivery_address_id'] = 0;
+                                                        }else{
+                                                            $data['delivery_address_id'] = $order_data['delivery_address_id'];
+                                                        }
 
                                                         if($this->db->insert('orders', $data)){
 
@@ -3402,10 +2672,7 @@ class Customer_api extends REST_Controller {
                                                             $delivery_charges = number_format((float)$order_data['delivery_charges'], 2, '.', '');
 
 
-                                                            $total = $sub_total2 + $tax + $service_charge + $delivery_charges;
-                                                            
-                                                            // $response['my_variant_data'] = $my_variant_data;    
-                                                            // $response['my_product_data'] = $my_product_data;    
+                                                            $total = $sub_total2 + $tax + $service_charge + $delivery_charges;   
 
                                                             $order_data_edited['promo_amount'] = number_format((float)$promo_discount, 2, '.', '');
                                                             $order_data_edited['total'] = number_format((float)$total, 2, '.', '');
@@ -3535,6 +2802,7 @@ class Customer_api extends REST_Controller {
                         }
                         $response['charges'] = $charges;
                         $response['mile'] = $mile . ' mile far this restaurant';
+                        $response['status'] = true;
                     }else{
                         $response['status'] = false;
                         $response['message'] = 'Delivery is not available on this location';
@@ -3584,6 +2852,8 @@ class Customer_api extends REST_Controller {
                                 't1.total',
                                 'IF(t1.order_type=5, t1.schedule_date, "") as schedule_date',
                                 'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
+                                'IF(t1.order_type=6, t1.schedule_date, "") as schedule_date',
+                                'IF(t1.order_type=6, t1.schedule_time, "") as schedule_time',
                                 'IF(t1.order_type=2, t1.later_time, "") as later_time',
                                 't1.created_at',
                                 't1.QR_code'
@@ -3823,6 +3093,68 @@ class Customer_api extends REST_Controller {
                 }
 
                 
+
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $orders_data = $sql_query->result_array();
+
+                    $response['orders'] = $orders_data;
+                    $response['status'] = TRUE;
+                }else{
+                    $response['message'] = 'No any order history found';                  
+                    $response['status'] = FALSE; 
+                }
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function weekly_order_history_post(){
+        $postFields['customer_id'] = $_POST['customer_id']; 
+
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+            $where = array('id' => intval($_POST['customer_id']));
+            $customer = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($customer)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';    
+            }else{
+                $sql_select = array(
+                                't1.id',
+                                't1.total',
+                                't1.order_type',
+                                't1.order_status',
+                                't1.favourite',
+                                't3.shop_name',
+                                't3.address as shop_address',
+                                't3.profile_picture as shop_picture',
+                                't1.created_at',
+                                't1.schedule_date'
+                );
+                $this->db->select($sql_select);
+
+                $this->db->from('orders t1');
+                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+
+                $this->db->where('t1.customer_id',$_POST['customer_id']);
+                $this->db->order_by("t1.created_at", "desc");
+
+                $order_status = array('0','1', '2', '3', '4', '5');
+                $order_type = array('5' ,'6');
+                $this->db->where_in('t1.order_type', $order_type);
+                $this->db->where_in('t1.order_status', $order_status);
+
+                $today = date('Y-m-d');
+                $add_days = 6;
+                $added_date = date('Y-m-d',strtotime($today) + (24*3600*$add_days));
+
+                $this->db->where('DATE(t1.schedule_date) >=', $today);  
+                $this->db->where('DATE(t1.schedule_date) <=', $added_date);  
 
                 $sql_query = $this->db->get();
                 if ($sql_query->num_rows() > 0){

@@ -65,14 +65,14 @@ button:focus {outline: 0;}
 .food-wrapper .food-details .add-to-cart {width: 140px; border: 0; box-shadow: none; color: #fff; outline: 0; height: 35px; font-size: 14px; border-radius: 3px; margin: 0 5px; display: flex; justify-content: center; align-items: center;}
 .food-wrapper .food-details .food-price {background-color: #454346;}
 .food-wrapper .food-details .add-to-cart {background-color: #FE1818;}
-.pagination .page-item {margin: 0 5px; padding: 0;}
+/* .pagination .page-item {margin: 0 5px; padding: 0;}
 .pagination .page-item.active .page-link {background-color: #FD4101; color: #fff;}
 .pagination .page-item .page-link {background-color: #F5F5F5; border: 0; color: #121212; padding: 0; width: 38px; height: 36px; border-radius: 0; display: flex; align-items: center; justify-content: center; box-shadow: none;}
 .restaurants-food nav {overflow: hidden;}
 .pagination {position: relative; margin-bottom: 70px;}
 .pagination:before, .pagination:after {content: ''; display: inline-block; height: 4px; width: 600px; position: absolute; top: 50%; transform: translateY(-50%); border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0;}
 .pagination:before {margin-right: 15px; right: 100%;}
-.pagination:after {margin-left: 15px; left: 100%;}
+.pagination:after {margin-left: 15px; left: 100%;} */
 .mail-subscription-custom-text {margin-bottom: 30px;}
 .mail-subscription .form-control {height: 65px; border-top-right-radius: 0; border-bottom-right-radius: 0; border-right: 0;}
 .mail-subscription .red-btn {height: 65px; border-top-left-radius: 0; border-bottom-left-radius: 0; width: 250px; letter-spacing: 1px;}
@@ -285,7 +285,7 @@ button:focus {outline: 0;}
 /* FAVOURITES */
 .favourites-order-block h3 {text-align: center; font-size: 40px; font-weight: 700; color: #525252; margin-bottom: 30px; text-transform: capitalize;}
 .favourites-order-list::-webkit-scrollbar {width: 0; background: transparent; -ms-overflow-style:none;}
-.favourites-order-list {background-color: #fff; box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.1); border-radius: 15px; padding: 15px 15px 15px 25px; margin-bottom: 40px; height: 910px; -ms-overflow-style: none; overflow: auto; scrollbar-width: none; -ms-overflow-style:none;}
+.favourites-order-list {background-color: #fff; box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.1); border-radius: 15px; padding: 15px 15px 15px 25px; margin-bottom: 40px;  -ms-overflow-style: none; overflow: auto; scrollbar-width: none; -ms-overflow-style:none;}
 .favourites-order-list .site-logo {box-shadow: 0px 1px 6px 3px rgba(0,0,0,0.2); height: 95px; max-width: 115px; border-radius: 10px; object-fit: cover;}
 .favourites-order-list .favourites-order-detail strong {color: #121212;}
 .favourites-order-list .favourites-order-detail .order-name {font-weight: 700; font-size: 18px;}
@@ -308,14 +308,14 @@ button:focus {outline: 0;}
 .order-history-wrapper .filter-block {text-align: center;}
 .order-history-wrapper .filter-block h3 {display: inline-block;}
 .order-history-wrapper .filter-block a.filter {float: right;}
-.modal-with-logo .filter-block .modalform {padding: 0 0 40px; border-radius: 5px; margin-bottom: 40px !important;}
+.modal-with-logo .filter-block .modalform {padding: 0; border-radius: 5px; margin-bottom: 40px !important;}
 .filter-block .filter-by-date {width: 100%; margin-bottom:0px;}
 .filter-block .filter-by-date h3 {background-color: #F0F0F0; color: #525252; border-top-left-radius: 5px; border-top-right-radius: 5px; padding: 12px 20px; font-size: 25px; font-weight: 700; letter-spacing: 1px;}
 .filter-block .filter-by-date .filter-date.form-control {border: 0; border-bottom: 2px solid #a4a4a4; width: 225px; margin: 0 auto; height: 40px; border-radius: 0; color: #a4a4a4; text-align: center; max-width: 100%; font-size: 20px;}
 .filter-block .filter-by-cuisines {width: 100%;}
 .filter-block .filter-by-cuisines h3 {background-color: #F0F0F0; color: #525252; padding: 12px 20px; font-size: 25px; font-weight: 700; letter-spacing: 1px; margin-bottom: 15px;}
 .filter-block .filter-by-cuisines .filter-search.form-control {width: 425px; max-width: 100%; margin: 0 auto; background-color: #F0F0F0; border: 0; height: 50px; border-radius: 25px; padding: 10px 30px 10px 55px; background: #F0F0F0 url('../images/search-grey.png') no-repeat scroll 22px center/20px 20px;}
-.filter-block .filter-items {padding: 0 20px;}
+.filter-block .filter-items {padding: 0 20px; max-height: 200px; overflow: scroll;}
 .modal form.filter-block .form-group {margin-bottom: 15px;}
 .filter-items .form-check-input {-webkit-appearance: none; -moz-appearance: none; -ms-appearance: none; -o-appearance: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; height: 23px; width: 23px; position: relative; border-radius: 5px; cursor: pointer; outline: 0; z-index: 0; margin: -2px 12px 0 -23px !important; padding: 0; border: 3px solid #000; background-color: transparent; vertical-align: middle;}
 .filter-items .form-check-input:checked::before {content: ''; background: transparent url('../images/shape-796.png') no-repeat scroll center/100% auto; width: 17px; height: 18px; display: inline-block;}

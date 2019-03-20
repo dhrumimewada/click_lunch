@@ -298,9 +298,52 @@ class Welcome extends CI_Controller {
 		return TRUE;
 	}
 
-	public function weekly_planner()
+	public function terms_service(){
+		$output_data['main_content'] = 'terms_service';
+		$this->load->view('web/template',$output_data);
+	}
+
+	public function contact_us()
 	{
-		$this->load->view('web/weekly-planner');
+
+		$this->auth->clear_messages();
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
+
+		if (isset($_POST) && !empty($_POST)){
+			if (isset($_POST['submit'])){
+				$validation_rules = array(
+					array('field' => 'name', 'label' => 'full name', 'rules' => 'trim|required|min_length[2]|max_length[50]'),
+					array('field' => 'email', 'label' => 'e-mail', 'rules' => 'trim|required|max_length[225]|valid_email'),
+					array('field' => 'contact_no', 'label' => 'phone number', 'rules' => 'trim|required|min_length[12]|max_length[12]'),
+					array('field' => 'subject', 'label' => 'subject', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'message', 'label' => 'message', 'rules' => 'trim|required|max_length[1000]')
+				);
+				$this->form_validation->set_rules($validation_rules);
+				if ($this->form_validation->run() === true) {
+					if($this->welcome_model->contact_us_post()){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "contact-us");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "contact-us");
+					}	
+				} 
+			}
+		}
+
+		$output_data['main_content'] = 'contact_us';
+		$this->load->view('web/template',$output_data);
+	}
+
+	public function about_us(){
+		$output_data['main_content'] = 'about_us';
+		$this->load->view('web/template',$output_data);
+	}
+
+	public function coming_soon(){
+		$output_data['main_content'] = 'coming_soon';
+		$this->load->view('web/template',$output_data);
 	}
 
 	public function takeout_restaurant()
@@ -369,12 +412,6 @@ class Welcome extends CI_Controller {
 	{
 
 		$this->load->view('web/checkout');
-	}
-
-	public function contact_us()
-	{
-
-		$this->load->view('web/contact-us');
 	}
 
 	public function get_the_app()

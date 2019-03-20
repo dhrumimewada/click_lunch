@@ -524,6 +524,23 @@ li.dropdown.notification-list.last-div:before{
 .modal-content.offer-pop-box{
     margin-top: 90px;
 }
+.favourites-order-block .pagination li{
+    padding: 1px 10px;
+    border: 1px solid #2E2D4D;
+    margin: 8px;
+    color: #2E2D4D;
+    border-radius: 15px;
+}
+.favourites-order-block .pagination li.active, .favourites-order-block .pagination li:hover{
+    background-color: #2E2D4D;
+}
+.favourites-order-block .pagination li.active a, .favourites-order-block .pagination li:hover a{
+    color: #fff;
+    font-weight: 700;
+}
+.favourites-order-block .pagination li a, .favourites-order-list .order-id a:hover{
+    color: #343a40;
+}
 /* Scroll */
 /* width */
 ::-webkit-scrollbar {

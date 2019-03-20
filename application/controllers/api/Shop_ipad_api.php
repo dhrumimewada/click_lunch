@@ -537,6 +537,7 @@ class Shop_ipad_api extends REST_Controller {
                                 't1.id',
                                 't1.total',
                                 't1.order_type',
+                                't1.order_status',
                                 't2.username',
                                 'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
                                 't4.latitude as address_latitude',
@@ -559,27 +560,45 @@ class Shop_ipad_api extends REST_Controller {
                 $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
 
                 $this->db->where('t1.shop_id', $_POST['shop_id']);
+                if($_POST['order_type'] == 1)
+                {
+                	$wh = '(t1.order_type = 1 OR t1.order_type = 2) ';
+                	$this->db->where($wh);                	
+                }
+                else if($_POST['order_type'] == 2)
+                {
+                	$wh = '(t1.order_type = 3 OR t1.order_type = 4) ';
+                	$this->db->where($wh);
+                }
+                else if($_POST['order_type'] == 3)
+                {
+                	$wh = '(t1.order_type = 5 OR t1.order_type = 6) ';
+                	$this->db->where('t1.order_type', $wh);                	
+                }
+
+                
               //  $this->db->where('t1.order_status', 4);
 
-                $this->db->group_start();
-                    $this->db->where('t1.order_type', 1);
-                    $this->db->or_where('t1.order_type', 2);
+                // $this->db->group_start();
+                //     $this->db->where('t1.order_type', 1);
+                //     $this->db->or_where('t1.order_type', 2);
 
-                    $this->db->or_group_start();
-                        $this->db->where('t1.order_type', 5);
-                        $this->db->where('DATE(t1.schedule_date)', date('Y-m-d'));
-                    $this->db->group_end();
+                //     $this->db->or_group_start();
+                //         $this->db->where('t1.order_type', 5);
+                //         $this->db->where('DATE(t1.schedule_date)', date('Y-m-d'));
+                //     $this->db->group_end();
 
-                $this->db->group_end();
+                // $this->db->group_end();
 
-                if($_POST['order_type'] == 1){
-                    $this->db->where('DATE(t1.created_at)', date('Y-m-d'));
-                }else{
-                    $this->db->where('DATE(t1.created_at) !=', date('Y-m-d'));
-                }
+                // if($_POST['order_type'] == 1){
+                //     $this->db->where('DATE(t1.created_at)', date('Y-m-d'));
+                // }else{
+                //     $this->db->where('DATE(t1.created_at) !=', date('Y-m-d'));
+                // }
 
                 $sql_query = $this->db->get();
                 $last_query = $this->db->last_query();
+               // print_r($last_query);exit;
                 if ($sql_query->num_rows() > 0){
                     $orders_data = $sql_query->result_array();     
 
@@ -612,7 +631,7 @@ class Shop_ipad_api extends REST_Controller {
                             }
 
                         }else{
-                            $orders_data[$key]['products'] = '';
+                            // $orders_data[$key]['products'] = '';
                         }
                     }
                     $response['orders_data'] = $orders_data;                   

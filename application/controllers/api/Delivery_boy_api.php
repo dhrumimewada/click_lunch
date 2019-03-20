@@ -510,7 +510,7 @@ class Delivery_boy_api extends REST_Controller {
                 $order = (array)$this->db->get_where('orders',$where)->row();
                 if(empty($order)){
                     $response['status'] = false;
-                    $response['message'] = 'Order not found';    
+                    $response['message'] = 'This order assigned to another delivery boy';    
                 }else{
 
                     if($_POST['accept_reject'] == 0){
@@ -569,6 +569,7 @@ class Delivery_boy_api extends REST_Controller {
                                 't1.id',
                                 't1.total',
                                 't1.order_type',
+                                't1.order_status',
                                 't2.username',
                                 'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
                                 't4.latitude as address_latitude',
@@ -591,7 +592,12 @@ class Delivery_boy_api extends REST_Controller {
                 $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
 
                 $this->db->where('t1.delivery_boy_id', $_POST['delivery_boy_id']);
+
+                $this->db->group_start();
                 $this->db->where('t1.order_status', 4);
+                $this->db->or_where('t1.order_status', 3);
+                $this->db->or_where('t1.order_status', 5);
+                $this->db->group_end();
 
                 $this->db->group_start();
                     $this->db->where('t1.order_type', 1);
@@ -614,7 +620,6 @@ class Delivery_boy_api extends REST_Controller {
                 $last_query = $this->db->last_query();
                 if ($sql_query->num_rows() > 0){
                     $orders_data = $sql_query->result_array();     
-
                     $sql_select = array(
                                     't2.name'
                     );
@@ -682,6 +687,150 @@ class Delivery_boy_api extends REST_Controller {
                 }else{
                     $response['message'] = 'No any order pending';                  
                     $response['status'] = FALSE; 
+                    //$response['last_query'] = $last_query; 
+                }
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+
+        $errorPost = $this->ValidatePostFields($postFields);
+    }
+
+    public function completed_orders_post(){
+        $postFields['delivery_boy_id'] = $_POST['delivery_boy_id']; 
+
+        if(empty($errorPost)){
+
+            $where = array('id' => intval($_POST['delivery_boy_id']) ,'deleted_at' => NULL, 'status' => 1);
+            $delivery_boy = (array)$this->db->get_where('delivery_boy',$where)->row();
+            if(empty($delivery_boy)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';    
+            }else{
+
+                $sql_select = array(
+                                't1.id',
+                                't1.total',
+                                't1.order_type',
+                                't1.order_status',
+                                't2.username',
+                                'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
+                                't4.latitude as address_latitude',
+                                't4.longitude as address_longitude',
+                                't3.shop_name',
+                                't3.address as shop_address',
+                                't3.latitude as shop_latitude',
+                                't3.longitude as shop_longitude',
+                                't3.profile_picture as shop_picture',
+                                'IF(t1.order_type=5, t1.schedule_date, "") as schedule_date',
+                                'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
+                                'IF(t1.order_type=2, t1.later_time, "") as later_time',
+                                't1.created_at'
+                );
+                $this->db->select($sql_select);
+
+                $this->db->from('orders t1');
+                $this->db->join('customer t2', 't1.customer_id = t2.id','left');
+                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+                $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
+
+                $this->db->where('t1.delivery_boy_id', $_POST['delivery_boy_id']);
+
+                $this->db->where('t1.order_status', 6);
+
+                $this->db->group_start();
+                    $this->db->where('t1.order_type', 1);
+                    $this->db->or_where('t1.order_type', 2);
+
+                    $this->db->or_group_start();
+                        $this->db->where('t1.order_type', 5);
+                        $this->db->where('DATE(t1.schedule_date)', date('Y-m-d'));
+                    $this->db->group_end();
+
+                $this->db->group_end();
+
+                if($_POST['order_type'] == 1){
+                    $this->db->where('DATE(t1.created_at)', date('Y-m-d'));
+                }else{
+                    $this->db->where('DATE(t1.created_at) !=', date('Y-m-d'));
+                }
+
+                $sql_query = $this->db->get();
+                $last_query = $this->db->last_query();
+                if ($sql_query->num_rows() > 0){
+                    $orders_data = $sql_query->result_array();     
+                    $sql_select = array(
+                                    't2.name'
+                    );
+
+                    foreach ($orders_data as $key => $value) {
+                        $this->db->select($sql_select);
+                        $this->db->from('order_items t1');
+                        $this->db->where('t1.order_id', $value['id']);
+                        $this->db->join('item t2', 't1.item_id = t2.id','left');
+                        $sql_query = $this->db->get();
+                        if ($sql_query->num_rows() > 0){
+                            $products_data = $sql_query->result_array();   
+                            $products = array_column($products_data, 'name');
+                            $orders_data[$key]['products'] = implode(', ', $products);
+
+                            $pickup_minutes = $this->config->item("pickup_minutes");
+                            $delivery_minutes = $this->config->item("delivery_minutes");
+
+                            if($value['order_type'] == 1){
+
+                                $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
+                                $my_date2 = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
+                                $pickup_time = $my_date->add(new DateInterval('PT'.$pickup_minutes.'M'));
+                                $delivery_time = $my_date2->add(new DateInterval('PT'.$delivery_minutes.'M'));
+
+                                $orders_data[$key]['order_date'] = $value['created_at'];
+                                $orders_data[$key]['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
+                                $orders_data[$key]['delivery_time'] = $delivery_time->format('Y-m-d H:i:s');
+
+                            }else if($value['order_type'] == 2){
+
+                                $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
+                                $created_date = $my_date->format('Y-m-d');
+                                $later_datetime = DateTime::createFromFormat('Y-m-d h:i A', $created_date.' '.$value['later_time']);
+                                $later_datetime2 = DateTime::createFromFormat('Y-m-d h:i A', $created_date.' '.$value['later_time']);
+
+                                $pickup_time = $later_datetime2->sub(new DateInterval('PT'.$delivery_minutes.'M'));
+
+                                $orders_data[$key]['order_date'] = $value['created_at'];
+                                $orders_data[$key]['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
+                                $orders_data[$key]['delivery_time'] = $later_datetime->format('Y-m-d H:i:s');
+
+                            }else if($value['order_type'] == 5){
+
+                                $my_date = DateTime::createFromFormat('Y-m-d h:i A', $value['schedule_date'].' '.$value['schedule_time']);
+                                $my_date2 = DateTime::createFromFormat('Y-m-d h:i A', $value['schedule_date'].' '.$value['schedule_time']);
+                                $pickup_time = $my_date->sub(new DateInterval('PT'.$delivery_minutes.'M'));
+
+                                $orders_data[$key]['order_date'] = $value['created_at'];
+                                $orders_data[$key]['pickup_time'] = $pickup_time->format('Y-m-d H:i:s');
+                                $orders_data[$key]['delivery_time'] = $my_date2->format('Y-m-d H:i:s');
+
+                            }else{
+
+                                $orders_data[$key]['pickup_time'] = '';
+                                $orders_data[$key]['delivery_time'] = '';
+                            }
+
+                        }else{
+                            $orders_data[$key]['products'] = '';
+                        }
+                    }
+                    $response['orders_data'] = $orders_data;                   
+                    $response['status'] = TRUE;                  
+                }else{
+                    $response['message'] = 'No any order pending';                  
+                    $response['status'] = FALSE; 
+                    //$response['last_query'] = $last_query; 
                 }
             }
 
@@ -887,7 +1036,7 @@ class Delivery_boy_api extends REST_Controller {
                 $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
 
                 $this->db->where('t1.id', $_POST['order_id']);
-                $this->db->where('t1.order_status', 4);
+                //$this->db->where('t1.order_status', 4);
 
                 // $this->db->group_start();
                 //     $this->db->where('t1.order_type', 1);

@@ -69,15 +69,6 @@ jQuery(function() {
 
 });
 
-jQuery(function() {
-
-    if($('#userdob').length)
-    {
-        $('#userdob').datepicker();
-    }
-});
-
-
 $(function () {
                 var startDate = new Date();
                 var fechaFin = new Date();

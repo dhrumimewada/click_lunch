@@ -353,14 +353,117 @@ class Profile extends CI_Controller {
 	}
 
 	public function order_history(){
+		$this->load->library('pagination');
 
 		$order = $this->profile_model->order_history();
+
+		$config['base_url'] = base_url().'order-history';
+		$config['total_rows'] = count($order);
+		$config['per_page'] = 8;
+		$config["uri_segment"] = 2;
+
+		$config['full_tag_open'] = "<ul class='pagination'>";
+	    $config['full_tag_close'] = '</ul>';
+	    $config['num_tag_open'] = '<li>';
+	    $config['num_tag_close'] = '</li>';
+	    $config['cur_tag_open'] = '<li class="active"><a href="#">';
+	    $config['cur_tag_close'] = '</a></li>';
+	    $config['prev_tag_open'] = '<li>';
+	    $config['prev_tag_close'] = '</li>';
+	    $config['first_tag_open'] = '<li>';
+	    $config['first_tag_close'] = '</li>';
+	    $config['last_tag_open'] = '<li>';
+	    $config['last_tag_close'] = '</li>';
+
+	    $config['prev_link'] = '<i class="mdi mdi-chevron-left mdi-24px"></i>';
+	    $config['prev_tag_open'] = '<li>';
+	    $config['prev_tag_close'] = '</li>';
+
+	    $config['next_link'] = '<i class="mdi mdi-chevron-right mdi-24px"></i>';
+	    $config['next_tag_open'] = '<li>';
+	    $config['next_tag_close'] = '</li>';
+
+		$this->pagination->initialize($config);
+
+		$page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
+		$output_data["links"] = $this->pagination->create_links();
+
+		
 
 		// echo "<pre>";
 		// print_r($order);
 		// exit;
-		$output_data["order"] = $order;
+		$output_data["order"] = $this->profile_model->order_history($config["per_page"], $page);
 		$output_data['main_content'] = 'order_history';
+		$this->load->view('web/template',$output_data);
+	}
+
+	public function favourite_status_update(){
+
+		$is_success = false;
+		if (isset($_POST['id']) && !is_null($_POST['id']) && !empty($_POST['id'])) {
+
+			$user_data = array('favourite' => $_POST['status']);
+			$this->db->where('id', $_POST['id']);
+			if($this->db->update('orders', $user_data)){
+				$is_success = true;
+			}
+		}
+		echo json_encode(array("is_success" => $is_success));
+		return $is_success;
+	}
+
+	public function get_cuisine(){
+		$is_success = false;
+		$data = array();
+
+		$this->db->select('id,cuisine_name');
+		$this->db->from('cuisine');
+		$this->db->where("deleted_at", NULL);
+		$this->db->where("is_active", 1);
+
+		if(isset($_POST['str']) && $_POST['str'] != ''){
+			$this->db->where("cuisine_name LIKE '%".$_POST['str']."%'");
+		}
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$data = $sql_query->result_array();
+			$is_success = true;
+		}
+
+		echo json_encode(array("is_success" => $is_success, "data" => $data));
+		return $is_success;
+	}
+
+	public function get_order_history_filtered(){
+		//$is_success = false;
+		$is_success = true;
+		$mydate = '';
+
+		if($_POST['date'] != ''){
+			$date = DateTime::createFromFormat('d/m/Y', $_POST['date']);
+			$mydate = $date->format('Y-m-d');
+		}
+
+		if($_POST['cuisines'] == NULL){
+			$filter_data = array();
+		}else{
+			$filter_data = $this->profile_model->order_history(NULL,NULL, $mydate, $_POST['cuisines']);
+		}
+		
+		echo json_encode(array("is_success" => $is_success, "filter_data" => $filter_data, 'date' => $mydate , 'cuisines' => $_POST['cuisines']));
+		return $is_success;
+
+	}
+
+	public function get_favourite_orders(){
+		$fav = true;
+		$output_data["order"] = $this->profile_model->order_history(NULL, NULL, NULL, array(), $fav);
+
+		// echo "<pre>";
+		// print_r($output_data["order"]);
+		// exit;
+		$output_data['main_content'] = 'favourite_orders';
 		$this->load->view('web/template',$output_data);
 	}
 

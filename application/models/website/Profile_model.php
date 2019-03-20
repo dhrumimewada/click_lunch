@@ -308,6 +308,7 @@ class Profile_model extends CI_Model {
                 $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
 
                 $this->db->where('t1.id', $id);
+                $this->db->where('t1.customer_id',$this->auth->get_user_id());
                 $sql_query = $this->db->get();
 
                 if ($sql_query->num_rows() > 0){
@@ -333,7 +334,7 @@ class Profile_model extends CI_Model {
         return $return_data;
     }
 
-    public function order_history(){
+    public function order_history($limit = NULL, $start = NULL, $date = NULL, $cuisines = array(), $fav = false){
         
         $return_data = array();
 
@@ -353,19 +354,25 @@ class Profile_model extends CI_Model {
         $this->db->from('orders t1');
         $this->db->join('shop t3', 't1.shop_id = t3.id','left');
 
-        // if(isset($_POST['cuisines']) && !is_null($_POST['cuisines']) && $_POST['cuisines'] != ''){
-        //     $cuisines = explode(',', $_POST['cuisines']);
-        //     $this->db->join('order_items t4', 't1.id = t4.order_id','left');
-        //     $this->db->join('item t5', 't4.item_id = t5.id','left');
-        //     $this->db->where_in('t5.cuisine_id',$cuisines);
-        //     $response['cuisines'] = $cuisines;
-        // }
+        if(isset($cuisines) && is_array($cuisines) && !empty($cuisines)){
+            $this->db->join('order_items t4', 't1.id = t4.order_id','left');
+            $this->db->join('item t5', 't4.item_id = t5.id','left');
+            $this->db->where_in('t5.cuisine_id',$cuisines);
+        }
 
-        // if(isset($_POST['date']) && !is_null($_POST['date']) && $_POST['date'] != ''){
-        //     $this->db->where('DATE(t1.created_at)', $_POST['date']);
-        // }
+        if(isset($date) && !is_null($date) && $date != ''){
+            $this->db->where('DATE(t1.created_at)', $date);
+        }
         $this->db->where('t1.customer_id',$this->auth->get_user_id());
         $this->db->order_by("t1.created_at", "desc");
+
+        if(isset($limit) && isset($start) && !is_null($limit) && !is_null($start)){
+            $this->db->limit($limit, $start);
+        }
+
+        if(isset($fav) && $fav == TRUE){
+            $this->db->where('t1.favourite',1);
+        }
 
         // $limit = 10; // messages per page
         // if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
@@ -386,6 +393,7 @@ class Profile_model extends CI_Model {
             $return_data = $sql_query->result_array();
         }
 
+        //return $this->db->last_query();
         return $return_data;
     }
 }

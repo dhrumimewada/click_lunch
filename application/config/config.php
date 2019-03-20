@@ -521,7 +521,7 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
-$config['profile_path'] = 'assets\files\profile_pictures';
+$config['profile_path'] = 'assets/files/profile_pictures';
 $config['customer_profile_path'] = 'assets\files\customer_profile_pictures';
 $config['brochure_path'] = 'assets\files\shop_brochures';
 $config['banner_photo_path'] = 'assets\files\banners';

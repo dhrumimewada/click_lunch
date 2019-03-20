@@ -290,7 +290,7 @@
                      
                   </div>
               <div class="form-actions d-flex justify-content-center">
-                  <a href="<?php echo BASE_URL(); ?>web/home" class="white-btn back-home-btn text-center" id="back-home-btn">Back to home</a>
+                  <a href="<?php echo BASE_URL(); ?>welcome" class="white-btn back-home-btn text-center" id="back-home-btn">Back to home</a>
               </div>
           </div>
       </div>

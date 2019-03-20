@@ -211,7 +211,7 @@ if($is_admin){
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Orders <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="<?php echo base_url().'order-new'; ?>">Pending</a></li>
+                        <li><a href="<?php echo base_url().'order-single-assign'; ?>">Pending</a></li>
                         <li><a href="<?php echo base_url().'maintenance6'; ?>">Scheduled</a></li>
                         <li><a href="<?php echo base_url().'order-processing'; ?>">Processing</a></li>
                         <li><a href="<?php echo base_url().'maintenance7'; ?>">Completed</a></li>
@@ -273,6 +273,11 @@ if($is_admin){
                 <li>
                     <a href="<?php echo base_url().'popular-location-list'; ?>" class="waves-effect">
                         <i class="mdi mdi-map-marker-multiple"></i><span> Popular Location </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?php echo base_url().'contact-us-data'; ?>" class="waves-effect">
+                        <i class="mdi mdi-message-text"></i><span> Contact Us </span>
                     </a>
                 </li>
                 <li>

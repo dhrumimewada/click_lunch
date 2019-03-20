@@ -564,4 +564,29 @@ class Welcome_model extends CI_Model {
 		}
 		return $return_data;
     }
+
+    public function contact_us_post(){
+
+		$this->db->trans_begin();
+		$return_value = FALSE;
+		$user_data = array(
+						'name' => ucwords(addslashes($this->input->post("name"))),
+						'email' => $this->input->post("email"),
+						'subject' => addslashes($this->input->post("subject")),
+						'contact_no' => $this->input->post("contact_no"),
+						'message' => addslashes($this->input->post("message"))
+					);
+		$this->db->insert("contact_us", $user_data);
+		
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+			$this->auth->set_error_message("Error into submitting form. Please try again");
+		} else {
+			$this->db->trans_commit();
+			$this->auth->set_status_message("Thanks for contacting us. we'll get back to you shortly");
+			$return_value = TRUE;
+		}
+
+		return $return_value;
+    }
 }

@@ -276,7 +276,8 @@ $route['popular-location-list'] = 'admin/popular_location/index';
 $route['popular-location-add'] = 'admin/popular_location/post';  
 $route['popular-location-delete'] = 'admin/popular_location/delete';
 
-
+$route['contact-us-data'] = 'admin/contact_us/index'; 
+$route['contact-us-delete'] = 'admin/contact_us/delete'; 
 
 //Dispatcher
 $route['login-dispatcher'] = 'dispatcher/dispatcher_login/login';
@@ -370,6 +371,17 @@ $route['place-order'] = 'web/checkout/place_order';
 $route['order-success/(:any)'] = 'web/checkout/order_success/$1';
 
 $route['order-history'] = 'web/profile/order_history';
+$route['order-history/(:num)'] = 'web/profile/order_history';
+$route['favourite-status-update'] = 'web/profile/favourite_status_update';
+$route['get-cuisine'] = 'web/profile/get_cuisine';
+$route['get-order-history-filtered'] = 'web/profile/get_order_history_filtered';
+
+$route['terms-of-service'] = 'web/welcome/terms_service';
+$route['about-us'] = 'web/welcome/about_us';
+$route['contact-us'] = 'web/welcome/contact_us';
+$route['coming-soon'] = 'web/welcome/coming_soon';
+
+$route['favourite-orders'] = 'web/profile/get_favourite_orders';
 
 
 

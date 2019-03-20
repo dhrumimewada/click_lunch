@@ -112,7 +112,7 @@ if($is_customer){
                                         </li>
                                         <li class="nav-item dropdown drop-down-icon">
                                             <div class="sub-list">
-                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
+                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>favourite-orders">
                                                     <img src="<?php echo $assets; ?>images/favorite-heart-button.png">
                                                     <span>Favourites</span>
                                                 </a>
@@ -120,7 +120,7 @@ if($is_customer){
                                         </li>
                                         <li class="nav-item dropdown drop-down-icon">
                                             <div class="sub-list">
-                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
+                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>coming-soon">
                                                     <img src="<?php echo $assets; ?>images/calendar-weekly.png">
                                                     <span>Weekly Planner</span>
                                                 </a>
@@ -128,7 +128,7 @@ if($is_customer){
                                         </li>
                                         <li class="nav-item dropdown drop-down-icon">
                                             <div class="sub-list">
-                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
+                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>coming-soon">
                                                     <img src="<?php echo $assets; ?>images/Group-Order.png">
                                                     <span>Group Order</span>
                                                 </a>
@@ -144,7 +144,7 @@ if($is_customer){
                                         </li>
                                         <li class="nav-item dropdown drop-down-icon">
                                             <div class="sub-list">
-                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>welcome">
+                                                <a class="dropdown-item drop-down-icon" href="<?php echo BASE_URL(); ?>about-us">
                                                     <img src="<?php echo $assets; ?>images/About-US.png">
                                                     <span>About Us</span>
                                                 </a>

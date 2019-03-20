@@ -16,14 +16,14 @@
         <div class="footer-content">
             <div class="footer-menu">
                <ul>
-                    <li><a href="<?php echo BASE_URL(); ?>web/home/contact_us">Contact Us</a></li>
-                    <li><a href="<?php echo BASE_URL(); ?>web/home/restaurant_partner">Restaurant Partners</a></li>
-                    <li><a href="<?php echo BASE_URL(); ?>web/home/terms_of_service">Terms of Service</a></li>
-                    <li><a href="<?php echo BASE_URL(); ?>web/home/faq">FAQ</a></li>
+                    <li><a href="<?php echo BASE_URL(); ?>contact-us">Contact Us</a></li>
+                    <li><a href="<?php echo BASE_URL(); ?>restaurant-partner-form">Restaurant Partners</a></li>
+                    <li><a href="<?php echo BASE_URL(); ?>terms-of-service">Terms of Service</a></li>
+                    <li><a href="<?php echo BASE_URL(); ?>faq">FAQ</a></li>
                 </ul>
             </div>
             <div class="copyright text-center">
-                <span>&copy; 2018 - www.<a href="<?php echo BASE_URL(); ?>web/home">ClickLunch</a>.com. All rights reserved</span>
+                <span>&copy; 2018 - www.<a href="<?php echo BASE_URL(); ?>welcome">ClickLunch</a>.com. All rights reserved</span>
             </div>
         </div>
     </div>

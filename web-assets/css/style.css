@@ -483,12 +483,8 @@ td.list-total { font-weight: 900;}
 .txt-red{ font-weight: 700; }
 
 /* sani list-hover*/
-.restaurant-hover-img.like {
-    border-right: 1px solid #cccccc61;
-}
-.restaurant-hover-list { position: absolute; top: 30px; left: 50px; background: #fff; padding: 0; border-radius: 25px;}
 .restaurant-hover-img { display: inline-block; padding: 12px 15px;}
-.restaurant-hover-list { position: absolute; top: 50px; left: 50%; background: #fff; padding: 0; border-radius: 25px; transform: translate(-50%);}
+.restaurant-hover-list { position: absolute; top: 50px; left: 50%; background: rgba(177, 177, 177, 0.5); padding: 0; border-radius: 25px; transform: translate(-50%);}
 .restaurant-hover{ display: none;  }
 .card:hover .restaurant-hover{ display: block; }
 .thank-u-pop .add-new-address-block .form-check { padding-left: 0; margin-right: 20px;}
@@ -533,8 +529,6 @@ td.list-total { font-weight: 900;}
 .home-banner { position: relative;}
 
 .social-links ul li a {display: block;}
-
-
 .social-links ul li a img.hover-img { display: none;}
 .social-links ul li a:hover .hover-img{ display: block;}
 .social-links ul li a:hover .normal-img{ display: none;}
@@ -543,8 +537,6 @@ img.hover-icon {
     display: none;
 }
 .social-links.social-lins-mobile {display: none;}
-
-
 
 .social-links ul li a.fb-icon { background:url(../images/Facebook-Icon.png) no-repeat; width: 20px; height: 20px;}
 .social-links ul li:hover a.fb-icon-hover { background:url(../images/fb-hover.png) no-repeat; width: 20px; height: 20px; }

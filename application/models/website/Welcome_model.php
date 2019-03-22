@@ -6,7 +6,7 @@ class Welcome_model extends CI_Model {
 		$this->load->library('cart');
 	}
 
-	public function get_shops($short_name = NULL){
+	public function get_shops($short_name = NULL, $cuisine_id = NULL, $pickup = NULL, $popular = NULL){
 		$return_data = array();
 		$this->db->select('t1.id,t1.shop_name,t1.short_name,t1.profile_picture,t1.order_by_time,t1.delivery_time, t1.contact_no1,CONCAT(t1.city, ", ", t1.zip_code, ", ", t1.state) as address');
 		$this->db->from('shop t1');
@@ -14,6 +14,15 @@ class Welcome_model extends CI_Model {
 		$this->db->where("t1.deleted_at", NULL);
 		$this->db->group_by('t2.shop_id');
 		$this->db->where("t1.status", 1);
+		if (isset($cuisine_id) && !is_null($cuisine_id)) {
+			$this->db->where('t2.cuisine_id',$cuisine_id);
+		}
+		if (isset($pickup) && !is_null($pickup)) {
+			$this->db->group_start();
+			$this->db->where('t1.takeout_delivery_status',2);
+			$this->db->or_where('t1.takeout_delivery_status',3);
+			$this->db->group_end();
+		}
 		if (isset($short_name) && !is_null($short_name)) {
 			$this->db->where('t1.short_name',$short_name);
 		}
@@ -23,7 +32,7 @@ class Welcome_model extends CI_Model {
 			foreach ($return_data as $key => $value) {
 
 				// get cuisines of shop
-				$sql_select = array("t2.cuisine_name");
+				$sql_select = array("t2.cuisine_name","t1.cuisine_id");
 				$this->db->select($sql_select);
 				$this->db->from('shop_cuisines t1');
 				$this->db->where("t1.shop_id", $value['id']);
@@ -31,9 +40,16 @@ class Welcome_model extends CI_Model {
 				$sql_query = $this->db->get();
 				if ($sql_query->num_rows() > 0){
 					$cuisines_data = $sql_query->result_array();
-					$cuisine_list = array_column($cuisines_data, 'cuisine_name');
-					$cuisines = implode(', ', $cuisine_list);
-					$return_data[$key]['cuisine'] = $cuisines;
+					$return_data[$key]['cuisine'] = $cuisines_data;
+				}
+
+				$this->db->select('day, from_time, to_time, full_day, is_closed');
+				$this->db->from('shop_availibality');
+				$this->db->where("shop_id", $value['id']);
+				$this->db->where("day", date('l'));
+				$sql_query = $this->db->get();
+				if ($sql_query->num_rows() > 0){
+					$return_data[$key]['availibality'] = (array)$sql_query->row();
 				}
 			}
 		}

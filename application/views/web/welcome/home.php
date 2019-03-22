@@ -1,3 +1,8 @@
+<style type="text/css" media="screen">
+   .tab-content>.active{
+        display: inline-flex !important;
+   } 
+</style>
 <!-- SLider Start-->
 <?php
 if(isset($banner_list) && !empty($banner_list)){
@@ -59,16 +64,6 @@ if(isset($banner_list) && !empty($banner_list)){
                         ?>
 
                     </div>
-
-
-                    <!-- <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a> -->
                 </div>
                 <div class="social-links">
                     <ul>
@@ -127,6 +122,7 @@ if(isset($banner_list) && !empty($banner_list)){
 }
 ?>
 <!-- Slider End -->
+
 <div class="row mr-0 ml-0 mb-5  grey-bg" id="offers">
     <div class="container">
         <div class="offer-title text-center">
@@ -135,11 +131,16 @@ if(isset($banner_list) && !empty($banner_list)){
         <div class="home-filter-list">
             <div class="home-filter-box">
                 <ul class="nav nav-pills mb-3 list-filter" id="pills-tab" role="tablist">
-
+                    <?php
+                    $all_cuisines_url = base_url() . 'web-assets/images/all.png';
+                    ?>
+                    <li class="nav-item">                            
+                        <a class="nav-link active" id="" data-toggle="pill" href="" role="tab" aria-controls="" aria-selected="true"><img src="<?php echo $all_cuisines_url; ?>">All</a>
+                    </li>   
                     <?php
                     foreach ($cuisines as $key => $value) {
-                        $active = ($key == 0)?'active':'';
-                        $photo_url = base_url() . 'assets/images/default/cuisine.jpg';
+                        //$active = ($key == 0)?'active':'';
+                        $photo_url = base_url() . 'web-assets/images/all.png';
                         if (isset($value['cuisine_picture']) && ($value['cuisine_picture'] != '')) {
                             if (file_exists($this->config->item("cuisine_photo_path") . '/'.$value['cuisine_picture'])){
                                 $photo_url = base_url() . $this->config->item("cuisine_photo_path") . '/'.$value['cuisine_picture'];
@@ -175,6 +176,7 @@ if(isset($banner_list) && !empty($banner_list)){
                                         <label  for="#review-star1" class="review-icon"><img src="<?php echo $assets; ?>images/bookmark-star.png"></label>
                                     <select class="form-control review-star" id="review-star1">                                     
                                          <option class="sort-dev" value="Over" disabled selected hidden data-imagesrc="<?php echo $assets; ?>images/01.png">4.5</option>       
+                                         <option selected value='' >all</option>
                                          <option value="1" >1</option>
                                          <option value="1" >1.5</option>
                                          <option value="2" >2</option>
@@ -189,12 +191,12 @@ if(isset($banner_list) && !empty($banner_list)){
                                 </div>                           
                         </div>                        
                         <div class="form-check form-check-inline  Pickup-check delivery">
-                            <input class="form-check-input" type="checkbox" id="Pickup1" value="option1" name="Pickup">
-                            <label class="form-check-label" for="Pickup1">Pickup</label>
+                            <input class="form-check-input filter" type="checkbox" id="filter-pickup" value="1" name="filter-pickup">
+                            <label class="form-check-label" for="filter-pickup">Pickup</label>
                         </div>
                         <div class="form-check form-check-inline  Pickup-check delivery">
-                            <input class="form-check-input" type="checkbox" id="Popular1" value="option1" name="Pickup">
-                            <label class="form-check-label" for="Popular1">Popular</label>
+                            <input class="form-check-input filter" type="checkbox" id="filter-popular" value="1" name="filter-popular">
+                            <label class="form-check-label" for="filter-popular">Popular</label>
                         </div>
                         <div class="form-check form-check-inline  Pickup-check delivery">
                             <input class="form-check-input" type="checkbox" id="Vegetarian1" value="option1" name="Pickup">
@@ -214,64 +216,178 @@ if(isset($banner_list) && !empty($banner_list)){
             </div>
     </div> 
         <div class="offer-title2 mt-5">
-            <div class="text-center">
-                <label class="label1 mr-3"><a href="#">Combo Offers</a></label>
-                <label class="label2 mr-3 active"><a href="#">Nearby Restaurant</a></label>
-                <!-- <label class="fliter mr-3"><a href="#address-pop" data-toggle="modal"><img src="images/filter.png"></a></label> -->
-            </div>
+            <ul class="nav nav-tabs justify-content-center border-bottom-0" id="home-tabs" role="tablist">
+                <li class="nav-item mr-3">
+                    <a class="nav-link" id="combo-tab" data-toggle="tab" href="#combo" role="tab" aria-controls="combo" aria-selected="false">Combo Offers</a>
+                </li>
+                <li class="nav-item mr-3">
+                    <a class="nav-link active" id="nearby-tab" data-toggle="tab" href="#nearby" role="tab" aria-controls="nearby" aria-selected="true">Nearby Restaurant</a>
+                </li>
+            </ul>
         </div>
-        <div class="restaurant row mt-4">
-            <?php
-            foreach ($shops as $key => $value) {
-                $photo_url = base_url() . 'assets/images/default/cuisine.jpg';
-                if (isset($value['profile_picture']) && ($value['profile_picture'] != '')) {
-                    if (file_exists($this->config->item("profile_path") . '/'.$value['profile_picture'])){
-                        $photo_url = base_url() . $this->config->item("profile_path") . '/'.$value['profile_picture'];
-                    }
-                }
-            ?>
-            <div class="col-lg-3 px-2">
-                <div class="card">
-                    <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>">
-                        <div class="restaurant-img position-relative">
-                            <img class="card-img-top" src="<?php echo $photo_url; ?>" alt="Card image cap">
-                            <div class="rating txt1">Ratings</div>
-                            <div class="rating txt2 txt-red">4.2</div>
-                        </div>
-                        <div class="card-body restaurant-body">
-                                <div class="card-title txt-red font-md text-center cut-text">
-                                    <?php echo stripcslashes($value['shop_name']); ?>
+        <div class="tab-content">
+            <div class="tab-pane fade show active restaurant row mt-4" id="nearby" role="tabpanel" aria-labelledby="nearby-tab">
+                <?php
+                if(isset($shops) && !empty($shops)){
+                    foreach ($shops as $key => $value){
+                        $photo_url = base_url() . 'web-assets/images/logo-3.png';
+                        if (isset($value['profile_picture']) && ($value['profile_picture'] != '')) {
+                            if (file_exists($this->config->item("profile_path") . '/'.$value['profile_picture'])){
+                                $photo_url = base_url() . $this->config->item("profile_path") . '/'.$value['profile_picture'];
+                            }
+                        }
+                        ?>
+                    <div class="col-lg-3 px-2">
+                        <div class="card">
+                            <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>">
+                                <div class="restaurant-img position-relative">
+                                    <img class="card-img-top" src="<?php echo $photo_url; ?>" alt="Card image cap">
+                                    <div class="rating txt1">Ratings</div>
+                                    <div class="rating txt2 txt-red">4.2</div>
                                 </div>
-                                <b>
-                                    <div class="d-inline-block txt-black font-small">Delivery <?php echo $value['delivery_time']; ?></div>
-                                    <div class="d-inline-block txt-black float-right font-small">Order by <?php echo $value['order_by_time']; ?></div>
-                                </b>
-                                <?php
-                                if(isset($value['cuisine']) && $value['cuisine'] != ''){
-                                ?>
-                                <div class="position-relative txt-black font-14 pl-4 cusion cut-text">
-                                    <?php echo $value['cuisine']; ?>
+                                <div class="card-body restaurant-body">
+                                        <div class="card-title txt-red font-md text-center cut-text">
+                                            <?php echo stripcslashes($value['shop_name']); ?>
+                                        </div>
+                                        <b>
+                                            <div class="d-inline-block txt-black font-small">Delivery <?php echo $value['delivery_time']; ?></div>
+                                            <div class="d-inline-block txt-black float-right font-small">Order by <?php echo $value['order_by_time']; ?></div>
+                                        </b>
+                                        <?php
+                                        if(isset($value['cuisine']) && $value['cuisine'] != ''){
+                                        ?>
+                                        <div class="position-relative txt-black font-14 pl-4 cusion cut-text">
+                                            <?php
+                                            $total = count($value['cuisine']) - 1;
+                                            foreach ($value['cuisine'] as $key1 => $value1) {
+                                                echo '<span data-id="'.$value1['cuisine_id'].'" data-toggle="tooltip" data-placement="bottom" title="View all '.$value1['cuisine_name'].' Restaurants" class="search-cuisine d-inline-block pointer">'.$value1['cuisine_name'].'</span>';
+                                                if($key1 != $total){
+                                                    echo ', ';
+                                                }
+                                            }
+                                            ?>
+                                        </div>
+                                        <?php
+                                        }
+                                        ?>
+                                        <div class="card-text txt-black font-11">
+                                            <?php
+                                            if($value['availibality']['is_closed'] == 1){
+                                                echo $time = 'TODAY CLOSED';
+                                            }else if($value['availibality']['full_day'] == 1){
+                                                echo $time = 'FULL DAY OPEN';
+                                            }else if($value['availibality']['from_time'] != '' && $value['availibality']['to_time'] != ''){
+                                                echo $time = $value['availibality']['from_time'].' to '.$value['availibality']['to_time'];
+                                            }else{
+                                                echo '&nbsp;';
+                                            }
+                                            ?>
+                                        </div>
+                                        <!-- <div class="text-right txt-black mt-1"><b>0.71mi</b></div> -->
                                 </div>
-                                <?php
-                                }
-                                ?>
-                                <div class="card-text txt-black font-11">11:00am to 15:00pm / 18:30am to 22:30am</div>
-                                <div class="text-right txt-black mt-1"><b>0.71mi</b></div>
-                        </div>
-                        <div class="restaurant-hover">
-                            <div class="restaurant-hover-list">
-                                 <div class="restaurant-hover-img">
-                                    <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>"><img src="<?php echo $assets; ?>images/zoom-in-out.png"></a>
+                                <div class="restaurant-hover">
+                                    <div class="restaurant-hover-list">
+                                         <div class="restaurant-hover-img">
+                                            <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>"><img src="<?php echo $assets; ?>images/zoom-in-out.png"></a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
-            </div>
+                    </div>
 
-            <?php
-            }
-            ?>
+                <?php
+                    }
+                }else{
+                ?>
+                <div class="text-muted no-shops-found">
+                    No any restaurant found
+                </div>
+                <?php
+                }
+                ?>
+            </div>
+            <div class="tab-pane fade restaurant row mt-4" id="combo" role="tabpanel" aria-labelledby="combo-tab">
+                <?php
+                if(isset($combo_shops) && !empty($combo_shops)){
+                    foreach ($combo_shops as $key => $value){
+                        $photo_url = base_url() . 'web-assets/images/logo-3.png';
+                        if (isset($value['profile_picture']) && ($value['profile_picture'] != '')) {
+                            if (file_exists($this->config->item("profile_path") . '/'.$value['profile_picture'])){
+                                $photo_url = base_url() . $this->config->item("profile_path") . '/'.$value['profile_picture'];
+                            }
+                        }
+                        ?>
+                    <div class="col-lg-3 px-2">
+                        <div class="card">
+                            <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>">
+                                <div class="restaurant-img position-relative">
+                                    <img class="card-img-top" src="<?php echo $photo_url; ?>" alt="Card image cap">
+                                    <div class="rating txt1">Ratings</div>
+                                    <div class="rating txt2 txt-red">4.2</div>
+                                </div>
+                                <div class="card-body restaurant-body">
+                                        <div class="card-title txt-red font-md text-center cut-text">
+                                            <?php echo stripcslashes($value['shop_name']); ?>
+                                        </div>
+                                        <b>
+                                            <div class="d-inline-block txt-black font-small">Delivery <?php echo $value['delivery_time']; ?></div>
+                                            <div class="d-inline-block txt-black float-right font-small">Order by <?php echo $value['order_by_time']; ?></div>
+                                        </b>
+                                        <?php
+                                        if(isset($value['cuisine']) && $value['cuisine'] != ''){
+                                        ?>
+                                        <div class="position-relative txt-black font-14 pl-4 cusion cut-text">
+                                            <?php
+                                            $total = count($value['cuisine']) - 1;
+                                            foreach ($value['cuisine'] as $key1 => $value1) {
+                                                echo '<span data-id="'.$value1['cuisine_id'].'" data-toggle="tooltip" data-placement="bottom" title="View all '.$value1['cuisine_name'].' Restaurants" class="search-cuisine d-inline-block pointer">'.$value1['cuisine_name'].'</span>';
+                                                if($key1 != $total){
+                                                    echo ', ';
+                                                }
+                                            }
+                                            ?>
+                                        </div>
+                                        <?php
+                                        }
+                                        ?>
+                                        <div class="card-text txt-black font-11">
+                                            <?php
+                                            if($value['availibality']['is_closed'] == 1){
+                                                echo $time = 'TODAY CLOSED';
+                                            }else if($value['availibality']['full_day'] == 1){
+                                                echo $time = 'FULL DAY OPEN';
+                                            }else if($value['availibality']['from_time'] != '' && $value['availibality']['to_time'] != ''){
+                                                echo $time = $value['availibality']['from_time'].' to '.$value['availibality']['to_time'];
+                                            }else{
+                                                echo '&nbsp;';
+                                            }
+                                            ?>
+                                        </div>
+                                        <!-- <div class="text-right txt-black mt-1"><b>0.71mi</b></div> -->
+                                </div>
+                                <div class="restaurant-hover">
+                                    <div class="restaurant-hover-list">
+                                         <div class="restaurant-hover-img">
+                                            <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>"><img src="<?php echo $assets; ?>images/zoom-in-out.png"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                <?php
+                    }
+                }else{
+                ?>
+                <div class="text-muted no-shops-found">
+                    No any combo restaurant found
+                </div>
+                <?php
+                }
+                ?>
+            </div>
         </div>
     </div>
 </div>
@@ -489,10 +605,21 @@ if(isset($banner_list) && !empty($banner_list)){
 <script type="text/javascript">
 var latitude = '<?php echo $_SESSION['lat']; ?>';
 var longitude = '<?php echo $_SESSION['long']; ?>';
+
+var get_shop_data_url = "<?php echo base_url().'get-shops-by-filter'; ?>";
+var photo_url = '<?php echo base_url() . $this->config->item("profile_path") . '/'; ?>';
+var defualt_photo_url = '<?php echo base_url() . 'web-assets/images/logo-3.png'; ?>';
+
+var shop_url = '<?php echo base_url().'restaurant/'; ?>';
+var zoom_out_img_url = '<?php echo base_url().'web-assets/images/zoom-in-out.png'; ?>';
+
+var cuisine_id = '';
+var pickup = '';
+var popular = '';
 $(document).ready(function() {
 
-if($('#simple').length)
-{    
+    $('[data-toggle="tooltip"]').tooltip();
+    
     var owl = $('#simple');
         owl.owlCarousel({
             loop:true,
@@ -521,52 +648,51 @@ if($('#simple').length)
                 }
             }
         });       
-}
+// if (latitude == '' || longitude == ''){
 
-if (latitude == '' || longitude == ''){
+//     window.onload = function() {
 
-    window.onload = function() {
+//         function initMap(position) {
+//              var latitude = parseFloat(position.coords.latitude);
+//              var longitude = parseFloat(position.coords.longitude);
+//              console.log('js fetch' + latitude+' ** '+longitude);
+//         }
+//         if (navigator.geolocation){
+//             navigator.permissions && navigator.permissions.query({name: 'geolocation'}).then(function(PermissionStatus) {
+//                 navigator.geolocation.getCurrentPosition(initMap);
+//             });
+//         }
 
-        function initMap(position) {
-             var latitude = parseFloat(position.coords.latitude);
-             var longitude = parseFloat(position.coords.longitude);
-             console.log('js fetch' + latitude+' ** '+longitude);
-        }
-        if (navigator.geolocation){
-            navigator.permissions && navigator.permissions.query({name: 'geolocation'}).then(function(PermissionStatus) {
-                navigator.geolocation.getCurrentPosition(initMap);
-            });
-        }
-
-    }
-}else{
-    console.log('php lat long fetch'+ latitude +' - '+longitude);
-}
+//     }
+// }else{
+//     console.log('php lat long fetch'+ latitude +' - '+longitude);
+// }
     
-    var get_shops_url = "<?php echo base_url().'get-shops'; ?>";
+//     var get_shops_url = "<?php // echo base_url().'get-shops'; ?>";
 
-if (latitude !== '' || longitude !== ''){
-    $.ajax({
-        url: get_shops_url,
-        type: "POST",
-        data:{
-            latitude:latitude,
-            longitude:longitude
-            },
-        success: function (returnData) {
-            if (typeof returnData != "undefined"){
-                returnData = $.parseJSON(returnData);
-                console.log(returnData);
-            }
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            console.log('error');
-        }
-    });
-}else{
-    console.log("blank");
-}
+// if (latitude !== '' || longitude !== ''){
+//     $.ajax({
+//         url: get_shops_url,
+//         type: "POST",
+//         data:{
+//             latitude:latitude,
+//             longitude:longitude
+//             },
+//         success: function (returnData) {
+//             if (typeof returnData != "undefined"){
+//                 returnData = $.parseJSON(returnData);
+//                 console.log(returnData);
+//             }
+//         },
+//         error: function (xhr, ajaxOptions, thrownError) {
+//             console.log('error');
+//         }
+//     });
+// }else{
+//     console.log("blank");
+// }
      
 
 });
 </script>
+<script src="<?php echo base_url().'web-assets/js/custom/home.js'; ?>"></script>

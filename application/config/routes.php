@@ -383,5 +383,10 @@ $route['coming-soon'] = 'web/welcome/coming_soon';
 
 $route['favourite-orders'] = 'web/profile/get_favourite_orders';
 
+$route['get-shops-by-filter'] = 'web/welcome/get_shops_by_filter';
+
+
+
+
 
 

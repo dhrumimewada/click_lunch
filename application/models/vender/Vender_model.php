@@ -273,6 +273,7 @@ class Vender_model extends CI_Model {
 		$this->db->where('status', 0);
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
+			$shop = $sql_query->row();
 
 			$user_data = array(
 						'password' => password_hash($this->input->post("password"), PASSWORD_DEFAULT),
@@ -282,7 +283,18 @@ class Vender_model extends CI_Model {
 					);
 			$this->db->where("activation_token",$this->input->post("token"));
 			$this->db->update("shop", $user_data);
-				
+			
+			foreach ($this->config->item("days") as $key => $value) {
+				$availability_data = array(
+					'shop_id' =>  $shop->id,
+					'day' =>  $value,
+					'from_time' => '',
+					'to_time' =>  '',
+					'full_day' =>  0,
+					'is_closed' =>  1
+					);
+				$this->db->insert("shop_availibality", $availability_data);
+			}
 		}else{
 			$this->auth->set_error_message("Something went wrong! Contact admin for more.");
 			return $return_value;

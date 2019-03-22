@@ -394,6 +394,102 @@ class Shop_ipad_api extends REST_Controller {
         $this->response($response);
     }
 
+    public function manage_service_post(){
+        $postFields['shop_id'] = $_POST['shop_id']; 
+        $postFields['takeout_delivery_status'] = $_POST['takeout_delivery_status'];
+        $postFields['min_order'] = $_POST['min_order'];
+        $postFields['service_charge'] = $_POST['service_charge'];
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
+            $shop = (array)$this->db->get_where('shop',$where)->row();
+            if(empty($shop)){
+                $response['status'] = false;
+                $response['message'] = 'Shop not found';
+            }else{
+
+            	$data['takeout_delivery_status'] = $_POST['takeout_delivery_status'];
+            	$data['min_order'] = number_format($_POST['min_order'],2);
+            	$data['service_charge'] = number_format($_POST['service_charge'],2);
+            	$this->db->update('shop',$data,array('id'=>$_POST['shop_id']));
+
+                $response['status'] = true;
+                $response['message'] = 'Services updated successfully.';
+                $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
+            	$shop = (array)$this->db->get_where('shop',$where)->row();
+                $response['profile'] = $shop;
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function store_time_post(){
+
+    	$data = json_decode(file_get_contents('php://input'), true);
+
+    	//print_r($data['Sunday']);exit;
+        $postFields['shop_id'] = $data['shop_id'];        
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $data['shop_id'],'status' => '1', 'deleted_at' => NULL);
+            $shop = (array)$this->db->get_where('shop',$where)->row();
+            if(empty($shop)){
+                $response['status'] = false;
+                $response['message'] = 'Shop not found';
+            }else{
+            	if(!empty($data['Sunday']) && !empty($data['Monday']) && !empty($data['Tuesday']) && !empty($data['Thursday']) && !empty($data['Friday']) && !empty($data['Saturday']) && !empty($data['Wednesday']))
+            	{
+            		$day_array = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+
+	            	foreach ($day_array as $day) 
+	            	{
+	            		$update_data['is_closed'] = $data[$day]['is_closed'];
+	            		$update_data['full_day'] = $data[$day]['full_day'];
+	            		if($data[$day]['is_closed'] == 1 || $data[$day]['full_day'] == 1)
+	            		{
+	            			$update_data['from_time'] =  "";
+	            			$update_data['to_time'] = "";
+	            		}
+	            		else
+	            		{
+	            			$update_data['from_time'] = $data[$day]['from_time'];
+	            			$update_data['to_time'] = $data[$day]['to_time'];
+	            		}
+	            		if($data[$day]['is_closed'] == 1)
+	            		{
+	            			$update_data['full_day'] = 0;
+	            		}
+	            		
+	            		//print_r($update_data);exit;
+	            		$this->db->update('shop_availibality',$update_data,array('day'=>$day,'shop_id'=>$data['shop_id']));
+	            	}	
+            	}
+
+            	
+            	
+            	$time_info = $this->db->get_where('shop_availibality',array('shop_id'=>$data['shop_id']))->result_array();    	
+
+                $response['status'] = true;
+                $response['message'] = 'Store time updated successfully.';
+                $response['time_data'] = $time_info;
+            
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
     public function register_post()
     {
 	    $postFields['email'] = $_POST['email'];
@@ -808,7 +904,7 @@ class Shop_ipad_api extends REST_Controller {
                 $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
 
                 $this->db->where('t1.id', $_POST['order_id']);
-                $this->db->where('t1.order_status', 4);
+            //    $this->db->where('t1.order_status', 4);
 
                 $this->db->group_start();
                     $this->db->where('t1.order_type', 1);

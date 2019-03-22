@@ -29,6 +29,10 @@ class Welcome extends CI_Controller {
 		$output_data["highlight"] = get_data_by_filter('highlight',$select);
 
 		$output_data["shops"] = $this->welcome_model->get_shops();
+		$output_data["combo_shops"] = $this->welcome_model->get_shops();
+		// echo "<pre>";
+		// print_r($output_data["shops"]);
+		// exit;
 
 		$output_data['main_content'] = 'welcome/home';
 		$this->load->view('web/template',$output_data);
@@ -61,6 +65,30 @@ class Welcome extends CI_Controller {
 			$this->load->view('web/template',$output_data);
 		}
 		
+	}
+
+	public function get_shops_by_filter(){
+		if(isset($_POST['cuisine_id']) && $_POST['cuisine_id'] != ''){
+			$cuisine_id = $_POST['cuisine_id'];
+		}else{
+			$cuisine_id = NULL;
+		}
+
+		if(isset($_POST['pickup']) && $_POST['pickup'] != '' && $_POST['pickup'] == 1){
+			$pickup = $_POST['pickup'];
+		}else{
+			$pickup = NULL;
+		}
+
+		if(isset($_POST['popular']) && $_POST['popular'] != '' && $_POST['popular'] == 1){
+			$popular = $_POST['popular'];
+		}else{
+			$popular = NULL;
+		}
+
+		$shops = $this->welcome_model->get_shops(NULL, $cuisine_id, $pickup, $popular);
+		echo json_encode(array("is_success" => true, "shops" => $shops));
+		return TRUE;
 	}
 
 	public function get_shops(){

@@ -3265,6 +3265,36 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
+    public function rating_post(){
+        
+        $postFields['order_id'] = $_POST['order_id'];
+        $postFields['star'] = $_POST['star'];
+
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+            $where = array('id' => intval($_POST['order_id']));
+            $customer = (array)$this->db->get_where('orders',$where)->row();
+            if(empty($customer)){
+                $response['status'] = false;
+                $response['message'] = 'Order not found';    
+            }else{
+                $update_data = array('rating' => number_format((float)$_POST['star'], 1, '.', '') );
+                $this->db->where('id', intval($_POST['order_id']));
+                if($this->db->update('orders', $update_data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Thank you for rating';    
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+            }
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
     public function generate_qr_code($data_string = NULL){
         $return_data = NULL;
         if(isset($data_string) && !is_null($data_string)){

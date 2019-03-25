@@ -39,6 +39,12 @@
                 digits: true,
                 greaterThanZero: true,
                 validate_no_of_orders:true
+            },
+            notification_title:{
+                required:true
+            },
+            notification_message:{
+                required:true
             }
         },
         messages: {
@@ -65,6 +71,12 @@
                 digits: "Enter only numeric value",
                 greaterThanZero: "The minimum number of orders should be more than zero.",
                 validate_no_of_orders: "The minimum number of orders field is required."
+            },
+            notification_title:{
+                required: "The title field is required."
+            },
+            notification_message:{
+                required: "The message field is required."
             }
         },
         submitHandler: function(form) {

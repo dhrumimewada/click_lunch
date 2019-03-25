@@ -98,15 +98,6 @@ $route['item-update'] = 'vender/item/item/put';
 // vender Combo managment
 $route['combo-add'] = 'vender/item/item/post/Combo';
 
-// // Vender category management
-// $route['category-list'] = 'vender/category/category/index'; 
-// $route['category-add'] = 'vender/category/category/post'; 
-// $route['category-update/(:any)'] = 'vender/category/category/put/$1'; 
-// $route['category-update'] = 'vender/category/category/index'; 
-// $route['category-put'] = 'vender/category/category/put'; 
-// $route['category-delete'] = 'vender/category/category/delete';
-// $route['category-status'] = 'vender/category/category/active_deactive_category';  
-
 //Vender - Vrient group
 $route['variant-group-list'] = 'vender/item/variant_group/index'; 
 $route['variant-group-add'] = 'vender/item/variant_group/post'; 
@@ -188,6 +179,9 @@ $route['custom-email-customer'] = 'admin/email_template/custom_email_customer';
 $route['custom-email-send'] = 'admin/email_template/custom_email';
 $route['custom-email-restaurant'] = 'admin/email_template/custom_email/shop';
 $route['custom-email-deliveryboy'] = 'admin/email_template/custom_email/delivery_boy';
+
+// admin - send custom push
+$route['custom-push-customer'] = 'admin/email_template/custom_push_customer';
 
 //Admin- History
 $route['transaction-history'] = 'admin/history/transaction_history'; 
@@ -276,6 +270,11 @@ $route['popular-location-list'] = 'admin/popular_location/index';
 $route['popular-location-add'] = 'admin/popular_location/post';  
 $route['popular-location-delete'] = 'admin/popular_location/delete';
 
+// Admin - All orders
+$route['delivery-orders'] = 'admin/orders/delivery_orders';
+$route['takeout-orders'] = 'admin/orders/takeout_orders';
+$route['weekly-orders'] = 'admin/orders/weekly_orders';
+
 $route['contact-us-data'] = 'admin/contact_us/index'; 
 $route['contact-us-delete'] = 'admin/contact_us/delete'; 
 
@@ -308,7 +307,7 @@ $route['set-db'] = 'dispatcher/order/set_db';
 
 $route['home-page'] = 'user/user/index'; 
 
-// vender - push - email
+// vender  - email
 $route['vender-custom-email-customer'] = 'vender/email_push/custom_email_customer';
 
 // API

@@ -28,6 +28,13 @@ class Email_push extends CI_Controller {
 		}
 	}
 
+	public function test(){
+		$abc = $this->email_template_model->test();
+		echo "<pre>";
+		print_r($abc);
+
+	}
+
 	public function validate_order_no($no_of_orders = NULL, $group_id = NULL) {
 		$no_of_orders = trim($no_of_orders);
 		if($group_id == 6 && $no_of_orders == ''){

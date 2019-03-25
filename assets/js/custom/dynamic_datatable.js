@@ -157,6 +157,63 @@ $( document ).ready(function() {
         ]
     });
 
+    var delivery_orders_url = base_url+ 'admin/orders/delivery_orders_list/';
+    $('.delivery_orders').DataTable( {
+        "ajax": {
+            url : delivery_orders_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+    var takeout_orders_url = base_url+ 'admin/orders/takeout_orders_list/';
+    $('.takeout_orders').DataTable( {
+        "ajax": {
+            url : takeout_orders_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+    var weekly_orders_url = base_url+ 'admin/orders/weekly_orders_list/';
+    $('.weekly_orders').DataTable( {
+        "ajax": {
+            url : weekly_orders_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
 });
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];

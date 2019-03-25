@@ -1,6 +1,7 @@
 <?php
 $edit_link = base_url().'email-update';
 $to_customer_link = base_url().'custom-email-customer';
+$push_to_customer_link = base_url().'custom-push-customer';
 $to_restaurant_link = base_url().'custom-email-restaurant';
 $to_deliveryboy_link = base_url().'custom-email-deliveryboy';
 ?>
@@ -27,7 +28,7 @@ $to_deliveryboy_link = base_url().'custom-email-deliveryboy';
                                 Send Push Notification
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Notification to Customers</a>
+                                <a class="dropdown-item" href="<?php echo $push_to_customer_link; ?>">Notification to Customers</a>
                                 <a class="dropdown-item" href="#">Notification to Restaurants</a>
                             </div>
                         </div>

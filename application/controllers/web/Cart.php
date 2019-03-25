@@ -15,10 +15,11 @@ class Cart extends CI_Controller {
 		echo "Before destroy";
 		//print_r($this->cart->contents());
 		echo "after destroy";
-		print_r($_SESSION);
+		//print_r($_SESSION);
+		$shops = $this->welcome_model->get_popular_shops();
 		// $this->cart->destroy();
 		// echo "<pre>";
-		// print_r($this->cart->contents());
+		 print_r($shops);
 
 		// $insert_data = array(
   //   				'id' => "8d39e3679e0898c5292a7e59105bda96",

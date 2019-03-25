@@ -6,6 +6,22 @@ class Welcome_model extends CI_Model {
 		$this->load->library('cart');
 	}
 
+	public function get_popular_shops(){
+		$return_data = array();
+		$this->db->select('shop_id');
+		$this->db->from('orders');
+		$this->db->where("order_status", 6);
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			$shops = $sql_query->result_array();
+			$return_data = array_column($shops, 'shop_id');
+			$return_data = array_count_values($return_data);
+			$return_data=array_flip($return_data);
+			asort($return_data);
+		}
+		return $return_data;
+	}
+
 	public function get_shops($short_name = NULL, $cuisine_id = NULL, $pickup = NULL, $popular = NULL){
 		$return_data = array();
 		$this->db->select('t1.id,t1.shop_name,t1.short_name,t1.profile_picture,t1.order_by_time,t1.delivery_time, t1.contact_no1,CONCAT(t1.city, ", ", t1.zip_code, ", ", t1.state) as address');
@@ -29,6 +45,46 @@ class Welcome_model extends CI_Model {
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
 			$return_data = $sql_query->result_array();		
+
+			if (isset($popular) && !is_null($popular)){
+				$this->db->select('shop_id');
+				$this->db->from('orders');
+				$this->db->where("order_status", 6);
+				$this->db->where_in("shop_id", array_column($return_data, 'id'));
+				$sql_query = $this->db->get();
+				if ($sql_query->num_rows() > 0){
+					$query = $this->db->last_query();
+					$popular_shops_data = $sql_query->result_array();
+					$popular_shops = array_column($popular_shops_data, 'shop_id');
+
+					$popular_shops = array_count_values($popular_shops);
+					arsort($popular_shops);
+
+					$new_shops = array();
+					foreach ($popular_shops as $key => $value) {
+						foreach ($return_data as $key1 => $value1) {
+							if($key == $value1['id']){
+								array_push($new_shops, $return_data[$key1]);
+							}
+						}
+					}
+					$return_data = $new_shops;
+				}
+			}
+
+			$this->db->select('shop_id');
+			$this->db->from('item');
+			$this->db->where("quantity !=", 0);
+			$this->db->where("deleted_at", NULL);
+			$this->db->where("is_active", 1);
+			$this->db->where("is_combo", 1);
+			$this->db->where_in("shop_id", array_column($return_data, 'id'));
+			$sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0){
+				$combo_shops_data = $sql_query->result_array();
+				$combo_shops = array_column($combo_shops_data, 'shop_id');
+			}
+			
 			foreach ($return_data as $key => $value) {
 
 				// get cuisines of shop
@@ -51,8 +107,15 @@ class Welcome_model extends CI_Model {
 				if ($sql_query->num_rows() > 0){
 					$return_data[$key]['availibality'] = (array)$sql_query->row();
 				}
+
+				if(in_array($value['id'], $combo_shops)){
+					$return_data[$key]['combo_available'] = true;
+				}else{
+					$return_data[$key]['combo_available'] = false;
+				}
 			}
 		}
+		//$return_data['new_shops'] = $new_shops;
 		return $return_data;
 	}
 

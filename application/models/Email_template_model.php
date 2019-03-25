@@ -116,80 +116,360 @@ class Email_template_model extends CI_Model {
 
 		$emails_array = array();
 
-		// All customer for shop
-		 $sql_select = array(
-                            "t2.email",
-                            "t1.id"
-                        );
-        $this->db->select($sql_select);
-        $this->db->where("t2.deleted_at", NULL);
-        $this->db->where("t2.status", 1);
+        if($this->input->post("group") == 4){
 
-        $this->db->where("t1.order_status", 3);
+        	if($this->auth->is_admin()){
+        		$this->db->select('email');
+		        $this->db->where("deleted_at", NULL);
+		        $this->db->where("status", 1);
+		        $this->db->from('customer');
+		        $sql_query = $this->db->get();
+		        if ($sql_query->num_rows() > 0){
+		        	$customers_data = $sql_query->result_array();
+		        	$emails_array = array_column($customers_data, 'email');
+		        }
+        	}else{
 
-        if($this->auth->is_vender()){
-			$this->db->where("t1.shop_id", $this->auth->get_user_id());
-		}else if($this->auth->is_employee()){
-			$this->db->where("t1.shop_id",$this->auth->get_emp_shop_id());
-		}
-        $this->db->from('orders t1');
-        $this->db->join('customer t2', 't1.customer_id = t2.id', "left join");
-        $sql_query = $this->db->get();
-        if ($sql_query->num_rows() > 0){
-        	$all_order_customer_list = $sql_query->result_array();
+		        $this->db->select('t2.email');
+		        $this->db->where("t2.deleted_at", NULL);
+		        $this->db->where("t2.status", 1);
 
-        	if($this->input->post("group") == 4){
-        		$emails_array = array_column($all_order_customer_list, 'email');
-
-			}else if($this->input->post("group") == 6){
-				$data = array_column($all_order_customer_list, 'email');
-				$vals = array_count_values($data);
-				foreach ($vals as $key => $value) {
-					if($value >= $this->input->post("no_of_orders")){
-						array_push($emails_array, $key);
-					}
+		        if($this->auth->is_vender()){
+					$this->db->where("t1.shop_id", $this->auth->get_user_id());
+				}else if($this->auth->is_employee()){
+					$this->db->where("t1.shop_id",$this->auth->get_emp_shop_id());
 				}
-			}else if($this->input->post("group") == 7){
 
-				$order_ids_array = array_column($all_order_customer_list, 'id');
-				$this->db->select('t2.id');
-                $this->db->from('order_items t1');
-        		$this->db->join('orders t2', 't1.order_id = t2.id', "left join");
-        		$this->db->where_in("t1.order_id", $order_ids_array);
-        		$this->db->where_in("t1.item_id", $this->input->post("item"));
-                $sql_query = $this->db->get();
+				$this->db->from('orders t1');
+		        $this->db->join('customer t2', 't1.customer_id = t2.id');
+		        $sql_query = $this->db->get();
+		        if ($sql_query->num_rows() > 0){
+		        	$customers_data = $sql_query->result_array();
+		        	$emails_array = array_column($customers_data, 'email');
+		        }
 
-                if ($sql_query->num_rows() > 0){
-                	$valid_order_array = $sql_query->result_array();
-                	$valid_orders = array_column($valid_order_array, 'id');
-                	foreach ($all_order_customer_list as $key => $value) {
-                		if(in_array($valid_orders, $value['id'])){
-                			array_push($emails_array, $value['email']);
-                		}
-                	}
-                }
-			}else{
+        	}
+
+		}else if($this->input->post("group") == 6){
+
+			$emails_array = $this->get_X_ordered_customers(intval($this->input->post("no_of_orders")));
+
+		}else if($this->input->post("group") == 7){
+
+			if(isset($_POST['item']) && is_array($_POST['item']) && !empty($_POST['item'])){
+
+				$this->db->select('t2.email,t1.id');
+		        $this->db->where("t2.deleted_at", NULL);
+		        $this->db->where("t2.status", 1);
+
+		        if($this->auth->is_vender()){
+					$this->db->where("t1.shop_id", $this->auth->get_user_id());
+				}else if($this->auth->is_employee()){
+					$this->db->where("t1.shop_id",$this->auth->get_emp_shop_id());
+				}
+
+				$this->db->from('orders t1');
+		        $this->db->join('customer t2', 't1.customer_id = t2.id');
+		        $this->db->join('order_items t3', 't1.id = t3.order_id');
+
+		        $this->db->where_in("t3.item_id", $this->input->post("item"));
+
+		        $sql_query = $this->db->get();
+		        if ($sql_query->num_rows() > 0){
+		        	$customers_data = $sql_query->result_array();
+		        	$emails_array = array_column($customers_data, 'email');
+		        }
 
 			}
 
-			if(is_array($emails_array) && !empty($emails_array)){
-				$emails_array = array_unique($emails_array);
-				$email_data = implode(',', $emails_array);
-				$total_sended = count($emails_array);
-				$mail = sendmail($from, $email_data, $subject, $message);
-				
-				$this->auth->set_status_message("Total ".$total_sended. " emails sent successfully");
-				$return_value = TRUE;
-			}else{
-				//$this->auth->set_error_message("Something went wrong. please try again later");
-				$this->auth->set_error_message("No any user found");
+		}else if($this->input->post("group") == 1){
+
+			$emails_array = $this->get_new_customers();
+
+		}else if($this->input->post("group") == 5){
+
+			if(isset($_POST['shop']) && is_array($_POST['shop']) && !empty($_POST['shop'])){
+
+				$this->db->select('t1.email');
+				$this->db->from('customer t1');
+				$this->db->join('orders t2', 't1.id = t2.customer_id', "left");
+				$this->db->where('t1.deleted_at', NULL);
+				$this->db->where('t1.status', 1);
+				$this->db->where_in('t2.shop_id', $_POST['shop']);
+				$sql_query = $this->db->get();
+				if ($sql_query->num_rows() > 0){
+					$valid_customers = $sql_query->result_array();
+					$emails_array = array_column($valid_customers, 'email');
+				}
+
 			}
 
-        }
+		}else{
 
-		return $return_value;
-		
+		}
+
+		if(is_array($emails_array) && !empty($emails_array)){
+			$emails_array = array_unique($emails_array);
+			$email_data = implode(',', $emails_array);
+			$total_sended = count($emails_array);
+			$mail = sendmail($from, $email_data, $subject, $message);
+			
+			$this->auth->set_status_message("Total ".$total_sended. " emails sent successfully");
+			$return_value = TRUE;
+		}else{
+			$this->auth->set_error_message("No any user found");
+		}
+
+		return $return_value;	
 	}
 
+	public function get_X_ordered_customers($X_number_of_order = NULL){
+		$return_data = array();
+
+		if(isset($X_number_of_order) && $X_number_of_order != ''){
+			$this->db->select('t1.email');
+			$this->db->from('customer t1');
+			$this->db->join('orders t2', 't1.id = t2.customer_id', "left");
+			$this->db->where('t1.deleted_at', NULL);
+			$this->db->where('t1.status', 1);
+			$this->db->where('t2.order_status', 6);
+
+			if($this->auth->is_vender()){
+				$this->db->where("t2.shop_id", $this->auth->get_user_id());
+			}else if($this->auth->is_employee()){
+				$this->db->where("t2.shop_id",$this->auth->get_emp_shop_id());
+			}
+
+			$sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0){
+				$valid_customers = $sql_query->result_array();
+				$emails_array = array_column($valid_customers, 'email');
+				$total = array_count_values($emails_array);
+				$return_data = array();
+				foreach ($total as $key => $value) {
+					if($value >= $X_number_of_order){
+						array_push($return_data, $key);
+					}
+				}
+			}
+		}
+		
+		return $return_data;
+	}
+
+	public function get_X_ordered_customers_for_push($X_number_of_order = NULL){
+		$return_data = array();
+
+		if(isset($X_number_of_order) && $X_number_of_order != ''){
+			$this->db->select('t1.device_type,t1.device_token,t1.id');
+			$this->db->from('customer t1');
+			$this->db->join('orders t2', 't1.id = t2.customer_id', "left");
+			$this->db->where('t1.deleted_at', NULL);
+			$this->db->where('t1.status', 1);
+			$this->db->where('t2.order_status', 6);
+
+			if($this->auth->is_vender()){
+				$this->db->where("t2.shop_id", $this->auth->get_user_id());
+			}else if($this->auth->is_employee()){
+				$this->db->where("t2.shop_id",$this->auth->get_emp_shop_id());
+			}
+
+			$device_type = array('1','2');
+	        $this->db->where_in("t1.device_type", $device_type);
+	        $this->db->where("t1.device_token !=", '');
+
+			$sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0){
+				$valid_customers = $sql_query->result_array();
+				$ids_array = array_column($valid_customers, 'id');
+				$total_data = array_count_values($ids_array);
+				$return_data = array();
+				foreach ($total_data as $key => $value) {
+					if($value >= $X_number_of_order){
+						foreach ($valid_customers as $key1 => $value1) {
+							if($value1['id'] == $key){
+								array_push($return_data, $valid_customers[$key1]);
+							}
+						}
+					}
+				}
+			}
+		}
+		return $return_data;
+	}
+
+	public function get_new_customers(){
+		$return_data = array();
+
+		$this->db->select('t1.email');
+		$this->db->from('customer t1');
+		$this->db->join('orders t2', 't1.id = t2.customer_id', "left");
+		$this->db->where('t2.customer_id IS NULL',null,true);
+		$this->db->where('t1.deleted_at', NULL);
+		$this->db->where('t1.status', 1);
+
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$customer_data = $sql_query->result_array();
+			$return_data = array_column($customer_data, 'email');
+		}
+
+		return $return_data;
+	}
+
+	public function get_new_customers_for_push(){
+		$return_data = array();
+
+		$this->db->select('t1.device_type,t1.device_token');
+		$this->db->from('customer t1');
+		$this->db->join('orders t2', 't1.id = t2.customer_id', "left");
+		$this->db->where('t2.customer_id IS NULL',null,true);
+		$this->db->where('t1.deleted_at', NULL);
+		$this->db->where('t1.status', 1);
+
+		$device_type = array('1','2');
+		$this->db->where_in("t1.device_type", $device_type);
+		$this->db->where("t1.device_token !=", '');
+
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$return_data = $sql_query->result_array();
+		}
+		//return $this->db->last_query();
+		return $return_data;
+	}
+
+	public function send_custom_push_customer(){
+		$return_value = FALSE;
+
+		$from = "";
+		$subject = $this->input->post("notification_title");
+		$email_message_string = $this->input->post("notification_message");
+
+		$emails_array = array();
+
+        if($this->input->post("group") == 4){
+
+        	if($this->auth->is_admin()){
+        		$this->db->select('device_type,device_token');
+		        $this->db->where("deleted_at", NULL);
+		        $this->db->where("status", 1);
+
+		        $device_type = array('1','2');
+		        $this->db->where_in("device_type", $device_type);
+		        $this->db->where("device_token !=", '');
+
+		        $this->db->from('customer');
+		        $sql_query = $this->db->get();
+		        if ($sql_query->num_rows() > 0){
+		        	$customers_data = $sql_query->result_array();
+		        	//$emails_array = array_column($customers_data, 'email');
+		        	$emails_array = $customers_data;
+		        }
+        	}else{
+
+		        $this->db->select('t2.device_type,t2.device_token');
+		        $this->db->where("t2.deleted_at", NULL);
+		        $this->db->where("t2.status", 1);
+
+		        if($this->auth->is_vender()){
+					$this->db->where("t1.shop_id", $this->auth->get_user_id());
+				}else if($this->auth->is_employee()){
+					$this->db->where("t1.shop_id",$this->auth->get_emp_shop_id());
+				}
+
+				$device_type = array('1','2');
+		        $this->db->where_in("t2.device_type", $device_type);
+		        $this->db->where("t2.device_token !=", '');
+
+				$this->db->from('orders t1');
+		        $this->db->join('customer t2', 't1.customer_id = t2.id');
+		        $sql_query = $this->db->get();
+		        if ($sql_query->num_rows() > 0){
+		        	$customers_data = $sql_query->result_array();
+		        	//$emails_array = array_column($customers_data, 'email');
+		        	$emails_array = $customers_data;
+		        }
+
+        	}
+
+		}else if($this->input->post("group") == 6){
+
+			$emails_array = $this->get_X_ordered_customers_for_push(intval($this->input->post("no_of_orders")));
+
+		}else if($this->input->post("group") == 7){
+
+			if(isset($_POST['item']) && is_array($_POST['item']) && !empty($_POST['item'])){
+
+				$this->db->select('t2.device_type,t2.device_token,t1.id');
+		        $this->db->where("t2.deleted_at", NULL);
+		        $this->db->where("t2.status", 1);
+
+		        if($this->auth->is_vender()){
+					$this->db->where("t1.shop_id", $this->auth->get_user_id());
+				}else if($this->auth->is_employee()){
+					$this->db->where("t1.shop_id",$this->auth->get_emp_shop_id());
+				}
+
+				$this->db->from('orders t1');
+		        $this->db->join('customer t2', 't1.customer_id = t2.id');
+		        $this->db->join('order_items t3', 't1.id = t3.order_id');
+
+		        $this->db->where_in("t3.item_id", $this->input->post("item"));
+
+		        $sql_query = $this->db->get();
+		        if ($sql_query->num_rows() > 0){
+		        	$customers_data = $sql_query->result_array();
+		        	//$emails_array = array_column($customers_data, 'email');
+		        	$emails_array = $customers_data;
+		        }
+
+			}
+
+		}else if($this->input->post("group") == 1){
+
+			$emails_array = $this->get_new_customers_for_push();
+
+		}else if($this->input->post("group") == 5){
+
+			if(isset($_POST['shop']) && is_array($_POST['shop']) && !empty($_POST['shop'])){
+
+				$this->db->select('t1.device_type,t1.device_token');
+				$this->db->from('customer t1');
+				$this->db->join('orders t2', 't1.id = t2.customer_id', "left");
+				$this->db->where('t1.deleted_at', NULL);
+				$this->db->where('t1.status', 1);
+				$this->db->where_in('t2.shop_id', $_POST['shop']);
+
+				$device_type = array('1','2');
+		        $this->db->where_in("t1.device_type", $device_type);
+		        $this->db->where("t1.device_token !=", '');
+
+				$sql_query = $this->db->get();
+				//return $this->db->last_query();
+				if ($sql_query->num_rows() > 0){
+
+					$customers_data = $sql_query->result_array();
+					//$emails_array = array_column($customers_data, 'email');
+					$emails_array = $customers_data;
+				}
+
+			}
+
+		}else{
+
+		}
+
+		if(is_array($emails_array) && !empty($emails_array)){
+			$unique_array = array_map("unserialize", array_unique(array_map("serialize", $emails_array)));
+			
+			$this->auth->set_status_message("Notification(s) sent successfully");
+			$return_value = TRUE;
+		}else{
+			$this->auth->set_error_message("No any user found");
+		}
+
+		return $return_value;	
+	}
 	
 }

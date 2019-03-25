@@ -152,9 +152,9 @@ if($is_admin){
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-content-paste"></i><span> All Order <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="<?php echo base_url().'maintenance3'; ?>">Delivery</a></li>
-                        <li><a href="<?php echo base_url().'maintenance4'; ?>">Weekly</a></li>
-                        <li><a href="<?php echo base_url().'maintenance5'; ?>">Takeout</a></li>
+                        <li><a href="<?php echo base_url().'delivery-orders'; ?>">Delivery</a></li>
+                        <li><a href="<?php echo base_url().'takeout-orders'; ?>">Takeout</a></li>
+                        <li><a href="<?php echo base_url().'weekly-orders'; ?>">Weekly</a></li>
                     </ul>
                 </li>
 
@@ -212,7 +212,7 @@ if($is_admin){
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Orders <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
                         <li><a href="<?php echo base_url().'order-single-assign'; ?>">Pending</a></li>
-                        <li><a href="<?php echo base_url().'maintenance6'; ?>">Scheduled</a></li>
+                        <li><a href="<?php echo base_url().'restaurant-scheduled'; ?>">Scheduled</a></li>
                         <li><a href="<?php echo base_url().'order-processing'; ?>">Processing</a></li>
                         <li><a href="<?php echo base_url().'maintenance7'; ?>">Completed</a></li>
                         <li><a href="<?php echo base_url().'maintenance8'; ?>">Trashed</a></li>

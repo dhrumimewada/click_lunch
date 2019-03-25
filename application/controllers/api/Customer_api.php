@@ -2321,6 +2321,25 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
+    // public function validate_prices2_post(){
+    //     //$postFields['prices'] =  $_POST['prices'];
+    //     $response['prices'] = $_POST['prices'];
+
+    //     $myfile = fopen("req.txt", "w") or die("Unable to open file!");
+    //     $txt =  file_get_contents('php://input');
+    //     fwrite($myfile, $txt);
+
+    //     $txt =  '///////////////////////////////////////////////\r\n';
+    //     fwrite($myfile, $txt);
+
+    //     $txt =  $_POST['prices'];
+    //     fwrite($myfile, $txt);
+        
+    //     fclose($myfile);
+    //     $response['status'] = false;
+    //     $this->response($response);
+    // }
+
     public function place_order_post(){
         $postFields['order_data'] = $_POST['order_data']; 
         $errorPost = $this->ValidatePostFields($postFields);
@@ -2760,7 +2779,15 @@ class Customer_api extends REST_Controller {
             $response['message'] = $errorPost;
         }
         $this->response($response);
-    }  
+    }
+
+    // public function place_order2_post(){
+    //     $postFields['order_data'] = $_POST['order_data']; 
+    //     //$errorPost = $this->ValidatePostFields($postFields);
+
+    //     $response['order_data'] = $_POST['order_data'];
+    //     $this->response($response);
+    // }  
 
     public function fetch_delivery_charge_post(){
         $postFields['delivery_address_id'] = $_POST['delivery_address_id']; 
@@ -2856,7 +2883,8 @@ class Customer_api extends REST_Controller {
                                 'IF(t1.order_type=6, t1.schedule_time, "") as schedule_time',
                                 'IF(t1.order_type=2, t1.later_time, "") as later_time',
                                 't1.created_at',
-                                't1.QR_code'
+                                't1.QR_code',
+                                't1.rating'
                                 // 'IF(t1.order_type=2, t1.schedule_date, "") as schedule_date',
                                 // 'IF(t1.order_type=2, t1.schedule_time, "") as schedule_time',
                                 // 'IF(t1.order_type=1, t1.created_at, "") as created_at'
@@ -2880,7 +2908,7 @@ class Customer_api extends REST_Controller {
 
                 if ($sql_query->num_rows() > 0){
                     $orders_data = (array)$sql_query->row();
-                    $orders_data['rating'] = '3.5';
+                    //$orders_data['rating'] = '3.5';
 
                     $sql_select = array(
                                     't2.name',
@@ -3293,6 +3321,46 @@ class Customer_api extends REST_Controller {
             $response['message'] = $errorPost;
         }
         $this->response($response);
+    }
+
+    public function cancel_weekly_order_post(){
+        $postFields['order_id'] = $_POST['order_id'];
+        $postFields['customer_id'] = $_POST['customer_id'];
+
+        if(empty($errorPost)){
+
+            $where = array('id' => intval($_POST['order_id']), 'customer_id' => intval($_POST['customer_id']), 'order_type' => intval($_POST['customer_id']));
+            $order = (array)$this->db->get_where('orders',$where)->row();
+
+            $this->db->select('id');
+            $this->db->where("id",intval($_POST['order_id']));
+            $this->db->where("customer_id",intval($_POST['customer_id']));
+            $weekly = array('5','6');
+            $this->db->where_in("order_type", $weekly);
+            $this->db->from("orders");
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+
+                $data = array('order_status' => 8);
+                $this->db->where('id',$_POST['order_id']);
+                if($this->db->update('orders',$data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Order cancelled successfully';
+                }else{
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+                
+            }else{
+                $response['status'] = false;
+                $response['message'] = 'Order not found'; 
+            }
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+        $errorPost = $this->ValidatePostFields($postFields);
     }
 
     public function generate_qr_code($data_string = NULL){

@@ -6,10 +6,9 @@
     border-radius: unset;
 } 
  </style>
- <link rel="stylesheet" href="<?php echo base_url() . 'plugins/summernote/summernote-bs4.css'; ?>">
  <?php
  if($is_admin){
-     $put_link = base_url().'custom-email-customer';
+     $put_link = base_url().'custom-push-customer';
  }else{
      $put_link = base_url().'vender-custom-email-customer';
  }
@@ -22,7 +21,7 @@
             </div>
             <div class="col-lg-10">
                 <div class="page-title-box">
-                    <h4 class="page-title">Send email to Customer(s)</h4>
+                    <h4 class="page-title">Send notification to Customer(s)</h4>
                 </div>
             </div>
             <div class="col-lg-1">
@@ -167,38 +166,35 @@ if (isset($temp_value) && !empty($temp_value)) {
 
 
                             <div class="form-group">
-                                <label class="required">Email Subject</label>
+                                <label class="required" for="notification_title">Notification Title</label>
                                 <div>
                                 <?php
 $field_value = NULL;
-$temp_value = set_value('emat_email_subject');
+$temp_value = set_value('notification_title');
 if (isset($temp_value) && !empty($temp_value)) {
 $field_value = $temp_value;
 }
 ?>
-                                    <input type="text" name="emat_email_subject" class="form-control" id="emat_email_subject" placeholder="Enter email subject" value="<?php echo $field_value; ?>">
+                                    <input type="text" name="notification_title" class="form-control" id="notification_title" placeholder="Enter notification title" value="<?php echo $field_value; ?>">
                                     <div class="validation-error-label">
-                                        <?php echo form_error('emat_email_subject'); ?>
+                                        <?php echo form_error('notification_title'); ?>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="required">Email Message</label>
+                                <label class="required" for="notification_message">Notification Message</label>
                                 <div>
                                 <?php
-// $field_value = NULL;
-// $temp_value = set_value('emat_email_message');
-// if (isset($temp_value) && !empty($temp_value)) {
-// $field_value = $temp_value;
-// } 
+$field_value = NULL;
+$temp_value = set_value('notification_message');
+if (isset($temp_value) && !empty($temp_value)) {
+$field_value = $temp_value;
+} 
 ?>
-                                    <input type="hidden" name="emat_email_message" class="form-control" id="emat_email_message">
-                                    <div class="summernote">
-                                        <?php  // echo $field_value; ?>
-                                    </div>
+                                    <textarea name="notification_message" class="form-control" id="notification_message" placeholder="Enter notification message"><?php echo $field_value; ?></textarea>
                                     <div class="validation-error-label">
-                                        <?php echo form_error('emat_email_message'); ?>
+                                        <?php echo form_error('notification_message'); ?>
                                     </div>
                                 </div>
                             </div>

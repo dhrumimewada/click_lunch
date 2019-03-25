@@ -5,6 +5,11 @@ if (isset($shop['profile_picture']) && ($shop['profile_picture'] != '')) {
         $photo_url = base_url() . $this->config->item("profile_path") . '/'.$shop['profile_picture'];
     }
 }
+if(isset($shop['cuisine']) && !empty($shop['cuisine'])){
+	$cuisines = implode(', ', array_column($shop['cuisine'], 'cuisine_name'));
+}else{
+	$cuisines = '';
+}
 ?>
 <div id="content">
 	<div class="restaurant-detail-banner position-relative">
@@ -17,7 +22,12 @@ if (isset($shop['profile_picture']) && ($shop['profile_picture'] != '')) {
 				<div class="delivery">Delivery <?php echo $shop['delivery_time'] ?></div>
 				<div class="order-by">Order By <?php echo $shop['order_by_time'] ?></div>
 			</div>
-			<div class="food-types mb-1"><img src="<?php echo $assets; ?>images/tray.png" /> <?php echo $shop['cuisine'] ?></div>
+			<div class="food-types mb-1">
+				<img src="<?php echo $assets; ?>images/tray.png" />
+				<?php
+				echo $cuisines;
+				?>
+			</div>
 			<div class="timing d-flex mb-1">
 				<div class="first-half">11:00 To 15:00</div>
 				<div>&nbsp; / &nbsp;</div>

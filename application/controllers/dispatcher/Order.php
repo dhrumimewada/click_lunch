@@ -4,7 +4,7 @@ class Order extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (($this->auth->is_logged_in() == TRUE) && ($this->auth->is_vender()) ||($this->auth->is_dispatcher()) || (($this->auth->is_employee()) && (is_allowed($this->auth->get_role_id(), 'orders')) ) ){
+		if (($this->auth->is_logged_in() == TRUE) && ($this->auth->is_vender()) || ($this->auth->is_admin()) ||($this->auth->is_dispatcher()) || (($this->auth->is_employee()) && (is_allowed($this->auth->get_role_id(), 'orders')) ) ){
 			
 		}else{
 			if($this->auth->is_logged_in() == TRUE){
@@ -95,12 +95,31 @@ class Order extends CI_Controller {
   		$output_data['is_vender'] = $this->auth->is_vender();
 		$output_data['is_employee'] = $this->auth->is_employee();
 		$output_data['is_dispatcher'] = $this->auth->is_dispatcher();
+		$output_data['is_admin'] = $this->auth->is_admin();
 
   		$order_data = $this->order_model->get_order_detail($id);
   		// echo "<pre>";
   		// print_r($order_data);
   		// exit;
+  		$order_type = $order_data['order']->order_type;
+  		if($order_type == 1){
+        	$order_type = 'Delivery Now';
+        }else if($order_type == 2){
+        	$order_type = 'Delivery Later';
+        }else if($order_type == 3){
+        	$order_type = 'Takeout Now';
+        }else if($order_type == 4){
+        	$order_type = 'Takeout Later';
+        }else if($order_type == 5){
+        	$order_type = 'Weekly Delivery';
+        }else if($order_type == 6){
+        	$order_type = 'Weekly Takeout';
+        }else{
+        	$order_type = '';
+        }
+
   		$output_data['order_data'] = $order_data;
+  		$output_data['order_type'] = $order_type;
   		$output_data['main_content'] = "dispatcher/order/order_detail";
 		$this->load->view('template/template',$output_data);	
   	}

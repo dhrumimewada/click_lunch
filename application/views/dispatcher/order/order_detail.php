@@ -86,6 +86,37 @@ $back_link = base_url().'order-single-assign';
                                             <?php echo '+1 '.$order_data['order']->mobile_number; ?>
                                         </address>
                                     </div>
+                                    <div class="col-6">
+                                        <strong>Order Type:</strong>
+                                        <?php echo $order_type; ?><br>
+                                        <?php
+                                        $created_date_ts = strtotime($order_data['order']->created_at);
+
+                                        if($order_data['order']->order_type == 2 || $order_data['order']->order_type == 4){
+                                        ?>
+                                        <strong>Schedule Time:</strong>
+                                        <?php echo date("j M, Y", $created_date_ts).' '.$order_data['order']->later_time; ?><br>
+                                        <?php
+                                        }
+                                        if($order_data['order']->order_type == 5 || $order_data['order']->order_type == 6){
+                                        ?>
+                                        <strong>Schedule Date Time:</strong>
+                                        <?php
+                                        $schedule_date_ts = strtotime($order_data['order']->schedule_date);
+                                        echo $schedule_date = date("j M, Y", $schedule_date_ts);
+                                        echo ' '.$order_data['order']->schedule_time;
+                                        ?>
+                                        <br>
+                                        <?php
+                                        }
+                                        ?>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <strong>Order Placed On:</strong><br>
+                                        <?php
+                                        echo $created_date = date("j M, Y h:i A", $created_date_ts);
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -101,15 +132,14 @@ $back_link = base_url().'order-single-assign';
                                             <table class="table">
                                                 <thead>
                                                 <tr>
-                                                    <td><strong>Product</strong></td>
+                                                    <td><strong>Product(s)</strong></td>
                                                     <td class="text-center"><strong>Price</strong></td>
                                                     <td class="text-center"><strong>Quantity</strong>
                                                     </td>
-                                                    <td class="text-right"><strong>Totals</strong></td>
+                                                    <td class="text-right"><strong>Total</strong></td>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <!-- foreach ($order->lineItems as $line) or some such thing here -->
                                                 <?php
                                                 $sub_total = 0;
                                                 foreach ($order_data['order_items'] as $key => $value) {
@@ -229,9 +259,15 @@ $back_link = base_url().'order-single-assign';
                                                 }elseif($is_dispatcher){ ?>
                                                 <button class="btn btn-primary waves-effect assign-db" data-ordername='<?php echo 'CL'.$order_data['order']->id; ?>' title='Assign to Delivery Boy' data-popup='tooltip' data-toggle='modal' data-target='#detail-db-model'>Assign Delivery Boy</button>
                                                 <?php
+                                                }else{
+
                                                 }
-                                                ?>  
+                                                if(!$is_admin){
+                                                ?>
                                                 <a href="<?php echo $back_link; ?>" class="btn btn-secondary waves-effect">Back</a>
+                                                <?php
+                                                }
+                                                ?>
                                             </div>
                                         </div>
                                     </div>

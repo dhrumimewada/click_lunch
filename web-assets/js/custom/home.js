@@ -32,10 +32,16 @@ function update_shops() {
             success: function (returnData) {
                 returnData = $.parseJSON(returnData);
                 if (typeof returnData != "undefined"){
+
+                    var data_str = '';
+                    var data_str_combo = '';
+                    $('#nearby').html('');
+                    $('#combo').html('');
+                    console.log(returnData.shops);
+                    //return false;
+
                 	if (typeof returnData.shops !== 'undefined' && returnData.shops.length > 0){
-                		var data_str = '';
-                		$('#nearby').html('');
-                		 console.log(returnData.shops);
+                		
                 		$.each(returnData.shops, function (key, val){
 
                 			if(val.profile_picture == ''){
@@ -106,14 +112,21 @@ function update_shops() {
                 					+'</a>'
                 				+'</div>'
                 			+'</div>';
+
+                            //if(val.combo_available == true){
+                                data_str_combo += data_str;
+                            //}
                 		});
 
-
-                		$('#nearby').html(data_str);
-                		$('[data-toggle="tooltip"]').tooltip();
                 	}else{
                 		console.log('No shops found');
+                        data_str = '<div class="text-muted no-shops-found">No any restaurant found</div>';
+                        data_str_combo = '<div class="text-muted no-shops-found">No any combo restaurant found</div>';
                 	}
+
+                    $('#nearby').html(data_str);
+                    $('#combo').html(data_str_combo);
+                    $('[data-toggle="tooltip"]').tooltip();
                 }
             },
             error: function (xhr, ajaxOptions, thrownError){

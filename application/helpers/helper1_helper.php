@@ -414,6 +414,75 @@ function send_push($device_type = '',$device_token = '', $push_title = '', $push
         return $result;
 }
 
+function send_push_multiple_android($android_data = array(), $push_title = NULL, $push_message = NULL,$push_type =NULL){
+
+  	$fcmFields = array(
+	            'priority' => 'high',
+	            'registration_ids' => $android_data,
+	            'sound' => 'default',
+	            'data' => array( 
+	                "title"=> $push_title,
+	                "body"=> $push_message,
+	                "type"=> $push_type
+	                )
+	            );
+
+  	$CI = &get_instance();
+    $key = $CI->config->item('fcm_key');
+    define('API_ACCESS_KEY', $key);
+
+  	$headers = array('Authorization: key=' . API_ACCESS_KEY,'Content-Type: application/json');
+         
+    $ch = curl_init();
+    curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+    curl_setopt( $ch,CURLOPT_POST, true );
+    curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+    curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+    curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+    curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fcmFields ) );
+    $result = curl_exec($ch );
+    curl_close( $ch );
+    //echo $fcmFields . "\n\n";
+    //print_r($result);
+    return $result;
+}
+
+function send_push_multiple_ios($ios_data = array(), $push_title = NULL, $push_message = NULL,$push_type =NULL){
+
+  	$push_data = array('message' => $push_message);
+
+            $fcmFields = array(
+                'priority' => 'high',
+                'registration_ids' => $ios_data,
+                'sound' => 'default',
+                'notification' => array( 
+                    "title"=> $push_title,
+                    "body"=> $push_message,
+                    "data"=> $push_data,
+                    "type"=> $push_type
+                    )
+                );
+
+  	$CI = &get_instance();
+    $key = $CI->config->item('fcm_key');
+    define('API_ACCESS_KEY', $key);
+
+  	$headers = array('Authorization: key=' . API_ACCESS_KEY,'Content-Type: application/json');
+         
+    $ch = curl_init();
+    curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
+    curl_setopt( $ch,CURLOPT_POST, true );
+    curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+    curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+    curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+    curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fcmFields ) );
+    $result = curl_exec($ch );
+    curl_close( $ch );
+    //echo $fcmFields . "\n\n";
+    //print_r($result);
+    return $result;
+}
+
 if(!function_exists('is_empty')){
 	function is_empty($data){
 		if(empty($data)){

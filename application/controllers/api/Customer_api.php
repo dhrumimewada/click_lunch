@@ -69,106 +69,116 @@ class Customer_api extends REST_Controller {
         if(empty($errorPost)){
 
             $this->db->select('*');
-            $this->db->group_start();
-                $this->db->where("email",$_POST['email']);
-                $this->db->or_where("mobile_number",$_POST['mobile_number']);
-            $this->db->group_end();
+            $this->db->where("email",$_POST['email']);
             $this->db->where("deleted_at",NULL);
             $this->db->from("customer");
             $sql_query = $this->db->get();
             if ($sql_query->num_rows() > 0){
 
                 $response['status'] = false;
-                $response['message'] = 'Your account is already exists. Please login instead register.';
+                $response['message'] = 'Your email account is already exists. Please login instead register.';
 
             }else{
 
-                $social_user_exists = array();
-                if(isset($_POST['social_id']) && $_POST['social_id'] != "" && isset($_POST['social_type']) && $_POST['social_type'] != "0" && !is_null($_POST['social_id']) && !is_null($_POST['social_type'])){
+                $this->db->select('*');
+                $this->db->where("mobile_number",$_POST['mobile_number']);
+                $this->db->where("deleted_at",NULL);
+                $this->db->from("customer");
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $response['status'] = false;
+                    $response['message'] = 'Your contact number is already exists. Please use another number.';
+                }else{
 
-                    $this->db->select('id');
-                    $this->db->where("social_id",$_POST['social_id']);
-                    $this->db->where("social_type",$_POST['social_type']);
-                    $this->db->from("customer");
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $social_user_exists = $sql_query->result_array();
-                    }
-                }
-
-                if(empty($social_user_exists)){
-
-                    $google_api_key = $this->config->item("google_key");
-                    $geocodeFromLatLong = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?latlng='.$_POST['latitude'].','.$_POST['longitude'].'&key='.$google_api_key);
-                    $output = json_decode($geocodeFromLatLong);
-                    $status = $output->status;
-
-                    $address = ($status=="OK")?$output->results[1]->formatted_address:'';
-
-                    $user = array( 
-                            'username' => $_POST['username'], 
-                            'email'=> $_POST['email'], 
-                            'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
-                            'device_token'=> $_POST['device_token'], 
-                            'device_type'=> $_POST['device_type'], 
-                            'mobile_number'=> $_POST['mobile_number'],
-                            'latitude'=> $_POST['latitude'],
-                            'longitude'=> $_POST['longitude'],
-                            'gender'=> $_POST['gender'],
-                            'dob'=> $_POST['date_of_birth'],
-                            'address'=> $address
-                        );
-
+                    $social_user_exists = array();
                     if(isset($_POST['social_id']) && $_POST['social_id'] != "" && isset($_POST['social_type']) && $_POST['social_type'] != "0" && !is_null($_POST['social_id']) && !is_null($_POST['social_type'])){
 
-                        $user['social_id'] = $_POST['social_id'];
-                        $user['social_type'] = $_POST['social_type'];
+                        $this->db->select('id');
+                        $this->db->where("social_id",$_POST['social_id']);
+                        $this->db->where("social_type",$_POST['social_type']);
+                        $this->db->from("customer");
+                        $sql_query = $this->db->get();
+                        if ($sql_query->num_rows() > 0){
+                            $social_user_exists = $sql_query->result_array();
+                        }
                     }
 
-                    $this->db->insert('customer', $user);
-                    $insert_id = $this->db->insert_id();
+                    if(empty($social_user_exists)){
 
-                    if($insert_id){
+                        $google_api_key = $this->config->item("google_key");
+                        $geocodeFromLatLong = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?latlng='.$_POST['latitude'].','.$_POST['longitude'].'&key='.$google_api_key);
+                        $output = json_decode($geocodeFromLatLong);
+                        $status = $output->status;
 
-                        //Send activation mail
+                        $address = ($status=="OK")?$output->results[1]->formatted_address:'';
 
-                        $to =  array($_POST['email']);
-                        $subject = 'Activate Your '.$this->config->item('site_name').' Account';
-                        $path = BASE_URL().'email_template/register.html';
-                        $template = file_get_contents($path);
+                        $user = array( 
+                                'username' => $_POST['username'], 
+                                'email'=> $_POST['email'], 
+                                'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+                                'device_token'=> $_POST['device_token'], 
+                                'device_type'=> $_POST['device_type'], 
+                                'mobile_number'=> $_POST['mobile_number'],
+                                'latitude'=> $_POST['latitude'],
+                                'longitude'=> $_POST['longitude'],
+                                'gender'=> $_POST['gender'],
+                                'dob'=> $_POST['date_of_birth'],
+                                'address'=> $address
+                            );
 
-                        $activation_token = bin2hex(random_bytes(20));
-                        $activate_url = base_url() . 'customer-activate/'. $activation_token;
-                        $template = str_replace('##ACCOUNTACIVATIONURL##', $activate_url, $template);
+                        if(isset($_POST['social_id']) && $_POST['social_id'] != "" && isset($_POST['social_type']) && $_POST['social_type'] != "0" && !is_null($_POST['social_id']) && !is_null($_POST['social_type'])){
 
-                        $template = $this->create_email_template($template);
+                            $user['social_id'] = $_POST['social_id'];
+                            $user['social_type'] = $_POST['social_type'];
+                        }
 
-                        $mail = $this->send_mail($to,$subject,$template);
+                        $this->db->insert('customer', $user);
+                        $insert_id = $this->db->insert_id();
 
-                        if($mail){
+                        if($insert_id){
 
-                            $update_data = array('activation_token' => $activation_token);
-                            $this->db->where('id', $insert_id);
-                            $this->db->update('customer', $update_data);
+                            //Send activation mail
 
-                            $response['status'] = true;
-                            $response['message'] = 'Account activation mail is sent on your email address';
+                            $to =  array($_POST['email']);
+                            $subject = 'Activate Your '.$this->config->item('site_name').' Account';
+                            $path = BASE_URL().'email_template/register.html';
+                            $template = file_get_contents($path);
 
-                         }else{
+                            $activation_token = bin2hex(random_bytes(20));
+                            $activate_url = base_url() . 'customer-activate/'. $activation_token;
+                            $template = str_replace('##ACCOUNTACIVATIONURL##', $activate_url, $template);
 
+                            $template = $this->create_email_template($template);
+
+                            $mail = $this->send_mail($to,$subject,$template);
+
+                            if($mail){
+
+                                $update_data = array('activation_token' => $activation_token);
+                                $this->db->where('id', $insert_id);
+                                $this->db->update('customer', $update_data);
+
+                                $response['status'] = true;
+                                $response['message'] = 'Account activation mail is sent on your email address';
+
+                             }else{
+                                $this->db->where('id', $insert_id);
+                                $this->db->delete('customer');
+
+                                $response['status'] = false;
+                                $response['message'] = 'Error into sending mail. please try again later';
+
+                             }
+
+                        }else{
                             $response['status'] = false;
-                            $response['message'] = 'Error into sending mail. please try again later';
-
-                         }
+                            $response['message'] = 'Error into register. please try again later';
+                        }
 
                     }else{
                         $response['status'] = false;
-                        $response['message'] = 'Error into register. please try again later';
+                        $response['message'] = 'This social account already used buy another account.';
                     }
-
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'This social account already used buy another account.';
                 }
             }
 
@@ -343,7 +353,7 @@ class Customer_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['customer_id']), 'deleted_at' => NULL);
+            $where = array('id' => intval($_POST['customer_id']), 'status' => 1, 'deleted_at' => NULL);
             $user = (array)$this->db->get_where('customer',$where)->row();
             if(empty($user)){
                 $response['status'] = false;
@@ -2321,25 +2331,6 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    // public function validate_prices2_post(){
-    //     //$postFields['prices'] =  $_POST['prices'];
-    //     $response['prices'] = $_POST['prices'];
-
-    //     $myfile = fopen("req.txt", "w") or die("Unable to open file!");
-    //     $txt =  file_get_contents('php://input');
-    //     fwrite($myfile, $txt);
-
-    //     $txt =  '///////////////////////////////////////////////\r\n';
-    //     fwrite($myfile, $txt);
-
-    //     $txt =  $_POST['prices'];
-    //     fwrite($myfile, $txt);
-        
-    //     fclose($myfile);
-    //     $response['status'] = false;
-    //     $this->response($response);
-    // }
-
     public function place_order_post(){
         $postFields['order_data'] = $_POST['order_data']; 
         $errorPost = $this->ValidatePostFields($postFields);
@@ -2550,7 +2541,8 @@ class Customer_api extends REST_Controller {
                                                             'order_status'=> 0,
                                                             'payment_status'=> 1,
                                                             'payment_mode'=> $order_data['payment_mode'],
-                                                            'transaction_id'=> '' 
+                                                            'transaction_id'=> '',
+                                                            'created_at'=> date('Y-m-d H:i:s')
                                                         );
 
                                                         if($address_not_required == true){
@@ -2789,6 +2781,172 @@ class Customer_api extends REST_Controller {
     //     $this->response($response);
     // }  
 
+    public function reorder_post(){
+        $postFields['order_id'] = $_POST['order_id'];
+        $postFields['customer_id'] = $_POST['customer_id'];
+
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+
+            $where = array('id' => intval($_POST['customer_id']), 'status' => 1, 'deleted_at' => NULL);
+            $customer = (array)$this->db->get_where('customer',$where)->row();
+            if(empty($customer)){
+                $response['status'] = false;
+                $response['message'] = 'User not found';    
+            }else{
+                $where = array('id' => intval($_POST['order_id']));
+                $order = (array)$this->db->get_where('orders',$where)->row();
+                if(empty($order)){
+                    $response['status'] = false;
+                    $response['message'] = 'Order not found';    
+                }else{
+
+                    // check shop is providing takeout or delievry not
+                    $this->db->select('id,service_charge,charges_of_minimum_mile');
+                    $this->db->from('shop');
+
+                    if($order['order_type'] == 1 || 2 || 5){
+                        $order_type = 'delivery';
+                        $this->db->group_start();
+                            $this->db->where("takeout_delivery_status", 1);
+                            $this->db->or_where("takeout_delivery_status", 3);
+                        $this->db->group_end();
+                    }else if($order['order_type'] == 3 || 4 || 6){
+                        $order_type = 'takeout';
+                        $this->db->group_start();
+                            $this->db->where("takeout_delivery_status", 2);
+                            $this->db->or_where("takeout_delivery_status", 3);
+                        $this->db->group_end();
+                    }else{
+                        $order_type = 'service';
+                    }
+
+                    $this->db->where('id',$order['shop_id']);
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+
+                        $shop_data = (array)$sql_query->row();
+                        // get order product data
+                        $this->db->select('*');
+                        $this->db->from('order_items');
+                        $this->db->where('order_id',$_POST['order_id']);
+                        $sql_query = $this->db->get();
+                        if ($sql_query->num_rows() > 0){
+                            $orders_item_data = $sql_query->result_array();
+
+                            $error = FALSE;
+                            $products = array();
+                            foreach ($orders_item_data as $key => $value) {
+
+                                // check product avaibility, status, quntity, cuisine, category
+
+                                $sql_select = array(
+                                                't1.id',
+                                                'IF(t1.offer_price = "", t1.price, t1.offer_price) as price',
+                                                't1.name',
+                                                't1.item_picture',
+                                                't1.is_combo'
+                                );
+
+                                $this->db->select($sql_select);
+                                $this->db->from('item t1');
+                                $this->db->where('t1.id',$value['item_id']);
+                                $this->db->where('t1.is_active',1);
+                                $this->db->where('t1.deleted_at',NULL);
+                                $this->db->where('t2.is_active',1);
+                                $this->db->where('t2.deleted_at',NULL);
+                                $this->db->where('t3.status',1);
+                                $this->db->where('t3.deleted_at',NULL);
+                                $this->db->where('t1.quantity >=',$value['quantity']);
+                                $this->db->join('cuisine t2', 't1.cuisine_id = t2.id');
+                                $this->db->join('category t3', 't1.category_id = t3.id');
+                                $sql_query = $this->db->get();
+                                if ($sql_query->num_rows() > 0){
+
+                                    $products[$key] = (array)$sql_query->row();
+                                    $products[$key]['quantity'] = $value['quantity'];
+
+                                }else{
+                                    $error = TRUE;
+                                    $message = 'Product(s) not avalilable any more.';
+                                    continue;
+                                }
+                            }
+                            if($error == TRUE){
+                                $response['status'] = false;
+                                $response['message'] = $message;
+                            }else{
+
+                                // get order items varients
+                                $variant_ids = array();
+                                foreach ($orders_item_data as $key => $value) {
+                                    $this->db->select('variant_id');
+                                    $this->db->from('order_item_variant');
+                                    $this->db->where_in('order_item_id',$value['id']);
+                                    $sql_query = $this->db->get();
+                                    if ($sql_query->num_rows() > 0){
+                                        $variants = $sql_query->result_array();
+                                        $variant_ids = array_merge($variant_ids,array_column($variants, 'variant_id'));
+                                        $products[$key]['variants'] = array_column($variants, 'variant_id');
+                                    }
+                                }
+
+                                // check if order varients exists check in database exists or not
+                                if(isset($variant_ids) && !empty($variant_ids)){
+                                    $this->db->select('*');
+                                    $this->db->from('variant_items');
+                                    $this->db->where_in('id',$variant_ids);
+                                    $sql_query = $this->db->get();
+                                    if ($sql_query->num_rows() == count($variant_ids)){
+                                        $variant_items_data = $sql_query->result_array();
+                                        foreach ($variant_items_data as $key => $value) {
+                                            foreach ($products as $key1 => $value1) {
+                                                if($value1['id'] == $value['item_id']){
+                                                    $varient_price = $value['price'];
+                                                    $products[$key1]['price'] += $value['price'];
+                                                    $products[$key1]['price'] = number_format((float)$products[$key1]['price'], 2, '.', '');
+                                                }
+                                            }
+                                        }
+                                    }else{
+                                        $error = TRUE;
+                                        $message = 'Product varient(s) not avalilable any more.';
+                                    }
+                                }
+
+                                if($error == TRUE){
+                                    $response['status'] = false;
+                                    $response['message'] = $message;
+                                }else{
+
+                                    $order_data = array('order_type' => $order['order_type']);
+                                    $order_data['shop_id'] = $shop_data['id'];
+                                    $order_data['tax'] = $this->get_tax();
+                                    $order_data['delivery_charges'] = $shop_data['charges_of_minimum_mile'];
+                                    $order_data['service_charge'] = $shop_data['service_charge'];
+                                    $order_data['products'] = $products;
+                                    $response['order_data'] = $order_data;
+                                    
+                                } 
+                            }
+                            
+                        }else{
+                            $response['status'] = false;
+                        }
+
+                    }else{
+                        $response['status'] = false;
+                        $response['message'] = 'Restaurant is not providing '.$order_type;
+                    }
+                }
+            }
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
     public function fetch_delivery_charge_post(){
         $postFields['delivery_address_id'] = $_POST['delivery_address_id']; 
         $postFields['shop_id'] = $_POST['shop_id']; 
@@ -2946,7 +3104,7 @@ class Customer_api extends REST_Controller {
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
 
-            if(strlen($_POST['keyword']) > 2){
+            if(strlen($_POST['keyword']) > 0){
                 $sql_select = array(
                                 "id",
                                 "shop_name",
@@ -3072,7 +3230,7 @@ class Customer_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['customer_id']));
+            $where = array('id' => intval($_POST['customer_id']), 'status' => 1, 'deleted_at' => NULL);
             $customer = (array)$this->db->get_where('customer',$where)->row();
             if(empty($customer)){
                 $response['status'] = false;
@@ -3146,7 +3304,7 @@ class Customer_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['customer_id']));
+            $where = array('id' => intval($_POST['customer_id']), 'status' => 1, 'deleted_at' => NULL);
             $customer = (array)$this->db->get_where('customer',$where)->row();
             if(empty($customer)){
                 $response['status'] = false;
@@ -3208,7 +3366,7 @@ class Customer_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['customer_id']));
+            $where = array('id' => intval($_POST['customer_id']), 'status' => 1, 'deleted_at' => NULL);
             $customer = (array)$this->db->get_where('customer',$where)->row();
             if(empty($customer)){
                 $response['status'] = false;
@@ -3386,6 +3544,21 @@ class Customer_api extends REST_Controller {
         $img_mae = $this->generate_qr_code($_POST['data']);
         $response['img_mae'] = $img_mae;
         $this->response($response);
+    }
+
+    public function get_tax(){
+
+        $return = '';
+        $this->db->select('data');
+        $this->db->where("name", 'tax');
+        $this->db->from('setting');
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+            $tax_data = $sql_query->row();
+            $return = $tax_data->data;
+        }
+
+        return $return;
     }
 
     public function create_email_template($template){

@@ -182,6 +182,7 @@ $route['custom-email-deliveryboy'] = 'admin/email_template/custom_email/delivery
 
 // admin - send custom push
 $route['custom-push-customer'] = 'admin/email_template/custom_push_customer';
+$route['custom-push-restaurant'] = 'admin/email_template/custom_push_shop';
 
 //Admin- History
 $route['transaction-history'] = 'admin/history/transaction_history'; 
@@ -309,6 +310,7 @@ $route['home-page'] = 'user/user/index';
 
 // vender  - email
 $route['vender-custom-email-customer'] = 'vender/email_push/custom_email_customer';
+$route['vender-custom-push-customer'] = 'vender/email_push/custom_push_customer';
 
 // API
 $route['customer-activate/(:any)'] = 'customer/customer_login/activate_account/$1';

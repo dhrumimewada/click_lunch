@@ -17,6 +17,7 @@ class Email_push extends CI_Controller {
 			}
 		}
 		$this->load->model("email_template_model");
+		$this->load->model("vender/item_model");
 	}
 
 	public function validate_shop($shops = NULL, $group_id = NULL) {
@@ -82,7 +83,7 @@ class Email_push extends CI_Controller {
 				 
 				if ($this->form_validation->run() === true){
 
-					//$data = $this->email_template_model->send_custom_email_customer();
+					$data = $this->email_template_model->send_custom_email_customer();
 					// echo "<pre>";
 					// print_r($data);
 					// exit;
@@ -113,7 +114,7 @@ class Email_push extends CI_Controller {
 			$output_data["group"] = $this->config->item("group_for_admin");
 		}else if($is_vender || $is_employee){
 			$output_data["group"] = $this->config->item("group_for_shop_email");
-			$item_list = $this->email_template_model->get_table_data('item');
+			$item_list = $this->item_model->get_item();
 			$output_data["item_list"] = $item_list;
 		}else{
 
@@ -121,6 +122,59 @@ class Email_push extends CI_Controller {
 
 		$output_data["to"] =$to;
 		$output_data['main_content'] = "admin/email_template/email_custom_customer";
+		$this->load->view('template/template',$output_data);	
+	}
+
+	public function custom_push_customer(){
+		$this->auth->clear_messages();
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
+
+		if (isset($_POST) && !empty($_POST)){
+			if (isset($_POST['submit'])){
+
+				$validation_rules = array(
+					array('field' => 'shop[]', 'label' => 'restaurant', 'rules' => 'trim|callback_validate_shop[' . $_POST['group'] . ']'),
+					array('field' => 'no_of_orders', 'label' => 'minimum number of orders', 'rules' => 'trim|callback_validate_order_no[' . $_POST['group'] . ']'),
+					array('field' => 'group', 'label' => 'group', 'rules' => 'trim|required'),
+					array('field' => 'notification_title', 'label' => 'title', 'rules' => 'trim|required'),
+					array('field' => 'notification_message', 'label' => 'message', 'rules' => 'trim|required')
+				);
+
+				//echo "<pre>";
+				//print_r($_POST['emat_email_message']);
+
+				
+				$this->form_validation->set_rules($validation_rules);
+				 
+				if ($this->form_validation->run() === true){
+					
+					//$abc = $this->email_template_model->send_custom_push_customer();
+					// echo "<pre>";
+					// print_r($_POST);
+					// print_r($abc);
+					// exit;
+					if($this->email_template_model->send_custom_push_customer()){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "vender-custom-push-customer");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "vender-custom-push-customer");
+					}
+				}
+
+			}
+		}
+
+
+		$output_data["group"] = $this->config->item("group_for_shop_email");
+		$output_data["is_admin"] = $this->auth->is_admin();
+		$output_data["is_vender"] = $this->auth->is_vender();
+
+		$item_list = $this->item_model->get_item();
+		$output_data["item_list"] = $item_list;
+
+		$output_data['main_content'] = "admin/email_template/push_custom_customer";
 		$this->load->view('template/template',$output_data);	
 	}
 

@@ -340,11 +340,11 @@ class Email_template_model extends CI_Model {
 	}
 
 	public function send_custom_push_customer(){
+
 		$return_value = FALSE;
 
-		$from = "";
-		$subject = $this->input->post("notification_title");
-		$email_message_string = $this->input->post("notification_message");
+		$notification_title = $this->input->post("notification_title");
+		$notification_message = $this->input->post("notification_message");
 
 		$emails_array = array();
 
@@ -462,14 +462,64 @@ class Email_template_model extends CI_Model {
 
 		if(is_array($emails_array) && !empty($emails_array)){
 			$unique_array = array_map("unserialize", array_unique(array_map("serialize", $emails_array)));
+			//return $unique_array;
+
+			$ios_data = array();
+  			$android_data = array();
+
+			foreach ($unique_array as $key => $value) {
+				if($value['device_type'] == 1){
+	  				array_push($android_data, $device_type_token_array[$key]['device_token']);
+	  			}else if($value['device_type'] == 2){
+	  				array_push($ios_data, $device_type_token_array[$key]['device_token']);
+	  			}else{
+
+	  			}
+			}
+
+			if(!empty($android_data)){
+				$data1 = send_push_multiple_android($android_data, $ios_data, $notification_title, $notification_message, 'admin_notification');
+			}
+			if(!empty($ios_data)){
+				$data2 = send_push_multiple_ios($ios_data, $notification_title, $notification_message, 'admin_notification');
+			}
 			
 			$this->auth->set_status_message("Notification(s) sent successfully");
 			$return_value = TRUE;
 		}else{
-			$this->auth->set_error_message("No any user found");
+			$this->auth->set_error_message("No any customer found");
 		}
 
 		return $return_value;	
+	}
+
+	public function send_custom_push_shop(){
+		$return_value = FALSE;
+
+		$notification_title = $this->input->post("notification_title");
+		$notification_message = $this->input->post("notification_message");
+
+		$this->db->select('device_token');
+		$this->db->from('shop');
+		$this->db->where('device_token !=', '');
+		$this->db->where('t1.deleted_at', NULL);
+		$this->db->where('t1.status', 1);
+
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$shop_data = $sql_query->result_array();
+			$shop_devices = array_column($shop_data, 'device_token');
+
+			if(isset($shop_devices) && is_array($shop_devices) && !empty($shop_devices)){
+				$data = send_push_multiple_ios($shop_devices, $notification_title, $notification_message, 'admin_notification');
+			}
+
+			$this->auth->set_status_message("Notification(s) sent successfully");
+			$return_value = TRUE;
+		}else{
+			$this->auth->set_error_message("No any logged in restaurant found");
+		}	
+		return $return_value;
 	}
 	
 }

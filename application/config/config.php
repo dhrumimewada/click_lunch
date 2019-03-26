@@ -520,6 +520,8 @@ $config['rewrite_short_tags'] = FALSE;
 | Comma-separated:	'10.0.1.200,192.168.5.0/24'
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
+date_default_timezone_set('Asia/Kolkata');
+
 $config['proxy_ips'] = '';
 $config['profile_path'] = 'assets/files/profile_pictures';
 $config['customer_profile_path'] = 'assets\files\customer_profile_pictures';

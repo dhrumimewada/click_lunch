@@ -1468,6 +1468,7 @@ class Customer_api extends REST_Controller {
         $this->db->where("latitude !=", '');
         $this->db->where("deleted_at", NULL);
         $this->db->where("status", 1);
+        $this->db->where("weekly_status", 1);
 
         $this->db->from('shop');
         $sql_query = $this->db->get();
@@ -2371,6 +2372,26 @@ class Customer_api extends REST_Controller {
                     $this->db->where('id', $order_data['shop_id']);
                     $this->db->where('deleted_at',NULL);
                     $this->db->where('status', 1);
+
+                    $shop_error = 'Restaurant not found';
+                    if($order['order_type'] == 1 || 2 || 5){
+                        $shop_error = 'Restaurant is not providing delivery order for now.';
+                        $this->db->group_start();
+                            $this->db->where("takeout_delivery_status", 1);
+                            $this->db->or_where("takeout_delivery_status", 3);
+                        $this->db->group_end();
+                    }else if($order['order_type'] == 3 || 4 || 6){
+                        $shop_error = 'Restaurant is not providing takeout order for now.';
+                        $this->db->group_start();
+                            $this->db->where("takeout_delivery_status", 2);
+                            $this->db->or_where("takeout_delivery_status", 3);
+                        $this->db->group_end();
+                    }
+
+                    if($order['order_type'] == 5 || 6){
+                        $this->db->where("weekly_status", 1);
+                        $shop_error = 'Restaurant is not providing weekly order for now.';
+                    }
                     $sql_query = $this->db->get();
                     if ($sql_query->num_rows() > 0){
 
@@ -2445,8 +2466,44 @@ class Customer_api extends REST_Controller {
 
                                     if($order_type_error == FALSE){
 
-                                        // PENDING - check in Database shop timing - is shop open for this date & time $date $time
-                                        $shop_open = TRUE;
+                                        if($order_data['order_type'] == 1 || 3){
+                                            //avaliable in curent time
+                                            $day = date('l');
+                                        }else if($order_data['order_type'] == 2 || 4){
+                                            //available in today later time
+                                            $day = date('l');
+                                        }else if($order_data['order_type'] == 5 || 6){
+                                            // available in schedule date & time
+                                            $my_schedule_date = DateTime::createFromFormat('Y-m-d', $order_data['schedule_date']);
+                                            $day = $my_schedule_date->format('l');
+                                        }else{
+                                            $day = NULL;
+                                        }
+
+                                        $shop_open = FALSE;
+                                        if(isset($day) && !is_null($day) && $day != ''){
+                                            $this->db->select('from_time,to_time,full_day');
+                                            $this->db->from('shop_availibality');
+                                            $this->db->where('shop_id', $order_data['shop_id']);
+                                            $this->db->where('is_closed', 0);
+                                            $this->db->where('day',$day);
+                                            $sql_query = $this->db->get();
+                                            if ($sql_query->num_rows() > 0){
+                                                $availibality_data = (array)$sql_query->row();
+                                                if($availibality_data['full_day'] == 1){
+                                                    $shop_open = TRUE;
+                                                }else{
+                                                    // add validation for shop timing
+                                                    $shop_open = TRUE;
+                                                }
+                                                
+                                            }else{
+                                                $shop_open = FALSE;
+                                            }
+                                        }else{
+                                            $shop_open = TRUE;
+                                        }
+
                                         if($shop_open == TRUE){
 
                                             $order_products_array = array();
@@ -2525,12 +2582,18 @@ class Customer_api extends REST_Controller {
 
                                                     if($error == ''){
 
+                                                        if($order_data['order_type'] == 3 || 4 || 6){
+                                                            $delivery_charges = 0;
+                                                        }else{
+                                                            $delivery_charges = $order_data['delivery_charges'];
+                                                        }
+
                                                         $data = array( 
                                                             'customer_id' => $order_data['customer_id'], 
                                                             'shop_id'=> $order_data['shop_id'], 
                                                             'order_type'=> $order_data['order_type'], 
                                                             'later_time'=> $later_time,
-                                                            'delivery_charges' => number_format((float)$order_data['delivery_charges'], 2, '.', ''),
+                                                            'delivery_charges' => number_format((float)$delivery_charges, 2, '.', ''),
                                                             'promocode_id'=> $promocode_id,
                                                             'promo_amount'=> '',
                                                             'tax' => $order_data['tax'],
@@ -2755,7 +2818,7 @@ class Customer_api extends REST_Controller {
 
                     }else{
                         $response['status'] = false;
-                        $response['message'] = 'Restaurant not found';
+                        $response['message'] = $shop_error;
                     }
                 }else{
                     $response['status'] = false;
@@ -2781,7 +2844,7 @@ class Customer_api extends REST_Controller {
     //     $this->response($response);
     // }  
 
-    public function reorder_post(){
+    public function get_reorder_data_post(){
         $postFields['order_id'] = $_POST['order_id'];
         $postFields['customer_id'] = $_POST['customer_id'];
 
@@ -2805,20 +2868,25 @@ class Customer_api extends REST_Controller {
                     $this->db->select('id,service_charge,charges_of_minimum_mile');
                     $this->db->from('shop');
 
+                    if($order['order_type'] == 5 || 6){
+                        $this->db->where("weekly_status", 1);
+                        $order_type = 'weekly ';
+                    }
+
                     if($order['order_type'] == 1 || 2 || 5){
-                        $order_type = 'delivery';
+                        $order_type .= 'delivery';
                         $this->db->group_start();
                             $this->db->where("takeout_delivery_status", 1);
                             $this->db->or_where("takeout_delivery_status", 3);
                         $this->db->group_end();
                     }else if($order['order_type'] == 3 || 4 || 6){
-                        $order_type = 'takeout';
+                        $order_type .= 'takeout';
                         $this->db->group_start();
                             $this->db->where("takeout_delivery_status", 2);
                             $this->db->or_where("takeout_delivery_status", 3);
                         $this->db->group_end();
                     }else{
-                        $order_type = 'service';
+                        $order_type .= 'service';
                     }
 
                     $this->db->where('id',$order['shop_id']);

@@ -42,6 +42,9 @@ class Order extends CI_Controller {
 		$is_employee = $this->auth->is_employee();
 		$is_dispatcher = $this->auth->is_dispatcher();
 
+		$pickup_minutes = $this->config->item("pickup_minutes");
+		$delivery_minutes = $this->config->item("delivery_minutes");
+
 		foreach($order_list as $key => $value) {
 
 				$id = encrypt($value['id']);
@@ -49,10 +52,10 @@ class Order extends CI_Controller {
 
 				if($is_dispatcher){
 					$status_str = "<a href='".$order_view_url."/".$id."' class='btn btn-outline-primary waves-effect waves-light btn-sm' status-id='" . $value["order_status"] . "' title='View' data-popup='tooltip' > View</a> ";
-					if($value['order_status'] == 0){
-						$status_str .= "<button type='button' class='btn btn-sm btn-yellow waves-effect waves-light pending' title='Pending' data-popup='tooltip' disabled>Pending</button>";
-					}elseif($value['order_status'] == 1){
-						$status_str .= "<button type='button' class='btn btn-success btn-sm waves-effect waves-light assign-db' title='Assign to Delivery Boy' data-popup='tooltip' data-toggle='modal' data-target='#db-model' data-ordername='".$order_name."'> Assign</button>";
+					if($value['order_status'] == 3){
+						$status_str .= "<button type='button' class='btn btn-sm btn-yellow waves-effect waves-light assign-db' title='Reassign Delivery Boy' data-popup='tooltip' data-toggle='modal' data-target='#db-model' data-ordername='".$order_name."' data-prev-db-id='" . $value["delivery_boy_id"] . "'>Reassign</button>";
+					}else if($value['order_status'] == 1){
+						$status_str .= "<button type='button' class='btn btn-success btn-sm waves-effect waves-light assign-db' title='Send Request to Delivery Boy' data-popup='tooltip' data-toggle='modal' data-target='#db-model' data-ordername='".$order_name."'>Send Request</button>";
 					}else{
 
 					}
@@ -65,8 +68,37 @@ class Order extends CI_Controller {
 					$status_str = '';
 				}
 
-				$created_date_ts = strtotime($value["created_at"]);
-                $created_date = date("j M, Y g:i a", $created_date_ts);
+				$created_date_ts = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
+				$created_date = $created_date_ts->format('j M, Y h:i A');
+
+				if($value['order_type'] == 1 || 3){
+
+                    $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
+                    $my_delivery_minutes = $delivery_minutes + $pickup_minutes;
+                    $my_delivery_time = $my_date->add(new DateInterval('PT'.$my_delivery_minutes.'M'));
+                    $delivery_time = $my_delivery_time->format('j M, Y h:i A');
+                    $delivery_time_ts = $my_delivery_time->format('Y-m-d H:i:s');
+
+                }else if($value['order_type'] == 2 || 4){
+
+                    $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
+                    $my_created_date = $my_date->format('Y-m-d');
+                    $later_datetime = DateTime::createFromFormat('Y-m-d h:i A', $my_created_date.' '.$value['later_time']);
+                    $delivery_time = $later_datetime->format('j M, Y h:i A');
+                    $delivery_time_ts = $later_datetime->format('Y-m-d H:i:s');
+
+
+                }else if($value['order_type'] == 5 || 6){
+
+                    $my_date = DateTime::createFromFormat('Y-m-d h:i A', $value['schedule_date'].' '.$value['schedule_time']);
+                    $delivery_time = $my_date->format('j M, Y h:i A');
+                    $delivery_time_ts = $my_date->format('Y-m-d H:i:s');
+
+                }else{
+
+                    $delivery_time = '';
+                    $delivery_time_ts = date('Y-m-d H:i:s');
+                }
 		       	
 		       	$data[] = array(
 		            $value['id'],
@@ -75,6 +107,8 @@ class Order extends CI_Controller {
 		            $value["shop_name"],
 		            '&#36;'.$value["total"],
 		            $created_date,
+		            $delivery_time,
+		            $delivery_time_ts,
 		            $status_str
 		       	);
 
@@ -125,8 +159,8 @@ class Order extends CI_Controller {
   	}
 
   	public function get_all_db(){
-  		$where = array('deleted_at' => NULL, 'status' => 1);
-        $select = array('id','username');
+  		$where = array('deleted_at' => NULL, 'status' => 1, 'device_token !=' => '');
+        $select = array('id','username','mobile_number');
         $table = 'delivery_boy';
         $data = get_data_by_filter($table,$select, $where);
   		if(isset($data) && is_array($data) && !empty($data)){

@@ -57,13 +57,19 @@ if($is_admin){
                 </li>
 
                 <li>
+                    <a href="<?php echo base_url().'order-single-assign'; ?>" class="waves-effect">
+                        <i class="mdi mdi-account-settings"></i><span> Assign Delivery Boy </span>
+                    </a>
+                </li>
+
+                <!-- <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Assign Order <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="<?php echo base_url().'order-single-assign'; ?>">Single Order</a></li>
-                        <li><a href="<?php echo base_url().'maintenance8'; ?>">Multiple Order</a></li>
-                        <li><a href="<?php echo base_url().'maintenance9'; ?>">Weekly Order</a></li>
+                        <li><a href="<?php //echo base_url().'order-single-assign'; ?>">Single Order</a></li>
+                        <li><a href="<?php //echo base_url().'maintenance8'; ?>">Multiple Order</a></li>
+                        <li><a href="<?php //echo base_url().'maintenance9'; ?>">Weekly Order</a></li>
                     </ul>
-                </li>
+                </li> -->
 
                 <li>
                     <a href="<?php echo base_url().'maintenance10'; ?>" class="waves-effect">

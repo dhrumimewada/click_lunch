@@ -33,11 +33,14 @@ class Banner extends CI_Controller {
 		$highlight_list = $this->banner_model->get_highlight();
 
 		$output_data["highlight_list"] = $highlight_list;
+		// echo "<pre>";
+		// print_r($output_data);
+		// exit;
 		$output_data['main_content'] = "admin/banner/highlight";
 		$this->load->view('template/template',$output_data);	
 	}
 
-	public function highlight_put(){
+	public function highlight_put1(){
 		
 		$error = false;
 		$number = 0;
@@ -49,13 +52,47 @@ class Banner extends CI_Controller {
 			}
 		}
 		if($error == true){
-			$this->auth->set_error_message('Highlight slide '.$number.' is required');
+			$this->auth->set_error_message('Highlight text '.$number.' is required');
 		}else{
 			$this->auth->set_status_message("Slider text updated successfully");	
 		}
 		$this->session->set_flashdata($this->auth->get_messages_array());
 		redirect(base_url() . "highlight-list");
 		
+	}
+
+	public function highlight_put($id = NULL){
+
+		$this->auth->clear_messages();
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
+
+		if (isset($_POST) && !empty($_POST)){
+
+			if (isset($_POST['submit'])){
+				$validation_rules = array(
+					array('field' => 'txt1', 'label' => 'highlight text1', 'rules' => 'trim|required|max_length[8]'),
+					array('field' => 'txt2', 'label' => 'highlight text2', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'txt3', 'label' => 'highlight text3', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'highlight_id', 'label' => 'highlight id', 'rules' => 'trim|required')
+				);
+
+				$this->form_validation->set_rules($validation_rules);
+
+				if ($this->form_validation->run() === true) {
+					if($this->banner_model->highlight_put()){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "highlight-list");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "highlight-update/".encrypt($this->input->post("highlight_id")));
+					}	
+				} 
+			}
+		}
+		$output_data['highlight'] = $this->banner_model->get_highlight(decrypt($id));
+		$output_data['main_content'] = "admin/banner/highlight_put";
+		$this->load->view('template/template',$output_data);	
 	}
 
 	public function isexists($str = NULL, $id = NULL) {

@@ -18,6 +18,15 @@
                 normalizer: function (value) {
                     return $.trim(value);
                 }
+            },
+            delivery_available_mile: {
+                required:true,
+                number: true,
+                maxlength:10,
+                greaterThan:true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
             }
             
         },
@@ -28,6 +37,12 @@
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed"),
                 validate_perc:"The TAX field should be less than 100.00",
                 greaterThanZeroEqualTo: "The TAX field is invalid."
+            },
+            delivery_available_mile: {
+                required: "The delivery available mile field is required.",
+                number: "The delivery available mile field is invalid.",
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed"),
+                greaterThan: "The delivery available mile field is invalid."
             }
             
         },
@@ -38,6 +53,9 @@
 
   $.validator.addMethod("greaterThanZeroEqualTo", function(value, element) {
         return this.optional(element) || value >= 0;
+    });
+  $.validator.addMethod("greaterThan", function(value, element) {
+        return this.optional(element) || value > 0;
     });
 
   $.validator.addMethod("validate_perc", function(value, element) {

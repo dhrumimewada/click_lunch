@@ -643,6 +643,7 @@ class Delivery_boy_api extends REST_Controller {
                                 $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
                                 $my_date2 = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
                                 $pickup_time = $my_date->add(new DateInterval('PT'.$pickup_minutes.'M'));
+                                $delivery_minutes = $delivery_minutes + $pickup_minutes;
                                 $delivery_time = $my_date2->add(new DateInterval('PT'.$delivery_minutes.'M'));
 
                                 $orders_data[$key]['order_date'] = $value['created_at'];

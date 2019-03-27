@@ -15,6 +15,10 @@ class Order_model extends CI_Model {
 						't1.order_status',
 						't1.order_type',
 						't1.total',
+						't1.later_time',
+						't1.schedule_time',
+						't1.schedule_date',
+						't1.delivery_boy_id',
 						't2.username',
 						't3.shop_name',
 						't1.created_at'
@@ -38,8 +42,8 @@ class Order_model extends CI_Model {
 			$this->db->group_end();
 		
 			$this->db->group_start();
-			$this->db->where('t1.order_status', 0);
-			$this->db->or_where('t1.order_status', 1);
+				$this->db->or_where('t1.order_status', 1);
+				$this->db->or_where('t1.order_status', 3);
 			$this->db->group_end();
 		}elseif($this->auth->is_vender()){
 			$this->db->where("t1.shop_id",$this->auth->get_user_id());

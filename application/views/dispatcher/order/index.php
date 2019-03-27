@@ -10,6 +10,9 @@ $edit_link = base_url().'processing-update';
         border-color: #fe3153;
         background-color: #fe3153;
    }
+   .assign-db{
+        width: 6.5rem;
+   }
 </style>
 <div class="content">
     <div class="container-fluid">
@@ -17,7 +20,7 @@ $edit_link = base_url().'processing-update';
         <div class="row">
             <div class="col-sm-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">New Orders</h4>
+                    <h4 class="page-title">Orders</h4>
                 </div>
                 <?php echo get_msg();  ?>
             </div>
@@ -26,7 +29,7 @@ $edit_link = base_url().'processing-update';
 
         <!-- The Modal -->
         <div class="modal" id="db-model">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
               <div class="modal-content">
               
                 <!-- Modal Header -->
@@ -50,7 +53,7 @@ $edit_link = base_url().'processing-update';
                 <!-- Modal footer -->
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-success submit">Assign</button>
+                  <button type="button" class="btn btn-success submit">Send</button>
                 </div>
                 
               </div>
@@ -69,7 +72,9 @@ $edit_link = base_url().'processing-update';
                                 <th>Customer Name</th>
                                 <th>Restaurant Name</th>
                                 <th>Order Amount</th>
-                                <th>Order Date Time</th>
+                                <th>Order Placed On</th>
+                                <th>Order Should be Deliver by</th>
+                                <th>Order Should be Deliver by - Order by</th>
                                 <th class="text-center">Action</th>
                             </tr>
                             </thead>

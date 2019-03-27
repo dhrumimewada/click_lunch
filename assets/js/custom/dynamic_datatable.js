@@ -1,7 +1,10 @@
 var protocol = window.location.protocol;
 var host = window.location.host;
-//var base_url = protocol+'//'+host+'/click_lunch/';
-var base_url = protocol+'//'+host+'/';
+if(window.location.href.indexOf('localhost') !== -1){
+    var base_url = protocol+'//'+host+'/click_lunch/';
+}else{
+    var base_url = protocol+'//'+host+'/';
+}
 
 if(!promocode_id){
     var promocode_id = '';
@@ -141,19 +144,20 @@ $( document ).ready(function() {
             url : new_order_url,
             type : 'GET'
         },
-        "order":[[ 0, "desc" ]],
+        "order":[ 7, "desc" ],
         createdRow: function(row, data, dataIndex ) {
-                  $(row).attr("data-id",data[0]);
+                $(row).attr("data-id",data[0]);
 
-                  var $last_Cell = $(row).find('td:eq(5)');
-                  $($last_Cell).addClass("text-center");
+                var $deliver_by_Cell = $(row).find('td:eq(7)');
+                $($deliver_by_Cell).addClass("text-center");
+
               },
         "columnDefs": [
             {
-                "targets": [ 0 ],
+                "targets": [ 0 , 7],
                 "visible": false
             },
-            { "orderable": false, "targets": 6 }
+            { "orderable": false, "targets": 8 }
         ]
     });
 

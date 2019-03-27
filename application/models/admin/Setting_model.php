@@ -28,6 +28,12 @@ class Setting_model extends CI_Model {
 		$this->db->where('name', 'tax');
 		$this->db->update("setting", $user_data);
 
+		$delivery_available_mile = number_format((float)$this->input->post("delivery_available_mile"), 2, '.', '');
+		$user_data = array('data' => $delivery_available_mile);
+
+		$this->db->where('name', 'delivery_available_mile');
+		$this->db->update("setting", $user_data);
+
 		if ($this->db->trans_status() === FALSE) {
 			$this->db->trans_rollback();
 			$this->auth->set_error_message("Error into updating setting");

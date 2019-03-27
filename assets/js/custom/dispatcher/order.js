@@ -2,8 +2,8 @@ $(document).ready(function (){
 
     $(".select2").select2();
     var row_id = null;
-    var this_row = null;
     var order_name = null;
+    var prev_db_id = '';
         $(document).on('click',".update-status", function() {
 
             $this = $(this);
@@ -62,7 +62,7 @@ $(document).ready(function (){
                             } 
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
-                            console.log('error');
+                            //console.log('error');
                         }
                     });    
                 })
@@ -73,38 +73,45 @@ $(document).ready(function (){
             $('#selct_db').find('option').remove().end();
             $('#selct_db').attr('disabled', 'disabled');
 
+            $('#db-model .error').addClass("d-none");
 
             $this = $(this);
             order_name = $this.attr("data-ordername");
+            prev_db_id = $this.attr("data-prev-db-id");
+            //console.log(prev_db_id);
+            //return false;
             if (typeof order_id != "undefined" && order_id != ''){
                 row_id = order_id;
             }else{
                 row_id = get_dataid($this);
             }
             
-            this_row = $this;
             $('.order-id').text(order_name);
 
             $.ajax({
                 url: get_db_url,
                 type: "POST",
                 success: function (returnData) {
-                     console.log(returnData);
+                     //console.log(returnData);
                      if (typeof returnData != "undefined" && returnData != ''){
                         returnData = $.parseJSON(returnData);
 
                         // console.log('DB');
                         // console.log(returnData);
                         $.each(returnData, function (key, val){
-                            var newOption = new Option(val.username, val.id, false, false);
+                            var option_text = val.username+ ' ( ' + val.mobile_number + ' )';
+                            var newOption = new Option(option_text, val.id, false, false);
                             $('#selct_db').append(newOption).val('').trigger('change');
                         });
+                        if(prev_db_id != ''){
+                            $('#selct_db option[value="'+prev_db_id+'"]').attr("selected","selected").trigger('change');
+                        }
                      }
                      $('#selct_db').removeAttr('disabled');
                     return true;
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    console.log('error');
+                   // console.log('error');
                 }
             });
         });
@@ -115,9 +122,18 @@ $(document).ready(function (){
             var db_name = $('#selct_db').find('option:selected').text();
             var order_id = row_id;
 
-            console.log(db_id);
-            console.log(row_id);
-            console.log(db_name);
+            // console.log(db_id);
+            // console.log(row_id);
+            // console.log(db_name);
+
+            // if(typeof prev_db_id == "undefined" || prev_db_id == ''){
+            //     console.log("blank");
+            // }else{
+            //     console.log(prev_db_id);
+            // }
+
+            //return false;
+
             if (order_id !== null && order_id.length > 0 && db_id !== null && db_id.length > 0){
 
                 $.ajax({
@@ -128,16 +144,22 @@ $(document).ready(function (){
                         order_id:order_id
                     },
                     success: function (returnData) {
-                        console.log(returnData);
+                        console.log(db_id);
                         if (typeof returnData != "undefined")
                         {
                             $('#db-model').modal('toggle');
-                            remove_row(this_row);
                             swal(
                                 'Assigned!',
                                 'Order '+order_name+' Has Been Assigned To '+db_name+'.',
                                 'success'
                             )
+
+                            if(typeof prev_db_id == "undefined" || prev_db_id == ''){
+                                
+                                $('tr[data-id="' + row_id + '"] td:last-child .assign-db').replaceWith("<button type='button' class='btn btn-sm btn-yellow waves-effect waves-light assign-db' title='Reassign Delivery Boy' data-popup='tooltip' data-toggle='modal' data-target='#db-model' data-ordername='CL"+order_id+"' data-prev-db-id='"+db_id+"'>Reassign</button>");
+                            }else{
+                                $('tr[data-id="' + row_id + '"] td:last-child .assign-db').attr('data-prev-db-id', db_id);
+                            }
 
                             
                         } 
@@ -157,9 +179,9 @@ $(document).ready(function (){
             var db_name = $('#selct_db').find('option:selected').text();
             var order_id = row_id;
 
-            console.log(db_id);
-            console.log(row_id);
-            console.log(db_name);
+            // console.log(db_id);
+            // console.log(row_id);
+            // console.log(db_name);
             if (order_id !== null && order_id.length > 0 && db_id !== null && db_id.length > 0){
 
                 $.ajax({

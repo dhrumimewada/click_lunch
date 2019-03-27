@@ -1,6 +1,6 @@
  <!-- Start content -->
 <?php
-$put_link = base_url().'highlight-put';
+$edit_link = base_url().'highlight-update';
 ?>
 <div class="content">
     <div class="container-fluid">
@@ -8,7 +8,7 @@ $put_link = base_url().'highlight-put';
         <div class="row">
             <div class="col-lg-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">Update Highlights</h4>
+                    <h4 class="page-title">Highlights</h4>
                 </div>
             </div>
         </div>
@@ -27,59 +27,34 @@ $put_link = base_url().'highlight-put';
 
                     <div class="card m-b-20">
                         <div class="card-body">
-
+                            <table class="table table-hover dt-responsive nowrap admin_list">
+                            <thead>
+                            <tr>
+                                <th class='text-center'>Text1</th>
+                                <th class='text-center'>Text2</th>
+                                <th class='text-center'>Text3</th>
+                                <th>Updated Date</th>
+                                <th class='text-center'>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
                             <?php
                             if (isset($highlight_list) && !empty($highlight_list) && count($highlight_list) > 0){
                                 foreach ($highlight_list as $key => $value){
-                            ?>
+                                    $id = $value["id"];
 
-                            <div class="row">
-                                <div class="col-lg-12 mt-2 mb-1">
-                                    <h4 class="mt-0 mb-0 header-title">Highlight Slide <?php echo $key+1; ?></h4>
-                                    <hr class="mt-1 mb-3">
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="required">Text 1</label>
-                                        <div>
-                                            <input type="text" name="highlight<?php echo $key;?>[<?php echo $key;?>]" class="form-control" placeholder="Ex: 99.90" value="<?php echo $value['txt1']; ?>">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="required">Text 2</label>
-                                        <div>
-                                            <input type="text" name="highlight<?php echo $key;?>[<?php echo $key+1;?>]" class="form-control" placeholder="Ex: RESTAURANT" value="<?php echo $value['txt2']; ?>">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="required">Text 3</label>
-                                        <div>
-                                            <input type="text" name="highlight<?php echo $key;?>[<?php echo $key+2;?>]" class="form-control" placeholder="Ex: OPTIONS PER WEEK" value="<?php echo $value['txt3']; ?>">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <?php
+                                    echo '<tr data-id="' . $id . '">';
+                                    echo "<td class='text-center'>" . $value["txt1"] . "</td>";
+                                    echo "<td class='text-center'>" . $value["txt2"] . "</td>";
+                                    echo "<td class='text-center'>" . $value["txt3"] . "</td>";
+                                    echo "<td>" . $value["updated_at"] . "</td>";
+                                    echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a></td>";
+                                    echo '</tr>';
                                 }
                             }
                             ?>
-
-                            <div class="form-group m-b-0">
-                                <div>
-                                    <button type="submit" name="submit" class="btn btn-primary waves-effect waves-light">
-                                        Submit
-                                    </button>
-                                </div>
-                            </div>
-
+                            </tbody>
+                        </table>
                         </div>
                     </div>
                 </div> 
@@ -89,3 +64,11 @@ $put_link = base_url().'highlight-put';
 
     </div>
 </div>
+<script type="text/javascript">
+    var admin_list = $('.admin_list').DataTable({
+            keys: true,
+            "order": [[3, "desc"]],
+            columnDefs: [{orderable: false, targets: [4]},{visible: false,targets: [3]}],
+            'iDisplayLength': 10
+    });
+</script>

@@ -177,7 +177,7 @@ class Profile extends CI_Controller {
 					if($this->db->update('customer',$user_data)){
 						$this->auth->set_status_message("Password has been changed successfully.");
 						$this->session->set_flashdata($this->auth->get_messages_array());
-						redirect(base_url() . "reset-password");
+						redirect(base_url() . "contact-info");
 					}else{
 						$this->auth->set_status_message("Unable to change password");
 						$this->session->set_flashdata($this->auth->get_messages_array());

@@ -254,7 +254,8 @@ $route['banner-put'] = 'admin/banner/put';
 $route['banner-status'] = 'admin/banner/active_deactive_banner'; 
 
 $route['highlight-list'] = 'admin/banner/highlight';
-$route['highlight-put'] = 'admin/banner/highlight_put';
+$route['highlight-update/(:any)'] = 'admin/banner/highlight_put/$1';
+$route['highlight-update'] = 'admin/banner/highlight_put';
 
 // Admin - app setting
 $route['app-setting'] = 'appsetting/index';  

@@ -38,7 +38,8 @@ class Setting extends CI_Controller {
 
 				$validation_rules = array(
 					
-					array('field' => 'tax', 'label' => 'TAX', 'rules' => 'trim|required|numeric|greater_than[0]|max_length[10]')
+					array('field' => 'tax', 'label' => 'TAX', 'rules' => 'trim|required|numeric|greater_than[0]|max_length[10]'),
+					array('field' => 'delivery_available_mile', 'l,abel' => 'delivery available mile', 'rules' => 'trim|required|numeric|greater_than[0]|max_length[10]')
 				);
 
 				$this->form_validation->set_rules($validation_rules);

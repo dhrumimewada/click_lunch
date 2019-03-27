@@ -26,13 +26,20 @@ class Banner_model extends CI_Model {
 		return $return_data;
 	}
 
-	public function get_highlight() {
+	public function get_highlight($id = NULL) {
 		$return_data = array();
 		$this->db->select('*');
 		$this->db->from('highlight');
+		if (isset($id) && !is_null($id)) {
+			$this->db->where('id', $id);
+		}
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
-			$return_data = $sql_query->result_array();
+			if (isset($id) && !is_null($id)) {
+				$return_data = $sql_query->row();
+			}else{
+				$return_data = $sql_query->result_array();
+			}
 		}
 		return $return_data;
 	}
@@ -107,6 +114,31 @@ class Banner_model extends CI_Model {
 		} else {
 			$this->db->trans_commit();
 			$this->auth->set_status_message("Banner updated successfully");
+			$return_value = TRUE;
+		}
+
+		return $return_value;
+	}
+
+	public function highlight_put() {
+		$this->db->trans_begin();
+		$return_value = FALSE;
+
+		$user_data = array();
+		$user_data['txt1'] = ucwords(addslashes($this->input->post("txt1")));
+		$user_data['txt2'] = ucwords(addslashes($this->input->post("txt2")));
+		$user_data['txt3'] = ucwords(addslashes($this->input->post("txt3")));
+		$user_data['updated_at'] = date('Y-m-d H:i:s');
+	
+		$this->db->where('id', $this->input->post("highlight_id"));
+		$this->db->update("highlight", $user_data);
+
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+			$this->auth->set_error_message("Error into updating data");
+		} else {
+			$this->db->trans_commit();
+			$this->auth->set_status_message("Highlight updated successfully");
 			$return_value = TRUE;
 		}
 

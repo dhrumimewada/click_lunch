@@ -2,6 +2,8 @@
 $set_delivery_address = base_url()."customer-set-address";
 $back = base_url()."cart";
 $home_link = base_url().'welcome';
+
+$add_address_link = base_url()."update-delievry-address";
 ?>
 <div id="content">
 	<div class="delivery-address-wrapper grey-bg">
@@ -30,11 +32,11 @@ $home_link = base_url().'welcome';
 										}
 									?>
 
-										<div class="col-md-4">
-											<div class="delivery-address d-flex align-items-center" data-id="<?php echo encrypt($value['id']); ?>">
+										<div class="col-md-4 delivery-address-card">
+											<div class="delivery-address d-flex align-items-center">
 												<div class="form-check">
 													<input class="form-check-input" type="radio" name="address" id="<?php echo $value['id']; ?>" value="<?php echo $value['id']; ?>" <?php echo $checked; ?> >
-													<label class="form-check-label" for="<?php echo $value['id']; ?>">
+													<label class="form-check-label" for="<?php echo $value['id']; ?>" data-id="<?php echo encrypt($value['id']); ?>">
 														<?php
 														echo $value['house_no'].', '.$value['street'].', <br>'.$value['city'].', '.$value['zipcode'].' ';
 														if($value['address_type'] == 1){
@@ -48,6 +50,10 @@ $home_link = base_url().'welcome';
 														}
 														?>
 													</label>
+													<div class="delivery-address-btns" data-id="<?php echo $value['id']; ?>" data-house_no="<?php echo $value['house_no']; ?>" data-street="<?php echo $value['street']; ?>" data-city="<?php echo $value['city']; ?>" data-zipcode="<?php echo $value['zipcode']; ?>" data-delivery_instruction="<?php echo $value['delivery_instruction']; ?>" data-address_type="<?php echo $value['address_type']; ?>">
+														<i class="ion-edit mdi-18px text-danger pointer delivery-address-edit"></i>
+														<i class=" ion-trash-b mdi-18px text-success pointer ml-1 delivery-address-delete"></i>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -98,13 +104,11 @@ $home_link = base_url().'welcome';
 		</div>
 	</div>
 </div>
+<?php
+include 'add_address_modal.php';
+?>
 <script type="text/javascript" charset="utf-8" async defer>
 	var my_delievry_address = "<?php echo base_url().'my-delievry-address'; ?>";
-	 $( document ).ready(function() {
-	 	$(document).on('click','.delivery-address',function(){
-	 		var address_id = $(this).data("id");
-	 		console.log(address_id);
-	 		window.location = my_delievry_address+'/'+address_id;
-	 	});
-	 });
+	var delete_url = "<?php echo base_url().'delete-delievry-address'; ?>";
 </script>
+<script src="<?php echo $assets.'/js/custom/delivery_address.js'; ?>"></script>

@@ -1,8 +1,9 @@
 <?php
 $is_customer = $this->auth->is_customer();
-$profile_picture = 'https://bootdey.com/img/Content/avatar/avatar6.png';
+$profile_picture = 'https://bootdey.com/img/Content/avatar/avatar5.png';
 if($is_customer){
-    $name =  $user_data->username;
+    $user_id = $this->auth->get_user_id();
+    $user_data = get_loggedin_detail($user_id);
     if($user_data->profile_picture != ''){
         $profile_picture = base_url().$this->config->item("customer_profile_path") . '/'.$user_data->profile_picture;
     }
@@ -30,6 +31,11 @@ if($is_customer){
                             <strong class="text-uppercase active">Home</strong>
                         </a>       
                     </li>
+                    <li class="dropdown notification-list">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>weekly" role="button" aria-haspopup="false" aria-expanded="false">
+                            <strong class="text-uppercase">Weekly Planner</strong>
+                        </a>       
+                    </li>
                      <li class="dropdown notification-list">
                         <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>welcome" role="button" aria-haspopup="false" aria-expanded="false">
                             <strong class="text-uppercase">Delivery</strong>
@@ -53,7 +59,15 @@ if($is_customer){
                     
                     <?php
                     if($is_customer && $this->auth->is_logged_in()){
+                    ?>
 
+                    <li class="dropdown notification-list">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>add-request-address" role="button" aria-haspopup="false" aria-expanded="false">
+                            <strong class="text-uppercase">Popular Address</strong>
+                        </a>       
+                    </li>
+
+                    <?php
                     }else{
                     ?>
                     <li class="dropdown notification-list">

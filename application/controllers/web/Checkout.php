@@ -33,7 +33,7 @@ class Checkout extends CI_Controller {
 			$shop_id = $value['shop_id'];
 			break;
 		}
-		$this->db->select('service_charge,payment_mode');
+		$this->db->select('service_charge,payment_mode,takeout_delivery_status');
         $this->db->where("id", $shop_id);
         $this->db->from('shop');
         $sql_query = $this->db->get();
@@ -55,6 +55,7 @@ class Checkout extends CI_Controller {
             	$output_data['payment_google_pay'] = true;
             }
         }
+        $output_data['takeout_delivery_status'] = $shop_data->takeout_delivery_status;
         $output_data['service_charge'] = $service_charge;
         $address_id = decrypt($_SESSION['delivery_address_id']);
 
@@ -84,7 +85,7 @@ class Checkout extends CI_Controller {
         
 
         // echo "<pre>";
-        // print_r($output_data['delivery_fee']);
+        // print_r($output_data['takeout_delivery_status']);
         // exit;
 
 		$output_data['main_content'] = "checkout";
@@ -249,12 +250,18 @@ class Checkout extends CI_Controller {
                 }
             }
 
+            if($_POST['order_type'] == 3 || 4 || 6){
+	            $delivery_charges = 0;
+	        }else{
+	            $delivery_charges = $_POST['delivery_amount'];
+	        }
+
             $data = array( 
 	                    'customer_id' => $this->auth->get_user_id(), 
 	                    'shop_id'=> $shop_id, 
 	                    'order_type'=> $_POST['order_type'], 
 	                    'later_time'=> $later_time,
-	                    'delivery_charges' => number_format((float)$_POST['delivery_amount'], 2, '.', ''),
+	                    'delivery_charges' => number_format((float)$delivery_charges, 2, '.', ''),
 	                    'promocode_id'=> $promocode_id,
 	                    'promo_amount'=> '',
 	                    'tax' => $_POST['tax'], 
@@ -439,7 +446,7 @@ class Checkout extends CI_Controller {
 
             $this->cart->destroy();
 
-            echo json_encode(array("is_success" => true, "order_id" => $order_id , 'message' => 'Order sucess'));
+            echo json_encode(array("is_success" => true, "order_id" => $order_id , 'message' => 'Order success'));
 			return TRUE;
 
 		}else{

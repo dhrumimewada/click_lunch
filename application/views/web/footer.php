@@ -52,7 +52,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="registerUsername">Username</label>
+                                <label for="registerUsername">Full name</label>
                                 <input type="text" class="form-control" id="register_username" name="register_username" autocomplete="off">
                             </div>
                         </div>

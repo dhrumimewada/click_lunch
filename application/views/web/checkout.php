@@ -112,7 +112,8 @@ $img_path = base_url().'web-assets/images/card-icons/';
             <div class="pop-add-form">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="pop-form-title"><h4>Offers</h4>
+                        <div class="pop-form-title">
+                            <h4>Offers</h4>
                         </div>
                     </div>                              
                 </div>
@@ -165,7 +166,7 @@ $img_path = base_url().'web-assets/images/card-icons/';
 		<div class="container">
 			<div class="place-order-block white-bg">
 				<div class="coupon-delivery">
-					<h3 class="text-with-border-right">Coupon & Delivery</h3>
+					<h3 class="text-with-border-right">Coupon & Delivery </h3>
 					<div class="row m-0">
 						<div class="col-md-6 text-center coupon-and-offers">
 							<form class="coupon-form d-flex align-items-center">
@@ -174,6 +175,9 @@ $img_path = base_url().'web-assets/images/card-icons/';
 							</form>
                             <a href="#offer-pop" class="view-offers" data-toggle="modal">View Offers</a>
 						</div>
+                        <?php
+                        //if(($takeout_delivery_status == 1) || ($takeout_delivery_status == 3)){
+                        ?>
 						<div class="col-md-6" id="deliver">
 							<div class="delivery-address d-flex justify-content-around">
 								<div class="form-check deliver-now">
@@ -189,16 +193,29 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                 <label for="input_starttime">Select Delivery Time</label>
                                 <input type="text" name="timepicker" id="deliver_time" class="time_element" placeholder="00:00" />
 							</div>
+                            <?php
+                            if(($takeout_delivery_status == 2) || ($takeout_delivery_status == 3)){
+                            ?>
                             <div class="select-instead">
                                 <div class="md-form text-center">
                                    <a href="javascript:void(0)" id="takeout-instead">Take out instead</a>
                                 </div>
                             </div>
+                            <?php
+                            }
+                            ?>
 						</div>
+                        <?php
+                        //}
+                        //if(($takeout_delivery_status == 2) || ($takeout_delivery_status == 3)){
+                            // if($takeout_delivery_status == 2){
+                            //     $checked = 'checked';
+                            // }
+                        ?>
                         <div class="col-md-6" id="takeout" style="display: none;">
                             <div class="delivery-address d-flex justify-content-around">
                                 <div class="form-check deliver-now">
-                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption3" value="3">
+                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption3" value="3" <?php echo $checked; ?>>
                                     <label class="form-check-label" for="deliverOption3">Takeout</label>
                                 </div>
                                 <div class="form-check deliver-later">
@@ -210,12 +227,21 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                 <label for="input_starttime">Select Pickup Time</label>                        
                                 <input type="text" name="timepicker" id="takeout_time" class="time_element" placeholder="00:00" />
                             </div>
+                            <?php
+                            if(($takeout_delivery_status == 1) || ($takeout_delivery_status == 3)){
+                            ?>
                             <div class="select-instead">
                                 <div class="md-form text-center">
                                    <a href="javascript:void(0)" id="deliver-instead">Deliver Instead</a>
                                 </div>
                             </div>
+                            <?php
+                            }
+                            ?>
                         </div>
+                        <?php
+                        //}
+                        ?>
 					</div>
 				</div>
                 <div class="confirm-order">
@@ -277,7 +303,7 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                                 ?>
                                             </div>
                                         </div>
-                                        <div class="row m-0">
+                                        <div class="row m-0" id="delivery-amount-div">
                                             <div class="order-product-title col-9 col-md-9 p-0">Delivery Fee</div>
                                             <div class="order-product-price col-3 text-right col-md-3 p-0">+
                                                 <?php
@@ -447,4 +473,6 @@ $img_path = base_url().'web-assets/images/card-icons/';
     var validate_promocode_url = "<?php echo base_url().'validate-promocode'; ?>";
     var place_order_url = "<?php echo base_url().'place-order'; ?>";
     var order_success_url = "<?php echo base_url().'order-success'; ?>";
+
+    var takeout_delivery_status = "<?php echo $takeout_delivery_status; ?>";
 </script> 

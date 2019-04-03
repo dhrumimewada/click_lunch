@@ -49,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'Home/';
+$route['default_controller'] = 'welcome';
 //$route['default_controller'] = 'web/welcome';
 $route['404_override'] = 'my404';
 $route['translate_uri_dashes'] = FALSE;
@@ -163,6 +163,9 @@ $route['vender-setnewpassword'] = 'vender/vender_login/setpassword';
 $route['customer-setpassword/(:any)'] = 'customer/customer_login/setpassword/$1'; 
 $route['customer-setnewpassword'] = 'customer/customer_login/setpassword';
 
+$route['dispatcher-setpassword/(:any)'] = 'dispatcher/dispatcher_login/setpassword/$1';
+$route['dispatcher-setnewpassword'] = 'dispatcher/dispatcher_login/setpassword';
+
 
 // Admin profile - change pw
 $route['change-password'] = 'admin/admin/change_password';  
@@ -203,7 +206,8 @@ $route['vender-update'] = 'admin/vender/put';
 $route['vender-requests'] = 'admin/vender/vendor_requests'; 
 $route['vender-request-save'] = 'admin/vender/vendor_request_put';
 $route['vender-request-update/(:any)'] = 'admin/vender/vendor_request_put/$1';
-$route['vender-request-delete'] = 'admin/vender/vendor_request_delete';
+$route['vender-request-delete'] = 'admin/vender/delete';
+$route['vender-request-accept'] = 'admin/vender/vendor_request_accept';
 
 // admin - vender perc
 $route['vender-perc'] = 'admin/vender/vender_perc'; 
@@ -271,6 +275,9 @@ $route['setup-payment'] = 'admin/setup_payment/index';
 $route['popular-location-list'] = 'admin/popular_location/index';
 $route['popular-location-add'] = 'admin/popular_location/post';  
 $route['popular-location-delete'] = 'admin/popular_location/delete';
+$route['popular-location-requests'] = 'admin/popular_location/popular_location_requests';
+$route['location-request-delete'] = 'admin/popular_location/request_delete';
+$route['location-request-accept'] = 'admin/popular_location/request_accept';
 
 // Admin - All orders
 $route['delivery-orders'] = 'admin/orders/delivery_orders';
@@ -302,6 +309,8 @@ $route['order-detail/(:any)'] = 'dispatcher/order/order_detail/$1';
 
 $route['fetch-db'] = 'dispatcher/order/get_all_db';
 $route['set-db'] = 'dispatcher/order/set_db';
+
+$route['quantity-update-reject-order'] = 'dispatcher/order/quantity_update_reject_order';
 
 //--------------------------------------------------
 
@@ -342,6 +351,7 @@ $route['subscribe'] = 'web/welcome/subscribe';
 $route['faq'] = 'web/welcome/faq';
 $route['restaurant-partner-form'] = 'web/welcome/restaurant_partner_form';
 
+
 /*Customer login - register */
 $route['register'] = 'web/welcome/register';
 $route['email-check-availability'] = 'web/welcome/email_check_availability';
@@ -355,6 +365,8 @@ $route['customer-add-address'] = 'web/profile/add_address';
 $route['choose-address'] = 'web/profile/all_address';
 $route['customer-set-address'] = 'web/profile/set_address';
 $route['my-delievry-address/(:any)'] = 'web/profile/my_delievry_address/$1';
+$route['delete-delievry-address'] = 'web/profile/delete_delievry_address';
+$route['update-delievry-address'] = 'web/profile/update_delievry_address';
 
 $route['contact-info'] = 'web/profile/update_profile';
 $route['reset-password'] = 'web/profile/update_password';
@@ -382,6 +394,8 @@ $route['terms-of-service'] = 'web/welcome/terms_service';
 $route['about-us'] = 'web/welcome/about_us';
 $route['contact-us'] = 'web/welcome/contact_us';
 $route['coming-soon'] = 'web/welcome/coming_soon';
+
+$route['add-request-address'] = 'web/profile/request_add_popular_address';
 
 $route['favourite-orders'] = 'web/profile/get_favourite_orders';
 

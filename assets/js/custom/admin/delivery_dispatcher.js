@@ -30,14 +30,6 @@
                     return $.trim(value);
                 }
             },
-            password:{
-                required: true,
-                minlength: 6
-            },
-            c_password:{
-                required: true,
-                equalTo: "#password"
-            },
             contact_no:{
                 required: true,
                 digits: false,
@@ -115,14 +107,6 @@
                 alpha: "The full name field is not in the correct format.",
                 minlength: jQuery.validator.format("At least {0} characters required"),
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
-            },
-            password: {
-                required: "The password field is required.",
-                minlength: jQuery.validator.format("At least {0} characters required")
-            },
-            c_password: {
-                required: "The confirm password field is required.",
-                equalTo: "Please enter the same password."
             },
             contact_no: {
                 required: "The contact number field is required.",

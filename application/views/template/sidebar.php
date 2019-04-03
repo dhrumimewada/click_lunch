@@ -276,10 +276,13 @@ if($is_admin){
                 <?php
                 if($is_admin){
                     ?>
+
                 <li>
-                    <a href="<?php echo base_url().'popular-location-list'; ?>" class="waves-effect">
-                        <i class="mdi mdi-map-marker-multiple"></i><span> Popular Location </span>
-                    </a>
+                    <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-map-marker-multiple"></i><span> Popular Location <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
+                    <ul class="submenu">
+                        <li><a href="<?php echo base_url().'popular-location-list'; ?>">View Locations</a></li>
+                        <li><a href="<?php echo base_url().'popular-location-requests'; ?>">Location Requests</a></li>
+                    </ul>
                 </li>
                 <li>
                     <a href="<?php echo base_url().'contact-us-data'; ?>" class="waves-effect">

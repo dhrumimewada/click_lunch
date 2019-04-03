@@ -48,11 +48,16 @@ $edit_link = base_url().'cuisine-update';
                                         $btn_name = 'Deactivate';
                                         $btn_class = 'btn-deactive';
                                     }
-                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." waves-effect waves-light btn-sm deactive_cuisine' status-id='" . $value["is_active"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
+
+                                    $disabled = '';
+                                    if($value["cuisine_name"] == 'All'){
+                                        $disabled = 'disabled';
+                                    }
+                                    echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." waves-effect waves-light btn-sm deactive_cuisine' status-id='" . $value["is_active"] . "' title='".$btn_name."' data-popup='tooltip' ". $disabled ." >" . $btn_name . "</button></td>";
 
 
                                     echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
-                                    echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a><button type='button' class='btn btn-danger waves-effect waves-light btn-sm delete_cuisine' title='Delete' data-popup='tooltip'>Delete</button></td>";
+                                    echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a><button type='button' class='btn btn-danger waves-effect waves-light btn-sm delete_cuisine' title='Delete' data-popup='tooltip' ". $disabled .">Delete</button></td>";
                                     echo '</tr>';
                                 }
                             }

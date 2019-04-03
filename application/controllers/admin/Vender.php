@@ -407,14 +407,16 @@ class Vender extends CI_Controller {
 	 	$edit_link = base_url().'vender-request-update';
 
 		foreach($vendor_request_list as $key => $vendor_request) {
-
-		       $action_data = "<span class='text-center d-block'> <a href='".$edit_link."/".encrypt($vendor_request['id'])."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit & Verify</a> <button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vendor_request' status-id='" . $vendor_request["id"] . "' title='Verified' data-popup='tooltip' >Delete</button> <span>";
+				// <a href='".$edit_link."/".encrypt($vendor_request['id'])."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a>
+		       $action_data = "<span class='text-center d-block'> <button type='button' class='btn btn-yellow btn-sm waves-effect waves-light view-msg' title='Accept' data-popup='tooltip' data-shopname='".$vendor_request['shop_name']."'  data-msg='".$vendor_request['message']."' data-toggle='modal' data-target='#myModal'>View</button><button type='button' class='btn btn-success btn-sm waves-effect waves-light accept_vendor_request' title='Accept' data-popup='tooltip' >Accept</button> <button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vendor_request' title='Verified' data-popup='tooltip' >Delete</button> <span>";
 
 		       $data[] = array(
 		            $vendor_request['id'],
 		            stripslashes($vendor_request["shop_name"]),
+		            stripslashes(ucfirst($vendor_request["vender_name"])),
 		            $vendor_request['email'],
-		            $vendor_request['contact_no'],
+		            '+1 '.$vendor_request['contact_no1'],
+		            $vendor_request['city'].', '.$vendor_request['zip_code'].', '.$vendor_request['state'],
 		            $action_data
 		       );
 
@@ -428,6 +430,19 @@ class Vender extends CI_Controller {
 	    );
 	  	echo json_encode($output);
 	  	exit();
+  	}
+
+  	public function vendor_request_accept(){
+  		$id = $_POST['id'];
+  		if (isset($id) && !is_null($id) && !empty($id)) {
+			$user_data = array('admin_verified' => 1 );
+			$this->db->where('id', $id);
+			$this->db->update('shop', $user_data);
+			echo json_encode(array("is_success" => true));
+			return TRUE;
+		}else{
+			return FALSE;
+		}
   	}
 
   	public function vendor_request_put($id = ''){

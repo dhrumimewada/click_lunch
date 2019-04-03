@@ -150,7 +150,7 @@ class Profile_model extends CI_Model {
             }
         }
 
-        $user_data['mobile_number'] = $this->input->post("mobile_number");
+        $user_data['mobile_number'] = str_replace("+1 ", "", $this->input->post("mobile_number"));
         $user_data['updated_at'] = date('Y-m-d H:i:s');
     
         $this->db->where('id', $this->auth->get_user_id());
@@ -395,5 +395,42 @@ class Profile_model extends CI_Model {
 
         //return $this->db->last_query();
         return $return_data;
+    }
+
+    public function update_delievry_address(){
+        $return = false;
+        if (isset($_POST['address_id']) && !empty($_POST['address_id']) && is_null($_POST['address_id'])){
+            $return = true;
+        }
+        return $return;
+    }
+
+    public function request_add_popular_address() {
+
+        $location_data = array(
+                        'house_no' => $this->input->post("house_no"),
+                        'street' => $this->input->post("street"),
+                        'city' => $this->input->post("city"),
+                        'zipcode' => intval($this->input->post("zipcode")),
+                        'address_type' => intval($this->input->post("address_type")),
+                        'customer_id' => $this->auth->get_user_id()
+                    );
+
+        if($this->input->post("nickname")){
+            $location_data['nickname'] = $this->input->post("nickname");
+        }
+
+        $this->db->insert("delivery_address_popular_request", $location_data);
+        
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $this->auth->set_error_message("Error into inserting data");
+        } else {
+            $this->db->trans_commit();
+            $this->auth->set_status_message("Popular location requested successfully");
+            $return_value = TRUE;
+        }
+
+        return $return_value;
     }
 }

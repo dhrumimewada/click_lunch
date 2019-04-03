@@ -100,14 +100,23 @@ $back_link = base_url().'order-single-assign';
                                         }
                                         if($order_data['order']->order_type == 5 || $order_data['order']->order_type == 6){
                                         ?>
-                                        <strong>Schedule Date Time:</strong>
+                                            <strong>Schedule Date Time:</strong>
+                                            <?php
+                                            $schedule_date_ts = strtotime($order_data['order']->schedule_date);
+                                            echo $schedule_date = date("j M, Y", $schedule_date_ts);
+                                            echo ' '.$order_data['order']->schedule_time;
+                                            ?>
+                                            <br>
                                         <?php
-                                        $schedule_date_ts = strtotime($order_data['order']->schedule_date);
-                                        echo $schedule_date = date("j M, Y", $schedule_date_ts);
-                                        echo ' '.$order_data['order']->schedule_time;
+                                        }
+                                        if(isset($order_data['delivery_boy']) && !empty($order_data['delivery_boy'])){
                                         ?>
-                                        <br>
-                                        <?php
+                                            <strong>Delivery Boy:</strong><br>
+                                            <?php
+                                            echo $order_data['delivery_boy']['delivery_boy_name'];
+                                            echo ' ( '.$order_data['delivery_boy']['delivery_boy_mobile_number'].' )';
+                                            echo "<br>";
+                                            echo $order_data['delivery_boy']['delivery_boy_email'];
                                         }
                                         ?>
                                     </div>

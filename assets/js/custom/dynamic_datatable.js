@@ -134,7 +134,7 @@ $( document ).ready(function() {
                 "targets": [ 0 ],
                 "visible": false
             },
-            { "orderable": false, "targets": 4 }
+            { "orderable": false, "targets": 6 }
         ]
     });
 

@@ -97,6 +97,52 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
+                                        <label class="required"><?php echo $item_type; ?> Price</label>
+                                        <div>
+                                            <?php
+    $field_value = NULL;
+    $temp_value = set_value('price');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    } 
+    if($item_type == 'Combo'){
+        $placeholder = 'Enter combo price';
+    }else{
+        $placeholder = 'Enter product price';
+    }
+    ?>
+                                            <input type="text" name="price" class="form-control demo2" placeholder="<?php echo $placeholder; ?>" value="<?php echo $field_value; ?>" id="price" autocomplete="off">
+
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('price'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class=""><?php echo $item_type; ?> Offer Price</label>
+                                        <div>
+                                            <?php
+    $field_value = NULL;
+    $temp_value = set_value('offer_price');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    } 
+    ?>
+                                            <input type="text" name="offer_price" class="form-control demo2" id="offer_price" placeholder="Enter offer price" value="<?php echo $field_value; ?>" autocomplete="off">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('offer_price'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
                                         <label class="required"><?php echo $item_type; ?> Category</label>
                                         <div>
                                         <?php
@@ -121,91 +167,6 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
                                             </select>
                                             <div class="validation-error-label">
                                                 <?php echo form_error('category_id'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group m-t-30 item">
-                                        <?php
-    $checked = 'checked';
-    $field_value = NULL;
-    $temp_value = set_value('inventory_status');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    }
-    ?>
-                                        <span class="ml-5">
-                                        <input type="checkbox" switch="none" id="inventory_status" value="1" name="inventory_status" <?php echo $checked; ?> >
-                                        <label class="mb-0 mt-1" for="inventory_status" data-on-label="Inventory" data-off-label="Off" title="Inventory"></label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="required"><?php echo $item_type; ?> Price</label>
-                                        <div>
-                                            <?php
-    $field_value = NULL;
-    $temp_value = set_value('price');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    } 
-    if($item_type == 'Combo'){
-        $placeholder = 'Enter combo price';
-    }else{
-        $placeholder = 'Enter product price';
-    }
-    ?>
-                                            <input type="text" name="price" class="form-control demo2" placeholder="<?php echo $placeholder; ?>" value="<?php echo $field_value; ?>" id="price">
-
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('price'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class=""><?php echo $item_type; ?> Offer Price</label>
-                                        <div>
-                                            <?php
-    $field_value = NULL;
-    $temp_value = set_value('offer_price');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    } 
-    ?>
-                                            <input type="text" name="offer_price" class="form-control demo2" id="offer_price" placeholder="Enter offer price" value="<?php echo $field_value; ?>">
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('offer_price'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            
-                            <div class="row">
-                                
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class=""><?php echo $item_type; ?> Quantity</label>
-                                        <div>
-                                            <?php
-    $field_value = NULL;
-    $temp_value = set_value('quantity');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    } 
-    ?>
-                                            <input type="text" name="quantity" class="form-control demo3" id="quantity" placeholder="Enter item quantity" value="<?php echo $field_value; ?>">
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('quantity'); ?>
                                             </div>
                                         </div>
                                     </div>
@@ -264,6 +225,41 @@ $prof_url = base_url() . 'assets/images/default/cuisine.jpg';
                                 </div>
 
                                 
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group item">
+                                        <?php
+    $checked = 'checked';
+    $field_value = NULL;
+    $temp_value = set_value('inventory_status');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    }
+    ?>
+                                        <input type="checkbox" switch="none" id="inventory_status" value="1" name="inventory_status" <?php echo $checked; ?> >
+                                        <label class="mb-0 mt-1" for="inventory_status" data-on-label="Inventory" data-off-label="Off" title="Inventory"></label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 d-none" id="quantity-div">
+                                    <div class="form-group">
+                                        <label class=""><?php echo $item_type; ?> Quantity</label>
+                                        <div>
+                                            <?php
+    $field_value = NULL;
+    $temp_value = set_value('quantity');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value;
+    } 
+    ?>
+                                            <input type="text" name="quantity" class="form-control demo3" id="quantity" placeholder="Enter quantity" value="<?php echo $field_value; ?>" autocomplete="off">
+                                            <div class="validation-error-label">
+                                                <?php echo form_error('quantity'); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="row">

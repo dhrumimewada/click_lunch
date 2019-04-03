@@ -1,4 +1,4 @@
-$(document).on('click','.nav-link',function(){
+$(document).on('click','.list-filter .nav-link',function(){
 	cuisine_id = $(this).attr('id');
 	update_shops();
 });
@@ -6,42 +6,81 @@ $(document).on('click','.nav-link',function(){
 $(document).on('click','.filter',function(){
 	if ($('input#filter-pickup').is(':checked')){
 		pickup = $('input#filter-pickup').val();
-		console.log(pickup);
+		//console.log(pickup);
 	}else{
 		pickup = '';
 	}
 
 	if ($('input#filter-popular').is(':checked')){
 		popular = $('input#filter-popular').val();
-		console.log(popular);
+		//console.log(popular);
 	}else{
 		popular = '';
 	}
+
+    
+    if($( "#deliver-fee option:selected" ).val() != ''){
+        //$('#order-price').val('').trigger("change");
+        delivery_fee = $( "#deliver-fee option:selected" ).val();
+    }else{
+        delivery_fee = '';
+    }
+
+    if($( "#order-price option:selected" ).val() != ''){
+        //$('#deliver-fee').val('').trigger("change");
+        minimum_order_amount = $( "#order-price option:selected" ).val();
+    }else{
+        minimum_order_amount = '';
+    }
+
+    if($( "#order-category option:selected" ).val() != ''){
+        category = $( "#order-category option:selected" ).val();
+    }else{
+        category = '';
+    }
+
+    if($( "#review-star1 option:selected" ).val() != ''){
+        rating = $( "#order-category option:selected" ).val();
+    }else{
+        rating = '';
+    }
 	update_shops();
 });
 
 function update_shops() {
+
+      // console.log(category);
+      // return false;
 	$.ajax({
             url: get_shop_data_url,
             type: "POST",
             data:{
                 cuisine_id:cuisine_id,
                 pickup:pickup,
-                popular:popular
+                popular:popular,
+                delivery_fee:delivery_fee,
+                minimum_order_amount:minimum_order_amount,
+                category:category,
+                rating:rating
             },
             success: function (returnData) {
                 returnData = $.parseJSON(returnData);
                 if (typeof returnData != "undefined"){
 
+                     // console.log(returnData);
+                     // return false;
+
                     var data_str = '';
                     var data_str_combo = '';
+                    var combo_data_available = false;
                     $('#nearby').html('');
                     $('#combo').html('');
                     console.log(returnData.shops);
-                    //return false;
+                    
 
                 	if (typeof returnData.shops !== 'undefined' && returnData.shops.length > 0){
-                		
+                		// console.log('in');
+                  //       return false;
                 		$.each(returnData.shops, function (key, val){
 
                 			if(val.profile_picture == ''){
@@ -60,7 +99,7 @@ function update_shops() {
                 				}
                 			});
 
-                			console.log(val.availibality.day);
+                			//console.log(val.availibality.day);
                 			var time = '';
                 			if(val.availibality.is_closed == 1){
                 				time = 'TODAY CLOSED';
@@ -113,19 +152,25 @@ function update_shops() {
                 				+'</div>'
                 			+'</div>';
 
-                            //if(val.combo_available == true){
+                            if(val.combo_available == true){
                                 data_str_combo += data_str;
-                            //}
+                                combo_data_available = true;
+                            }
                 		});
 
                 	}else{
-                		console.log('No shops found');
-                        data_str = '<div class="text-muted no-shops-found">No any restaurant found</div>';
-                        data_str_combo = '<div class="text-muted no-shops-found">No any combo restaurant found</div>';
+                		//console.log('No shops found');
+                        data_str = '<div class="text-muted no-shops-found"><div class="d-block">No any restaurant found1</div></div>';
+                        data_str_combo = '<div class="text-muted no-shops-found">No any combo restaurant found1</div>';
                 	}
 
                     $('#nearby').html(data_str);
-                    $('#combo').html(data_str_combo);
+                    if(combo_data_available ==true){
+                        $('#combo').html(data_str_combo);
+                    }else{
+                        $('#combo').html('<div class="text-muted no-shops-found">No any combo restaurant found1</div>');
+                    }
+                    
                     $('[data-toggle="tooltip"]').tooltip();
                 }
             },

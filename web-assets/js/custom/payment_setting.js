@@ -105,6 +105,14 @@
 
 $(document).ready(function (){
 
+    $(document).on('keyup',"#card_number", function(){
+        if($(this).val() != ''){
+            var type_card = GetCardType($(this).val());
+            $("#"+type_card).prop("checked", true);
+        }
+        
+    });
+
 	$(document).on('click',".card-buttons .delete", function(){
 		$this = $(this);
 		var data_id = $(this).data("id");
@@ -152,3 +160,43 @@ $(document).ready(function (){
 	$("#cvv").inputmask("9999",{"placeholder": ""});
 	$("#card_number").inputmask("9999999999999999999",{"placeholder": ""});
 });
+
+function GetCardType(number)
+{
+    // visa
+    var re = new RegExp("^4");
+    if (number.match(re) != null)
+        return 1;
+
+    // Mastercard 
+    // Updated for Mastercard 2017 BINs expansion
+     if (/^(5[1-5][0-9]{14}|2(22[1-9][0-9]{12}|2[3-9][0-9]{13}|[3-6][0-9]{14}|7[0-1][0-9]{13}|720[0-9]{12}))$/.test(number)) 
+        return 2;
+
+    // AMEX
+    re = new RegExp("^3[47]");
+    if (number.match(re) != null)
+        return 3;
+
+    // Discover
+    re = new RegExp("^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)");
+    if (number.match(re) != null)
+        return 6;
+
+    // Diners
+    re = new RegExp("^36");
+    if (number.match(re) != null)
+        return 5;
+
+    // Diners - Carte Blanche
+    re = new RegExp("^30[0-5]");
+    if (number.match(re) != null)
+        return 5;
+
+    // JCB
+    re = new RegExp("^35(2[89]|[3-8][0-9])");
+    if (number.match(re) != null)
+        return 4;
+
+    return 7;
+}

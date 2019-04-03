@@ -175,4 +175,29 @@ class Customer_model extends CI_Model {
 
 		return $return_value;
 	}
+
+	public function send_silent_push($id = NULL){
+		if(isset($id) && !is_null($id) && $id != ''){
+
+			$this->db->select('device_type,device_token');
+			$this->db->from('customer');
+			$this->db->where('id', $id);
+			$this->db->where('device_type !=', 0);
+			$this->db->where('device_type !=', '');
+			$this->db->where('device_token !=', '');
+			$sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0){
+				$customer = (array)$sql_query->row();
+				$device_type = $customer['device_type'];
+				$device_token = $customer['device_token'];
+				$push_title = 'logout';
+				$push_data = array('customer_id' => $id);
+				$push_type = 'silent';
+
+				$result = send_push($device_type ,$device_token, $push_title, $push_data, $push_type);
+
+			}
+			return true;
+		}
+	}
 }

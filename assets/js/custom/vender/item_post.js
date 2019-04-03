@@ -174,6 +174,19 @@ $( document ).ready(function() {
         readURL(this);
     });
 
+    if ($('#inventory_status').is(':checked')){
+        $('#quantity-div').removeClass("d-none");
+    }else{
+        $('#quantity-div').addClass("d-none");
+    }
+
+    $(document).on('change','#inventory_status',function(){
+        if ($(this).is(':checked')){
+            $('#quantity-div').removeClass("d-none");
+        }else{
+            $('#quantity-div').addClass("d-none");
+        }
+    });
 
 
     $(document).on('click','.remove-btn',function(){

@@ -57,8 +57,12 @@ $edit_link = base_url().'item-update';
                                         echo "<td  data-order='" . $value["price"] . "'>&#36; " . $value["price"]. "</td>";
                                     }
                                     
-                                    
-                                    echo "<td>" . $value["quantity"] . "</td>";
+                                    if($value["inventory_status"] == 1){
+                                        $quantity = $value["quantity"];
+                                    }else{
+                                        $quantity = '';
+                                    }
+                                    echo "<td>" . $quantity . "</td>";
 
                                     if($value["recommended"] == 1){
                                         $btn_name = 'ON';

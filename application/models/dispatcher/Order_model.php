@@ -26,10 +26,9 @@ class Order_model extends CI_Model {
 		$this->db->select($sql_select);
 
 		$this->db->from('orders t1');
-		$this->db->join('customer t2', 't1.customer_id = t2.id','left');
-		$this->db->join('shop t3', 't1.shop_id = t3.id','left');
-
-		
+		$this->db->join('customer t2', 't1.customer_id = t2.id');
+		$this->db->join('shop t3', 't1.shop_id = t3.id');
+	
 		$this->db->where('t2.status', 1);
 		$this->db->where('t3.deleted_at', NULL);
 
@@ -97,6 +96,20 @@ class Order_model extends CI_Model {
 			if ($sql_query->num_rows() > 0) {
 				$return_data['order'] = $sql_query->row();
 
+				if($return_data['order']->delivery_boy_id != 0){
+					$this->db->select('email, username, mobile_number');
+					$this->db->where("id", $return_data['order']->delivery_boy_id);
+					$this->db->from('delivery_boy');
+					$sql_query = $this->db->get();
+					if ($sql_query->num_rows() > 0) {
+						$result_array =  (array)$sql_query->row();
+						$return_data['delivery_boy'] = array();
+						$return_data['delivery_boy']['delivery_boy_name'] = $result_array['username'];
+						$return_data['delivery_boy']['delivery_boy_email'] = $result_array['email'];
+						$return_data['delivery_boy']['delivery_boy_mobile_number'] = $result_array['mobile_number'];
+					}
+				}
+
 				$sql_select = array(
 								't2.name',
 								't1.*'
@@ -150,7 +163,7 @@ class Order_model extends CI_Model {
 			if($this->db->update('orders', $data)){
 
 				$where = array('deleted_at' => NULL, 'status' => 1, 'device_token !=' => '', 'id' => $_POST['db_id']);
-		        $select = array('id','device_token','username');
+		        $select = array('id','device_type','device_token','username');
 		        $table = 'delivery_boy';
 		        $data = get_data_by_filter($table,$select, $where);
 
@@ -185,7 +198,7 @@ class Order_model extends CI_Model {
 				        );
 			        $push_type = 'request';
 
-					$result = send_push('Android',$device_token, $push_title, $push_data, $push_type);
+					$result = send_push($data[0]['device_type'],$device_token, $push_title, $push_data, $push_type);
 					$return = TRUE;
 
 				}else{

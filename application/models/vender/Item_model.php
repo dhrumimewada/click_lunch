@@ -89,9 +89,11 @@ class Item_model extends CI_Model {
 			$is_combo = 1;
 		}
 
-		$inventory_status = '0';
+		$inventory_status = 0;
+		$quantity = 0;
 		if ($this->input->post("inventory_status")) {
 			$inventory_status = $this->input->post("inventory_status");
+			$quantity = intval($this->input->post("quantity"));
 		}
 
 		// echo "<pre>";
@@ -125,7 +127,7 @@ class Item_model extends CI_Model {
 						'category_id' => intval($this->input->post("category_id")),
 						'name' => ucwords(addslashes($this->input->post("name"))),
 						'short_name' => $short_name,
-						'quantity' => intval($this->input->post("quantity")),
+						'quantity' => $quantity,
 						'price' => sprintf("%.2f", $this->input->post("price")),
 						'offer_price' => sprintf("%.2f", $this->input->post("offer_price")),
 						'item_description' => ucwords(addslashes($this->input->post("item_description"))),
@@ -208,9 +210,11 @@ class Item_model extends CI_Model {
 			$is_combo = 1;
 		}
 
-		$inventory_status = '0';
+		$inventory_status = 0;
+		$quantity = 0;
 		if ($this->input->post("inventory_status")) {
 			$inventory_status = $this->input->post("inventory_status");
+			$quantity = intval($this->input->post("quantity"));
 		}
 
 		$item_name = preg_replace("/[^a-zA-Z ]/", "", strtolower($this->input->post("name")));
@@ -241,7 +245,7 @@ class Item_model extends CI_Model {
 						'category_id' => intval($this->input->post("category_id")),
 						'name' => ucwords(addslashes($this->input->post("name"))),
 						'short_name' => $short_name,
-						'quantity' => intval($this->input->post("quantity")),
+						'quantity' => $quantity,
 						'price' => sprintf("%.2f", $this->input->post("price")),
 						'offer_price' => sprintf("%.2f", $this->input->post("offer_price")),
 						'item_description' => ucwords(addslashes($this->input->post("item_description"))),

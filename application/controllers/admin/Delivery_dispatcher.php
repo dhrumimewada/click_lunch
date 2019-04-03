@@ -38,17 +38,24 @@ class Delivery_dispatcher extends CI_Controller {
 
 		foreach($delivery_dispatcher_list as $key => $delivery_dispatcher) {
 
-		       $action_data = "<a href='".$edit_link."/".encrypt($delivery_dispatcher['id'])."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a><button type='button' class='btn btn-danger waves-effect waves-light btn-sm delete_customer' title='Delete' data-popup='tooltip'>Delete</button>";
+		       	$action_data = "<a href='".$edit_link."/".encrypt($delivery_dispatcher['id'])."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a><button type='button' class='btn btn-danger waves-effect waves-light btn-sm delete_customer' title='Delete' data-popup='tooltip'>Delete</button>";
 
-		       if($delivery_dispatcher["status"] == 1){
+		       	if($delivery_dispatcher["status"] == 1){
 	                $btn_name = 'Active';
 	                $btn_class = 'btn-success';
-	            }else{
+	                $disabled = '';
+
+	            }elseif($delivery_dispatcher["status"] == 2){
 	                $btn_name = 'Deactivate';
 	                $btn_class = 'btn-deactive';
+	                $disabled = '';
+	            }else{
+	            	$btn_name = 'Pending';
+	                $btn_class = 'btn-yellow';
+	                $disabled = 'disabled';
 	            }
 
-		       $status_str = "<button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_customer' status-id='" . $delivery_dispatcher["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button>";
+		       $status_str = "<button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_customer' status-id='" . $delivery_dispatcher["status"] . "' title='".$btn_name."' data-popup='tooltip' ". $disabled ." >" . $btn_name . "</button>";
 
 		       $data[] = array(
 		            $delivery_dispatcher['id'],
@@ -91,8 +98,6 @@ class Delivery_dispatcher extends CI_Controller {
 					
 					array('field' => 'full_name', 'label' => 'full name', 'rules' => 'trim|required|min_length[3]|max_length[50]'),
 					array('field' => 'email', 'label' => 'email', 'rules' => 'trim|required|max_length[225]|valid_email|is_unique[customer.email]'),
-					array('field' => 'password', 'label' => 'password', 'rules' => 'trim|required|min_length[6]'),
-					array('field' => 'c_password', 'label' => 'confirm password', 'rules' => 'trim|required|matches[password]'),
 					array('field' => 'contact_no', 'label' => 'contact number', 'rules' => 'trim|min_length[12]|max_length[12]'),
 					array('field' => 'address', 'label' => 'street', 'rules' => 'trim|max_length[255]'),
 					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[255]'),

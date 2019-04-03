@@ -45,12 +45,32 @@ $(document).ready(function (){
                             },
                         success: function (returnData) {
                             returnData = $.parseJSON(returnData);
-                            if (typeof returnData != "undefined")
+                            console.log(returnData);
+                            if (typeof returnData != "undefined" && returnData.is_success == true)
                             {
                                 
                                 if(redirect == '1'){
                                     window.location = index_url;
                                 }else{
+                                    // increse quantity 
+                                    if(status == '2'){
+
+                                        $.ajax({
+                                            url: quantity_update_reject_order_url,
+                                            type: "POST",
+                                            data: { order_id:data_id },
+                                            success: function (returnData) {
+                                                returnData = $.parseJSON(returnData);
+                                                if (typeof returnData != "undefined"){
+                                                    if(returnData.is_success == true){
+                                                       // console.log('quantity updated');
+                                                    }
+                                                    //console.log(returnData);
+                                                } 
+                                            }
+                                        });  
+   
+                                    }
                                     swal(
                                     change_status_to1,
                                         'Order has been '+change_status_to1,
@@ -59,7 +79,13 @@ $(document).ready(function (){
                                     remove_row($this);
                                 }
                                 
-                            } 
+                            }else{
+                                swal(
+                                        'Something went wrong!',
+                                        'Please try again later',
+                                        'warning'
+                                    )
+                            }
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                             //console.log('error');

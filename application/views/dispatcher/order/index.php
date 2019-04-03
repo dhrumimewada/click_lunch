@@ -99,6 +99,8 @@ $edit_link = base_url().'processing-update';
     var get_db_url = "<?php echo base_url().'fetch-db'; ?>";
     var set_db_url = "<?php echo base_url().'set-db'; ?>";
 
+    var quantity_update_reject_order_url = "<?php echo base_url().'quantity-update-reject-order'; ?>";
+
     var redirect = '';
     var order_id = '';
     var index_url = "";

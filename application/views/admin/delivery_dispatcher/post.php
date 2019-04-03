@@ -90,47 +90,6 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required">Password</label>
-                                        <div>
-                                        <?php
-    $field_value = NULL;
-    $temp_value = set_value('password');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    }
-    ?>
-                                            <input type="password" name="password" class="form-control" id="password" placeholder="Enter password" value="<?php echo $field_value; ?>">
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('password'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label class="required">Confirm Password</label>
-                                        <div>
-                                        <?php
-    $field_value = NULL;
-    $temp_value = set_value('c_password');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    }
-    ?>
-                                            <input type="password" name="c_password" class="form-control" id="c_password" placeholder="Enter confirm password" value="<?php echo $field_value; ?>">
-                                            <div class="validation-error-label">
-                                                <?php echo form_error('c_password'); ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
                                         <label class="required">Contact Number</label>
                                         <div>
                                         <?php

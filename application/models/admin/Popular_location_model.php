@@ -129,5 +129,76 @@ class Popular_location_model extends CI_Model {
 		return $return_value;
 	}
 
+	public function get_requests() {
+		$return_data = array();
+		$this->db->select('t1.*, t2.username');
+		$this->db->from('delivery_address_popular_request t1');
+		$this->db->join('customer t2', 't1.customer_id = t2.id');
+		$this->db->where("t1.deleted_at", NULL);
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			$return_data = $sql_query->result_array();
+		}
+		return $return_data;
+	}
+
+	public function request_accept(){
+
+		$this->db->select('*');
+		$this->db->from('delivery_address_popular_request');
+		$this->db->where("deleted_at", NULL);
+		$this->db->where("id", $_POST['id']);
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			$request = (array)$sql_query->row();
+
+			$house_no = str_replace(" ","+",trim($request['house_no']));
+            $street = str_replace(" ","+",trim($request['street']));
+            $city = str_replace(" ","+",trim($request['city']));
+            $zipcode = str_replace(" ","+",trim($request['zipcode']));
+
+            $address = $house_no."+".$street."+".$city."+".$zipcode;
+
+            $google_key = $this->config->item('google_key');
+            $json = file_get_contents("https://maps.google.com/maps/api/geocode/json?address=$address&key=$google_key");
+            $json = json_decode($json);
+
+            $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+        	$long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+
+        	if($lat == '' || $long == ''){
+        		return array("is_success" => false, 'message' => 'Could not fetch latitude & longitude for this location');
+        	}else{
+
+        		$location_data = array(
+						'house_no' => $request['house_no'],
+						'street' => $request['street'],
+						'city' => $request['city'],
+						'zipcode' => $request['zipcode'],
+						'nickname' => $request['nickname'],
+						'address_type' => $request['address_type'],
+						'latitude' => $lat,
+						'longitude' => $long,
+						'popular' => 1,
+						'customer_id' => 0
+					);
+
+        		$this->db->insert("delivery_address", $location_data);
+
+        		$user_data = array('deleted_at' => date('Y-m-d H:i:s') );
+        		$this->db->where('id', $_POST['id']);
+				if($this->db->update("delivery_address_popular_request", $user_data)){
+					return array("is_success" => true, 'message' => 'Popular location request has been accepted.');
+				}else{
+					return array("is_success" => false, 'message' => 'Server encounter error');
+				}
+        	}
+
+
+		}else{
+			return array("is_success" => false, 'message' => 'Request not found');
+		}
+	}
+
 }
 ?>

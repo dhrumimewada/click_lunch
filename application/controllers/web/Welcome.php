@@ -21,16 +21,26 @@ class Welcome extends CI_Controller {
 		$banner_list = $this->banner_model->get_banner();
 		$output_data["banner_list"] = $banner_list;
 
-		$select = array('id','cuisine_name','cuisine_picture');
-		$where = array('deleted_at' => NULL, 'is_active' => 1);
-		$output_data["cuisines"] = get_data_by_filter('cuisine',$select,$where);
+		$output_data["cuisines"] = $this->welcome_model->get_cuisines();
+		$output_data["category"] = $this->welcome_model->get_category();
 
 		$select = array('txt1','txt2','txt3');
 		$output_data["highlight"] = get_data_by_filter('highlight',$select);
 
-		$output_data["shops"] = $this->welcome_model->get_shops();
-		$output_data["combo_shops"] = $this->welcome_model->get_shops();
+		$loc = $this->welcome_model->get_current_lat_long();
+
 		// echo "<pre>";
+		// print_r($loc);
+		// exit;
+
+		// $loc[0] = 23.0333;
+		// $loc[1] = 72.6167;
+
+		$output_data["shops"] = $this->welcome_model->get_shops(NULL, NULL, NULL, NULL, $loc[0], $loc[1]);
+		$output_data["combo_shops"] = $this->welcome_model->get_shops();
+
+		//echo "<pre>";
+		//print_r($loc);
 		// print_r($output_data["shops"]);
 		// exit;
 
@@ -48,6 +58,9 @@ class Welcome extends CI_Controller {
 			$where = array('shop_id' => $shop[0]['id'] ,'deleted_at' => NULL, 'is_active' => 1, 'quantity !=' => 0 );
 			$output_data["item"] = get_data_by_filter('item',$select,$where);
 
+			// echo "<pre>";
+			// print_r($output_data["shop"]);
+			// exit;
 			$output_data['main_content'] = 'restaurant_detail';
 			$this->load->view('web/template',$output_data);
 		}
@@ -86,7 +99,31 @@ class Welcome extends CI_Controller {
 			$popular = NULL;
 		}
 
-		$shops = $this->welcome_model->get_shops(NULL, $cuisine_id, $pickup, $popular);
+		if(isset($_POST['delivery_fee']) && $_POST['delivery_fee'] != ''){
+			$delivery_fee = $_POST['delivery_fee'];
+		}else{
+			$delivery_fee = NULL;
+		}
+
+		if(isset($_POST['minimum_order_amount']) && $_POST['minimum_order_amount'] != ''){
+			$minimum_order_amount = $_POST['minimum_order_amount'];
+		}else{
+			$minimum_order_amount = NULL;
+		}
+
+		if(isset($_POST['category']) && $_POST['category'] != ''){
+			$category = $_POST['category'];
+		}else{
+			$category = NULL;
+		}
+
+		if(isset($_POST['rating']) && $_POST['rating'] != ''){
+			$rating = $_POST['rating'];
+		}else{
+			$rating = NULL;
+		}
+
+		$shops = $this->welcome_model->get_shops(NULL, $cuisine_id, $pickup, $popular, NULL, NULL, $delivery_fee, $minimum_order_amount, $category, $rating);
 		echo json_encode(array("is_success" => true, "shops" => $shops));
 		return TRUE;
 	}
@@ -104,7 +141,8 @@ class Welcome extends CI_Controller {
 
 	public function cart(){
 		echo "<pre>";
-		print_r($_POST);
+		$data = get_rating(52);
+		print_r($data);
 		exit;
 	}
 
@@ -157,8 +195,9 @@ class Welcome extends CI_Controller {
 			if (isset($_POST['submit'])){
 				$validation_rules = array(
 					array('field' => 'shop_name', 'label' => 'restaurant name', 'rules' => 'trim|required|min_length[2]|max_length[50]'),
+					array('field' => 'vender_name', 'label' => 'full name', 'rules' => 'trim|required|min_length[2]|max_length[50]'),
 					array('field' => 'email', 'label' => 'email address', 'rules' => 'trim|required|max_length[225]|valid_email|callback_isexists'),
-					array('field' => 'mobile_number', 'label' => 'phone number', 'rules' => 'trim|required|min_length[12]|max_length[12]'),
+					array('field' => 'mobile_number', 'label' => 'phone number', 'rules' => 'trim|required|min_length[15]|max_length[15]'),
 					array('field' => 'address', 'label' => 'restaurant address', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'message', 'label' => 'message', 'rules' => 'trim|max_length[1000]')
 				);
@@ -218,8 +257,10 @@ class Welcome extends CI_Controller {
 		if ($sql_query->num_rows() > 0) {
 			$error = '1';
 		}else{
+
+			$register_number = str_replace('+1 ', '', $_POST['mobile_number']);
 			$this->db->select('id');
-			$this->db->where('mobile_number', $_POST['register_number']);
+			$this->db->where('mobile_number', $register_number);
 			$this->db->where('deleted_at', NULL);
 			$this->db->from('customer');
 			$sql_query = $this->db->get();
@@ -235,7 +276,7 @@ class Welcome extends CI_Controller {
                         'email'=> $_POST['email'], 
                         'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
                         'device_type'=> 0, 
-                        'mobile_number'=> $_POST['mobile_number'],
+                        'mobile_number'=>$register_number,
                         'latitude'=> '',
                         'longitude'=> '',
                         'gender'=> $_POST['gender'],

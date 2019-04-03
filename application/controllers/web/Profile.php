@@ -37,7 +37,7 @@ class Profile extends CI_Controller {
 				$validation_rules = array(
 					
 					array('field' => 'username', 'label' => 'full name', 'rules' => 'trim|required|callback_customAlpha|min_length[3]|max_length[50]'),
-					array('field' => 'mobile_number', 'label' => 'mobile number', 'rules' => 'trim|required|min_length[12]|max_length[12]'),
+					array('field' => 'mobile_number', 'label' => 'mobile number', 'rules' => 'trim|required|min_length[15]|max_length[15]'),
 					array('field' => 'dob', 'label' => 'date of birth', 'rules' => 'trim|required'),
 					array('field' => 'gender', 'label' => 'gender', 'rules' => 'trim|required')
 				);
@@ -286,33 +286,41 @@ class Profile extends CI_Controller {
 	}
 
 	public function all_address(){
-		$where = array('customer_id' => $this->auth->get_user_id(), 'deleted_at' => NULL);
-        $select = array('id','house_no','street','city','zipcode','latitude','longitude','address_type');
-        $table = 'delivery_address';
-        $customer_addresses = get_data_by_filter($table,$select, $where);
 
-        $where = array('popular' => 1, 'deleted_at' => NULL);
-        $select = array('id','default_address','house_no','street','city','zipcode','latitude','longitude','address_type');
-        $table = 'delivery_address';
-        $admin_addresses = get_data_by_filter($table,$select, $where);
+		$is_customer = $this->auth->is_customer();
+		$is_logged_in = $this->auth->is_logged_in();
 
-        if(isset($_SESSION['delivery_address_id']) && $_SESSION['delivery_address_id'] != ''){
-        	$output_data["default"] = decrypt($_SESSION['delivery_address_id']);
-        }
+		if($is_logged_in && $is_customer){
+			$where = array('customer_id' => $this->auth->get_user_id(), 'deleted_at' => NULL);
+	        $select = array('id','house_no','street','city','zipcode','latitude','longitude','address_type');
+	        $table = 'delivery_address';
+	        $customer_addresses = get_data_by_filter($table,$select, $where);
 
-        $address_type = $this->config->item("address_type");
+	        $where = array('popular' => 1, 'deleted_at' => NULL);
+	        $select = array('id','default_address','house_no','street','city','zipcode','latitude','longitude','address_type');
+	        $table = 'delivery_address';
+	        $admin_addresses = get_data_by_filter($table,$select, $where);
 
-         // echo "<pre>";
-         // print_r($_SESSION['delivery_address_id']);
-         // print_r($output_data);
-        // print_r($address_type);
-       //  exit;
-        $output_data["admin_addresses"] = $admin_addresses;
-        $output_data["customer_addresses"] = $customer_addresses;
-        $output_data["address_type"] = $address_type;
+	        if(isset($_SESSION['delivery_address_id']) && $_SESSION['delivery_address_id'] != ''){
+	        	$output_data["default"] = decrypt($_SESSION['delivery_address_id']);
+	        }
 
-        $output_data['main_content'] = 'all_address';
-		$this->load->view('web/template',$output_data);
+	        $address_type = $this->config->item("address_type");
+
+	         // echo "<pre>";
+	         // print_r($_SESSION['delivery_address_id']);
+	         // print_r($output_data);
+	        // print_r($address_type);
+	       //  exit;
+	        $output_data["admin_addresses"] = $admin_addresses;
+	        $output_data["customer_addresses"] = $customer_addresses;
+	        $output_data["address_type"] = $address_type;
+
+	        $output_data['main_content'] = 'all_address';
+			$this->load->view('web/template',$output_data);
+		}else{
+			redirect(base_url() . "welcome");
+		}
 	}
 
 	public function my_delievry_address($id = NULL){
@@ -464,6 +472,73 @@ class Profile extends CI_Controller {
 		// print_r($output_data["order"]);
 		// exit;
 		$output_data['main_content'] = 'favourite_orders';
+		$this->load->view('web/template',$output_data);
+	}
+
+	public function delete_delievry_address(){
+		$is_success = FALSE;
+		$id = $_POST['id'];
+		if (isset($id) && !is_null($id) && !empty($id)){
+			$user_data = array('deleted_at' => date('Y-m-d H:i:s') );
+			$this->db->where('id', $id);
+			$this->db->where('customer_id', $this->auth->get_user_id());
+			if($this->db->update('delivery_address', $user_data)){
+				$is_success = TRUE;
+			}else{
+				$is_success = FALSE;
+			}
+		}
+		echo json_encode(array("is_success" => $is_success));
+		return $is_success;
+	}
+
+	public function update_delievry_address(){
+		
+		if (isset($_POST) && !empty($_POST)){
+			if (isset($_POST['submit'])){
+				if($this->profile_model->update_delievry_address()){
+					redirect(base_url() . "choose-address");
+				}else{
+					redirect(base_url() . "choose-address");
+				}
+			}
+		}
+	}
+
+	public function request_add_popular_address(){
+
+		$this->auth->clear_messages();
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
+
+		if (isset($_POST) && !empty($_POST)){
+			if (isset($_POST['submit'])){
+
+				$validation_rules = array(
+				
+					array('field' => 'house_no', 'label' => 'house/office number', 'rules' => 'trim|required|max_length[250]'),
+					array('field' => 'street', 'label' => 'street', 'rules' => 'trim|required|max_length[250]'),
+					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[250]'),
+					array('field' => 'zipcode', 'label' => 'zipcode', 'rules' => 'trim|required|numeric|max_length[5]|min_length[5]'),
+					array('field' => 'nickname', 'label' => 'nick name', 'rules' => 'trim'),
+					array('field' => 'address_type', 'label' => 'address type', 'rules' => 'trim|required')
+				);
+				$this->form_validation->set_rules($validation_rules);
+				
+				if ($this->form_validation->run() === true) {
+					if($this->profile_model->request_add_popular_address()){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "add-request-address");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "add-request-address");
+					}	
+				} 
+			}
+		}
+
+		$output_data["address_type"] = $this->config->item("address_type");
+		$output_data['main_content'] = 'add_popular_address';
 		$this->load->view('web/template',$output_data);
 	}
 

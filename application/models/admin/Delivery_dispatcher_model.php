@@ -37,7 +37,6 @@ class Delivery_dispatcher_model extends CI_Model {
 		$user_data = array(
 						'full_name' => ucwords(addslashes($this->input->post("full_name"))),
 						'email' => $this->input->post("email"),
-						'password' => password_hash($this->input->post("password"), PASSWORD_DEFAULT),
 						'contact_no' => $this->input->post("contact_no"),
 						'address' => addslashes($this->input->post("address")),
 						'city' => addslashes($this->input->post("city")),
@@ -47,10 +46,52 @@ class Delivery_dispatcher_model extends CI_Model {
 						'latitude' => $this->input->post("latitude"),
 						'longitude' => $this->input->post("longitude"),
 						'profile_picture' => ((isset($profile_picture) && !empty($profile_picture)) ? $profile_picture : ''),
-						'status' => 1,
+						'status' => 0,
 						'created_at' => date('Y-m-d H:i:s')
 					);
-		$response = $this->db->insert("delivery_dispatcher", $user_data);
+		if($this->db->insert("delivery_dispatcher", $user_data)){
+			$user_id = $this->db->insert_id();
+
+			$this->db->select('emat_email_subject,emat_email_message');
+			$this->db->from('email_template');
+			$this->db->where('emat_email_type', 1);
+			$this->db->where("emat_is_active", 1);
+			$sql_query = $this->db->get();
+			$return_data = $sql_query->row();
+
+			if (!isset($return_data) && empty($return_data)){
+				$this->auth->set_error_message("Email template not found. Error into sending mail.");
+				return FALSE;
+			}
+
+			$activation_token = bin2hex(random_bytes(20));
+			$email_var_data["activation_link"] = base_url() . 'dispatcher-setpassword/'. $activation_token;
+
+			$from = "";
+			$to = $this->input->post("email");
+			$subject = $return_data->emat_email_subject;
+
+			$email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+			$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+			$mail = sendmail($from, $to, $subject, $message);
+
+			if(!$mail){
+
+				if(isset($profile_picture) && !empty($profile_picture)){
+					unlink(FCPATH . $this->config->item("delivery_dispatcher_photo_path") . "/" . $profile_picture);
+				}
+
+				$this->db->where("id", $user_id);
+				$this->db->delete("delivery_dispatcher");
+				$this->auth->set_error_message("Error into sending mail");
+				return FALSE;
+			}else{
+				$token_array = array('activation_token' => $activation_token);
+				$this->db->where("id", $user_id);
+				$this->db->update("delivery_dispatcher", $token_array);
+			}
+
+		}
 
 		if ($this->db->trans_status() === FALSE) {
 			$this->db->trans_rollback();

@@ -195,7 +195,7 @@ if(isset($_SESSION['shop_short_name']) && $_SESSION['shop_short_name'] != ''){
 						<div class="row m-0">
 							<?php
 							foreach ($additional_recommendation as $key => $value) {
-								$prof_url = base_url() . 'assets/images/default/cuisine.jpg';
+								$prof_url = base_url() . 'web-assets/images/logo-3.png';
 								if (isset($value['item_picture']) && ($value['item_picture'] != '')){
 									if (file_exists($this->config->item("item_photo_path") . '/'.$value['item_picture'])){
 										$prof_url = base_url() . $this->config->item("item_photo_path") . '/'.$value['item_picture'];
@@ -206,9 +206,9 @@ if(isset($_SESSION['shop_short_name']) && $_SESSION['shop_short_name'] != ''){
 							?>
 							<div class="col-md-4">
 								<div class="additional-recommendation">
-									<div class="additional-rec-image"><img src="<?php echo $prof_url; ?>" width="343" height="136" /></div>
+									<div class="additional-rec-image"><img src="<?php echo $prof_url; ?>" width="343" height="150" /></div>
 									<div class="additional-rec-detail">
-										<div class="rec-product-name"><?php echo $value['name']; ?></div>
+										<div class="rec-product-name cut-text"><?php echo $value['name']; ?></div>
 										<div class="rec-product-desc d-flex justify-content-between">
 											<?php
 											if($value['offer_price'] == ''){
@@ -281,86 +281,9 @@ if(isset($_SESSION['shop_short_name']) && $_SESSION['shop_short_name'] != ''){
 		</div>
 	</div>
 </div>
-
-<!-- Add New Address Modal -->
-<div class="modal fade modal-with-logo" id="addNewAddressModal" tabindex="-1" role="dialog" aria-labelledby="addNewAddressModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header justify-content-center position-relative">
-				<img src="<?php echo $assets; ?>images/click-lunch-logo-white.png" width="130" />
-			</div>
-			<div class="modal-body">
-				<form class="add-new-address-block" id="addNewAddress" method="post" action="<?php echo $add_address_link; ?>">
-					<div class="row white-bg modalform">
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" id="housernum" placeholder="House/Office Number" name="housernum" autocomplete="off">
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" id="street" placeholder="Street/Locality" name="street" autocomplete="off">
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" id="city" placeholder="City" name="city" autocomplete="off">
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" id="zipcode" placeholder="ZipCode Ex: 10001" name="zipcode" autocomplete="off">
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" id="delivery_instruction" placeholder="Any delivery instructions" name="delivery_instruction" autocomplete="off">
-							</div>
-						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<input type="text" class="form-control" id="nickname" placeholder="Nickname" name="nickname" autocomplete="off">
-							</div>
-						</div>
-						<div class="col-md-12">
-							<label>Address Type</label>
-							<div class="row m-0 mb-2 d-flex">
-								<?php
-								if(isset($address_type) && is_array($address_type) && !empty($address_type)){
-									foreach ($address_type as $key => $value) {
-									$checked = ($key == 1)?'checked':'';
-								?>
-									<div class="form-check mb-1">
-										<input class="form-check-input" type="radio" name="addresstype" id="<?php echo $key; ?>" value="<?php echo $key; ?>" <?php echo $checked; ?> >
-										<label class="form-check-label" for="<?php echo $key; ?>"><?php echo ucwords($value); ?></label>
-									</div>
-								<?php	
-									}
-								?>
-								<?php	
-								}else{
-								?>
-								<div class="form-check mb-1">
-									<label>Address Type not found</label>
-								</div>
-								<?php
-								}
-								?>
-							</div>
-						</div>
-					</div>
-					
-					<div class="row">
-						<div class="col-sm-12 p-0 text-center">
-							<button type="submit" name="new-add-btn" class="new-add-btn transparent-btn" id="new-add-btn"><img src="<?php echo $assets; ?>images/popup-checked.png"></button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-<script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
+<?php
+include 'add_address_modal.php';
+?>
 <script type="text/javascript">
 	$("input[type='number']").inputSpinner();
 	var delete_url = "<?php echo base_url().'cart-item-delete'; ?>";

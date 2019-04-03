@@ -15,6 +15,7 @@ class Vender_model extends CI_Model {
 			$this->db->where('id', $id);
 		}
 		$this->db->where("deleted_at", NULL);
+		$this->db->where("admin_verified", 1);
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
 			if (isset($id) && !is_null($id)) {
@@ -30,11 +31,13 @@ class Vender_model extends CI_Model {
 	public function get_vendor_request($id = NULL){
 		$return_data = array();
 		$this->db->select('*');
-		$this->db->from('shop_request');
+		$this->db->from('shop');
 		if (isset($id) && !is_null($id)) {
 			$this->db->where('id', $id);
 		}
 		$this->db->where("deleted_at", NULL);
+		$this->db->where("admin_verified", 0);
+		$this->db->where("tax_number !=", '');
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
 			if (isset($id) && !is_null($id)) {
@@ -102,6 +105,7 @@ class Vender_model extends CI_Model {
 						'payment_mode' => $payment_mode,
 						'profile_picture' => ((isset($profile_picture) && !empty($profile_picture)) ? $profile_picture : ''),
 						'status' => 0,
+						'admin_verified' => 1,
 						'created_at' => date('Y-m-d H:i:s')
 					);
 
@@ -143,7 +147,6 @@ class Vender_model extends CI_Model {
 		if($response){
 
 			$activation_token = bin2hex(random_bytes(20));
-			$email_var_data["vender_name"] = $this->input->post("vender_name");
 			$email_var_data["activation_link"] = base_url() . 'vender-setpassword/'. $activation_token;
 
 			$from = "";
@@ -156,6 +159,13 @@ class Vender_model extends CI_Model {
 		}
 
 		if(!$mail){
+			$this->db->where("id", $user_id);
+			$this->db->delete("shop");
+
+			if(isset($profile_picture) && !empty($profile_picture)){
+				unlink(FCPATH . $this->config->item("profile_path") . "/" . $profile_picture);
+			}
+
 			$this->auth->set_error_message("Error into sending mail");
 			return FALSE;
 		}else{

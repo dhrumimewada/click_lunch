@@ -249,11 +249,10 @@ class Email_template extends CI_Controller {
 				 
 				if ($this->form_validation->run() === true){
 					
-					//$abc = $this->email_template_model->send_custom_push_customer();
+					// $abc = $this->email_template_model->send_custom_push_customer();
 					// echo "<pre>";
-					// print_r($_POST);
-					// print_r($abc);
-					// exit;
+					//  print_r($abc);
+					//  exit;
 					if($this->email_template_model->send_custom_push_customer()){
 						$this->session->set_flashdata($this->auth->get_messages_array());
 						redirect(base_url() . "custom-push-customer");

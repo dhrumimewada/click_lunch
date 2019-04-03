@@ -43,29 +43,52 @@ class Customer_login extends CI_Controller {
 	}
 
 	public function activate_account($token=''){
-		$this->db->select('activation_token');
-        $this->db->where("activation_token",$token);
-        $this->db->where("deleted_at",NULL);
-        $this->db->where("status",0);
+		$this->db->select('id, username, activation_token, email, password');
+        $this->db->where("activation_token", $token);
+        $this->db->where("deleted_at", NULL);
+        $this->db->where("status", 0);
         $this->db->from("customer");
         $sql_query = $this->db->get();
         if ($sql_query->num_rows() > 0){
+
+        	$user = $sql_query->row();
+
         	$data = array(
 				'status' => 1,
 				'activation_token' => ''
 				);
 			$this->db->where('activation_token',$token);
 			$this->db->update('customer', $data);
-			$return = array('status' => true);
-			echo "<h2>Your account has been activated</h2>";
-			return json_encode($return);
-        }else{
-        	$return = array('status' => false);
-        	echo "<h2>Server encounter error</h2>";
-			return json_encode($return);
-        }
 
-		
+			$this->session->unset_userdata('employee_user');
+			$this->session->unset_userdata('vendor_user');
+			$this->session->unset_userdata('admin_user');
+			$this->session->unset_userdata('dispatcher_user');
+			$this->session->unset_userdata('customer_user');
+
+			$session_data['user_id'] = (int) $user->id;
+			$session_data['username'] =  (string) $user->username;
+			$session_data['email'] =  (string) $user->email;
+			$session_data['logged_in'] = (bool) TRUE;
+			$session_data['is_admin'] = (bool) FALSE;
+			$session_data['is_vender'] = (bool) FALSE;
+			$session_data['is_employee'] = (bool) FALSE;
+			$session_data['is_dispatcher'] = (bool) FALSE;
+			$session_data['is_customer'] = (bool) TRUE;
+			$session_data['role_id'] = (bool) FALSE;
+			$session_data['shop_id'] = (bool) FALSE;
+
+			$this->session_data = $session_data;
+			$this->session->set_userdata(array('customer_user' => $this->session_data));
+
+
+			redirect(base_url() . "welcome");
+			// $return = array('status' => true);
+			// echo "<h2>Your account has been activated</h2>";
+			// return json_encode($return);
+        }else{
+        	redirect(base_url() . "welcome");
+        }	
 	}
 
 	public function reset_password($token=''){
@@ -86,11 +109,9 @@ class Customer_login extends CI_Controller {
 				$this->form_validation->set_rules($validation_rules);
 				if ($this->form_validation->run() === true){
 					if($this->customer_model->set_password()){
-						echo "<h2>Your password updated successfully</h2>";
-						exit;
+						redirect(base_url());
 					}else{
-						echo "<h2>Server encounter error</h2>";
-						exit;
+						redirect(base_url());
 					}
 				}
 			}

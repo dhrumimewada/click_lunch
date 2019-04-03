@@ -29,9 +29,41 @@ if(isset($shop['cuisine']) && !empty($shop['cuisine'])){
 				?>
 			</div>
 			<div class="timing d-flex mb-1">
-				<div class="first-half">11:00 To 15:00</div>
-				<div>&nbsp; / &nbsp;</div>
-				<div class="second-half">18:30 To 22:30</div>
+				<?php
+				$data = '<table>';
+				foreach ($shop['all_working_time'] as $key => $value) {
+					$data .= '<tr>';
+					if($shop['availibality']['day'] == $value['day']){
+						$day = '<b>Today<b>';
+					}else{
+						$day = $value['day'];
+					}
+					if($value['is_closed'] == 1){
+						$data .= '<td>'.$day.' :&nbsp;</td><td>Closed</td>';
+					}else if($value['full_day'] == 1){
+						$data .= '<td>'.$day.' :&nbsp;</td><td>Full day open</td>';
+					}else if($shop['availibality']['from_time'] != ''){
+						$data .= '<td>'.$day.' :&nbsp;</td><td>'.$shop["availibality"]['from_time'].' to '.$shop['availibality']['to_time'].'</td>';
+					}else{
+						$data .= '<td>'.$day.' :&nbsp;</td><td>NA</td>';
+					}
+					$data .= '</tr>';
+				}
+				$data .= '</table>';
+				?>
+				<span class="pointer" data-toggle="popover" title="Open Hours" data-content="<?php echo $data; ?>"  data-trigger="hover" data-html="true"> 
+				<?php
+				if($shop['availibality']['is_closed'] == 1){
+					echo "Closed";
+				}else if($shop['availibality']['full_day'] == 1){
+					echo "24 Hours Open";
+				}else if($shop['availibality']['from_time'] != '' && $shop['availibality']['to_time'] != ''){
+					echo $shop["availibality"]['from_time'].' to '.$shop['availibality']['to_time'];
+				}else{
+					echo "Working time not available";
+				}
+				?>
+				</span>
 			</div>
 			<div class="rating-block d-flex justify-content-between">
 				<div class="rating">
@@ -115,3 +147,8 @@ if(isset($shop['cuisine']) && !empty($shop['cuisine'])){
 		</div>
 	</div>
 </div>
+<script type="text/javascript" charset="utf-8" async defer>
+	$(document).ready(function(){
+	  $('[data-toggle="popover"]').popover(); 
+	});
+</script>

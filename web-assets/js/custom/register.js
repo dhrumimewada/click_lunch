@@ -41,8 +41,8 @@
                 required: true,
                 digits: false,
                 greaterThanZero:false,
-                minlength: 12,
-                maxlength: 12,
+                minlength: 15,
+                maxlength: 15,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -67,8 +67,8 @@
                 emailValidation: "The e-mail field is invalid."
             },
             register_username: {
-                required: "The username field is required.",
-                alpha: "The username field is not in the correct format.",
+                required: "The full name field is required.",
+                alpha: "The full name field is not in the correct format.",
                 minlength: jQuery.validator.format("At least {0} characters required"),
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
@@ -174,7 +174,7 @@ function register() {
 }
 
  $( document ).ready(function(){
- 	$("#register_number").inputmask("999 999 9999",{"placeholder": ""});
+ 	$("#register_number").inputmask("+1 999 999 9999",{"placeholder": ""});
 
  	$('.datepicker-autoclose').datepicker({
             format: 'dd-mm-yyyy',

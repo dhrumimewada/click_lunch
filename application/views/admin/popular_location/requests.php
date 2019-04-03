@@ -1,36 +1,13 @@
 <?php
 $edit_link = base_url().'vender-request-update';
 ?>
-<div class="modal fade" id="myModal">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Message From <b><span id="shop-name"></span></b></h4>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body" id="message">
-          Modal body..
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-        
-      </div>
-    </div>
-</div>
-
 <div class="content">
     <div class="container-fluid">
 
         <div class="row">
             <div class="col-sm-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">Restaurant Pending Requests</h4>
+                    <h4 class="page-title">Popular Location Requests</h4>
                 </div>
                 <?php echo get_msg(); ?>
             </div>
@@ -41,19 +18,40 @@ $edit_link = base_url().'vender-request-update';
             <div class="col-12">
                 <div class="card m-b-20">
                     <div class="card-body">
-                        <table class="table table-hover dt-responsive nowrap vendor_request_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <table class="table table-hover dt-responsive nowrap request_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
-                                <th>Id</th>
-                                <th>Restaurant Name</th>
-                                <th>Conatct Person Name</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th class="text-center">Location</th>
+                                <th>Request By</th>
+                                <th>Location</th>
+                                <th>Zip Code</th>
+                                <th>Location Type</th>
+                                <th>Created date</th>
                                 <th class="text-center">Action</th>
                             </tr>
                             </thead>
                             <tbody>
+                                <?php
+                            if (isset($requests) && !empty($requests) && count($requests) > 0){
+                                foreach ($requests as $key => $value){
+                                    $id = $value["id"];
+                                    $created_date_ts = strtotime($value["created_at"]);
+                                    $created_date = date("j M, Y", $created_date_ts);
+
+                                    echo '<tr data-id="' . $id . '">';
+                                    echo "<td>" . ucfirst(stripslashes($value["username"])) . "</td>";
+                                    echo "<td>" . stripslashes($value["house_no"]).", ".stripslashes($value["street"]).", ".stripslashes($value["city"]) . "</td>";
+
+                                    echo "<td>" . $value["zipcode"] . "</td>";
+                                    echo "<td>" .  ucwords($address_type[$value["address_type"]]) . "</td>";
+
+                                    echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
+ 
+                                    echo "<td class='text-center'><button type='button' class='btn btn-primary btn-sm waves-effect waves-light accept_request' title='Accept' data-popup='tooltip'>Accept</button><button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_request' title='Delete' data-popup='tooltip'>Delete</button></td>";
+
+                                    echo '</tr>';
+                                }
+                            }
+                            ?>
                             </tbody>
                         </table>
 
@@ -70,13 +68,19 @@ $edit_link = base_url().'vender-request-update';
 
 <script type="text/javascript">
 
+    var request_list = $('.request_list').DataTable({
+            keys: true,
+            "order": [[4, "desc"]],
+            'iDisplayLength': 10,
+            columnDefs: [{orderable: false, targets: [5]},{visible: false,targets: [4]}],
+    });
 
-    var delete_url = "<?php echo base_url().'vender-request-delete'; ?>";
-    var accept_url = "<?php echo base_url().'vender-request-accept'; ?>";
+    var delete_url = "<?php echo base_url().'location-request-delete'; ?>";
+    var accept_url = "<?php echo base_url().'location-request-accept'; ?>";
 
     $(document).ready(function () {
 
-        $(document).on('click',".delete_vendor_request", function(){
+        $(document).on('click',".delete_request", function(){
 
             $this = $(this);
             var data_id = get_dataid($this);
@@ -103,24 +107,18 @@ $edit_link = base_url().'vender-request-update';
                             {
                                 swal(
                                     'Deleted!',
-                                    'Restaurant request has been deleted.',
+                                    'Location request has been deleted.',
                                     'success'
                                 )
                                 remove_row($this);
                             } 
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                            console.log('error');
-                        },
-                        complete: function () {
-                            $(this).removeAttr("disabled");
                         }
                     });    
                 })
             }    
         });
 
-        $(document).on('click',".accept_vendor_request", function(){
+        $(document).on('click',".accept_request", function(){
 
             $this = $(this);
             var data_id = get_dataid($this);
@@ -143,34 +141,28 @@ $edit_link = base_url().'vender-request-update';
                         data:{id:data_id},
                         success: function (returnData) {
                             returnData = $.parseJSON(returnData);
-                            if (typeof returnData != "undefined")
-                            {
-                                swal(
-                                    'Accepted!',
-                                    'Restaurant request has been accepted.',
-                                    'success'
-                                )
-                                remove_row($this);
+                            if (typeof returnData != "undefined"){
+                                console.log(returnData);
+                                if(returnData.is_success == true){
+                                    swal(
+                                        'Accepted!',
+                                        returnData.message,
+                                        'success'
+                                    )
+                                    remove_row($this);
+                                }else{
+                                   swal(
+                                        'Error!',
+                                        returnData.message,
+                                        'danger'
+                                    ) 
+                                }
+                                
                             } 
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                            console.log('error');
-                        },
-                        complete: function () {
-                            $(this).removeAttr("disabled");
                         }
                     });    
                 })
             }    
-        });
-
-        $(document).on('click',".view-msg", function(){
-
-            var shopname = $(this).attr("data-shopname");
-            var msg = $(this).attr("data-msg");
-            //console.log(shopname);
-            $('#myModal #shop-name').text(shopname);
-            $('#myModal #message').text(msg);
         });
 
     });

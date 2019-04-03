@@ -518,7 +518,7 @@ $delivery_evening_to = $delivery['evening']['to'];
                                     </div>
                                 </div>
                                 <!-- Avalable for -->
-                                <div class="col-lg-6">
+                                <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="required">Available Services</label>
                                         <div class="d-block mt-2">
@@ -561,6 +561,29 @@ $delivery_evening_to = $delivery['evening']['to'];
                                         </div>
                                         <div class="validation-error-label">
                                             <?php echo form_error('takeout_delivery_status[]'); ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="required">Weekly Service</label>
+                                        <div class="d-block mt-1">
+                                        <?php
+    $checked = '';
+    $field_value = NULL;
+    $temp_value = set_value('weekly_status');
+    if (isset($temp_value) && !empty($temp_value)) {
+        $field_value = $temp_value; 
+    } else{
+        $field_value = $vender_detail->weekly_status;
+    } 
+    if($field_value == 1){
+        $checked = 'checked';
+    }
+    
+    ?>
+                                            <input type="checkbox" switch="none" id="weekly_status" value="1" name="weekly_status" <?php echo $checked; ?> autocomplete="off">
+                                            <label for="weekly_status" data-on-label="On" data-off-label="Off" title="Weekly"></label>
                                         </div>
                                     </div>
                                 </div>

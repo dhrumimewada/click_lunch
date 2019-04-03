@@ -18,6 +18,14 @@
                     return $.trim(value);
                 }
             },
+            vender_name: {
+                required:true,
+                minlength:2,
+                maxlength:50,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
             email: {
                 required:true,
                 maxlength:255,
@@ -44,8 +52,8 @@
                 required: true,
                 digits: false,
                 greaterThanZero:false,
-                minlength: 12,
-                maxlength: 12,
+                minlength: 15,
+                maxlength: 15,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -55,6 +63,11 @@
 
             shop_name: {
                 required: "The restaurant name field is required.",
+                minlength: jQuery.validator.format("At least {0} digit required"),
+                maxlength: jQuery.validator.format("Maximum {0} characters allowed")
+            },
+            vender_name: {
+                required: "The full name field is required.",
                 minlength: jQuery.validator.format("At least {0} digit required"),
                 maxlength: jQuery.validator.format("Maximum {0} characters allowed")
             },
@@ -92,5 +105,5 @@
     });
 
 $( document ).ready(function() {
-    $("#mobile_number").inputmask("999 999 9999",{"placeholder": ""});
+    $("#mobile_number").inputmask("+1 999 999 9999",{"placeholder": ""});
 });

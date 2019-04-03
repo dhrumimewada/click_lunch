@@ -149,6 +149,8 @@ function get_loggedin_detail($id = NULL){
 		$table = 'employee';
 	}elseif ($CI->auth->is_dispatcher()){
 		$table = 'delivery_dispatcher';
+	}elseif ($CI->auth->is_customer()){
+		$table = 'customer';
 	}else{
 		return $return_data;
 	}
@@ -361,7 +363,7 @@ function get_card_type($str, $format = 'string'){
     return $type;
 }
 
-function send_push($device_type = '',$device_token = '', $push_title = '', $push_data = '', $push_type = ''){
+function send_push($device_type = '',$device_token = '', $push_title = '', $push_data = array(), $push_type = ''){
   		
   		$CI = &get_instance();
         $key = $CI->config->item('fcm_key');
@@ -369,7 +371,7 @@ function send_push($device_type = '',$device_token = '', $push_title = '', $push
 
         if($device_type == 2){
 
-            $push_data = array('message' => $push_message);
+            //$push_data = array('message' => $push_message);
 
             $fcmFields = array(
                 'priority' => 'high',
@@ -377,8 +379,7 @@ function send_push($device_type = '',$device_token = '', $push_title = '', $push
                 'sound' => 'default',
                 'notification' => array( 
                     "title"=> $push_title,
-                    "body"=> $push_message,
-                    //"data"=> $push_data,
+                    "body"=> $push_data,
                     "type"=> $push_type
                     )
                 );
@@ -481,6 +482,51 @@ function send_push_multiple_ios($ios_data = array(), $push_title = NULL, $push_m
     //echo $fcmFields . "\n\n";
     //print_r($result);
     return $result;
+}
+
+function notification_add($notification_type = NULL, $customer_id = NULL, $notification_title = NULL, $notification_message = NULL, $order_id = 0){
+	$CI = &get_instance();
+	if(isset($customer_id)){
+		$data = array(
+					'notification_type' => intval($notification_type),
+					'customer_id' => intval($customer_id),
+					'notification_title' => $notification_title,
+					'notification_message' => $notification_message,
+					'order_id' => $order_id
+				);
+
+		if($CI->db->insert("notification", $data)){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+		
+	}else{
+		return FALSE;
+	}
+	
+}
+
+function get_rating($shop_id = NULL){
+	$rate = 0.00;
+	$CI = &get_instance();
+	$CI->db->select('rating');
+	$CI->db->from('orders');
+	$CI->db->where("shop_id", $shop_id);
+	$CI->db->where("rating !=", 0);
+	$sql_query = $CI->db->get();
+	if ($sql_query->num_rows() > 0){
+		$total_rows = $sql_query->num_rows();
+		$ratings_data = $sql_query->result_array();
+		$rate_total = 0.00;
+		foreach ($ratings_data as $key => $value) {
+			$rate_total += floatval($value['rating']);
+		}
+		if($rate_total > 0){
+			$rate = $rate_total / $total_rows;
+		}
+	}
+	return $rate;
 }
 
 if(!function_exists('is_empty')){

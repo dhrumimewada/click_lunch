@@ -131,5 +131,38 @@ class Popular_location extends CI_Controller {
 			return FALSE;
 		}
 	}
+
+	public function popular_location_requests(){
+
+		$output_data["requests"] = $this->popular_location_model->get_requests();
+		$output_data["address_type"] = $this->config->item("address_type");
+		$output_data['main_content'] = "admin/popular_location/requests";
+		$this->load->view('template/template',$output_data);	
+	}
+
+	public function request_delete(){
+		$id = $_POST['id'];
+		if (isset($id) && !is_null($id) && !empty($id)) {
+			$user_data = array('deleted_at' => date('Y-m-d H:i:s') );
+			$this->db->where('id', $id);
+			$this->db->update('delivery_address_popular_request', $user_data);
+			echo json_encode(array("is_success" => true));
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+
+	public function request_accept(){
+		$id = $_POST['id'];
+		if (isset($id) && !is_null($id) && !empty($id)) {
+			
+			$result = $this->popular_location_model->request_accept();
+			echo json_encode($result);
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
 }
 ?>

@@ -185,15 +185,98 @@ class Order extends CI_Controller {
   	}
 
   	public function order_status_update(){
-  		$id = $_POST['id'];
+  		$order_id = $id = $_POST['id'];
 		$status = $_POST['status'];
 		if (isset($id) && !is_null($id) && !empty($id)) {
 			$user_data = array('order_status' => $status,'updated_at' => date('Y-m-d H:i:s') );
 			$this->db->where('id', $id);
 			$this->db->update('orders', $user_data);
-			echo json_encode(array("is_success" => true));
+
+			$customer_data = array();
+			$this->db->select('t1.device_type, t1.device_token, t2.customer_id');
+			$this->db->from('customer t1');
+			$this->db->join('orders t2', 't1.id = t2.customer_id');
+			$this->db->where('t2.id', $order_id);
+			$this->db->where('t1.device_type !=', '');
+			$this->db->where('t1.device_type !=', 0);
+			$this->db->where('t1.device_token !=', '');
+			$sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0){
+				$customer_data = (array)$sql_query->row();
+
+				$device_type = $customer_data['device_type'];
+				$device_token = $customer_data['device_token'];
+
+				if($status == 1){
+					$push_title = 'Order Accepted by Restaurant';
+					$message = 'Your order no. CL'.$order_id.' has been accepted by restaurant.';
+					$push_type = 'order_accepted';
+					$notification_type = 2;
+				}else{
+					$push_title = 'Order Rejected by Restaurant';
+					$message = 'Your order no. CL'.$order_id.' has been rejected by restaurant.';
+					$push_type = 'order_rejected';
+					$notification_type = 3;
+				}
+				
+				$push_data = array(
+						'order_id' => $order_id,
+						'customer_id' => $_POST['customer_id'],
+						'message' => $message
+						);
+				$result = send_push($device_type,$device_token, $push_title, $push_data, $push_type);
+
+				$success_data = notification_add($notification_type, $customer_data['customer_id'], $push_title, $message, $order_id);
+				$notification_store_data= array('notification_type' => $notification_type, 'customer_id' => $customer_data['customer_id'], 'push_title' => $push_title, 'message' =>$message, 'order_id' => $order_id);
+			}
+
+			echo json_encode(array("is_success" => true, 'notification_store_data' => $notification_store_data));
 			return TRUE;
 		}else{
+			return FALSE;
+		}
+  	}
+
+  	public function test(){
+  		$success_data = notification_add(2, '33', 'ffff', 'gfff', 195);
+  		echo "<pre>";
+  		print_r($success_data);
+  		exit;
+  	}
+
+  	public function quantity_update_reject_order(){
+  		// increse quantity of products of order if shop reject the order
+  		if (isset($_POST['order_id']) && !is_null($_POST['order_id']) && !empty($_POST['order_id'])){
+
+  			$this->db->select('item_id, quantity');
+			$this->db->from('order_items');
+			$this->db->where('order_id', $_POST['order_id']);
+			$sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0){
+				$return_data = $sql_query->result_array();
+				foreach ($return_data as $key => $value) {
+
+					$this->db->select('quantity');
+					$this->db->from('item');
+					$this->db->where('id', $value['item_id']);
+					$sql_query = $this->db->get();
+					if ($sql_query->num_rows() > 0){
+						$item_data = (array)$sql_query->row();
+						$quantity = $item_data['quantity'] + $value['quantity'];
+						$update_data = array('quantity' => $quantity);
+						$this->db->where('id', $value['item_id']);
+						$this->db->update('item', $update_data);
+					}
+
+				}
+
+				echo json_encode(array("is_success" => true));
+				return TRUE;
+			}else{
+				echo json_encode(array("is_success" => false));
+				return TRUE;
+			}
+  		}else{
 			return FALSE;
 		}
   	}

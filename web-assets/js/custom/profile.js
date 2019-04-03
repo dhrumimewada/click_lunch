@@ -26,8 +26,8 @@
                 required: true,
                 digits: false,
                 greaterThanZero:false,
-                minlength: 12,
-                maxlength: 12,
+                minlength: 15,
+                maxlength: 15,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -130,7 +130,7 @@
 
 $( document ).ready(function() {
 
-	$("#mobile_number").inputmask("999 999 9999",{"placeholder": ""});
+	$("#mobile_number").inputmask("+1 999 999 9999",{"placeholder": ""});
 
 	$('.datepicker-autoclose').datepicker({
             format: 'dd-mm-yyyy',

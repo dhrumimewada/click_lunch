@@ -54,7 +54,7 @@ class Customer_api extends REST_Controller {
     }
 
     public function register_post(){
-        $postFields['username'] = $_POST['username'];        
+        $postFields['fullname'] = $_POST['username'];        
         $postFields['email'] = $_POST['email'];        
         $postFields['password'] = $_POST['password']; 
         $postFields['mobile_number'] = $_POST['mobile_number']; 
@@ -262,7 +262,7 @@ class Customer_api extends REST_Controller {
         $postFields['social_id'] = $_POST['social_id'];  
         $postFields['social_type'] = $_POST['social_type'];  
 
-        $postFields['username'] = $_POST['username'];        
+        $postFields['fullname'] = $_POST['username'];        
         $postFields['email'] = $_POST['email'];        
         $postFields['mobile_number'] = $_POST['mobile_number']; 
         $postFields['date_of_birth'] = $_POST['date_of_birth']; 
@@ -353,22 +353,14 @@ class Customer_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['customer_id']), 'status' => 1, 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';   
+            $data = array('device_token' => '', 'device_type' => '0', 'latitude' => '','longitude' => '' );
+            $this->db->where('id',$_POST['customer_id']);
+            if($this->db->update('customer',$data)){
+                $response['status'] = true;
             }else{
-                $data = array('device_token' => '', 'device_type' => '0', 'latitude' => '','longitude' => '' );
-                $this->db->where('id',$_POST['customer_id']);
-                if($this->db->update('customer',$data)){
-                    $response['status'] = true;
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
-                }
+                $response['status'] = false;
+                $response['message'] = 'Server encountered an error. please try again';
             }
-
         }else{
             $response['status'] = false;
             $response['message'] = $errorPost;
@@ -487,6 +479,18 @@ class Customer_api extends REST_Controller {
                 $response['status'] = false;
                 $response['message'] = 'User not found';
             }else{
+
+                $this->db->select('*');
+                $this->db->where("customer_id",$user['id']);
+                $this->db->where("deleted_at",NULL);
+                $this->db->where("default_address",1);
+                $this->db->from("delivery_address");
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $default_delivery_address = $sql_query->row();
+                    $response['default_delivery_address'] = $default_delivery_address;
+                }
+
                 $response['status'] = true;
                 $response['profile'] = $user;
             }
@@ -506,81 +510,76 @@ class Customer_api extends REST_Controller {
         if(empty($errorPost)){
             $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
             $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
-            }else{
+            
 
-                if(isset($_POST['username']) && $_POST['username'] != ""){
-                    $user_data['username'] = ucwords($_POST['username']);
-                }
-                if(isset($_POST['mobile_number']) && $_POST['mobile_number'] != ""){
-                    $user_data['mobile_number'] = $_POST['mobile_number'];
-                }
-                if(isset($_POST['date_of_birth']) && $_POST['date_of_birth'] != ""){
-                    $user_data['dob'] = $_POST['date_of_birth'];
-                }
-                if(isset($_POST['gender']) && $_POST['gender'] != ""){
-                    $user_data['gender'] = $_POST['gender'];
-                }
+            if(isset($_POST['username']) && $_POST['username'] != ""){
+                $user_data['username'] = ucwords($_POST['username']);
+            }
+            if(isset($_POST['mobile_number']) && $_POST['mobile_number'] != ""){
+                $user_data['mobile_number'] = $_POST['mobile_number'];
+            }
+            if(isset($_POST['date_of_birth']) && $_POST['date_of_birth'] != ""){
+                $user_data['dob'] = $_POST['date_of_birth'];
+            }
+            if(isset($_POST['gender']) && $_POST['gender'] != ""){
+                $user_data['gender'] = $_POST['gender'];
+            }
 
-                if (isset($_FILES['image']) && !empty($_FILES['image']) && strlen($_FILES['image']['name']) > 0) {
+            if (isset($_FILES['image']) && !empty($_FILES['image']) && strlen($_FILES['image']['name']) > 0) {
 
-                    //save new image in folder
-                    $config['upload_path'] = FCPATH . $this->config->item("customer_profile_path");
-                    $config['allowed_types'] = 'jpg|jpeg|png';
-                    $config['encrypt_name'] = false;
-                    $config['file_name'] = 'customer' . '_' . time();
-                    $config['file_ext_tolower'] = true;
+                //save new image in folder
+                $config['upload_path'] = FCPATH . $this->config->item("customer_profile_path");
+                $config['allowed_types'] = 'jpg|jpeg|png';
+                $config['encrypt_name'] = false;
+                $config['file_name'] = 'customer' . '_' . time();
+                $config['file_ext_tolower'] = true;
 
-                    $this->load->library('upload');
-                    $this->upload->initialize($config, true);
+                $this->load->library('upload');
+                $this->upload->initialize($config, true);
 
-                    if (!$this->upload->do_upload('image')) {
-                        $response['status'] = false;
-                        $response['message'] = $this->upload->display_errors();
-                    } else {
+                if (!$this->upload->do_upload('image')) {
+                    $response['status'] = false;
+                    $response['message'] = $this->upload->display_errors();
+                } else {
 
-                        $image_data = $this->upload->data();
+                    $image_data = $this->upload->data();
 
-                        //remove old image from user folder
-                        $this->db->select('profile_picture');
-                        $this->db->where('id', intval($_POST['customer_id']));
-                        $this->db->from('customer');
-                        $sql_query = $this->db->get();
-                        if ($sql_query->num_rows() > 0) {
-                            $return_data = $sql_query->row();
-                            $image_old = $return_data->image;
+                    //remove old image from user folder
+                    $this->db->select('profile_picture');
+                    $this->db->where('id', intval($_POST['customer_id']));
+                    $this->db->from('customer');
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0) {
+                        $return_data = $sql_query->row();
+                        $image_old = $return_data->image;
 
-                            if (isset($image_old) && !empty($image_old)) {
-                                if (file_exists(FCPATH . $this->config->item("customer_profile_path") . "/" . $image_old)) {
-                                    unlink(FCPATH . $this->config->item("customer_profile_path") . "/" . $image_old);
-                                }
+                        if (isset($image_old) && !empty($image_old)) {
+                            if (file_exists(FCPATH . $this->config->item("customer_profile_path") . "/" . $image_old)) {
+                                unlink(FCPATH . $this->config->item("customer_profile_path") . "/" . $image_old);
                             }
                         }
-
-                        $user_data['profile_picture'] = $image_data['file_name'];
                     }
+
+                    $user_data['profile_picture'] = $image_data['file_name'];
                 }
+            }
 
+            $user_data['updated_at'] = date('Y-m-d H:i:s');
 
+            $this->db->where('id',$_POST['customer_id']);
+            if($this->db->update('customer',$user_data)){
 
-                $user_data['updated_at'] = date('Y-m-d H:i:s');
+                $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
+                $updated_user_data = (array)$this->db->get_where('customer',$where)->row();
 
-                $this->db->where('id',$_POST['customer_id']);
-                if($this->db->update('customer',$user_data)){
+                $response['status'] = true;
+                $response['profile'] = $updated_user_data;
+                $response['message'] = 'Profile updated successfully';
+            }else{
+                $response['status'] = false;
+                $response['message'] = 'Server encountered an error. please try again';
+            }
 
-                    $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-                    $updated_user_data = (array)$this->db->get_where('customer',$where)->row();
-
-                    $response['status'] = true;
-                    $response['profile'] = $updated_user_data;
-                    $response['message'] = 'Profile updated successfully';
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
-                }
-            } 
         }
         else{
             $response['status'] = false;
@@ -596,22 +595,14 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
+            $user_data = array($_POST['setting_name'] => $_POST['status'] );
+            $this->db->where('id',$_POST['customer_id']);
+            if($this->db->update('customer',$user_data)){
+                $response['status'] = true;
+                $response['message'] = 'Setting updated successfully';
             }else{
-
-                $user_data = array($_POST['setting_name'] => $_POST['status'] );
-                $this->db->where('id',$_POST['customer_id']);
-                if($this->db->update('customer',$user_data)){
-                    $response['status'] = true;
-                    $response['message'] = 'Setting updated successfully';
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
-                }
+                $response['status'] = false;
+                $response['message'] = 'Server encountered an error. please try again';
             }
             
         }else{
@@ -630,22 +621,14 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
+            $user_data = array($_POST['setting_name'] => $_POST['status'] );
+            $this->db->where('id',$_POST['customer_id']);
+            if($this->db->update('customer',$user_data)){
+                $response['status'] = true;
+                $response['message'] = 'Setting updated successfully';
             }else{
-
-                $user_data = array($_POST['setting_name'] => $_POST['status'] );
-                $this->db->where('id',$_POST['customer_id']);
-                if($this->db->update('customer',$user_data)){
-                    $response['status'] = true;
-                    $response['message'] = 'Setting updated successfully';
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
-                }
+                $response['status'] = false;
+                $response['message'] = 'Server encountered an error. please try again';
             }
             
         }else{
@@ -661,19 +644,34 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
-            }else{
 
-                $where = array('customer_id' => $_POST['customer_id'],'deleted_at' => NULL);
-                $delivery_addresses = $this->db->get_where('delivery_address',$where)->result_array();
+            $where = array('customer_id' => $_POST['customer_id'],'deleted_at' => NULL);
+            $delivery_addresses = $this->db->get_where('delivery_address',$where)->result_array();
 
-                $response['status'] = true;
-                $response['delivery_addresses'] = $delivery_addresses;
+            if(!empty($delivery_addresses)){
+
+                $this->db->select('default_address');
+                $this->db->where("id",$_POST['customer_id']);
+                $this->db->where("default_address !=",'');
+                $this->db->from("customer");
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $default_address_data = $sql_query->row();
+                    $default_address = $default_address_data->default_address;
+
+                    foreach ($delivery_addresses as $key => $value) {
+                        if($default_address == $value['id']){
+                            $delivery_addresses[$key]['default_address'] = 1;
+                        }
+                    }
+                }
+
+                
             }
+
+            $response['status'] = true;
+            $response['delivery_addresses'] = $delivery_addresses;
+            $response['default_address'] = $default_address;
 
         }else{
             $response['status'] = false;
@@ -713,63 +711,52 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
-            }else{
+            $delivery_address_data = array(
+                'customer_id' => $_POST['customer_id'],
+                'house_no' => $_POST['house_no'],
+                'city' => $_POST['city'],
+                'street' => $_POST['street'],
+                'zipcode' => $_POST['zipcode'],
+                'address_type' => $_POST['address_type']
+            );
 
-                $delivery_address_data = array(
-                    'customer_id' => $_POST['customer_id'],
-                    'house_no' => $_POST['house_no'],
-                    'city' => $_POST['city'],
-                    'street' => $_POST['street'],
-                    'zipcode' => $_POST['zipcode'],
-                    'address_type' => $_POST['address_type']
-                );
+            if(isset($_POST['delivery_instruction'])){
+                $delivery_address_data['delivery_instruction'] = $_POST['delivery_instruction'];
+            }
+            if(isset($_POST['nickname'])){
+                $delivery_address_data['nickname'] = $_POST['nickname'];
+            }
 
-                if(isset($_POST['delivery_instruction'])){
-                    $delivery_address_data['delivery_instruction'] = $_POST['delivery_instruction'];
-                }
-                if(isset($_POST['nickname'])){
-                    $delivery_address_data['nickname'] = $_POST['nickname'];
-                }
+            $house_no = str_replace(" ","+",trim($_POST['house_no']));
+            $street = str_replace(" ","+",trim($_POST['street']));
+            $city = str_replace(" ","+",trim($_POST['city']));
+            $zipcode = str_replace(" ","+",trim($_POST['zipcode']));
 
-                $house_no = str_replace(" ","+",trim($_POST['house_no']));
-                $street = str_replace(" ","+",trim($_POST['street']));
-                $city = str_replace(" ","+",trim($_POST['city']));
-                $zipcode = str_replace(" ","+",trim($_POST['zipcode']));
+            $address = $house_no."+".$street."+".$city."+".$zipcode;
 
-                $address = $house_no."+".$street."+".$city."+".$zipcode;
+            $google_key = $this->config->item('google_key');
+            $json = file_get_contents("https://maps.google.com/maps/api/geocode/json?address=$address&key=$google_key");
+            $json = json_decode($json);
 
-                $google_key = $this->config->item('google_key');
-                $json = file_get_contents("https://maps.google.com/maps/api/geocode/json?address=$address&key=$google_key");
-                $json = json_decode($json);
+            $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+            $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 
-                $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
-                $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+            if(isset($lat) && $lat != "" && isset($long) && $long != ""){
+                $delivery_address_data['latitude'] = $lat;
+                $delivery_address_data['longitude'] = $long;
 
-                if(isset($lat) && $lat != "" && isset($long) && $long != ""){
-                    $delivery_address_data['latitude'] = $lat;
-                    $delivery_address_data['longitude'] = $long;
-
-                    if($this->db->insert('delivery_address',$delivery_address_data)){
-                        $response['status'] = true;
-                        $response['message'] = 'Delivery address added successfully';
-                    }else{
-                        $response['status'] = false;
-                        $response['message'] = 'Server encountered an error.p lease try again';
-                    }
+                if($this->db->insert('delivery_address',$delivery_address_data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Delivery address added successfully';
                 }else{
                     $response['status'] = false;
-                    $response['message'] = 'Sorry, We could not fetch location. Please enter correct address';
+                    $response['message'] = 'Server encountered an error. Please try again';
                 }
-
-                
-                
-                
+            }else{
+                $response['status'] = false;
+                $response['message'] = 'Sorry, We could not fetch location. Please enter correct address';
             }
+
             
         }else{
             $response['status'] = false;
@@ -790,60 +777,51 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['address_id'],'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('delivery_address',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'Address not found';
-            }else{
+            $delivery_address_data = array(
+                'house_no' => $_POST['house_no'],
+                'city' => $_POST['city'],
+                'street' => $_POST['street'],
+                'zipcode' => $_POST['zipcode'],
+                'address_type' => $_POST['address_type']
+            );
 
-                $delivery_address_data = array(
-                    'house_no' => $_POST['house_no'],
-                    'city' => $_POST['city'],
-                    'street' => $_POST['street'],
-                    'zipcode' => $_POST['zipcode'],
-                    'address_type' => $_POST['address_type']
-                );
+            if(isset($_POST['delivery_instruction'])){
+                $delivery_address_data['delivery_instruction'] = $_POST['delivery_instruction'];
+            }
+            if(isset($_POST['nickname'])){
+                $delivery_address_data['nickname'] = $_POST['nickname'];
+            }
 
-                if(isset($_POST['delivery_instruction'])){
-                    $delivery_address_data['delivery_instruction'] = $_POST['delivery_instruction'];
-                }
-                if(isset($_POST['nickname'])){
-                    $delivery_address_data['nickname'] = $_POST['nickname'];
-                }
+            $house_no = str_replace(" ","+",trim($_POST['house_no']));
+            $street = str_replace(" ","+",trim($_POST['street']));
+            $city = str_replace(" ","+",trim($_POST['city']));
+            $zipcode = str_replace(" ","+",trim($_POST['zipcode']));
 
-                $house_no = str_replace(" ","+",trim($_POST['house_no']));
-                $street = str_replace(" ","+",trim($_POST['street']));
-                $city = str_replace(" ","+",trim($_POST['city']));
-                $zipcode = str_replace(" ","+",trim($_POST['zipcode']));
+            $address = $house_no."+".$street."+".$city."+".$zipcode;
 
-                $address = $house_no."+".$street."+".$city."+".$zipcode;
+            $google_key = $this->config->item('google_key');
+            $json = file_get_contents("https://maps.google.com/maps/api/geocode/json?address=$address&key=$google_key");
+            $json = json_decode($json);
 
-                $google_key = $this->config->item('google_key');
-                $json = file_get_contents("https://maps.google.com/maps/api/geocode/json?address=$address&key=$google_key");
-                $json = json_decode($json);
+            $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+            $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 
-                $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
-                $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+            if(isset($lat) && $lat != "" && isset($long) && $long != ""){
+                $delivery_address_data['latitude'] = $lat;
+                $delivery_address_data['longitude'] = $long;
 
-                if(isset($lat) && $lat != "" && isset($long) && $long != ""){
-                    $delivery_address_data['latitude'] = $lat;
-                    $delivery_address_data['longitude'] = $long;
+                $this->db->where('id',$_POST['address_id']);
 
-                    $this->db->where('id',$_POST['address_id']);
-
-                    if($this->db->update('delivery_address',$delivery_address_data)){
-                        $response['status'] = true;
-                        $response['message'] = 'Delivery address updated successfully';
-                    }else{
-                        $response['status'] = false;
-                        $response['message'] = 'Server encountered an error. Please try again';
-                    }
+                if($this->db->update('delivery_address',$delivery_address_data)){
+                    $response['status'] = true;
+                    $response['message'] = 'Delivery address updated successfully';
                 }else{
                     $response['status'] = false;
-                    $response['message'] = 'Sorry, We could not fetch location. Please enter correct address';
+                    $response['message'] = 'Server encountered an error. Please try again';
                 }
-                
+            }else{
+                $response['status'] = false;
+                $response['message'] = 'Sorry, We could not fetch location. Please enter correct address';
             }
             
         }else{
@@ -861,42 +839,15 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
+            $data_array = array('default_address' => $_POST['address_id']);
+            $this->db->where('id',$_POST['customer_id']);
+
+            if($this->db->update('customer',$data_array)){
+                $response['status'] = true;
+                $response['message'] = 'Default delivery address added successfully';
             }else{
-
-                $this->db->select('id');
-                $this->db->where("id", $_POST['address_id']);
-                $this->db->where("deleted_at", NULL);
-                $this->db->from('delivery_address');
-                $sql_query = $this->db->get();
-                if ($sql_query->num_rows() > 0){
-
-                    $old_data_array = array('default_address' => 0);
-                    $this->db->where('customer_id',$_POST['customer_id']);
-                    $this->db->where('default_address',1);
-                    $this->db->update('delivery_address',$old_data_array);
-
-                    $data_array = array('default_address' => 1);
-                    $this->db->where('customer_id',$_POST['customer_id']);
-                    $this->db->where('id',$_POST['address_id']);
-
-                    if($this->db->update('delivery_address',$data_array)){
-                        $response['status'] = true;
-                        $response['message'] = 'Default delivery address added successfully';
-                    }else{
-                        $response['status'] = false;
-                        $response['message'] = 'Server encountered an error. please try again';
-                    }
-
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Address not found';
-                }
-
+                $response['status'] = false;
+                $response['message'] = 'Server encountered an error. please try again';
             }
             
         }else{
@@ -914,25 +865,17 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
+            $data = array('deleted_at' => date('Y-m-d H:i:s'));
+
+            $this->db->where('customer_id',$_POST['customer_id']);
+            $this->db->where('id',$_POST['delivery_address_id']);
+
+            if($this->db->update('delivery_address',$data)){
+                $response['status'] = true;
+                $response['message'] = 'Delivery address removed successfully';
             }else{
-
-                $data = array('deleted_at' => date('Y-m-d H:i:s'));
-
-                $this->db->where('customer_id',$_POST['customer_id']);
-                $this->db->where('id',$_POST['delivery_address_id']);
-
-                if($this->db->update('delivery_address',$data)){
-                    $response['status'] = true;
-                    $response['message'] = 'Delivery address removed successfully';
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
-                }
+                $response['status'] = false;
+                $response['message'] = 'Server encountered an error. please try again';
             }
             
         }else{
@@ -948,29 +891,22 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
-            }else{
-                $payment_cards = array();
-                $this->db->select('*');
-                $where = array('customer_id' => $_POST['customer_id'],'deleted_at' => NULL);
-                $this->db->where($where);
-                $this->db->from('customer_payment_card');
-                $sql_query = $this->db->get();
-                if ($sql_query->num_rows() > 0){
-                    $payment_cards = $sql_query->result_array();
-                    foreach ($payment_cards as $key => $value) {
-                        $payment_cards[$key]['expiry_date'] = decrypt($value['expiry_date']);
-                        $payment_cards[$key]['cvv'] = decrypt($value['cvv']);
-                    }
+            $payment_cards = array();
+            $this->db->select('*');
+            $where = array('customer_id' => $_POST['customer_id'],'deleted_at' => NULL);
+            $this->db->where($where);
+            $this->db->from('customer_payment_card');
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $payment_cards = $sql_query->result_array();
+                foreach ($payment_cards as $key => $value) {
+                    $payment_cards[$key]['expiry_date'] = decrypt($value['expiry_date']);
+                    $payment_cards[$key]['cvv'] = decrypt($value['cvv']);
                 }
-
-                $response['status'] = true;
-                $response['payment_cards'] = $payment_cards;
             }
+
+            $response['status'] = true;
+            $response['payment_cards'] = $payment_cards;
 
         }else{
             $response['status'] = false;
@@ -1011,90 +947,42 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
+            $card_number = $_POST['card_number'];
+            $card_number = str_replace(' ', '', $card_number);
+
+            $validate_date = $this->validate_expirydate($_POST['expiry_date']);
+            $validate_date = TRUE;
+
+            $card_types = array('1' => 'visa', '2' => 'mastercard', '3' => 'amex', '4' => 'jcb', '5' => 'dinnerclub', '6' => 'discover');
+            $my_card_type = $card_types[$_POST['card_type']];
+            $card_type = validate_customer_card($card_number);
+            if($card_type != '' && $card_type == $my_card_type){
+
+                    $payment_card_data = array(
+                        'customer_id' => $_POST['customer_id'],
+                        'card_holder_name' => $_POST['card_holder_name'],
+                        'card_number' => encrypt($card_number),
+                        'display_number' => 'XXXX XXXX XXXX '.substr($card_number, -4),
+                        'expiry_date' => encrypt($_POST['expiry_date']),
+                        'cvv' => encrypt($_POST['cvv']),
+                        'card_type' => intval($_POST['card_type'])
+                    );
+
+                    if(isset($_POST['nickname'])){
+                        $payment_card_data['nickname'] = $_POST['nickname'];
+                    }
+
+                    if($this->db->insert('customer_payment_card',$payment_card_data)){
+                        $response['status'] = true;
+                        $response['message'] = 'Card added successfully';
+                    }else{
+                        $response['status'] = false;
+                        $response['message'] = 'Server encountered an error. please try again';
+                    }
+
             }else{
-                $card_number = $_POST['card_number'];
-                $card_number = str_replace(' ', '', $card_number);
-
-                $validate_date = $this->validate_expirydate($_POST['expiry_date']);
-                $validate_date = TRUE;
-
-                $card_types = array('1' => 'visa', '2' => 'mastercard', '3' => 'amex', '4' => 'jcb', '5' => 'dinnerclub', '6' => 'discover');
-                $my_card_type = $card_types[$_POST['card_type']];
-                $card_type = validate_customer_card($card_number);
-                if($card_type != '' && $card_type == $my_card_type){
-
-                        $payment_card_data = array(
-                            'customer_id' => $_POST['customer_id'],
-                            'card_holder_name' => $_POST['card_holder_name'],
-                            'card_number' => encrypt($card_number),
-                            'display_number' => 'XXXX XXXX XXXX '.substr($card_number, -4),
-                            'expiry_date' => encrypt($_POST['expiry_date']),
-                            'cvv' => encrypt($_POST['cvv']),
-                            'card_type' => intval($_POST['card_type'])
-                        );
-
-                        if(isset($_POST['nickname'])){
-                            $payment_card_data['nickname'] = $_POST['nickname'];
-                        }
-
-                        if($this->db->insert('customer_payment_card',$payment_card_data)){
-                            $response['status'] = true;
-                            $response['message'] = 'Card added successfully';
-                            //$response['card_number'] = $card_number;
-                        }else{
-                            $response['status'] = false;
-                            $response['message'] = 'Server encountered an error. please try again';
-                        }
-
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Invalid card number';
-                    //$response['card_number'] = $card_number;
-                    //$response['card_type'] = $card_type;
-                }
-
-                // if(validate_card($card_number) && is_numeric($card_number) && $validate_date == TRUE){
-                //     $user_card_type = $this->config->item("card_type")[$_POST['card_type']];
-                //     $real_card_type = get_card_type($_POST['card_number']);
-                //     if($user_card_type == $real_card_type){
-
-                //         $payment_card_data = array(
-                //             'customer_id' => $_POST['customer_id'],
-                //             'card_holder_name' => $_POST['card_holder_name'],
-                //             'card_number' => encrypt($card_number),
-                //             'display_number' => 'XXXX XXXX XXXX '.substr($card_number, -4),
-                //             'expiry_date' => encrypt($_POST['expiry_date']),
-                //             'cvv' => encrypt($_POST['cvv']),
-                //             'card_type' => intval($_POST['card_type'])
-                //         );
-
-                //         if(isset($_POST['nickname'])){
-                //             $payment_card_data['nickname'] = $_POST['nickname'];
-                //         }
-
-                //         if($this->db->insert('customer_payment_card',$payment_card_data)){
-                //             $response['status'] = true;
-                //             $response['message'] = 'Card added successfully';
-                //             $response['card_number'] = $card_number;
-                //         }else{
-                //             $response['status'] = false;
-                //             $response['message'] = 'Server encountered an error. please try again';
-                //         }
-
-                //     }else{
-                //         $response['status'] = false;
-                //         $response['message'] = 'Invalid card number';
-                //         $response['card_number'] = $card_number;
-                //     }
-                // }else{
-                //     $response['status'] = false;
-                //     $response['message'] = 'Invalid card number';
-                // }
+                $response['status'] = false;
+                $response['message'] = 'Invalid card number';
             }
             
         }else{
@@ -1117,56 +1005,47 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
-            }else{
+            $card_number = $_POST['card_number'];
+            $card_number = str_replace(' ', '', $card_number);
 
-                $card_number = $_POST['card_number'];
-                $card_number = str_replace(' ', '', $card_number);
+            $validate_date = $this->validate_expirydate($_POST['expiry_date']);
+            if(validate_card($_POST['card_number']) && is_numeric($card_number) && $validate_date == TRUE){
+                $user_card_type = $this->config->item("card_type")[$_POST['card_type']];
+                $real_card_type = get_card_type($_POST['card_number']);
+                if($user_card_type == $real_card_type){
 
-                $validate_date = $this->validate_expirydate($_POST['expiry_date']);
-                if(validate_card($_POST['card_number']) && is_numeric($card_number) && $validate_date == TRUE){
-                    $user_card_type = $this->config->item("card_type")[$_POST['card_type']];
-                    $real_card_type = get_card_type($_POST['card_number']);
-                    if($user_card_type == $real_card_type){
+                    $payment_card_data = array(
+                        'card_holder_name' => $_POST['card_holder_name'],
+                        'card_number' => encrypt($card_number),
+                        'display_number' => 'XXXX XXXX XXXX '.substr($card_number, -4),
+                        'expiry_date' => encrypt($_POST['expiry_date']),
+                        'cvv' => encrypt($_POST['cvv']),
+                        'card_type' => intval($_POST['card_type']),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    );
 
-                        $payment_card_data = array(
-                            'card_holder_name' => $_POST['card_holder_name'],
-                            'card_number' => encrypt($card_number),
-                            'display_number' => 'XXXX XXXX XXXX '.substr($card_number, -4),
-                            'expiry_date' => encrypt($_POST['expiry_date']),
-                            'cvv' => encrypt($_POST['cvv']),
-                            'card_type' => intval($_POST['card_type']),
-                            'updated_at' => date('Y-m-d H:i:s')
-                        );
+                    if(isset($_POST['nickname'])){
+                        $data['nickname'] = $_POST['nickname'];
+                    }
 
-                        if(isset($_POST['nickname'])){
-                            $data['nickname'] = $_POST['nickname'];
-                        }
+                    $this->db->where('customer_id',$_POST['customer_id']);
+                    $this->db->where('id',$_POST['payment_card_id']);
 
-                        $this->db->where('customer_id',$_POST['customer_id']);
-                        $this->db->where('id',$_POST['payment_card_id']);
-
-                        if($this->db->update('customer_payment_card',$data)){
-                            $response['status'] = true;
-                            $response['message'] = 'Card updated successfully';
-                        }else{
-                            $response['status'] = false;
-                            $response['message'] = 'Server encountered an error. please try again';
-                        }
-
+                    if($this->db->update('customer_payment_card',$data)){
+                        $response['status'] = true;
+                        $response['message'] = 'Card updated successfully';
                     }else{
                         $response['status'] = false;
-                        $response['message'] = 'Invalid card number';
+                        $response['message'] = 'Server encountered an error. please try again';
                     }
+
                 }else{
                     $response['status'] = false;
                     $response['message'] = 'Invalid card number';
                 }
-                
+            }else{
+                $response['status'] = false;
+                $response['message'] = 'Invalid card number';
             }
             
         }else{
@@ -1184,25 +1063,17 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
+            $data = array('deleted_at' => date('Y-m-d H:i:s'));
+
+            $this->db->where('customer_id',$_POST['customer_id']);
+            $this->db->where('id',$_POST['payment_card_id']);
+
+            if($this->db->update('customer_payment_card',$data)){
+                $response['status'] = true;
+                $response['message'] = 'Card removed successfully';
             }else{
-
-                $data = array('deleted_at' => date('Y-m-d H:i:s'));
-
-                $this->db->where('customer_id',$_POST['customer_id']);
-                $this->db->where('id',$_POST['payment_card_id']);
-
-                if($this->db->update('customer_payment_card',$data)){
-                    $response['status'] = true;
-                    $response['message'] = 'Card removed successfully';
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
-                }
+                $response['status'] = false;
+                $response['message'] = 'Server encountered an error. please try again';
             }
             
         }else{
@@ -1273,16 +1144,27 @@ class Customer_api extends REST_Controller {
         }else{
 
         }
+
+        // get delivery_available_mile
+        $delivery_available_mile = '';
+        $this->db->select('data');
+        $this->db->where("name", 'delivery_available_mile');
+        $this->db->from('setting');
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+            $delivery_available_mile_data = $sql_query->row();
+            $delivery_available_mile = $delivery_available_mile_data->data;
+        }
         
 
         $this->db->select($sql_select);
 
-        if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != ""){
+        if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != "" && $delivery_available_mile != ''){
             $this->db->order_by("distance", "asc");
-            $this->db->having("distance <=", 100);
+            $this->db->having("distance <=", $delivery_available_mile);
         }else if(isset($_POST['latitude']) && $_POST['latitude'] != "" && $_POST['address_id'] != "0"){
             $this->db->order_by("distance", "asc");
-            $this->db->having("distance <=", 100);
+            $this->db->having("distance <=", $delivery_available_mile);
         }else{
             
         }
@@ -1321,8 +1203,6 @@ class Customer_api extends REST_Controller {
 
         $this->db->from('shop');
         $sql_query = $this->db->get();
-
-        //$sql_query = $this->db->query('SELECT * , (3956 * 2 * ASIN(SQRT( POWER(SIN((42.4483050 - latitude) * pi()/180 / 2), 2) +COS( 42.3483050 * pi()/180) * COS(longitude * pi()/180) * POWER(SIN(( -71.08359259999990 - longitude) * pi()/180 / 2), 2) ))) as distance from shop having distance <= 100 order by distance');
         
         if ($sql_query->num_rows() > 0){
 
@@ -1453,13 +1333,24 @@ class Customer_api extends REST_Controller {
         }else{
 
         }
+
+        // get delivery_available_mile
+        $delivery_available_mile = '';
+        $this->db->select('data');
+        $this->db->where("name", 'delivery_available_mile');
+        $this->db->from('setting');
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+            $delivery_available_mile_data = $sql_query->row();
+            $delivery_available_mile = $delivery_available_mile_data->data;
+        }
         
 
         $this->db->select($sql_select);
 
-        if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != ""){
+        if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != "" && $delivery_available_mile != ''){
             $this->db->order_by("distance", "asc");
-            $this->db->having("distance <=", 100);
+            $this->db->having("distance <=", $delivery_available_mile);
         }else{
             
         }
@@ -1605,6 +1496,7 @@ class Customer_api extends REST_Controller {
                 $shop_data = array(
                                 'id' => $_POST['shop_id'],
                                 'shop_name' => $shop['shop_name'],
+                                'rating' => '1.5',
                                 'zip_code' => $shop['zip_code'],
                                 'city' => $shop['city'],
                                 'state' => $shop['state'],
@@ -1778,136 +1670,247 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
+            $today = date('Y-m-d');
+            $products_array = explode(',',$_POST['products']);
+            $valid_promocodes = array();
+
+            // Get All customer promocode - GROUP 4
+            $this->db->select('*'); 
+
+            $this->db->group_start();
+                $this->db->where('shop_id',$_POST['shop_id']);  
+                $this->db->where('group_type',4);  
+            $this->db->group_end();
+
+            $this->db->or_group_start();
+                $this->db->where('shop_id','');  
+                $this->db->where('group_type',4);  
+            $this->db->group_end();
+
+            $this->db->group_start();
+                $this->db->where('from_date <=', $today);
+                $this->db->where('to_date >=', $today);
+            $this->db->group_end();
+
+            $this->db->group_start();
+                $this->db->where('promo_min_order_amount', '');
+                $this->db->or_where('promo_min_order_amount <=', floatval($_POST['total_amount']));
+            $this->db->group_end();
+
+            $this->db->where('status',1);  
+            $this->db->where('deleted_at',NULL);  
+            $this->db->from('promocode'); 
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $all_customer_promocode = $sql_query->result_array();
+                foreach ($all_customer_promocode as $key => $value) {
+                    // if product based promocode added by shop
+                    if(($value['shop_id'] != '') && ($value['promo_type'] == 1)){
+                        $this->db->select('product_id'); 
+                        $this->db->where('promocode_id',$value['id']);  
+                        $this->db->where_in('product_id',$products_array);  
+                        $this->db->from('promocode_valid_product'); 
+                        $sql_query = $this->db->get();
+                        if ($sql_query->num_rows() <= 0){
+                            unset($all_customer_promocode[$key]);
+                        }
+                    }
+                }
+                foreach ($all_customer_promocode as $key => $value){
+                    array_push($valid_promocodes, $all_customer_promocode[$key]);
+                }
+            }
+
+            // Get promocode ( added by admin for group of shops) GROUP 5
+            $this->db->select('t2.*'); 
+            $this->db->where('t1.shop_id',$_POST['shop_id']);  
+            $this->db->where('t2.group_type',5);  
+            $this->db->from('promocode_shops t1');
+            $this->db->join('promocode t2', 't1.promocode_id = t2.id', "right join");
+
+            $this->db->group_start();
+                $this->db->where('t2.from_date <=', $today);
+                $this->db->where('t2.to_date >=', $today);
+            $this->db->group_end();
+
+            $this->db->where('t2.status',1);  
+            $this->db->where('t2.shop_id','');  
+            $this->db->where('t2.deleted_at',NULL);  
+
+            $this->db->group_start();
+                $this->db->where('promo_min_order_amount', '');
+                $this->db->or_where('promo_min_order_amount <=', floatval($_POST['total_amount']));
+            $this->db->group_end();
+
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $group_of_shops_promocode = $sql_query->result_array();
+                foreach ($group_of_shops_promocode as $key => $value){
+                    array_push($valid_promocodes, $group_of_shops_promocode[$key]);
+                }
+            }
+
+            // Get customer total completed order
+            $where = array('customer_id' => $_POST['customer_id'], 'order_status' => 6);
+            $select = array('id');
+            $table = 'orders';
+            $customer_total_orders_array = get_data_by_filter($table,$select, $where);
+            $customer_total_orders = count($customer_total_orders_array);
+
+            $where = array('customer_id' => $_POST['customer_id'],'shop_id' => $_POST['shop_id'], 'order_status' => 5);
+            $customer_total_shop_orders_array = get_data_by_filter($table,$select, $where);
+            $customer_total_shop_orders = count($customer_total_shop_orders_array);
+
+            $X_ordered_promocode = array();
+
+            // Get promocode ( Number of X ordered Customers - order based) GROUP 6 (Admin - vender)
+            $this->db->select('*'); 
+
+            $this->db->group_start();
+                $this->db->group_start();
+                    $this->db->where('shop_id','');  
+                    $this->db->where('min_no_of_orders <=', $customer_total_orders);  
+                $this->db->group_end();
+
+                $this->db->or_group_start();
+                    $this->db->where('shop_id',$_POST['shop_id']);  
+                    $this->db->where('min_no_of_orders <=', $customer_total_shop_orders);  
+                $this->db->group_end();
+            $this->db->group_end();
+
+            
+            $this->db->where('group_type',6);  
+
+            $this->db->group_start();
+                $this->db->where('from_date <=', $today);
+                $this->db->where('to_date >=', $today);
+            $this->db->group_end();
+
+            
+            $this->db->where('status',1);  
+            $this->db->where('deleted_at',NULL);  
+
+            $this->db->group_start();
+                $this->db->where('promo_min_order_amount', '');
+                $this->db->or_where('promo_min_order_amount <=', floatval($_POST['total_amount']));
+            $this->db->group_end();
+
+            $this->db->from('promocode'); 
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $X_ordered_promocode = $sql_query->result_array();
+                foreach ($X_ordered_promocode as $key => $value){
+                    array_push($valid_promocodes, $X_ordered_promocode[$key]);
+                }
+            }
+
+            // If no any ordered from any shop - promocode by admin - GROUP 1
+            $new_customer_for_admin_promocode = array();
+            if($customer_total_orders == 0){
+                $this->db->select('*'); 
+
+                $this->db->where('shop_id','');  
+                $this->db->where('group_type',1);  
+
+                $this->db->group_start();
+                    $this->db->where('from_date <=', $today);
+                    $this->db->where('to_date >=', $today);
+                $this->db->group_end();
+
+                $this->db->group_start();
+                    $this->db->where('promo_min_order_amount', '');
+                    $this->db->or_where('promo_min_order_amount <=', floatval($_POST['total_amount']));
+                $this->db->group_end();
+
+                $this->db->where('status',1);  
+                $this->db->where('deleted_at',NULL);  
+                $this->db->from('promocode'); 
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $new_customer_for_admin_promocode = $sql_query->result_array();
+                    foreach ($new_customer_for_admin_promocode as $key => $value){
+                        array_push($valid_promocodes, $new_customer_for_admin_promocode[$key]);
+                    }
+                }
+
             }else{
 
-                $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
-                $shop = (array)$this->db->get_where('shop',$where)->row();
-                if(empty($shop)){
-                    $response['status'] = false;
-                    $response['message'] = 'Restaurant not found';
-                }else{
-                    $today = date('Y-m-d');
-                    $products_array = explode(',',$_POST['products']);
-                    $valid_promocodes = array();
+                // Get customer total completed order for this shop
+                $where = array('customer_id' => $_POST['customer_id'],'shop_id' => $_POST['shop_id'], 'order_status' => 6);
+                $select = array('id');
+                $table = 'orders';
+                $customer_total_shop_orders_array = get_data_by_filter($table,$select, $where);
+                $customer_total_shop_orders = count($customer_total_shop_orders_array);
+                $X_shop_ordered_promocode = array();
 
-                    // Get All customer promocode - GROUP 4
+                // If no any ordered from this shop - promocode by shop - GROUP 1
+                $new_customer_for_shop_promocode = array();
+                if($customer_total_shop_orders <= 0){
                     $this->db->select('*'); 
-
-                    $this->db->group_start();
-                        $this->db->where('shop_id',$_POST['shop_id']);  
-                        $this->db->where('group_type',4);  
-                    $this->db->group_end();
-
-                    $this->db->or_group_start();
-                        $this->db->where('shop_id','');  
-                        $this->db->where('group_type',4);  
-                    $this->db->group_end();
+                    $this->db->where('shop_id',$_POST['shop_id']);  
+                    $this->db->where('group_type',1);  
 
                     $this->db->group_start();
                         $this->db->where('from_date <=', $today);
                         $this->db->where('to_date >=', $today);
                     $this->db->group_end();
 
+                    $this->db->where('status',1);  
+                    $this->db->where('deleted_at',NULL);  
+
                     $this->db->group_start();
                         $this->db->where('promo_min_order_amount', '');
                         $this->db->or_where('promo_min_order_amount <=', floatval($_POST['total_amount']));
                     $this->db->group_end();
 
-                    $this->db->where('status',1);  
-                    $this->db->where('deleted_at',NULL);  
                     $this->db->from('promocode'); 
                     $sql_query = $this->db->get();
                     if ($sql_query->num_rows() > 0){
-                        $all_customer_promocode = $sql_query->result_array();
-                        foreach ($all_customer_promocode as $key => $value) {
-                            // if product based promocode added by shop
-                            if(($value['shop_id'] != '') && ($value['promo_type'] == 1)){
+                        $new_customer_for_shop_promocode = $sql_query->result_array();
+                        foreach ($new_customer_for_shop_promocode as $key => $value) {
+                            // if product based promocode
+                            if($value['promo_type'] == 1){
                                 $this->db->select('product_id'); 
                                 $this->db->where('promocode_id',$value['id']);  
                                 $this->db->where_in('product_id',$products_array);  
                                 $this->db->from('promocode_valid_product'); 
                                 $sql_query = $this->db->get();
                                 if ($sql_query->num_rows() <= 0){
-                                    unset($all_customer_promocode[$key]);
+                                    unset($new_customer_for_shop_promocode[$key]);
                                 }
                             }
                         }
-                        foreach ($all_customer_promocode as $key => $value){
-                            array_push($valid_promocodes, $all_customer_promocode[$key]);
+                        foreach ($new_customer_for_shop_promocode as $key => $value){
+                            array_push($valid_promocodes, $new_customer_for_shop_promocode[$key]);
                         }
                     }
+                }
 
-                    // Get promocode ( added by admin for group of shops) GROUP 5
-                    $this->db->select('t2.*'); 
-                    $this->db->where('t1.shop_id',$_POST['shop_id']);  
-                    $this->db->where('t2.group_type',5);  
-                    $this->db->from('promocode_shops t1');
-                    $this->db->join('promocode t2', 't1.promocode_id = t2.id', "right join");
+                if($customer_total_shop_orders > 0){
 
-                    $this->db->group_start();
-                        $this->db->where('t2.from_date <=', $today);
-                        $this->db->where('t2.to_date >=', $today);
-                    $this->db->group_end();
+                    // GROUP 7 PROMOCODES ARE PENDING - waiting for order
 
-                    $this->db->where('t2.status',1);  
-                    $this->db->where('t2.shop_id','');  
-                    $this->db->where('t2.deleted_at',NULL);  
+                    $customer_total_shop_orders_ids = array_column($customer_total_shop_orders_array, 'id');
 
-                    $this->db->group_start();
-                        $this->db->where('promo_min_order_amount', '');
-                        $this->db->or_where('promo_min_order_amount <=', floatval($_POST['total_amount']));
-                    $this->db->group_end();
-
+                    $this->db->select('item_id');  
+                    $this->db->where_in('order_id',$customer_total_shop_orders_ids);  
+                    $this->db->from('order_items'); 
                     $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $group_of_shops_promocode = $sql_query->result_array();
-                        foreach ($group_of_shops_promocode as $key => $value){
-                            array_push($valid_promocodes, $group_of_shops_promocode[$key]);
-                        }
-                    }
+                    $customer_total_item_orders_array = $sql_query->result_array();
+                    $customer_total_ordered_items = array_column($customer_total_item_orders_array, 'item_id');
+                    $customer_total_ordered_items = array_unique($customer_total_ordered_items);
 
-                    // Get customer total completed order
-                    $where = array('customer_id' => $_POST['customer_id'], 'order_status' => 6);
-                    $select = array('id');
-                    $table = 'orders';
-                    $customer_total_orders_array = get_data_by_filter($table,$select, $where);
-                    $customer_total_orders = count($customer_total_orders_array);
+                    // get promocode for this shop - have to orderd these products
 
-                    $where = array('customer_id' => $_POST['customer_id'],'shop_id' => $_POST['shop_id'], 'order_status' => 5);
-                    $customer_total_shop_orders_array = get_data_by_filter($table,$select, $where);
-                    $customer_total_shop_orders = count($customer_total_shop_orders_array);
-
-                    $X_ordered_promocode = array();
-
-                    // Get promocode ( Number of X ordered Customers - order based) GROUP 6 (Admin - vender)
-                    $this->db->select('*'); 
-
-                    $this->db->group_start();
-                        $this->db->group_start();
-                            $this->db->where('shop_id','');  
-                            $this->db->where('min_no_of_orders <=', $customer_total_orders);  
-                        $this->db->group_end();
-
-                        $this->db->or_group_start();
-                            $this->db->where('shop_id',$_POST['shop_id']);  
-                            $this->db->where('min_no_of_orders <=', $customer_total_shop_orders);  
-                        $this->db->group_end();
-                    $this->db->group_end();
-
-                    
-                    $this->db->where('group_type',6);  
+                    $this->db->select('id'); 
+                    $this->db->where('shop_id',$_POST['shop_id']);  
+                    $this->db->where('group_type',7);  
 
                     $this->db->group_start();
                         $this->db->where('from_date <=', $today);
                         $this->db->where('to_date >=', $today);
                     $this->db->group_end();
 
-                    
                     $this->db->where('status',1);  
                     $this->db->where('deleted_at',NULL);  
 
@@ -1919,168 +1922,41 @@ class Customer_api extends REST_Controller {
                     $this->db->from('promocode'); 
                     $sql_query = $this->db->get();
                     if ($sql_query->num_rows() > 0){
-                        $X_ordered_promocode = $sql_query->result_array();
-                        foreach ($X_ordered_promocode as $key => $value){
-                            array_push($valid_promocodes, $X_ordered_promocode[$key]);
-                        }
-                    }
 
-                    // If no any ordered from any shop - promocode by admin - GROUP 1
-                    $new_customer_for_admin_promocode = array();
-                    if($customer_total_orders == 0){
+                        $promocode_shop_group7_array = $sql_query->result_array();
+                        $promocode_shop_group7_ids = array_column($promocode_shop_group7_array, 'id');
+                        
                         $this->db->select('*'); 
-
-                        $this->db->where('shop_id','');  
-                        $this->db->where('group_type',1);  
-
-                        $this->db->group_start();
-                            $this->db->where('from_date <=', $today);
-                            $this->db->where('to_date >=', $today);
-                        $this->db->group_end();
-
-                        $this->db->group_start();
-                            $this->db->where('promo_min_order_amount', '');
-                            $this->db->or_where('promo_min_order_amount <=', floatval($_POST['total_amount']));
-                        $this->db->group_end();
-
-                        $this->db->where('status',1);  
-                        $this->db->where('deleted_at',NULL);  
-                        $this->db->from('promocode'); 
+                        $this->db->where('shop_id',$_POST['shop_id']);  
+                        $this->db->where_in('promocode_id',$promocode_shop_group7_ids);  
+                        $this->db->from('promocode_products'); 
                         $sql_query = $this->db->get();
-                        if ($sql_query->num_rows() > 0){
-                            $new_customer_for_admin_promocode = $sql_query->result_array();
-                            foreach ($new_customer_for_admin_promocode as $key => $value){
-                                array_push($valid_promocodes, $new_customer_for_admin_promocode[$key]);
+                        $promocode_haveto_ordeded_products = $sql_query->result_array();
+
+                        $matched_ordered_products = array();
+                        foreach ($promocode_haveto_ordeded_products as $key => $value) {
+                            if(in_array($value['product_id'], $customer_total_ordered_items)){
+                                $matched_ordered_products[] = $value;
                             }
                         }
 
-                    }else{
-
-                        // Get customer total completed order for this shop
-                        $where = array('customer_id' => $_POST['customer_id'],'shop_id' => $_POST['shop_id'], 'order_status' => 6);
-                        $select = array('id');
-                        $table = 'orders';
-                        $customer_total_shop_orders_array = get_data_by_filter($table,$select, $where);
-                        $customer_total_shop_orders = count($customer_total_shop_orders_array);
-                        $X_shop_ordered_promocode = array();
-
-                        // If no any ordered from this shop - promocode by shop - GROUP 1
-                        $new_customer_for_shop_promocode = array();
-                        if($customer_total_shop_orders <= 0){
-                            $this->db->select('*'); 
-                            $this->db->where('shop_id',$_POST['shop_id']);  
-                            $this->db->where('group_type',1);  
-
-                            $this->db->group_start();
-                                $this->db->where('from_date <=', $today);
-                                $this->db->where('to_date >=', $today);
-                            $this->db->group_end();
-
-                            $this->db->where('status',1);  
-                            $this->db->where('deleted_at',NULL);  
-
-                            $this->db->group_start();
-                                $this->db->where('promo_min_order_amount', '');
-                                $this->db->or_where('promo_min_order_amount <=', floatval($_POST['total_amount']));
-                            $this->db->group_end();
-
-                            $this->db->from('promocode'); 
-                            $sql_query = $this->db->get();
-                            if ($sql_query->num_rows() > 0){
-                                $new_customer_for_shop_promocode = $sql_query->result_array();
-                                foreach ($new_customer_for_shop_promocode as $key => $value) {
-                                    // if product based promocode
-                                    if($value['promo_type'] == 1){
-                                        $this->db->select('product_id'); 
-                                        $this->db->where('promocode_id',$value['id']);  
-                                        $this->db->where_in('product_id',$products_array);  
-                                        $this->db->from('promocode_valid_product'); 
-                                        $sql_query = $this->db->get();
-                                        if ($sql_query->num_rows() <= 0){
-                                            unset($new_customer_for_shop_promocode[$key]);
-                                        }
-                                    }
-                                }
-                                foreach ($new_customer_for_shop_promocode as $key => $value){
-                                    array_push($valid_promocodes, $new_customer_for_shop_promocode[$key]);
-                                }
+                        if(isset($matched_ordered_products) && !empty($matched_ordered_products)){
+                            foreach ($matched_ordered_products as $key => $value) {
+                                $where = array('id' => $value['promocode_id']);
+                                $select = array('*');
+                                $table = 'promocode';
+                                $promocode_valid_data = get_data_by_filter($table,$select, $where);
+                                array_push($valid_promocodes, $promocode_valid_data[0]);
                             }
                         }
 
-                        if($customer_total_shop_orders > 0){
-
-                            // GROUP 7 PROMOCODES ARE PENDING - waiting for order
-
-                            $customer_total_shop_orders_ids = array_column($customer_total_shop_orders_array, 'id');
-
-                            $this->db->select('item_id');  
-                            $this->db->where_in('order_id',$customer_total_shop_orders_ids);  
-                            $this->db->from('order_items'); 
-                            $sql_query = $this->db->get();
-                            $customer_total_item_orders_array = $sql_query->result_array();
-                            $customer_total_ordered_items = array_column($customer_total_item_orders_array, 'item_id');
-                            $customer_total_ordered_items = array_unique($customer_total_ordered_items);
-
-                            // get promocode for this shop - have to orderd these products
-
-                            $this->db->select('id'); 
-                            $this->db->where('shop_id',$_POST['shop_id']);  
-                            $this->db->where('group_type',7);  
-
-                            $this->db->group_start();
-                                $this->db->where('from_date <=', $today);
-                                $this->db->where('to_date >=', $today);
-                            $this->db->group_end();
-
-                            $this->db->where('status',1);  
-                            $this->db->where('deleted_at',NULL);  
-
-                            $this->db->group_start();
-                                $this->db->where('promo_min_order_amount', '');
-                                $this->db->or_where('promo_min_order_amount <=', floatval($_POST['total_amount']));
-                            $this->db->group_end();
-
-                            $this->db->from('promocode'); 
-                            $sql_query = $this->db->get();
-                            if ($sql_query->num_rows() > 0){
-
-                                $promocode_shop_group7_array = $sql_query->result_array();
-                                $promocode_shop_group7_ids = array_column($promocode_shop_group7_array, 'id');
-                                
-                                $this->db->select('*'); 
-                                $this->db->where('shop_id',$_POST['shop_id']);  
-                                $this->db->where_in('promocode_id',$promocode_shop_group7_ids);  
-                                $this->db->from('promocode_products'); 
-                                $sql_query = $this->db->get();
-                                $promocode_haveto_ordeded_products = $sql_query->result_array();
-
-                                $matched_ordered_products = array();
-                                foreach ($promocode_haveto_ordeded_products as $key => $value) {
-                                    if(in_array($value['product_id'], $customer_total_ordered_items)){
-                                        $matched_ordered_products[] = $value;
-                                    }
-                                }
-
-                                if(isset($matched_ordered_products) && !empty($matched_ordered_products)){
-                                    foreach ($matched_ordered_products as $key => $value) {
-                                        $where = array('id' => $value['promocode_id']);
-                                        $select = array('*');
-                                        $table = 'promocode';
-                                        $promocode_valid_data = get_data_by_filter($table,$select, $where);
-                                        array_push($valid_promocodes, $promocode_valid_data[0]);
-                                    }
-                                }
-
-                            }
-
-                        }
                     }
 
-                    $response['valid_promocodes'] = $valid_promocodes;
-                    $response['status'] = true;
                 }
             }
-            
+
+            $response['valid_promocodes'] = $valid_promocodes;
+            $response['status'] = true;
         }else{
             $response['status'] = false;
             $response['message'] = $errorPost;
@@ -2099,161 +1975,154 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => $_POST['customer_id'],'status' => '1', 'deleted_at' => NULL);
-            $user = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($user)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';
-            }else{
+            $today = date('Y-m-d');
 
-                $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
-                $shop = (array)$this->db->get_where('shop',$where)->row();
-                if(empty($shop)){
+            $this->db->select('*');
+            $this->db->from('promocode');
+            $this->db->where('promocode', $_POST['promocode']);
+            $this->db->where('deleted_at',NULL);
+            $this->db->where('status', 1);
+
+            $this->db->group_start();
+                $this->db->where("shop_id", $_POST['shop_id']);
+                $this->db->or_where("shop_id", '');
+            $this->db->group_end();
+
+            $this->db->group_start();
+                $this->db->where('from_date <=', $today);
+                $this->db->where('to_date >=', $today);
+            $this->db->group_end();
+
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $promo_data = $sql_query->row();
+                $group_type = $promo_data->group_type;
+
+                if($promo_data->promo_min_order_amount > $_POST['total_amount']){
                     $response['status'] = false;
-                    $response['message'] = 'Restaurant not found';
+                    $response['message'] = 'Add more items to apply this promocode';
                 }else{
 
-                    $today = date('Y-m-d');
-
-                    $this->db->select('*');
-                    $this->db->from('promocode');
-                    $this->db->where('promocode', $_POST['promocode']);
-                    $this->db->where('deleted_at',NULL);
-                    $this->db->where('status', 1);
-
-                    $this->db->group_start();
-                        $this->db->where("shop_id", $_POST['shop_id']);
-                        $this->db->or_where("shop_id", '');
-                    $this->db->group_end();
-
-                    $this->db->group_start();
-                        $this->db->where('from_date <=', $today);
-                        $this->db->where('to_date >=', $today);
-                    $this->db->group_end();
-
+                    // check usage_limit
+                    $this->db->select('id'); 
+                    $this->db->where('customer_id',$_POST['customer_id']);  
+                    $success_order_status = array('0', '1', '3', '4', '5', '6');
+                    $this->db->where_in('order_status',$success_order_status);  
+                    $this->db->where('promocode_id',$promo_data->id);  
+                    $this->db->from('orders');
                     $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $promo_data = $sql_query->row();
-                        $group_type = $promo_data->group_type;
-
-                        if($promo_data->promo_min_order_amount > $_POST['total_amount']){
-                            $response['status'] = false;
-                            $response['message'] = 'Add more items to apply this promocode';
-                        }else{
-
-                            // check usage_limit
-                            $this->db->select('id'); 
-                            $this->db->where('customer_id',$_POST['customer_id']);  
-                            $success_order_status = array('0', '1', '3', '4', '5', '6');
-                            $this->db->where_in('order_status',$success_order_status);  
-                            $this->db->where('promocode_id',$promo_data->id);  
-                            $this->db->from('orders');
-                            $sql_query = $this->db->get();
-                            if ($sql_query->num_rows() >= $promo_data->usage_limit){
-                                $response['status'] = false;
-                                $response['message'] = 'Invalid Promocode';
-                            }
-                            else
-                            {
-                                $products_array = explode(',',$_POST['products']);
-                                $valid_promocodes = array();
-                                $valid = FALSE;
-
-                                switch ($group_type) {
-                                    case 1:
-
-                                        $this->db->select('id'); 
-                                        $this->db->where('customer_id',$_POST['customer_id']);  
-                                        $this->db->from('orders'); 
-                                        $sql_query = $this->db->get();
-                                        if ($sql_query->num_rows() <= 0){
-                                            $valid = TRUE;
-                                        }
-                                            
-                                        break;
-                                    case 4:
-                                        $valid = TRUE;
-                                        break;
-                                    case 5:
-                                        if($_POST['shop_id'] == $promo_data->shop_id){
-                                            $valid = TRUE;
-                                        }
-                                        break;
-                                    case 6:
-                                        $orders = $promo_data->min_no_of_orders;
-                                        $this->db->select('id'); 
-                                        $this->db->where('customer_id',$_POST['customer_id']);  
-                                        $this->db->where('order_status',6);  
-                                        $this->db->from('orders'); 
-                                        $sql_query = $this->db->get();
-                                        if ($sql_query->num_rows() >= intval($orders)){
-                                            $valid = TRUE;
-                                        }
-                                        break;
-                                    case 7:
-
-                                        $this->db->select('id'); 
-                                        $this->db->where('customer_id',$_POST['customer_id']);  
-                                        $this->db->where('shop_id',$_POST['shop_id']);  
-                                        $this->db->where('order_status',6);  
-                                        $this->db->from('orders'); 
-                                        $sql_query = $this->db->get();
-
-                                        if ($sql_query->num_rows() > 0){
-                                            $prev_orders_data = $sql_query->result_array();
-                                            $prev_orders_ids = array_column($prev_orders_data, 'id');
-
-                                            // get ordered product
-                                            $this->db->select('id'); 
-                                            $this->db->where_in('order_id',$prev_orders_ids);  
-                                            $this->db->where_in('item_id',$products_array);  
-                                            $this->db->from('order_items'); 
-                                            $sql_query = $this->db->get();
-                                            if ($sql_query->num_rows() > 0){
-                                                $valid = TRUE;
-                                            }
-                                        }
-
-                                        break;
-                                    default:
-                                    $valid = FALSE;
-                                }
-
-                                if($valid == TRUE){
-                                    $promocode_applied_products = array();
-                                    if($promo_data->promo_type == 1){
-                                        $this->db->select('product_id'); 
-                                        $this->db->where('promocode_id',$promo_data->id);  
-                                        $this->db->where('shop_id',$_POST['shop_id']);  
-                                        $this->db->from('promocode_valid_product');
-                                        $sql_query = $this->db->get();
-                                        if ($sql_query->num_rows() > 0){
-                                            $product_ids = $sql_query->result_array();
-                                            $promocode_applied_products = array_column($product_ids, 'product_id');
-                                            $promocode_applied_products2 = array_intersect($products_array, $promocode_applied_products);
-                                        }
-                                    }
-                                    $response['promocode_id'] = $promo_data->id;
-                                    $response['promocode'] = $_POST['promocode'];
-                                    $response['valid_promocode'] = $valid;
-                                    $response['discount_type'] = $promo_data->discount_type;
-                                    $response['discount_amount'] = $promo_data->amount;
-                                    $response['max_discount_amount'] = $promo_data->max_disc;
-                                    $response['promo_type'] = $promo_data->promo_type;
-                                    $response['promocode_applied_products'] = $promocode_applied_products2;
-                                    $response['status'] = true;
-                                }else{
-                                    $response['promocode'] = $_POST['promocode'];
-                                    $response['valid_promocode'] = $valid;
-                                    $response['status'] = false;
-                                }
-                            }                            
-                        }
-                    }else{
+                    if ($sql_query->num_rows() >= $promo_data->usage_limit){
                         $response['status'] = false;
                         $response['message'] = 'Invalid Promocode';
                     }
+                    else
+                    {
+                        $products_array = explode(',',$_POST['products']);
+                        $valid_promocodes = array();
+                        $valid = FALSE;
+
+                        switch ($group_type) {
+                            case 1:
+
+                                $this->db->select('id'); 
+                                $this->db->where('customer_id',$_POST['customer_id']);  
+                                $this->db->from('orders'); 
+                                $sql_query = $this->db->get();
+                                if ($sql_query->num_rows() <= 0){
+                                    $valid = TRUE;
+                                }
+                                    
+                                break;
+                            case 4:
+                                $valid = TRUE;
+                                break;
+                            case 5:
+                                if($_POST['shop_id'] == $promo_data->shop_id){
+                                    $valid = TRUE;
+                                }
+                                break;
+                            case 6:
+                                $orders = $promo_data->min_no_of_orders;
+                                $this->db->select('id'); 
+                                $this->db->where('customer_id',$_POST['customer_id']);  
+                                $this->db->where('order_status',6);  
+                                $this->db->from('orders'); 
+                                $sql_query = $this->db->get();
+                                if ($sql_query->num_rows() >= intval($orders)){
+                                    $valid = TRUE;
+                                }
+                                break;
+                            case 7:
+
+                                $this->db->select('id'); 
+                                $this->db->where('customer_id',$_POST['customer_id']);  
+                                $this->db->where('shop_id',$_POST['shop_id']);  
+                                $this->db->where('order_status',6);  
+                                $this->db->from('orders'); 
+                                $sql_query = $this->db->get();
+
+                                if ($sql_query->num_rows() > 0){
+                                    $prev_orders_data = $sql_query->result_array();
+                                    $prev_orders_ids = array_column($prev_orders_data, 'id');
+
+                                    // get ordered product
+                                    $this->db->select('id'); 
+                                    $this->db->where_in('order_id',$prev_orders_ids);  
+                                    $this->db->where_in('item_id',$products_array);  
+                                    $this->db->from('order_items'); 
+                                    $sql_query = $this->db->get();
+                                    if ($sql_query->num_rows() > 0){
+                                        $valid = TRUE;
+                                    }
+                                }
+
+                                break;
+                            default:
+                            $valid = FALSE;
+                        }
+
+                        if($valid == TRUE){
+                            $promocode_applied_products = array();
+                            $promocode_applied_products2 = array();
+
+                            if($promo_data->promo_type == 1){
+                                $this->db->select('product_id'); 
+                                $this->db->where('promocode_id',$promo_data->id);  
+                                $this->db->where('shop_id',$_POST['shop_id']);  
+                                $this->db->from('promocode_valid_product');
+                                $sql_query = $this->db->get();
+                                if ($sql_query->num_rows() > 0){
+                                    $product_ids = $sql_query->result_array();
+                                    $promocode_applied_products = array_column($product_ids, 'product_id');
+
+                                    foreach ($promocode_applied_products as $key => $value) {
+                                        
+                                        if(in_array($value, $products_array)){
+                                            array_push($promocode_applied_products2, $value);
+                                        }
+                                    }
+                                    //$promocode_applied_products2 = array_intersect($products_array, $promocode_applied_products);
+                                }
+                            }
+                            $response['promocode_id'] = $promo_data->id;
+                            $response['promocode'] = $_POST['promocode'];
+                            $response['valid_promocode'] = $valid;
+                            $response['discount_type'] = $promo_data->discount_type;
+                            $response['discount_amount'] = $promo_data->amount;
+                            $response['max_discount_amount'] = $promo_data->max_disc;
+                            $response['promo_type'] = $promo_data->promo_type;
+                            $response['promocode_applied_products'] = $promocode_applied_products2;
+                            $response['status'] = true;
+                        }else{
+                            $response['promocode'] = $_POST['promocode'];
+                            $response['valid_promocode'] = $valid;
+                            $response['status'] = false;
+                        }
+                    }                            
                 }
+            }else{
+                $response['status'] = false;
+                $response['message'] = 'Invalid Promocode';
             }
             
         }else{
@@ -2361,468 +2230,482 @@ class Customer_api extends REST_Controller {
             if(empty($errorPost)){
 
                 $this->db->select('id');
-                $this->db->from('customer');
-                $this->db->where('id', $order_data['customer_id']);
+                $this->db->from('shop');
+                $this->db->where('id', $order_data['shop_id']);
+                $this->db->where('deleted_at',NULL);
                 $this->db->where('status', 1);
+
+                $shop_error = 'Restaurant not found';
+                if($order['order_type'] == 1 || 2 || 5){
+                    $shop_error = 'Restaurant is not providing delivery order for now.';
+                    $this->db->group_start();
+                        $this->db->where("takeout_delivery_status", 1);
+                        $this->db->or_where("takeout_delivery_status", 3);
+                    $this->db->group_end();
+                }else if($order['order_type'] == 3 || 4 || 6){
+                    $shop_error = 'Restaurant is not providing takeout order for now.';
+                    $this->db->group_start();
+                        $this->db->where("takeout_delivery_status", 2);
+                        $this->db->or_where("takeout_delivery_status", 3);
+                    $this->db->group_end();
+                }
+
+                if($order['order_type'] == 5 || 6){
+                    $this->db->where("weekly_status", 1);
+                    $shop_error = 'Restaurant is not providing weekly order for now.';
+                }
                 $sql_query = $this->db->get();
                 if ($sql_query->num_rows() > 0){
 
                     $this->db->select('id');
-                    $this->db->from('shop');
-                    $this->db->where('id', $order_data['shop_id']);
+                    $this->db->from('delivery_address');
+                    $this->db->where('id', $order_data['delivery_address_id']);
                     $this->db->where('deleted_at',NULL);
-                    $this->db->where('status', 1);
+                    $this->db->where('latitude !=', '');
+                    $this->db->where('longitude !=', '');
 
-                    $shop_error = 'Restaurant not found';
-                    if($order['order_type'] == 1 || 2 || 5){
-                        $shop_error = 'Restaurant is not providing delivery order for now.';
-                        $this->db->group_start();
-                            $this->db->where("takeout_delivery_status", 1);
-                            $this->db->or_where("takeout_delivery_status", 3);
-                        $this->db->group_end();
-                    }else if($order['order_type'] == 3 || 4 || 6){
-                        $shop_error = 'Restaurant is not providing takeout order for now.';
-                        $this->db->group_start();
-                            $this->db->where("takeout_delivery_status", 2);
-                            $this->db->or_where("takeout_delivery_status", 3);
-                        $this->db->group_end();
-                    }
+                    $this->db->group_start();
+                        $this->db->where("customer_id", $order_data['customer_id']);
+                        $this->db->or_where("popular", 1);
+                    $this->db->group_end();
 
-                    if($order['order_type'] == 5 || 6){
-                        $this->db->where("weekly_status", 1);
-                        $shop_error = 'Restaurant is not providing weekly order for now.';
-                    }
                     $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
+                    if ($sql_query->num_rows() > 0 || $address_not_required == TRUE){
 
                         $this->db->select('id');
-                        $this->db->from('delivery_address');
-                        $this->db->where('id', $order_data['delivery_address_id']);
+                        $this->db->from('customer_payment_card');
+                        $this->db->where('id', $order_data['payment_card_id']);
+                        $this->db->where('customer_id', $order_data['customer_id']);
                         $this->db->where('deleted_at',NULL);
-                        $this->db->where('latitude !=', '');
-                        $this->db->where('longitude !=', '');
-
-                        $this->db->group_start();
-                            $this->db->where("customer_id", $order_data['customer_id']);
-                            $this->db->or_where("popular", 1);
-                        $this->db->group_end();
-
                         $sql_query = $this->db->get();
-                        if ($sql_query->num_rows() > 0 || $address_not_required == TRUE){
+                        if ($sql_query->num_rows() > 0){
 
-                            $this->db->select('id');
-                            $this->db->from('customer_payment_card');
-                            $this->db->where('id', $order_data['payment_card_id']);
-                            $this->db->where('customer_id', $order_data['customer_id']);
-                            $this->db->where('deleted_at',NULL);
-                            $sql_query = $this->db->get();
-                            if ($sql_query->num_rows() > 0){
+                            $promocode_error = FALSE;
+                            $promocode_data = array();
+                            if(isset($order_data['promocode_id']) && $order_data['promocode_id'] != ''){
 
-                                $promocode_error = FALSE;
-                                $promocode_data = array();
-                                if(isset($order_data['promocode_id']) && $order_data['promocode_id'] != ''){
+                                $this->db->select('*');
+                                $this->db->from('promocode');
+                                $this->db->where('id', $order_data['promocode_id']);
+                                $this->db->where('deleted_at',NULL);
+                                $this->db->where('status', 1);
 
-                                    $this->db->select('*');
-                                    $this->db->from('promocode');
-                                    $this->db->where('id', $order_data['promocode_id']);
-                                    $this->db->where('deleted_at',NULL);
-                                    $this->db->where('status', 1);
+                                $this->db->group_start();
+                                    $this->db->where("shop_id", $order_data['shop_id']);
+                                    $this->db->or_where("shop_id", '');
+                                $this->db->group_end();
 
-                                    $this->db->group_start();
-                                        $this->db->where("shop_id", $order_data['shop_id']);
-                                        $this->db->or_where("shop_id", '');
-                                    $this->db->group_end();
+                                $sql_query = $this->db->get();
+                                if ($sql_query->num_rows() > 0){
+                                    $promocode_data = $sql_query->row();
+                                }else{
+                                    $promocode_error = TRUE;
+                                }
+                            }
 
-                                    $sql_query = $this->db->get();
-                                    if ($sql_query->num_rows() > 0){
-                                        $promocode_data = $sql_query->row();
+                            if($promocode_error == FALSE){
+
+                                $order_type_error = FALSE;
+                                $date = date('Y-m-d');
+                                $time = date('h:i A');
+
+                                if(($order_data['order_type'] == 2) || ($order_data['order_type'] == 4)){
+                                    if(isset($order_data['later_time']) && $order_data['later_time'] != ''){
+                                        $time = $order_data['later_time'];
                                     }else{
-                                        $promocode_error = TRUE;
+                                        $order_type_error = TRUE;
                                     }
+                                }elseif(($order_data['order_type'] == 5) || ($order_data['order_type'] == 6)) {
+                                    if(isset($order_data['schedule_date']) && $order_data['schedule_date'] != '' && isset($order_data['schedule_time']) && $order_data['schedule_time'] != ''){
+                                        $date = $order_data['schedule_date'];
+                                        $time = $order_data['schedule_time'];
+                                    }else{
+                                        $order_type_error = TRUE;
+                                    }
+                                }else{
+                                    
                                 }
 
-                                if($promocode_error == FALSE){
+                                if($order_type_error == FALSE){
 
-                                    $order_type_error = FALSE;
-                                    $date = date('Y-m-d');
-                                    $time = date('h:i A');
-
-                                    if(($order_data['order_type'] == 2) || ($order_data['order_type'] == 4)){
-                                        if(isset($order_data['later_time']) && $order_data['later_time'] != ''){
-                                            $time = $order_data['later_time'];
-                                        }else{
-                                            $order_type_error = TRUE;
-                                        }
-                                    }elseif(($order_data['order_type'] == 5) || ($order_data['order_type'] == 6)) {
-                                        if(isset($order_data['schedule_date']) && $order_data['schedule_date'] != '' && isset($order_data['schedule_time']) && $order_data['schedule_time'] != ''){
-                                            $date = $order_data['schedule_date'];
-                                            $time = $order_data['schedule_time'];
-                                        }else{
-                                            $order_type_error = TRUE;
-                                        }
+                                    if($order_data['order_type'] == 1 || 3){
+                                        //avaliable in curent time
+                                        $day = date('l');
+                                    }else if($order_data['order_type'] == 2 || 4){
+                                        //available in today later time
+                                        $day = date('l');
+                                    }else if($order_data['order_type'] == 5 || 6){
+                                        // available in schedule date & time
+                                        $my_schedule_date = DateTime::createFromFormat('Y-m-d', $order_data['schedule_date']);
+                                        $day = $my_schedule_date->format('l');
                                     }else{
-                                        
+                                        $day = NULL;
                                     }
 
-                                    if($order_type_error == FALSE){
-
-                                        if($order_data['order_type'] == 1 || 3){
-                                            //avaliable in curent time
-                                            $day = date('l');
-                                        }else if($order_data['order_type'] == 2 || 4){
-                                            //available in today later time
-                                            $day = date('l');
-                                        }else if($order_data['order_type'] == 5 || 6){
-                                            // available in schedule date & time
-                                            $my_schedule_date = DateTime::createFromFormat('Y-m-d', $order_data['schedule_date']);
-                                            $day = $my_schedule_date->format('l');
-                                        }else{
-                                            $day = NULL;
-                                        }
-
-                                        $shop_open = FALSE;
-                                        if(isset($day) && !is_null($day) && $day != ''){
-                                            $this->db->select('from_time,to_time,full_day');
-                                            $this->db->from('shop_availibality');
-                                            $this->db->where('shop_id', $order_data['shop_id']);
-                                            $this->db->where('is_closed', 0);
-                                            $this->db->where('day',$day);
-                                            $sql_query = $this->db->get();
-                                            if ($sql_query->num_rows() > 0){
-                                                $availibality_data = (array)$sql_query->row();
-                                                if($availibality_data['full_day'] == 1){
-                                                    $shop_open = TRUE;
-                                                }else{
-                                                    // add validation for shop timing
-                                                    $shop_open = TRUE;
-                                                }
-                                                
+                                    $shop_open = FALSE;
+                                    if(isset($day) && !is_null($day) && $day != ''){
+                                        $this->db->select('from_time,to_time,full_day');
+                                        $this->db->from('shop_availibality');
+                                        $this->db->where('shop_id', $order_data['shop_id']);
+                                        $this->db->where('is_closed', 0);
+                                        $this->db->where('day',$day);
+                                        $sql_query = $this->db->get();
+                                        if ($sql_query->num_rows() > 0){
+                                            $availibality_data = (array)$sql_query->row();
+                                            if($availibality_data['full_day'] == 1){
+                                                $shop_open = TRUE;
                                             }else{
-                                                $shop_open = FALSE;
+                                                // add validation for shop timing
+                                                $shop_open = TRUE;
                                             }
+                                            
                                         }else{
-                                            $shop_open = TRUE;
+                                            $shop_open = FALSE;
                                         }
+                                    }else{
+                                        $shop_open = TRUE;
+                                    }
 
-                                        if($shop_open == TRUE){
+                                    if($shop_open == TRUE){
 
-                                            $order_products_array = array();
-                                            if(is_array($order_data['products']) && !empty($order_data['products'])){
-                                                foreach ($order_data['products'] as $product_key => $product_value) {
-                                                    
-                                                    $this->db->select('*');
-                                                    $this->db->from('item');
-                                                    $this->db->where('id', $product_value['product_id']);
-                                                    $this->db->where('shop_id', $order_data['shop_id']);
-                                                    $this->db->where('quantity >=', intval($product_value['qty']));
-                                                    $this->db->where('deleted_at',NULL);
-                                                    $this->db->where('is_active',1);
-                                                    $sql_query = $this->db->get();
-                                                    if ($sql_query->num_rows() > 0){
-                                                        array_push($order_products_array, $sql_query->result_array());
+                                        $order_products_array = array();
+                                        if(is_array($order_data['products']) && !empty($order_data['products'])){
+                                            foreach ($order_data['products'] as $product_key => $product_value) {
+                                                
+                                                $this->db->select('*');
+                                                $this->db->from('item');
+                                                $this->db->where('id', $product_value['product_id']);
+                                                $this->db->where('shop_id', $order_data['shop_id']);
+
+                                                $this->db->group_start();
+                                                    $this->db->group_start();
+                                                        $this->db->where('quantity >=', intval($product_value['qty']));
+                                                        $this->db->where('inventory_status', 1);
+                                                    $this->db->group_end();
+
+                                                    $this->db->or_group_start();
+                                                         $this->db->where('inventory_status', 0);
+                                                    $this->db->group_end();
+                                                $this->db->group_end();
+
+                                                $this->db->where('deleted_at',NULL);
+                                                $this->db->where('is_active',1);
+                                                $sql_query = $this->db->get();
+                                                if ($sql_query->num_rows() > 0){
+                                                    array_push($order_products_array, $sql_query->result_array());
+                                                }
+                                            }
+                                        }
+                                        if(count($order_products_array) == count($order_data['products'])){
+
+                                            $order_varients_array = array();
+                                            foreach ($order_data['products'] as $product_key => $product_value){
+                                                if(isset($product_value['variants_id']) && is_array($product_value['variants_id']) && !empty($product_value['variants_id'])){
+                                                    foreach ($product_value['variants_id'] as $variant_key => $variant_value) {
+                                                        $order_varients_array[] = $variant_value;
                                                     }
                                                 }
                                             }
-                                            if(count($order_products_array) == count($order_data['products'])){
 
-                                                $order_varients_array = array();
-                                                foreach ($order_data['products'] as $product_key => $product_value){
-                                                    if(isset($product_value['variants_id']) && is_array($product_value['variants_id']) && !empty($product_value['variants_id'])){
-                                                        foreach ($product_value['variants_id'] as $variant_key => $variant_value) {
-                                                            $order_varients_array[] = $variant_value;
-                                                        }
-                                                    }
+                                            $varient_error = FALSE;
+                                            if(isset($order_varients_array) && !empty($order_varients_array)){
+                                                $order_varients_data_array = array();
+                                                $this->db->select('*');
+                                                $this->db->from('variant_items');
+                                                $this->db->where_in('id', $order_varients_array);
+                                                $sql_query = $this->db->get();
+                                                if ($sql_query->num_rows() > 0){
+                                                    $order_varients_data_array = $sql_query->result_array();
+                                                }
+                                                if(count($order_varients_data_array) != count($order_varients_array)){
+                                                    $varient_error = TRUE;
+                                                }
+                                            }
+                                            if($varient_error == FALSE){
+
+                                                // if varient exists
+                                                $error = '';
+                                                if(($order_data['order_type'] == 2) || ($order_data['order_type'] == 4)){
+                                                    if(isset($order_data['later_time']) && $order_data['later_time'] != ''){
+                                                        $later_time = $order_data['later_time'];
+                                                    }else{
+                                                        $error = 'later_time';
+                                                    }  
+                                                }else{
+                                                    $later_time = "";
                                                 }
 
-                                                $varient_error = FALSE;
-                                                if(isset($order_varients_array) && !empty($order_varients_array)){
-                                                    $order_varients_data_array = array();
-                                                    $this->db->select('*');
-                                                    $this->db->from('variant_items');
-                                                    $this->db->where_in('id', $order_varients_array);
-                                                    $sql_query = $this->db->get();
-                                                    if ($sql_query->num_rows() > 0){
-                                                        $order_varients_data_array = $sql_query->result_array();
-                                                    }
-                                                    if(count($order_varients_data_array) != count($order_varients_array)){
-                                                        $varient_error = TRUE;
-                                                    }
+                                                if(isset($order_data['promocode_id']) && $order_data['promocode_id'] != "" && $order_data['promocode_id'] != "0" && !is_null($order_data['promocode_id'])){
+                                                    $promocode_id = $order_data['promocode_id'];
+                                                }else{
+                                                    $promocode_id = '';
                                                 }
-                                                if($varient_error == FALSE){
 
-                                                    // if varient exists
-                                                    $error = '';
-                                                    if(($order_data['order_type'] == 2) || ($order_data['order_type'] == 4)){
-                                                        if(isset($order_data['later_time']) && $order_data['later_time'] != ''){
-                                                            $later_time = $order_data['later_time'];
-                                                        }else{
-                                                            $error = 'later_time';
-                                                        }  
+                                                if(($order_data['order_type'] == 5) || ($order_data['order_type'] == 6)){
+                                                    if(isset($order_data['schedule_date']) && $order_data['schedule_date'] != '' && isset($order_data['schedule_time']) && $order_data['schedule_time'] != ''){
+                                                        $schedule_date = $order_data['schedule_date'];
+                                                        $schedule_time = $order_data['schedule_time'];
                                                     }else{
-                                                        $later_time = "";
+                                                        $error = 'schedule_date & schedule_time';
+                                                    }
+                                                }else{
+                                                    $schedule_date = '';
+                                                    $schedule_time = '';
+                                                }
+
+                                                if($error == ''){
+
+                                                    if($order_data['order_type'] == 3 || 4 || 6){
+                                                        $delivery_charges = 0;
+                                                    }else{
+                                                        $delivery_charges = $order_data['delivery_charges'];
                                                     }
 
-                                                    if(isset($order_data['promocode_id']) && $order_data['promocode_id'] != "" && $order_data['promocode_id'] != "0" && !is_null($order_data['promocode_id'])){
-                                                        $promocode_id = $order_data['promocode_id'];
+                                                    $data = array( 
+                                                        'customer_id' => $order_data['customer_id'], 
+                                                        'shop_id'=> $order_data['shop_id'], 
+                                                        'order_type'=> $order_data['order_type'], 
+                                                        'later_time'=> $later_time,
+                                                        'delivery_charges' => number_format((float)$delivery_charges, 2, '.', ''),
+                                                        'promocode_id'=> $promocode_id,
+                                                        'promo_amount'=> '',
+                                                        'tax' => $order_data['tax'],
+                                                        'service_charge' => $order_data['service_charge'],
+                                                        'schedule_date'=> $schedule_date,
+                                                        'schedule_time'=> $schedule_time,
+
+                                                        'order_status'=> 0,
+                                                        'payment_status'=> 1,
+                                                        'payment_mode'=> $order_data['payment_mode'],
+                                                        'transaction_id'=> '',
+                                                        'created_at'=> date('Y-m-d H:i:s')
+                                                    );
+
+                                                    if($address_not_required == true){
+                                                        $data['delivery_address_id'] = 0;
                                                     }else{
-                                                        $promocode_id = '';
+                                                        $data['delivery_address_id'] = $order_data['delivery_address_id'];
                                                     }
 
-                                                    if(($order_data['order_type'] == 5) || ($order_data['order_type'] == 6)){
-                                                        if(isset($order_data['schedule_date']) && $order_data['schedule_date'] != '' && isset($order_data['schedule_time']) && $order_data['schedule_time'] != ''){
-                                                            $schedule_date = $order_data['schedule_date'];
-                                                            $schedule_time = $order_data['schedule_time'];
-                                                        }else{
-                                                            $error = 'schedule_date & schedule_time';
-                                                        }
-                                                    }else{
-                                                        $schedule_date = '';
-                                                        $schedule_time = '';
-                                                    }
+                                                    if($this->db->insert('orders', $data)){
 
-                                                    if($error == ''){
+                                                        $order_id = $this->db->insert_id();
+                                                        $my_product_data = array();
+                                                        $my_variant_data = array();
+                                                        $sub_total = 0;
 
-                                                        if($order_data['order_type'] == 3 || 4 || 6){
-                                                            $delivery_charges = 0;
-                                                        }else{
-                                                            $delivery_charges = $order_data['delivery_charges'];
-                                                        }
+                                                        $update_quantity = array();
+                                                        foreach ($order_data['products'] as $products_key => $products_value){
 
-                                                        $data = array( 
-                                                            'customer_id' => $order_data['customer_id'], 
-                                                            'shop_id'=> $order_data['shop_id'], 
-                                                            'order_type'=> $order_data['order_type'], 
-                                                            'later_time'=> $later_time,
-                                                            'delivery_charges' => number_format((float)$delivery_charges, 2, '.', ''),
-                                                            'promocode_id'=> $promocode_id,
-                                                            'promo_amount'=> '',
-                                                            'tax' => $order_data['tax'],
-                                                            'service_charge' => $order_data['service_charge'],
-                                                            'schedule_date'=> $schedule_date,
-                                                            'schedule_time'=> $schedule_time,
-
-                                                            'order_status'=> 0,
-                                                            'payment_status'=> 1,
-                                                            'payment_mode'=> $order_data['payment_mode'],
-                                                            'transaction_id'=> '',
-                                                            'created_at'=> date('Y-m-d H:i:s')
-                                                        );
-
-                                                        if($address_not_required == true){
-                                                            $data['delivery_address_id'] = 0;
-                                                        }else{
-                                                            $data['delivery_address_id'] = $order_data['delivery_address_id'];
-                                                        }
-
-                                                        if($this->db->insert('orders', $data)){
-
-                                                            $order_id = $this->db->insert_id();
-                                                            $my_product_data = array();
-                                                            $my_variant_data = array();
-                                                            $sub_total = 0;
-                                                            foreach ($order_data['products'] as $products_key => $products_value){
-
-                                                                $this->db->select('IF(offer_price = "", price, offer_price) as price'); 
-                                                                $this->db->where('id',$products_value['product_id']); 
-                                                                $this->db->where('shop_id',$order_data['shop_id']); 
-                                                                $this->db->from('item'); 
-                                                                $sql_query = $this->db->get();
-                                                                if ($sql_query->num_rows() > 0){
-                                                                    $product_price_array = $sql_query->row();
-                                                                    $item_price = $product_price_array->price;
-                                                                }else{
-                                                                    $item_price = '';
-                                                                }
-
-                                                                $product_data = 
-                                                                array(
-                                                                    'order_id' => $order_id,
-                                                                    'item_id' => $products_value['product_id'],
-                                                                    'item_price' => $item_price,
-                                                                    'variants_price' => '',
-                                                                    'quantity' => $products_value['qty'],
-                                                                    'total_product_price' => ''
-                                                                );
-
-                                                                $this->db->insert('order_items', $product_data);
-                                                                $product_insert_id = $this->db->insert_id();
-                                                                $my_product_data[] = $product_data;
-
-                                                                $varients_price = 0;
-                                                                foreach ($products_value['variants_id'] as $variant_key => $variant_value){
-
-                                                                    $this->db->select('id,variant_group_id,price'); 
-                                                                    $this->db->where('id',$variant_value); 
-                                                                    $this->db->where('item_id',$products_value['product_id']);
-                                                                    $this->db->from('variant_items'); 
-                                                                    $sql_query = $this->db->get();
-                                                                    if ($sql_query->num_rows() > 0){
-                                                                        $variant_array = $sql_query->row();
-
-                                                                        $variant_data = 
-                                                                            array(
-                                                                                'order_item_id' => $product_insert_id,
-                                                                                'variant_group_id' => $variant_array->variant_group_id,
-                                                                                'variant_id' => $variant_value,
-                                                                                'price' => number_format((float)$variant_array->price, 2, '.', '')
-                                                                            );
-                                                                        $this->db->insert('order_item_variant', $variant_data);
-
-                                                                        $varients_price +=  number_format((float)$variant_array->price, 2, '.', '');
-                                                                        $my_variant_data[] = $variant_data;
-                                                                    }
-                                                                }
-
-                                                                $total_product_price = ($item_price + $varients_price) * $products_value['qty'];
-
-                                                                $product_data_edited = 
-                                                                        array(
-                                                                            'variants_price' => number_format((float)$varients_price, 2, '.', ''),
-                                                                            'total_product_price' => number_format((float)$total_product_price, 2, '.', '')
-                                                                        );
-                                                                $this->db->where('id',$product_insert_id); 
-                                                                $this->db->update('order_items', $product_data_edited);
-
-                                                                $sub_total += $total_product_price;
+                                                            $this->db->select('IF(offer_price = "", price, offer_price) as price, quantity'); 
+                                                            $this->db->where('id',$products_value['product_id']); 
+                                                            $this->db->where('shop_id',$order_data['shop_id']); 
+                                                            $this->db->from('item'); 
+                                                            $sql_query = $this->db->get();
+                                                            if ($sql_query->num_rows() > 0){
+                                                                $product_price_array = $sql_query->row();
+                                                                $item_price = $product_price_array->price;
+                                                                
+                                                                $update_quantity[$products_value['product_id']] = $product_price_array->quantity - $products_value['qty'];
+                                                            }else{
+                                                                $item_price = '';
                                                             }
 
-                                                            $sub_total = number_format((float)$sub_total, 2, '.', '');
-                                                            $order_data_edited = array(
-                                                                                'subtotal' => $sub_total
-                                                                                );
+                                                            $product_data = 
+                                                            array(
+                                                                'order_id' => $order_id,
+                                                                'item_id' => $products_value['product_id'],
+                                                                'item_price' => $item_price,
+                                                                'variants_price' => '',
+                                                                'quantity' => $products_value['qty'],
+                                                                'total_product_price' => ''
+                                                            );
 
-                                                            $promo_discount = 0;
-                                                            if(isset($promocode_data) && !empty($promocode_data)){
-                                                                if($promocode_data->promo_type == 2){
-                                                                    
-                                                                    if($promocode_data->discount_type == 0){
-                                                                        $promo_discount = $promocode_data->amount;
-                                                                    }else{
-                                                                        $promo_discount = (floatval($sub_total) * floatval($promocode_data->amount)) / 100;
-                                                                    }
+                                                            $this->db->insert('order_items', $product_data);
+                                                            $product_insert_id = $this->db->insert_id();
+                                                            $my_product_data[] = $product_data;
+
+                                                            $varients_price = 0;
+                                                            foreach ($products_value['variants_id'] as $variant_key => $variant_value){
+
+                                                                $this->db->select('id,variant_group_id,price'); 
+                                                                $this->db->where('id',$variant_value); 
+                                                                $this->db->where('item_id',$products_value['product_id']);
+                                                                $this->db->from('variant_items'); 
+                                                                $sql_query = $this->db->get();
+                                                                if ($sql_query->num_rows() > 0){
+                                                                    $variant_array = $sql_query->row();
+
+                                                                    $variant_data = 
+                                                                        array(
+                                                                            'order_item_id' => $product_insert_id,
+                                                                            'variant_group_id' => $variant_array->variant_group_id,
+                                                                            'variant_id' => $variant_value,
+                                                                            'price' => number_format((float)$variant_array->price, 2, '.', '')
+                                                                        );
+                                                                    $this->db->insert('order_item_variant', $variant_data);
+
+                                                                    $varients_price +=  number_format((float)$variant_array->price, 2, '.', '');
+                                                                    $my_variant_data[] = $variant_data;
+                                                                }
+                                                            }
+
+                                                            $total_product_price = ($item_price + $varients_price) * $products_value['qty'];
+
+                                                            $product_data_edited = 
+                                                                    array(
+                                                                        'variants_price' => number_format((float)$varients_price, 2, '.', ''),
+                                                                        'total_product_price' => number_format((float)$total_product_price, 2, '.', '')
+                                                                    );
+                                                            $this->db->where('id',$product_insert_id); 
+                                                            $this->db->update('order_items', $product_data_edited);
+
+                                                            $sub_total += $total_product_price;
+                                                        }
+
+                                                        $sub_total = number_format((float)$sub_total, 2, '.', '');
+                                                        $order_data_edited = array(
+                                                                            'subtotal' => $sub_total
+                                                                            );
+
+                                                        $promo_discount = 0;
+                                                        if(isset($promocode_data) && !empty($promocode_data)){
+                                                            if($promocode_data->promo_type == 2){
+                                                                
+                                                                if($promocode_data->discount_type == 0){
+                                                                    $promo_discount = $promocode_data->amount;
                                                                 }else{
-                                                                    $promocode_valid_products = $this->customer_api_model->get_promocode_valid_products($promocode_data->id);
-                                                                    if(isset($promocode_valid_products) && !empty($promocode_valid_products)){
-                                                                        $valid_products = array();
-                                                                        $valid_products = array_column($promocode_valid_products, 'product_id');
-                                                                        foreach ($order_data['products'] as $products_key => $products_value){
-                                                                            if (in_array($products_value['product_id'], $valid_products)){
-                                                                                if($promocode_data->discount_type == 0){
-                                                                                    // flat
-                                                                                    $promo_discount += $promocode_data->amount;
-                                                                                }else{
-                                                                                    // perc
-                                                                                    $total_product_price = 0;
-                                                                                    $this->db->select('total_product_price'); 
-                                                                                    $this->db->where('item_id',$products_value['product_id']); 
-                                                                                    $this->db->where('order_id',$order_id); 
-                                                                                    $this->db->from('order_items');
-                                                                                    $sql_query = $this->db->get();
-                                                                                    if ($sql_query->num_rows() > 0){
-                                                                                        $total_product_price_array = $sql_query->row();
-                                                                                        $total_product_price = $total_product_price_array->total_product_price;
-                                                                                        $promo_discount += (floatval($total_product_price) * floatval($promocode_data->amount)) / 100;
-                                                                                    }
-                                                                                }   
-                                                                            }
+                                                                    $promo_discount = (floatval($sub_total) * floatval($promocode_data->amount)) / 100;
+                                                                }
+                                                            }else{
+                                                                $promocode_valid_products = $this->customer_api_model->get_promocode_valid_products($promocode_data->id);
+                                                                if(isset($promocode_valid_products) && !empty($promocode_valid_products)){
+                                                                    $valid_products = array();
+                                                                    $valid_products = array_column($promocode_valid_products, 'product_id');
+                                                                    foreach ($order_data['products'] as $products_key => $products_value){
+                                                                        if (in_array($products_value['product_id'], $valid_products)){
+                                                                            if($promocode_data->discount_type == 0){
+                                                                                // flat
+                                                                                $promo_discount += $promocode_data->amount;
+                                                                            }else{
+                                                                                // perc
+                                                                                $total_product_price = 0;
+                                                                                $this->db->select('total_product_price'); 
+                                                                                $this->db->where('item_id',$products_value['product_id']); 
+                                                                                $this->db->where('order_id',$order_id); 
+                                                                                $this->db->from('order_items');
+                                                                                $sql_query = $this->db->get();
+                                                                                if ($sql_query->num_rows() > 0){
+                                                                                    $total_product_price_array = $sql_query->row();
+                                                                                    $total_product_price = $total_product_price_array->total_product_price;
+                                                                                    $promo_discount += (floatval($total_product_price) * floatval($promocode_data->amount)) / 100;
+                                                                                }
+                                                                            }   
                                                                         }
                                                                     }
                                                                 }
                                                             }
+                                                        }
 
-                                                            if(isset($promocode_data->max_disc) && $promocode_data->max_disc != '' ){
-                                                                $promo_discount = (floatval($promocode_data->max_disc) < floatval($promo_discount))?floatval($promocode_data->max_disc):$promo_discount;
+                                                        if(isset($promocode_data->max_disc) && $promocode_data->max_disc != '' ){
+                                                            $promo_discount = (floatval($promocode_data->max_disc) < floatval($promo_discount))?floatval($promocode_data->max_disc):$promo_discount;
+                                                        }
+
+                                                        $sub_total2 = floatval($sub_total) - floatval($promo_discount);
+                                                        $sub_total2 = number_format((float)$sub_total2, 2, '.', '');
+
+                                                        $tax = (floatval($sub_total2) * floatval($order_data['tax'])) / 100;
+                                                        $tax = number_format((float)$tax, 2, '.', '');
+
+                                                        $service_charge = (floatval($sub_total2) * floatval($order_data['service_charge'])) / 100;
+                                                        $service_charge = number_format((float)$service_charge, 2, '.', '');
+
+                                                        $delivery_charges = number_format((float)$order_data['delivery_charges'], 2, '.', '');
+
+
+                                                        $total = $sub_total2 + $tax + $service_charge + $delivery_charges;   
+
+                                                        $order_data_edited['promo_amount'] = number_format((float)$promo_discount, 2, '.', '');
+                                                        $order_data_edited['total'] = number_format((float)$total, 2, '.', '');
+
+                                                        $order_data_edited['QR_code'] = $this->generate_qr_code('CL'.$order_id);
+
+                                                        $this->db->where('id',$order_id);  
+                                                        $this->db->update('orders', $order_data_edited);
+
+                                                        // Decrease in quantity of product
+                                                        if(isset($update_quantity) && !empty($update_quantity)){
+                                                            foreach ($update_quantity as $product_id => $updated_quantity) {
+                                                                $my_quantity = ($updated_quantity < 0)?'0':$updated_quantity;
+                                                                $data = array('quantity' => $my_quantity);
+                                                                $this->db->where('id',$product_id);  
+                                                                $this->db->update('item', $data);
                                                             }
+                                                        }
 
-                                                            $sub_total2 = floatval($sub_total) - floatval($promo_discount);
-                                                            $sub_total2 = number_format((float)$sub_total2, 2, '.', '');
+                                                         // $response['data'] = true;    
+                                                         // $response['sub_total'] = $sub_total;    
+                                                         // $response['promo_discount'] = number_format((float)$promo_discount, 2, '.', '');
+                                                         // $response['sub_total2'] = $sub_total2;    
+                                                         // $response['tax'] = $tax;    
+                                                         // $response['service_charge'] = $service_charge;    
+                                                         // $response['delivery_charges'] = $delivery_charges;    
+                                                         // $response['total'] = number_format((float)$total, 2, '.', '');
+                                                           
+                                                        // $response['order_varients_data_array'] = $order_varients_data_array;    
+                                                        // $response['product_data'] = $order_products_array;
 
-                                                            $tax = (floatval($sub_total2) * floatval($order_data['tax'])) / 100;
-                                                            $tax = number_format((float)$tax, 2, '.', '');
-
-                                                            $service_charge = (floatval($sub_total2) * floatval($order_data['service_charge'])) / 100;
-                                                            $service_charge = number_format((float)$service_charge, 2, '.', '');
-
-                                                            $delivery_charges = number_format((float)$order_data['delivery_charges'], 2, '.', '');
-
-
-                                                            $total = $sub_total2 + $tax + $service_charge + $delivery_charges;   
-
-                                                            $order_data_edited['promo_amount'] = number_format((float)$promo_discount, 2, '.', '');
-                                                            $order_data_edited['total'] = number_format((float)$total, 2, '.', '');
-
-                                                            $order_data_edited['QR_code'] = $this->generate_qr_code('CL'.$order_id);
-
-                                                            $this->db->where('id',$order_id);  
-                                                            $this->db->update('orders', $order_data_edited);
-
-                                                             // $response['data'] = true;    
-                                                             // $response['sub_total'] = $sub_total;    
-                                                             // $response['promo_discount'] = number_format((float)$promo_discount, 2, '.', '');
-                                                             // $response['sub_total2'] = $sub_total2;    
-                                                             // $response['tax'] = $tax;    
-                                                             // $response['service_charge'] = $service_charge;    
-                                                             // $response['delivery_charges'] = $delivery_charges;    
-                                                             // $response['total'] = number_format((float)$total, 2, '.', '');
-                                                               
-                                                            // $response['order_varients_data_array'] = $order_varients_data_array;    
-                                                            // $response['product_data'] = $order_products_array;
-
-                                                            $response['order'] = true;    
-                                                            $response['order_id'] = $order_id;    
-
-                                                        }else{
-                                                            $response['status'] = false;
-                                                            $response['message'] = 'Server encountered an error. please try again';
-                                                        }       
-                                                        
+                                                        $response['order'] = true;    
+                                                        $response['order_id'] = $order_id;    
 
                                                     }else{
                                                         $response['status'] = false;
-                                                        $response['message'] = $error.' field is required'; 
-                                                    }
+                                                        $response['message'] = 'Server encountered an error. please try again';
+                                                    }       
+                                                    
+
                                                 }else{
                                                     $response['status'] = false;
-                                                    $response['message'] = 'Varients not found. Please refresh the cart.'; 
+                                                    $response['message'] = $error.' field is required'; 
                                                 }
- 
                                             }else{
                                                 $response['status'] = false;
-                                                $response['message'] = 'Product not found. Please refresh the cart.'; 
+                                                $response['message'] = 'Varients not found. Please refresh the cart.'; 
                                             }
-                                            
+
                                         }else{
                                             $response['status'] = false;
-                                            $response['message'] = 'Sorry! This restaurant does not provice service for this time';
+                                            $response['message'] = 'Product not found. Please refresh the cart.'; 
                                         }
-
+                                        
                                     }else{
                                         $response['status'] = false;
-                                        $response['message'] = 'later_time or schedule_date or schedule_time not found';
+                                        $response['message'] = 'Sorry! This restaurant does not provice service for this time';
                                     }
 
                                 }else{
                                     $response['status'] = false;
-                                    $response['message'] = 'Promocode is not valid';
+                                    $response['message'] = 'later_time or schedule_date or schedule_time not found';
                                 }
 
                             }else{
                                 $response['status'] = false;
-                                $response['message'] = 'Payment card does not found';
+                                $response['message'] = 'Promocode is not valid';
                             }
 
                         }else{
                             $response['status'] = false;
-                            $response['message'] = 'Delivery address does not found';
+                            $response['message'] = 'Payment card does not found';
                         }
 
                     }else{
                         $response['status'] = false;
-                        $response['message'] = $shop_error;
+                        $response['message'] = 'Delivery address does not found';
                     }
+
                 }else{
                     $response['status'] = false;
-                    $response['message'] = 'Customer not found';
+                    $response['message'] = $shop_error;
                 }
             }else{
                 $response['status'] = false;
@@ -2836,14 +2719,6 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    // public function place_order2_post(){
-    //     $postFields['order_data'] = $_POST['order_data']; 
-    //     //$errorPost = $this->ValidatePostFields($postFields);
-
-    //     $response['order_data'] = $_POST['order_data'];
-    //     $this->response($response);
-    // }  
-
     public function get_reorder_data_post(){
         $postFields['order_id'] = $_POST['order_id'];
         $postFields['customer_id'] = $_POST['customer_id'];
@@ -2851,162 +2726,171 @@ class Customer_api extends REST_Controller {
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
 
-            $where = array('id' => intval($_POST['customer_id']), 'status' => 1, 'deleted_at' => NULL);
-            $customer = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($customer)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';    
-            }else{
-                $where = array('id' => intval($_POST['order_id']));
-                $order = (array)$this->db->get_where('orders',$where)->row();
-                if(empty($order)){
-                    $response['status'] = false;
-                    $response['message'] = 'Order not found';    
+            $this->db->select('*');
+            $this->db->from('orders');
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $order = (array)$sql_query->row();
+
+                // check shop is providing takeout or delievry not
+                $this->db->select('id,service_charge,charges_of_minimum_mile');
+                $this->db->from('shop');
+
+                if($order['order_type'] == 5 || 6){
+                    $this->db->where("weekly_status", 1);
+                    $order_type = 'weekly ';
+                }
+
+                if($order['order_type'] == 1 || 2 || 5){
+                    $order_type .= 'delivery';
+                    $this->db->group_start();
+                        $this->db->where("takeout_delivery_status", 1);
+                        $this->db->or_where("takeout_delivery_status", 3);
+                    $this->db->group_end();
+                }else if($order['order_type'] == 3 || 4 || 6){
+                    $order_type .= 'takeout';
+                    $this->db->group_start();
+                        $this->db->where("takeout_delivery_status", 2);
+                        $this->db->or_where("takeout_delivery_status", 3);
+                    $this->db->group_end();
                 }else{
+                    $order_type .= 'service';
+                }
 
-                    // check shop is providing takeout or delievry not
-                    $this->db->select('id,service_charge,charges_of_minimum_mile');
-                    $this->db->from('shop');
+                $this->db->where('id',$order['shop_id']);
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
 
-                    if($order['order_type'] == 5 || 6){
-                        $this->db->where("weekly_status", 1);
-                        $order_type = 'weekly ';
-                    }
-
-                    if($order['order_type'] == 1 || 2 || 5){
-                        $order_type .= 'delivery';
-                        $this->db->group_start();
-                            $this->db->where("takeout_delivery_status", 1);
-                            $this->db->or_where("takeout_delivery_status", 3);
-                        $this->db->group_end();
-                    }else if($order['order_type'] == 3 || 4 || 6){
-                        $order_type .= 'takeout';
-                        $this->db->group_start();
-                            $this->db->where("takeout_delivery_status", 2);
-                            $this->db->or_where("takeout_delivery_status", 3);
-                        $this->db->group_end();
-                    }else{
-                        $order_type .= 'service';
-                    }
-
-                    $this->db->where('id',$order['shop_id']);
+                    $shop_data = (array)$sql_query->row();
+                    // get order product data
+                    $this->db->select('*');
+                    $this->db->from('order_items');
+                    $this->db->where('order_id',$_POST['order_id']);
                     $sql_query = $this->db->get();
                     if ($sql_query->num_rows() > 0){
+                        $orders_item_data = $sql_query->result_array();
 
-                        $shop_data = (array)$sql_query->row();
-                        // get order product data
-                        $this->db->select('*');
-                        $this->db->from('order_items');
-                        $this->db->where('order_id',$_POST['order_id']);
-                        $sql_query = $this->db->get();
-                        if ($sql_query->num_rows() > 0){
-                            $orders_item_data = $sql_query->result_array();
+                        $error = FALSE;
+                        $products = array();
+                        foreach ($orders_item_data as $key => $value) {
 
-                            $error = FALSE;
-                            $products = array();
+                            // check product avaibility, status, quntity, cuisine, category
+
+                            $sql_select = array(
+                                            't1.id',
+                                            'IF(t1.offer_price = "", t1.price, t1.offer_price) as price',
+                                            't1.name',
+                                            't1.item_picture',
+                                            't1.is_combo'
+                            );
+
+                            $this->db->select($sql_select);
+                            $this->db->from('item t1');
+                            $this->db->where('t1.id',$value['item_id']);
+                            $this->db->where('t1.is_active',1);
+                            $this->db->where('t1.deleted_at',NULL);
+                            $this->db->where('t2.is_active',1);
+                            $this->db->where('t2.deleted_at',NULL);
+                            $this->db->where('t3.status',1);
+                            $this->db->where('t3.deleted_at',NULL);
+
+                            $this->db->group_start();
+
+                                $this->db->group_start();
+                                    $this->db->where('t1.quantity >=', intval($value['quantity']));
+                                    $this->db->where('t1.inventory_status', 1);
+                                $this->db->group_end();
+
+                                $this->db->or_group_start();
+                                     $this->db->where('t1.inventory_status', 0);
+                                $this->db->group_end();
+
+                            $this->db->group_end();
+
+                            $this->db->join('cuisine t2', 't1.cuisine_id = t2.id');
+                            $this->db->join('category t3', 't1.category_id = t3.id');
+                            $sql_query = $this->db->get();
+                            if ($sql_query->num_rows() > 0){
+
+                                $products[$key] = (array)$sql_query->row();
+                                $products[$key]['quantity'] = $value['quantity'];
+
+                            }else{
+                                $error = TRUE;
+                                $message = 'Product(s) not avalilable any more.';
+                                continue;
+                            }
+                        }
+                        if($error == TRUE){
+                            $response['status'] = false;
+                            $response['message'] = $message;
+                        }else{
+
+                            // get order items varients
+                            $variant_ids = array();
                             foreach ($orders_item_data as $key => $value) {
-
-                                // check product avaibility, status, quntity, cuisine, category
-
-                                $sql_select = array(
-                                                't1.id',
-                                                'IF(t1.offer_price = "", t1.price, t1.offer_price) as price',
-                                                't1.name',
-                                                't1.item_picture',
-                                                't1.is_combo'
-                                );
-
-                                $this->db->select($sql_select);
-                                $this->db->from('item t1');
-                                $this->db->where('t1.id',$value['item_id']);
-                                $this->db->where('t1.is_active',1);
-                                $this->db->where('t1.deleted_at',NULL);
-                                $this->db->where('t2.is_active',1);
-                                $this->db->where('t2.deleted_at',NULL);
-                                $this->db->where('t3.status',1);
-                                $this->db->where('t3.deleted_at',NULL);
-                                $this->db->where('t1.quantity >=',$value['quantity']);
-                                $this->db->join('cuisine t2', 't1.cuisine_id = t2.id');
-                                $this->db->join('category t3', 't1.category_id = t3.id');
+                                $this->db->select('variant_id');
+                                $this->db->from('order_item_variant');
+                                $this->db->where_in('order_item_id',$value['id']);
                                 $sql_query = $this->db->get();
                                 if ($sql_query->num_rows() > 0){
-
-                                    $products[$key] = (array)$sql_query->row();
-                                    $products[$key]['quantity'] = $value['quantity'];
-
-                                }else{
-                                    $error = TRUE;
-                                    $message = 'Product(s) not avalilable any more.';
-                                    continue;
+                                    $variants = $sql_query->result_array();
+                                    $variant_ids = array_merge($variant_ids,array_column($variants, 'variant_id'));
+                                    $products[$key]['variants'] = array_column($variants, 'variant_id');
                                 }
                             }
+
+                            // check if order varients exists check in database exists or not
+                            if(isset($variant_ids) && !empty($variant_ids)){
+                                $this->db->select('*');
+                                $this->db->from('variant_items');
+                                $this->db->where_in('id',$variant_ids);
+                                $sql_query = $this->db->get();
+                                if ($sql_query->num_rows() == count($variant_ids)){
+                                    $variant_items_data = $sql_query->result_array();
+                                    foreach ($variant_items_data as $key => $value) {
+                                        foreach ($products as $key1 => $value1) {
+                                            if($value1['id'] == $value['item_id']){
+                                                $varient_price = $value['price'];
+                                                $products[$key1]['price'] += $value['price'];
+                                                $products[$key1]['price'] = number_format((float)$products[$key1]['price'], 2, '.', '');
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    $error = TRUE;
+                                    $message = 'Product varient(s) not avalilable any more.';
+                                }
+                            }
+
                             if($error == TRUE){
                                 $response['status'] = false;
                                 $response['message'] = $message;
                             }else{
 
-                                // get order items varients
-                                $variant_ids = array();
-                                foreach ($orders_item_data as $key => $value) {
-                                    $this->db->select('variant_id');
-                                    $this->db->from('order_item_variant');
-                                    $this->db->where_in('order_item_id',$value['id']);
-                                    $sql_query = $this->db->get();
-                                    if ($sql_query->num_rows() > 0){
-                                        $variants = $sql_query->result_array();
-                                        $variant_ids = array_merge($variant_ids,array_column($variants, 'variant_id'));
-                                        $products[$key]['variants'] = array_column($variants, 'variant_id');
-                                    }
-                                }
-
-                                // check if order varients exists check in database exists or not
-                                if(isset($variant_ids) && !empty($variant_ids)){
-                                    $this->db->select('*');
-                                    $this->db->from('variant_items');
-                                    $this->db->where_in('id',$variant_ids);
-                                    $sql_query = $this->db->get();
-                                    if ($sql_query->num_rows() == count($variant_ids)){
-                                        $variant_items_data = $sql_query->result_array();
-                                        foreach ($variant_items_data as $key => $value) {
-                                            foreach ($products as $key1 => $value1) {
-                                                if($value1['id'] == $value['item_id']){
-                                                    $varient_price = $value['price'];
-                                                    $products[$key1]['price'] += $value['price'];
-                                                    $products[$key1]['price'] = number_format((float)$products[$key1]['price'], 2, '.', '');
-                                                }
-                                            }
-                                        }
-                                    }else{
-                                        $error = TRUE;
-                                        $message = 'Product varient(s) not avalilable any more.';
-                                    }
-                                }
-
-                                if($error == TRUE){
-                                    $response['status'] = false;
-                                    $response['message'] = $message;
-                                }else{
-
-                                    $order_data = array('order_type' => $order['order_type']);
-                                    $order_data['shop_id'] = $shop_data['id'];
-                                    $order_data['tax'] = $this->get_tax();
-                                    $order_data['delivery_charges'] = $shop_data['charges_of_minimum_mile'];
-                                    $order_data['service_charge'] = $shop_data['service_charge'];
-                                    $order_data['products'] = $products;
-                                    $response['order_data'] = $order_data;
-                                    
-                                } 
-                            }
-                            
-                        }else{
-                            $response['status'] = false;
+                                $order_data = array('order_type' => $order['order_type']);
+                                $order_data['shop_id'] = $shop_data['id'];
+                                $order_data['tax'] = $this->get_tax();
+                                $order_data['delivery_charges'] = $shop_data['charges_of_minimum_mile'];
+                                $order_data['service_charge'] = $shop_data['service_charge'];
+                                $order_data['products'] = $products;
+                                $response['order_data'] = $order_data;
+                                $response['status'] = TRUE;
+                                
+                            } 
                         }
-
+                        
                     }else{
                         $response['status'] = false;
-                        $response['message'] = 'Restaurant is not providing '.$order_type;
                     }
                 }
+                else{
+                    $response['status'] = false;
+                    $response['message'] = 'Restaurant is not providing '.$order_type;
+                }
+            }else{
+                $response['message'] = 'Order data not found';                  
+                $response['status'] = FALSE; 
             }
         }else{
             $response['status'] = false;
@@ -3076,86 +2960,77 @@ class Customer_api extends REST_Controller {
     public function order_detail_post(){
         $postFields['order_id'] = $_POST['order_id']; 
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['order_id']));
-            $order = (array)$this->db->get_where('orders',$where)->row();
-            if(empty($order)){
-                $response['status'] = false;
-                $response['message'] = 'Order not found';    
-            }else{
+
+            $sql_select = array(
+                            't1.id',
+                            't1.total',
+                            't2.username',
+                            't1.order_type',
+                            'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
+                            't4.latitude as address_latitude',
+                            't4.longitude as address_longitude',
+                            't3.shop_name',
+                            't3.profile_picture',
+                            't3.address as shop_address',
+                            't3.latitude as shop_latitude',
+                            't3.longitude as shop_longitude',
+                            't3.profile_picture as shop_picture',
+                            't1.payment_mode',
+                            't1.subtotal',
+                            't1.promo_amount',
+                            'ROUND((((t1.subtotal + t1.promo_amount) * t1.tax) / 100), 2) as tax_amount',
+                            'ROUND((((t1.subtotal + t1.promo_amount) * t1.service_charge) / 100), 2) as service_charge_amount',
+                            't1.delivery_charges',
+                            't1.total',
+                            'IF(t1.order_type=5, t1.schedule_date, "") as schedule_date',
+                            'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
+                            'IF(t1.order_type=6, t1.schedule_date, "") as schedule_date',
+                            'IF(t1.order_type=6, t1.schedule_time, "") as schedule_time',
+                            'IF(t1.order_type=2, t1.later_time, "") as later_time',
+                            't1.created_at',
+                            't1.QR_code',
+                            't1.rating'
+            );
+            $this->db->select($sql_select);
+
+            $this->db->from('orders t1');
+            $this->db->join('customer t2', 't1.customer_id = t2.id','left');
+            $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+            $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
+
+            $this->db->where('t1.id', $_POST['order_id']);
+            //$this->db->where('t1.order_status', 4);
+
+            // $this->db->group_start();
+            //     $this->db->where('t1.order_type', 1);
+            //     $this->db->or_where('t1.order_type', 2);
+            // $this->db->group_end();
+
+            $sql_query = $this->db->get();
+
+            if ($sql_query->num_rows() > 0){
+                $orders_data = (array)$sql_query->row();
+                //$orders_data['rating'] = '3.5';
+
                 $sql_select = array(
-                                't1.id',
-                                't1.total',
-                                't2.username',
-                                't1.order_type',
-                                'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
-                                't4.latitude as address_latitude',
-                                't4.longitude as address_longitude',
-                                't3.shop_name',
-                                't3.profile_picture',
-                                't3.address as shop_address',
-                                't3.latitude as shop_latitude',
-                                't3.longitude as shop_longitude',
-                                't3.profile_picture as shop_picture',
-                                't1.payment_mode',
-                                't1.subtotal',
-                                't1.promo_amount',
-                                'ROUND((((t1.subtotal + t1.promo_amount) * t1.tax) / 100), 2) as tax_amount',
-                                'ROUND((((t1.subtotal + t1.promo_amount) * t1.service_charge) / 100), 2) as service_charge_amount',
-                                't1.delivery_charges',
-                                't1.total',
-                                'IF(t1.order_type=5, t1.schedule_date, "") as schedule_date',
-                                'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
-                                'IF(t1.order_type=6, t1.schedule_date, "") as schedule_date',
-                                'IF(t1.order_type=6, t1.schedule_time, "") as schedule_time',
-                                'IF(t1.order_type=2, t1.later_time, "") as later_time',
-                                't1.created_at',
-                                't1.QR_code',
-                                't1.rating'
-                                // 'IF(t1.order_type=2, t1.schedule_date, "") as schedule_date',
-                                // 'IF(t1.order_type=2, t1.schedule_time, "") as schedule_time',
-                                // 'IF(t1.order_type=1, t1.created_at, "") as created_at'
+                                't2.name',
+                                't1.quantity',
+                                't1.total_product_price'
                 );
+
                 $this->db->select($sql_select);
-
-                $this->db->from('orders t1');
-                $this->db->join('customer t2', 't1.customer_id = t2.id','left');
-                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
-                $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
-
-                $this->db->where('t1.id', $_POST['order_id']);
-                //$this->db->where('t1.order_status', 4);
-
-                // $this->db->group_start();
-                //     $this->db->where('t1.order_type', 1);
-                //     $this->db->or_where('t1.order_type', 2);
-                // $this->db->group_end();
-
+                $this->db->from('order_items t1');
+                $this->db->where('t1.order_id', $orders_data['id']);
+                $this->db->join('item t2', 't1.item_id = t2.id','left');
                 $sql_query = $this->db->get();
-
                 if ($sql_query->num_rows() > 0){
-                    $orders_data = (array)$sql_query->row();
-                    //$orders_data['rating'] = '3.5';
-
-                    $sql_select = array(
-                                    't2.name',
-                                    't1.quantity',
-                                    't1.total_product_price'
-                    );
-
-                    $this->db->select($sql_select);
-                    $this->db->from('order_items t1');
-                    $this->db->where('t1.order_id', $orders_data['id']);
-                    $this->db->join('item t2', 't1.item_id = t2.id','left');
-                    $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0){
-                        $orders_data['products'] = $sql_query->result_array();
-                    }    
-                    $response['orders_data'] = $orders_data;       
-                    $response['status'] = TRUE;             
-                }else{
-                    $response['message'] = 'Order data not found';                  
-                    $response['status'] = FALSE; 
-                }
+                    $orders_data['products'] = $sql_query->result_array();
+                }    
+                $response['orders_data'] = $orders_data;       
+                $response['status'] = TRUE;             
+            }else{
+                $response['message'] = 'Order data not found';                  
+                $response['status'] = FALSE; 
             }
         }else{
             $response['status'] = false;
@@ -3198,9 +3073,20 @@ class Customer_api extends REST_Controller {
 
                 $this->db->select($sql_select);
 
-                if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != ""){
+                // get delivery_available_mile
+                $delivery_available_mile = '';
+                $this->db->select('data');
+                $this->db->where("name", 'delivery_available_mile');
+                $this->db->from('setting');
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $delivery_available_mile_data = $sql_query->row();
+                    $delivery_available_mile = $delivery_available_mile_data->data;
+                }
+
+                if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != "" && $delivery_available_mile != ''){
                     $this->db->order_by("distance", "asc");
-                    $this->db->having("distance <=", 100);
+                    $this->db->having("distance <=", $delivery_available_mile);
                 }
 
                 $this->db->where("longitude !=", '');
@@ -3298,66 +3184,60 @@ class Customer_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['customer_id']), 'status' => 1, 'deleted_at' => NULL);
-            $customer = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($customer)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';    
+
+            $sql_select = array(
+                            't1.id',
+                            't1.total',
+                            't1.order_type',
+                            't1.order_status',
+                            't1.favourite',
+                            't3.shop_name',
+                            't3.address as shop_address',
+                            't3.profile_picture as shop_picture',
+                            't1.created_at'
+            );
+            $this->db->select($sql_select);
+
+            $this->db->from('orders t1');
+            $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+
+            if(isset($_POST['cuisines']) && !is_null($_POST['cuisines']) && $_POST['cuisines'] != ''){
+                $cuisines = explode(',', $_POST['cuisines']);
+                $this->db->join('order_items t4', 't1.id = t4.order_id','left');
+                $this->db->join('item t5', 't4.item_id = t5.id','left');
+                $this->db->where_in('t5.cuisine_id',$cuisines);
+                $response['cuisines'] = $cuisines;
+            }
+
+            if(isset($_POST['date']) && !is_null($_POST['date']) && $_POST['date'] != ''){
+                $this->db->where('DATE(t1.created_at)', $_POST['date']);
+            }
+            $this->db->where('t1.customer_id',$_POST['customer_id']);
+            $this->db->order_by("t1.created_at", "desc");
+
+            $limit = 10; // messages per page
+            if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
+                $start = $limit * ($_POST['page_number'] - 1);
+                $this->db->limit($limit, $start);
             }else{
-                $sql_select = array(
-                                't1.id',
-                                't1.total',
-                                't1.order_type',
-                                't1.order_status',
-                                't1.favourite',
-                                't3.shop_name',
-                                't3.address as shop_address',
-                                't3.profile_picture as shop_picture',
-                                't1.created_at'
-                );
-                $this->db->select($sql_select);
-
-                $this->db->from('orders t1');
-                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
-
-                if(isset($_POST['cuisines']) && !is_null($_POST['cuisines']) && $_POST['cuisines'] != ''){
-                    $cuisines = explode(',', $_POST['cuisines']);
-                    $this->db->join('order_items t4', 't1.id = t4.order_id','left');
-                    $this->db->join('item t5', 't4.item_id = t5.id','left');
-                    $this->db->where_in('t5.cuisine_id',$cuisines);
-                    $response['cuisines'] = $cuisines;
-                }
-
-                if(isset($_POST['date']) && !is_null($_POST['date']) && $_POST['date'] != ''){
-                    $this->db->where('DATE(t1.created_at)', $_POST['date']);
-                }
-                $this->db->where('t1.customer_id',$_POST['customer_id']);
-                $this->db->order_by("t1.created_at", "desc");
-
-                $limit = 10; // messages per page
-                if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
-                    $start = $limit * ($_POST['page_number'] - 1);
-                    $this->db->limit($limit, $start);
+                if(isset($_POST['keyword']) && !is_null($_POST['keyword']) && $_POST['keyword'] != ''){
+                    $this->db->where("t3.shop_name LIKE '%".$_POST['keyword']."%'");
                 }else{
-                    if(isset($_POST['keyword']) && !is_null($_POST['keyword']) && $_POST['keyword'] != ''){
-                        $this->db->where("t3.shop_name LIKE '%".$_POST['keyword']."%'");
-                    }else{
-                        $this->db->limit($limit);
-                    }
+                    $this->db->limit($limit);
                 }
+            }
 
-                
+            
 
-                $sql_query = $this->db->get();
-                if ($sql_query->num_rows() > 0){
-                    $orders_data = $sql_query->result_array();
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $orders_data = $sql_query->result_array();
 
-                    $response['orders'] = $orders_data;
-                    $response['status'] = TRUE;
-                }else{
-                    $response['message'] = 'No any order history found';                  
-                    $response['status'] = FALSE; 
-                }
+                $response['orders'] = $orders_data;
+                $response['status'] = TRUE;
+            }else{
+                $response['message'] = 'No any order history found';                  
+                $response['status'] = FALSE; 
             }
 
         }else{
@@ -3372,55 +3252,50 @@ class Customer_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['customer_id']), 'status' => 1, 'deleted_at' => NULL);
-            $customer = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($customer)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';    
+
+            $sql_select = array(
+                            't1.id',
+                            't1.total',
+                            't1.order_type',
+                            't1.order_status',
+                            't1.favourite',
+                            't3.shop_name',
+                            't3.address as shop_address',
+                            't3.profile_picture as shop_picture',
+                            't1.created_at',
+                            't1.schedule_date'
+            );
+            $this->db->select($sql_select);
+
+            $this->db->from('orders t1');
+            $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+
+            $this->db->where('t1.customer_id',$_POST['customer_id']);
+            $this->db->order_by("t1.created_at", "desc");
+
+            $order_status = array('0','1', '2', '3', '4', '5');
+            $order_type = array('5' ,'6');
+            $this->db->where_in('t1.order_type', $order_type);
+            $this->db->where_in('t1.order_status', $order_status);
+
+            $today = date('Y-m-d');
+            $add_days = 6;
+            $added_date = date('Y-m-d',strtotime($today) + (24*3600*$add_days));
+
+            $this->db->where('DATE(t1.schedule_date) >=', $today);  
+            $this->db->where('DATE(t1.schedule_date) <=', $added_date);  
+
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $orders_data = $sql_query->result_array();
+
+                $response['orders'] = $orders_data;
+                $response['status'] = TRUE;
             }else{
-                $sql_select = array(
-                                't1.id',
-                                't1.total',
-                                't1.order_type',
-                                't1.order_status',
-                                't1.favourite',
-                                't3.shop_name',
-                                't3.address as shop_address',
-                                't3.profile_picture as shop_picture',
-                                't1.created_at',
-                                't1.schedule_date'
-                );
-                $this->db->select($sql_select);
-
-                $this->db->from('orders t1');
-                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
-
-                $this->db->where('t1.customer_id',$_POST['customer_id']);
-                $this->db->order_by("t1.created_at", "desc");
-
-                $order_status = array('0','1', '2', '3', '4', '5');
-                $order_type = array('5' ,'6');
-                $this->db->where_in('t1.order_type', $order_type);
-                $this->db->where_in('t1.order_status', $order_status);
-
-                $today = date('Y-m-d');
-                $add_days = 6;
-                $added_date = date('Y-m-d',strtotime($today) + (24*3600*$add_days));
-
-                $this->db->where('DATE(t1.schedule_date) >=', $today);  
-                $this->db->where('DATE(t1.schedule_date) <=', $added_date);  
-
-                $sql_query = $this->db->get();
-                if ($sql_query->num_rows() > 0){
-                    $orders_data = $sql_query->result_array();
-
-                    $response['orders'] = $orders_data;
-                    $response['status'] = TRUE;
-                }else{
-                    $response['message'] = 'No any order history found';                  
-                    $response['status'] = FALSE; 
-                }
+                $response['message'] = 'No any order history found';                  
+                $response['status'] = FALSE; 
             }
+
 
         }else{
             $response['status'] = false;
@@ -3434,53 +3309,47 @@ class Customer_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['customer_id']), 'status' => 1, 'deleted_at' => NULL);
-            $customer = (array)$this->db->get_where('customer',$where)->row();
-            if(empty($customer)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';    
+
+            $sql_select = array(
+                            't1.id',
+                            't1.total',
+                            't1.order_type',
+                            't1.order_status',
+                            't3.shop_name',
+                            't3.address as shop_address',
+                            't3.profile_picture as shop_picture',
+                            't1.created_at'
+            );
+            $this->db->select($sql_select);
+
+            $this->db->from('orders t1');
+            $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+
+            $this->db->where('t1.customer_id',$_POST['customer_id']);
+            $this->db->where('t1.favourite',1);
+            $this->db->order_by("t1.created_at", "desc");
+
+            $limit = 10; // messages per page
+            if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
+                $start = $limit * ($_POST['page_number'] - 1);
+                $this->db->limit($limit, $start);
             }else{
-                $sql_select = array(
-                                't1.id',
-                                't1.total',
-                                't1.order_type',
-                                't1.order_status',
-                                't3.shop_name',
-                                't3.address as shop_address',
-                                't3.profile_picture as shop_picture',
-                                't1.created_at'
-                );
-                $this->db->select($sql_select);
-
-                $this->db->from('orders t1');
-                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
-
-                $this->db->where('t1.customer_id',$_POST['customer_id']);
-                $this->db->where('t1.favourite',1);
-                $this->db->order_by("t1.created_at", "desc");
-
-                $limit = 10; // messages per page
-                if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
-                    $start = $limit * ($_POST['page_number'] - 1);
-                    $this->db->limit($limit, $start);
+                if(isset($_POST['keyword']) && !is_null($_POST['keyword']) && $_POST['keyword'] != ''){
+                    $this->db->where("t3.shop_name LIKE '%".$_POST['keyword']."%'");
                 }else{
-                    if(isset($_POST['keyword']) && !is_null($_POST['keyword']) && $_POST['keyword'] != ''){
-                        $this->db->where("t3.shop_name LIKE '%".$_POST['keyword']."%'");
-                    }else{
-                        $this->db->limit($limit);
-                    }
+                    $this->db->limit($limit);
                 }
-                
+            }
+            
 
-                $sql_query = $this->db->get();
-                if ($sql_query->num_rows() > 0){
-                    $orders_data = $sql_query->result_array();
-                    $response['orders'] = $orders_data;
-                    $response['status'] = TRUE;
-                }else{
-                    $response['message'] = 'No any order history found';                  
-                    $response['status'] = FALSE; 
-                }
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $orders_data = $sql_query->result_array();
+                $response['orders'] = $orders_data;
+                $response['status'] = TRUE;
+            }else{
+                $response['message'] = 'No any order history found';                  
+                $response['status'] = FALSE; 
             }
 
         }else{
@@ -3496,21 +3365,14 @@ class Customer_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['order_id']));
-            $customer = (array)$this->db->get_where('orders',$where)->row();
-            if(empty($customer)){
-                $response['status'] = false;
-                $response['message'] = 'Order not found';    
+            $update_data = array('favourite' => intval($_POST['favourite']));
+            $this->db->where('id', intval($_POST['order_id']));
+            if($this->db->update('orders', $update_data)){
+                $response['status'] = true;
+                $response['message'] = 'Favourite order updated';    
             }else{
-                $update_data = array('favourite' => intval($_POST['favourite']));
-                $this->db->where('id', intval($_POST['order_id']));
-                if($this->db->update('orders', $update_data)){
-                    $response['status'] = true;
-                    $response['message'] = 'Favourite order updated';    
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
-                }
+                $response['status'] = false;
+                $response['message'] = 'Server encountered an error. please try again';
             }
         }else{
             $response['status'] = false;
@@ -3526,21 +3388,14 @@ class Customer_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
         if(empty($errorPost)){
-            $where = array('id' => intval($_POST['order_id']));
-            $customer = (array)$this->db->get_where('orders',$where)->row();
-            if(empty($customer)){
-                $response['status'] = false;
-                $response['message'] = 'Order not found';    
+            $update_data = array('rating' => number_format((float)$_POST['star'], 1, '.', '') );
+            $this->db->where('id', intval($_POST['order_id']));
+            if($this->db->update('orders', $update_data)){
+                $response['status'] = true;
+                $response['message'] = 'Thank you for rating';    
             }else{
-                $update_data = array('rating' => number_format((float)$_POST['star'], 1, '.', '') );
-                $this->db->where('id', intval($_POST['order_id']));
-                if($this->db->update('orders', $update_data)){
-                    $response['status'] = true;
-                    $response['message'] = 'Thank you for rating';    
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
-                }
+                $response['status'] = false;
+                $response['message'] = 'Server encountered an error. please try again';
             }
         }else{
             $response['status'] = false;
@@ -3555,32 +3410,85 @@ class Customer_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $where = array('id' => intval($_POST['order_id']), 'customer_id' => intval($_POST['customer_id']), 'order_type' => intval($_POST['customer_id']));
-            $order = (array)$this->db->get_where('orders',$where)->row();
+            $data = array('order_status' => 8);
+            $this->db->where('id',$_POST['order_id']);
+            if($this->db->update('orders',$data)){
 
-            $this->db->select('id');
-            $this->db->where("id",intval($_POST['order_id']));
-            $this->db->where("customer_id",intval($_POST['customer_id']));
-            $weekly = array('5','6');
-            $this->db->where_in("order_type", $weekly);
-            $this->db->from("orders");
-            $sql_query = $this->db->get();
-            if ($sql_query->num_rows() > 0){
+                $this->db->select('t1.quantity as order_quantity, t2.quantity as item_quantity, t1.item_id');
+                $this->db->from('order_items t1');
+                $this->db->join('item t2', 't1.item_id = t2.id');
+                $this->db->where("order_id", $_POST['order_id']);
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $quantity_data = $sql_query->result_array();
 
-                $data = array('order_status' => 8);
-                $this->db->where('id',$_POST['order_id']);
-                if($this->db->update('orders',$data)){
-                    $response['status'] = true;
-                    $response['message'] = 'Order cancelled successfully';
-                }else{
-                    $response['status'] = false;
-                    $response['message'] = 'Server encountered an error. please try again';
+                    foreach ($quantity_data as $key => $value) {
+
+                        $quantity = $value['item_quantity'] + $value['order_quantity'];
+                        $data = array('quantity' => $quantity);
+                        $this->db->where("id", $value['item_id']);
+                        $this->db->where("inventory_status", 1);
+                        $this->db->update('item',$data);
+                        
+                    }
+
                 }
-                
+                $response['status'] = true;
+                $response['message'] = 'Order cancelled successfully';
             }else{
                 $response['status'] = false;
-                $response['message'] = 'Order not found'; 
+                $response['message'] = 'Server encountered an error. please try again';
             }
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+        $errorPost = $this->ValidatePostFields($postFields);
+    }
+
+    public function notifications_post(){
+        $postFields['customer_id'] = $_POST['customer_id'];
+
+        if(empty($errorPost)){
+
+            $notification_data = array();
+            $this->db->select('*');
+            $this->db->from('notification');
+            $this->db->where("customer_id", $_POST['customer_id']);
+            $this->db->order_by("created_at", "desc");
+
+            $limit = 10; // messages per page
+            if(isset($_POST['page_number']) && $_POST['page_number'] != "" && $_POST['page_number'] != "1"){
+                $start = $limit * ($_POST['page_number'] - 1);
+                $this->db->limit($limit, $start);
+            }else{
+                $this->db->limit($limit);
+            }
+        
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $notification_data = $sql_query->result_array();
+                foreach ($notification_data as $key => $value) {
+
+                    $notification_data[$key]['profile_picture'] = '';
+                    $this->db->select('t1.profile_picture');
+                    $this->db->from('shop t1');
+                    $this->db->join('orders t2', 't2.shop_id = t1.id');
+                    $this->db->where("t2.id", $value['order_id']);
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $shop_data = (array)$sql_query->row();
+                        $notification_data[$key]['profile_picture'] = $shop_data['profile_picture'];
+                    }
+
+                }
+                $response['status'] = true;
+            }else{
+                $response['status'] = false;
+            }
+            $response['notification'] = $notification_data;
+
         }else{
             $response['status'] = false;
             $response['message'] = $errorPost;

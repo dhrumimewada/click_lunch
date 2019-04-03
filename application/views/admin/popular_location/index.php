@@ -22,7 +22,7 @@
                             <thead>
                             <tr>
                                 <th>Location</th>
-                                <th>Zipcode</th>
+                                <th>Zip Code</th>
                                 <th>Location Type</th>
                                 <th>Created Date</th>
                                 <th class='text-center'>Action</th>

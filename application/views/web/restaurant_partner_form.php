@@ -16,20 +16,34 @@ $post_link = base_url().'restaurant-partner-form';
                 </div>
                 <div class="col-md-12 form-border">
                     <form class="partner-form-validate mt-5" action="<?php echo $post_link; ?>" method="post">
-                        <div class="form-group">
-                            <?php
-    $field_value = NULL;
-    $temp_value = set_value('shop_name');
-    if (isset($temp_value) && !empty($temp_value)) {
-        $field_value = $temp_value;
-    }
-    ?>
-                            <input type="text" name="shop_name" class="form-control input-border" placeholder="Restaurant Name *" value="<?php echo $field_value; ?>" />
-                            <div class="validation-error-label">
-                                <?php echo form_error('shop_name'); ?>
+                        <div class="row">
+                            <div class="form-group col-6">
+                                <?php
+        $field_value = NULL;
+        $temp_value = set_value('shop_name');
+        if (isset($temp_value) && !empty($temp_value)) {
+            $field_value = $temp_value;
+        }
+        ?>
+                                <input type="text" name="shop_name" class="form-control input-border" placeholder="Restaurant Name *" value="<?php echo $field_value; ?>" />
+                                <div class="validation-error-label">
+                                    <?php echo form_error('shop_name'); ?>
+                                </div>
+                            </div>
+                            <div class="form-group col-6">
+                                <?php
+        $field_value = NULL;
+        $temp_value = set_value('vender_name');
+        if (isset($temp_value) && !empty($temp_value)) {
+            $field_value = $temp_value;
+        }
+        ?>
+                                <input type="text" name="vender_name" class="form-control input-border" placeholder="Your Full Name *" value="<?php echo $field_value; ?>" />
+                                <div class="validation-error-label">
+                                    <?php echo form_error('vender_name'); ?>
+                                </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="form-group col-6">
                                 <?php
@@ -68,7 +82,16 @@ $post_link = base_url().'restaurant-partner-form';
         $field_value = $temp_value;
     }
     ?>
-                            <textarea class="form-control input-border exampleFormControlTextarea1" name="address" id="" rows="3" placeholder="Restaurant Address *"><?php echo $field_value; ?></textarea>
+                            <input type="text" class="form-control input-border" name="address" id="autocomplete" placeholder="Restaurant Address *" value="<?php echo $field_value; ?>" />
+                            <input type="hidden" id="administrative_area_level_2" name="city">
+                            <input type="hidden" id="administrative_area_level_1" name="state">
+
+                            <input type="hidden" name="latitude" id="latitude" value="">
+                            <input type="hidden" name="longitude" id="longitude" value="">
+                            <input type="hidden" name="zipcode" id="zipcode" value="">
+                            <input type="hidden" name="country" id="country" value="">
+                            <input type="hidden" name="state" id="state" value="">
+                            <input type="hidden" name="city" id="city" value="">
                             <div class="validation-error-label">
                                 <?php echo form_error('address'); ?>
                             </div>
@@ -168,3 +191,85 @@ $post_link = base_url().'restaurant-partner-form';
 </div>
 <script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
 <script src="<?php echo base_url().'web-assets/js/custom/restaurant_partner_form.js'; ?>"></script>
+<script>
+
+  var placeSearch, autocomplete;
+
+  var componentForm = {
+
+        administrative_area_level_2: 'long_name',
+        administrative_area_level_1: 'long_name'
+      };
+
+
+
+  function initAutocomplete() {
+    autocomplete = new google.maps.places.Autocomplete(
+       (document.getElementById('autocomplete')),
+        {types: ['geocode'] });
+    autocomplete.addListener('place_changed', fillInAddress);
+  }
+
+  function fillInAddress() {
+    var place = autocomplete.getPlace();
+
+     for (var component in componentForm) {
+      document.getElementById(component).value = '';
+      document.getElementById(component).disabled = false;
+    }
+
+   if (typeof place.address_components != "undefined" || place.address_components != null){
+
+    $('#latitude').val(place.geometry.location.lat());
+    $('#longitude').val(place.geometry.location.lng());
+
+    console.log(place.address_components);
+
+        for (var i = 0; i < place.address_components.length; i++) {
+            for (var j = 0; j < place.address_components[i].types.length; j++){
+                if (place.address_components[i].types[j] == "postal_code") {
+                    $('#zipcode').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "country") {
+                    $('#country').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "administrative_area_level_1") {
+                    $('#state').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "administrative_area_level_2") {
+                    $('#city').val(place.address_components[i].long_name);
+                }
+            }
+            var addressType = place.address_components[i].types[0];
+            if (componentForm[addressType]) {
+                var val = place.address_components[i][componentForm[addressType]];
+                document.getElementById(addressType).value = val;
+            }
+        }
+    }
+  }
+
+  function geolocate() {
+    $('.loader').show();
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var geolocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        // console.log(geolocation);
+        var circle = new google.maps.Circle({
+          center: geolocation,
+          radius: position.coords.accuracy
+        });
+        autocomplete.setBounds(circle.getBounds());
+      });
+    }
+     $('.loader').hide();
+  }
+</script>
+<?php
+$google_key = $this->config->item("google_key");
+?>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_key; ?>&libraries=places&callback=initAutocomplete" async defer></script>

@@ -85,6 +85,7 @@ class Shop_ipad_api extends REST_Controller {
                 $response['status'] = true;
                 $response['message'] = 'Login successfully.';
                 $response['profile'] = (array)$shop_details;
+                $response['apple_pay_api'] = (array)$this->db->get_where('payment_settings',array('shop_id'=>$shop_details->id,'payment_type'=>1))->row();
 
                 }else{
                     $response['status'] = false;
@@ -398,7 +399,8 @@ class Shop_ipad_api extends REST_Controller {
         $postFields['shop_id'] = $_POST['shop_id']; 
         $postFields['takeout_delivery_status'] = $_POST['takeout_delivery_status'];
         $postFields['min_order'] = $_POST['min_order'];
-        $postFields['service_charge'] = $_POST['service_charge'];
+        //$postFields['service_charge'] = $_POST['service_charge'];
+        $postFields['weekly_status'] = $_POST['weekly_status'];
         $errorPost = $this->ValidatePostFields($postFields);
 
         if(empty($errorPost)){
@@ -412,7 +414,8 @@ class Shop_ipad_api extends REST_Controller {
 
             	$data['takeout_delivery_status'] = $_POST['takeout_delivery_status'];
             	$data['min_order'] = number_format($_POST['min_order'],2);
-            	$data['service_charge'] = number_format($_POST['service_charge'],2);
+            	//$data['service_charge'] = number_format($_POST['service_charge'],2);
+                $data['weekly_status'] = $_POST['weekly_status'];
             	$this->db->update('shop',$data,array('id'=>$_POST['shop_id']));
 
                 $response['status'] = true;
@@ -430,10 +433,10 @@ class Shop_ipad_api extends REST_Controller {
     }
 
     public function store_time_post(){
+        //$jsondata = $_POST['jsondata'];
+    	$data = json_decode($_POST['jsondata'], true);
 
-    	$data = json_decode(file_get_contents('php://input'), true);
-
-    	//print_r($data['Sunday']);exit;
+    	//print_r($data);exit;
         $postFields['shop_id'] = $data['shop_id'];        
         $errorPost = $this->ValidatePostFields($postFields);
 
@@ -965,6 +968,220 @@ class Shop_ipad_api extends REST_Controller {
 
         $errorPost = $this->ValidatePostFields($postFields);
     }
+
+    public function product_stock_post(){
+        $postFields['shop_id'] = $_POST['shop_id']; 
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
+            $shop = (array)$this->db->get_where('shop',$where)->row();
+            if(empty($shop)){
+                $response['status'] = false;
+                $response['message'] = 'Restaurant not found';
+            }else{
+
+                $item_data = array();
+                $this->db->select('*');
+                $this->db->where("deleted_at", NULL);
+              //  $this->db->where("is_active", 1);
+                $this->db->where("shop_id", $_POST['shop_id']);
+                $this->db->from('item');
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $item_data = $sql_query->result_array();                        
+                }               
+
+               
+
+                $response['status'] = true;
+                $response['products'] = $item_data;
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function product_status_get($product_id="")
+    {       
+        $product_info = (array)$this->db->get_where('item',array('id'=>$product_id))->row(); 
+        if($product_id != "" && !empty($product_info))
+        {
+            if($product_info['is_active'] == 0)
+            {
+                $data['is_active'] = 1;    
+            }
+            else
+            {
+                $data['is_active'] = 0;
+            }
+            $this->db->update('item',$data,array('id'=>$product_id));
+            $response['status'] = true;
+            $response['message'] = 'Product status updated successfully';           
+
+        }
+        else
+        {
+            $response['status'] = false;
+            $response['message'] = 'Paramater missing';
+        }              
+        $this->response($response);
+    }
+
+    public function dashboard_get($shop_id="")
+    {    
+        if($shop_id != "" )
+        {
+            $data['order_count'] = $this->db->get_where('orders',array('shop_id'=>$shop_id,'deleted_at'=>null))->num_rows();
+            $data['product_count'] = $this->db->get_where('item',array('shop_id'=>$shop_id,'deleted_at'=>null))->num_rows();
+            $data['promocode_count'] = $this->db->get_where('promocode',array('shop_id'=>$shop_id,'deleted_at'=>null,'status'=>1))->num_rows();
+            $data['total_earning'] = 7854;
+
+            $data['today_earning'] = 90;
+            $data['weekly_earning'] = 654;
+            $data['monthly_earning'] = 5000;
+            $data['yearly_earning'] = 7854;
+
+            $sql_select = array(
+                                't1.id',
+                                't1.total',
+                                't1.order_type',
+                                't1.order_status',
+                                't2.username',
+                                'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
+                                't4.latitude as address_latitude',
+                                't4.longitude as address_longitude',
+                                't3.shop_name',
+                                't3.address as shop_address',
+                                't3.latitude as shop_latitude',
+                                't3.longitude as shop_longitude',
+                                't3.profile_picture as shop_picture',
+                                'IF(t1.order_type=5, t1.schedule_date, "") as schedule_date',
+                                'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
+                                'IF(t1.order_type=2, t1.later_time, "") as later_time',
+                                't1.created_at'
+                );
+                $this->db->select($sql_select);
+
+                $this->db->from('orders t1');
+                $this->db->join('customer t2', 't1.customer_id = t2.id','left');
+                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+                $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
+
+                $this->db->where('t1.shop_id', $shop_id);
+                $this->db->order_by('t1.id', 'DESC');
+                $this->db->limit(15, 0);
+                if($_POST['order_type'] == 1)
+                {
+                    $wh = '(t1.order_type = 1 OR t1.order_type = 2) ';
+                    $this->db->where($wh);                  
+                }
+                else if($_POST['order_type'] == 2)
+                {
+                    $wh = '(t1.order_type = 3 OR t1.order_type = 4) ';
+                    $this->db->where($wh);
+                }
+                else if($_POST['order_type'] == 3)
+                {
+                    $wh = '(t1.order_type = 5 OR t1.order_type = 6) ';
+                    $this->db->where('t1.order_type', $wh);                 
+                }              
+              
+
+                $sql_query = $this->db->get();
+                $last_query = $this->db->last_query();
+               // print_r($last_query);exit;
+                if ($sql_query->num_rows() > 0){
+                    $orders_data = $sql_query->result_array();     
+
+                    $sql_select = array(
+                                    't2.name'
+                    );
+
+                    foreach ($orders_data as $key => $value) {
+                        $this->db->select($sql_select);
+                        $this->db->from('order_items t1');
+                        $this->db->where('t1.order_id', $value['id']);
+                        $this->db->join('item t2', 't1.item_id = t2.id','left');
+
+                        $sql_query = $this->db->get();
+                        if ($sql_query->num_rows() > 0){
+                            $products_data = $sql_query->result_array();   
+                            $products = array_column($products_data, 'name');
+                            $orders_data[$key]['products'] = implode(', ', $products);
+
+
+                            if($value['order_type'] == 1){
+                                $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
+                                $added_time = $my_date->add(new DateInterval('PT30M'));
+                                $orders_data[$key]['delivery_time'] = $added_time->format('h:i A');
+                            }else if($value['order_type'] == 2){
+                                $orders_data[$key]['delivery_time'] = $value['later_time'];
+                            }else if($value['order_type'] == 5){
+                                $orders_data[$key]['delivery_time'] = $value['schedule_time'];
+                            }else{
+                                $orders_data[$key]['delivery_time'] = '';
+                            }
+
+                        }else{
+                             $orders_data = array();
+                        }
+                    }
+                }
+            $data['recent_order'] = $orders_data;
+            
+            $response['status'] = true;
+            $response['message'] = 'shop dashboard data';  
+            $response['data'] = $data;           
+
+        }
+        else
+        {
+            $response['status'] = false;
+            $response['message'] = 'Paramater missing';
+        }              
+        $this->response($response);
+    }
+
+    public function update_payment_api_post()
+    {
+        $postFields['shop_id'] = $_POST['shop_id']; 
+        $postFields['api_key'] = $_POST['api_key']; 
+        $postFields['payment_type'] = $_POST['payment_type']; 
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost))
+        {
+            $payment_api_info = (array)$this->db->get_where('payment_settings',array('shop_id'=>$_POST['shop_id'],'payment_type'=>1))->row();
+            if(!empty($payment_api_info))
+            {
+                $data['api_key'] = $_POST['api_key'];
+                $data['updated_at'] = date('Y-m-d H:i:s');
+                $this->db->update('payment_settings',$data,array('shop_id'=>$_POST['shop_id']));
+            }
+            else
+            {
+                $data['shop_id'] = $_POST['shop_id'];
+                $data['api_key'] = $_POST['api_key'];
+                $data['payment_type'] = 1;
+                $this->db->insert('payment_settings',$data);
+            }
+            $response['status'] = true;
+            $response['message'] = 'Payment api updated successfully.';
+
+        }
+        else
+        {
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
 
     public function send_mail2($to,$subject,$message){
 

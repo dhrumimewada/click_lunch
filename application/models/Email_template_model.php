@@ -261,9 +261,9 @@ class Email_template_model extends CI_Model {
 		$return_data = array();
 
 		if(isset($X_number_of_order) && $X_number_of_order != ''){
-			$this->db->select('t1.device_type,t1.device_token,t1.id');
+			$this->db->select('t1.device_type, t1.device_token, t2.customer_id');
 			$this->db->from('customer t1');
-			$this->db->join('orders t2', 't1.id = t2.customer_id', "left");
+			$this->db->join('orders t2', 't1.id = t2.customer_id');
 			$this->db->where('t1.deleted_at', NULL);
 			$this->db->where('t1.status', 1);
 			$this->db->where('t2.order_status', 6);
@@ -281,13 +281,13 @@ class Email_template_model extends CI_Model {
 			$sql_query = $this->db->get();
 			if ($sql_query->num_rows() > 0){
 				$valid_customers = $sql_query->result_array();
-				$ids_array = array_column($valid_customers, 'id');
+				$ids_array = array_column($valid_customers, 'customer_id');
 				$total_data = array_count_values($ids_array);
 				$return_data = array();
 				foreach ($total_data as $key => $value) {
 					if($value >= $X_number_of_order){
 						foreach ($valid_customers as $key1 => $value1) {
-							if($value1['id'] == $key){
+							if($value1['customer_id'] == $key){
 								array_push($return_data, $valid_customers[$key1]);
 							}
 						}
@@ -320,7 +320,7 @@ class Email_template_model extends CI_Model {
 	public function get_new_customers_for_push(){
 		$return_data = array();
 
-		$this->db->select('t1.device_type,t1.device_token');
+		$this->db->select('t1.device_type,t1.device_token, t2.customer_id');
 		$this->db->from('customer t1');
 		$this->db->join('orders t2', 't1.id = t2.customer_id', "left");
 		$this->db->where('t2.customer_id IS NULL',null,true);
@@ -351,7 +351,7 @@ class Email_template_model extends CI_Model {
         if($this->input->post("group") == 4){
 
         	if($this->auth->is_admin()){
-        		$this->db->select('device_type,device_token');
+        		$this->db->select('id as customer_id,device_type,device_token');
 		        $this->db->where("deleted_at", NULL);
 		        $this->db->where("status", 1);
 
@@ -368,7 +368,7 @@ class Email_template_model extends CI_Model {
 		        }
         	}else{
 
-		        $this->db->select('t2.device_type,t2.device_token');
+		        $this->db->select('t2.customer_id, t2.device_type, t2.device_token');
 		        $this->db->where("t2.deleted_at", NULL);
 		        $this->db->where("t2.status", 1);
 
@@ -401,7 +401,7 @@ class Email_template_model extends CI_Model {
 
 			if(isset($_POST['item']) && is_array($_POST['item']) && !empty($_POST['item'])){
 
-				$this->db->select('t2.device_type,t2.device_token,t1.id');
+				$this->db->select('t2.device_type, t2.device_token, t1.id, t1.customer_id');
 		        $this->db->where("t2.deleted_at", NULL);
 		        $this->db->where("t2.status", 1);
 
@@ -434,7 +434,7 @@ class Email_template_model extends CI_Model {
 
 			if(isset($_POST['shop']) && is_array($_POST['shop']) && !empty($_POST['shop'])){
 
-				$this->db->select('t1.device_type,t1.device_token');
+				$this->db->select('t1.device_type,t1.device_token, t2.customer_id');
 				$this->db->from('customer t1');
 				$this->db->join('orders t2', 't1.id = t2.customer_id', "left");
 				$this->db->where('t1.deleted_at', NULL);
@@ -460,6 +460,8 @@ class Email_template_model extends CI_Model {
 
 		}
 
+		//return $emails_array;
+
 		if(is_array($emails_array) && !empty($emails_array)){
 			$unique_array = array_map("unserialize", array_unique(array_map("serialize", $emails_array)));
 			//return $unique_array;
@@ -467,21 +469,28 @@ class Email_template_model extends CI_Model {
 			$ios_data = array();
   			$android_data = array();
 
+  			$notification_type = 1;
+
 			foreach ($unique_array as $key => $value) {
 				if($value['device_type'] == 1){
-	  				array_push($android_data, $device_type_token_array[$key]['device_token']);
+	  				array_push($android_data, $unique_array[$key]['device_token']);
 	  			}else if($value['device_type'] == 2){
-	  				array_push($ios_data, $device_type_token_array[$key]['device_token']);
+	  				array_push($ios_data, $unique_array[$key]['device_token']);
 	  			}else{
 
 	  			}
+	  			$customer_id = $value['customer_id'];
+	  			notification_add($notification_type, $customer_id, $notification_title, $notification_message);
 			}
 
+			$notification_message_array = array('message' => $notification_message);
+			//return $android_data;
+
 			if(!empty($android_data)){
-				$data1 = send_push_multiple_android($android_data, $ios_data, $notification_title, $notification_message, 'admin_notification');
+				$data1 = send_push_multiple_android($android_data, $notification_title, $notification_message_array,'general_notification');
 			}
 			if(!empty($ios_data)){
-				$data2 = send_push_multiple_ios($ios_data, $notification_title, $notification_message, 'admin_notification');
+				$data2 = send_push_multiple_ios($ios_data, $notification_title, $notification_message_array, 'general_notification');
 			}
 			
 			$this->auth->set_status_message("Notification(s) sent successfully");

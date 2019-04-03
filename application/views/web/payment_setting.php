@@ -42,8 +42,16 @@ $home_link = base_url().'welcome';
 										}else{
 											$img_name = '';
 										}
+										if($img_name == ''){
 										?>
-										<img src="<?php echo $img_path.$img_name; ?>" />
+											<b>Other</b>
+										<?php
+										}else{
+										?>
+											<img src="<?php echo $img_path.$img_name; ?>" />
+										<?php
+										}
+										?>
 										<div class="card-expiry-date">Ex - 
 											<?php echo decrypt($value['expiry_date']); ?>
 										</div>
@@ -180,28 +188,32 @@ $home_link = base_url().'welcome';
     }
     ?>
 										<div class="form-check">
-											<input class="form-check-input" type="radio" name="card_type" id="selectCard1" value="1" <?php echo ($field_value == 1)?'checked':''; ?> >
-											<label class="form-check-label visa" for="selectCard1"></label>
+											<input class="form-check-input" type="radio" name="card_type" id="1" value="1" <?php echo ($field_value == 1)?'checked':''; ?> >
+											<label class="form-check-label visa" for="1"></label>
 										</div>
 										<div class="form-check">
-											<input class="form-check-input" type="radio" name="card_type" id="selectCard2" value="2" <?php echo ($field_value == 2)?'checked':''; ?> >
-											<label class="form-check-label master-card" for="selectCard2"></label>
+											<input class="form-check-input" type="radio" name="card_type" id="2" value="2" <?php echo ($field_value == 2)?'checked':''; ?> >
+											<label class="form-check-label master-card" for="2"></label>
 										</div>
 										<div class="form-check">
-											<input class="form-check-input" type="radio" name="card_type" id="selectCard3" value="3" <?php echo ($field_value == 3)?'checked':''; ?> >
-											<label class="form-check-label american-express" for="selectCard3"></label>
+											<input class="form-check-input" type="radio" name="card_type" id="3" value="3" <?php echo ($field_value == 3)?'checked':''; ?> >
+											<label class="form-check-label american-express" for="3"></label>
 										</div>
 										<div class="form-check">
-											<input class="form-check-input" type="radio" name="card_type" id="selectCard4" value="4" <?php echo ($field_value == 4)?'checked':''; ?> >
-											<label class="form-check-label jcb" for="selectCard4"></label>
+											<input class="form-check-input" type="radio" name="card_type" id="4" value="4" <?php echo ($field_value == 4)?'checked':''; ?> >
+											<label class="form-check-label jcb" for="4"></label>
 										</div>
 										<div class="form-check">
-											<input class="form-check-input" type="radio" name="card_type" id="selectCard5" value="5" <?php echo ($field_value == 5)?'checked':''; ?> >
-											<label class="form-check-label diners" for="selectCard5"></label>
+											<input class="form-check-input" type="radio" name="card_type" id="5" value="5" <?php echo ($field_value == 5)?'checked':''; ?> >
+											<label class="form-check-label diners" for="5"></label>
 										</div>
 										<div class="form-check">
-											<input class="form-check-input" type="radio" name="card_type" id="selectCard6" value="6" <?php echo ($field_value == 6)?'checked':''; ?> >
-											<label class="form-check-label discover" for="selectCard6"></label>
+											<input class="form-check-input" type="radio" name="card_type" id="6" value="6" <?php echo ($field_value == 6)?'checked':''; ?> >
+											<label class="form-check-label discover" for="6"></label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="card_type" id="7" value="7" <?php echo ($field_value == 7)?'checked':''; ?> >
+											<label class="form-check-label other" for="7"><b>Other</b></label>
 										</div>
 									</div>
 									<div class="validation-error-label">

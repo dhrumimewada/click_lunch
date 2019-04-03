@@ -52,7 +52,7 @@ class Cart extends CI_Controller {
 
 		$is_customer = $this->auth->is_customer();
 		$is_logged_in = $this->auth->is_logged_in();
-		if(is_logged_in && $is_customer){
+		if($is_logged_in && $is_customer){
 
 			if(isset($_SESSION['delivery_address_id']) && $_SESSION['delivery_address_id'] != ''){
 				$where = array('id' => decrypt($this->session->userdata('delivery_address_id')));
@@ -76,9 +76,6 @@ class Cart extends CI_Controller {
 
 		$additional_recommendation = $this->welcome_model->additional_recommendation_items($this->cart->contents());
 		$output_data['additional_recommendation'] = $additional_recommendation;
-
-		$address_type = $this->config->item("address_type");
-		$output_data['address_type'] = $address_type;
 		$output_data['cart_contents'] = $this->cart->contents();
 		$output_data['cart_total'] = $this->cart->total();
 		$output_data['main_content'] = 'cart';
@@ -180,12 +177,12 @@ class Cart extends CI_Controller {
 	        }
 		}
 
-		// echo "<pre>";
-	 //        print_r($item_data);
-	 //        print_r($insert_data);
-	 //        print_r($this->cart->contents());
-	 //        exit;
-		redirect('cart');
+		//echo "<pre>";
+	        //print_r($item_data);
+	        //print_r($insert_data);
+	        //print_r($this->cart->contents());
+	       // exit;
+		redirect(base_url() . "cart");
 	}
 
 	public function get_recommendation_item_data(){

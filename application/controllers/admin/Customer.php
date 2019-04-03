@@ -243,7 +243,11 @@ class Customer extends CI_Controller {
 		if (isset($id) && !is_null($id) && !empty($id)) {
 			$user_data = array('status' => $status );
 			$this->db->where('id', $id);
-			$this->db->update('customer', $user_data);
+			if($this->db->update('customer', $user_data)){
+				if($status == 2){
+					$result = $this->customer_model->send_silent_push($_POST['id']);
+				}
+			}
 			echo json_encode(array("is_success" => true));
 			return TRUE;
 		}else{

@@ -152,6 +152,10 @@ class Vender_model extends CI_Model {
 		$user_data['order_by_time'] = $this->input->post("order_by_time");
 		$user_data['delivery_time'] = $this->input->post("delivery_time");
 
+		if ($this->input->post("weekly_status")) {
+			$user_data['weekly_status'] = $this->input->post("weekly_status");
+		}
+
 		if (isset($modal_data['profile_picture']) && !empty($modal_data['profile_picture'])){
 			
 			$user_data['profile_picture'] = $modal_data['profile_picture']['file_name'];

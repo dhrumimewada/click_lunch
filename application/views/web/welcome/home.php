@@ -133,22 +133,19 @@ if(isset($banner_list) && !empty($banner_list)){
                 <ul class="nav nav-pills mb-3 list-filter" id="pills-tab" role="tablist">
                     <?php
                     $all_cuisines_url = base_url() . 'web-assets/images/all.png';
-                    ?>
-                    <li class="nav-item">                            
-                        <a class="nav-link active" id="" data-toggle="pill" href="" role="tab" aria-controls="" aria-selected="true"><img src="<?php echo $all_cuisines_url; ?>">All</a>
-                    </li>   
-                    <?php
+
                     foreach ($cuisines as $key => $value) {
-                        //$active = ($key == 0)?'active':'';
+                        $active = ($value['cuisine_name'] == 'All')?'active':'';
                         $photo_url = base_url() . 'web-assets/images/all.png';
                         if (isset($value['cuisine_picture']) && ($value['cuisine_picture'] != '')) {
                             if (file_exists($this->config->item("cuisine_photo_path") . '/'.$value['cuisine_picture'])){
                                 $photo_url = base_url() . $this->config->item("cuisine_photo_path") . '/'.$value['cuisine_picture'];
                             }
                         }
+                        $id = ($value['cuisine_name'] == 'All')?'':$value['id'];
                     ?>
                         <li class="nav-item">                            
-                            <a class="nav-link <?php echo $active; ?>" id="<?php echo $value['id']; ?>" data-toggle="pill" href="" role="tab" aria-controls="" aria-selected="true"><img src="<?php echo $photo_url; ?>"><?php echo $value['cuisine_name']; ?></a>
+                            <a class="nav-link <?php echo $active; ?>" id="<?php echo $id; ?>" data-toggle="pill" href="" role="tab" aria-controls="" aria-selected="true"><img src="<?php echo $photo_url; ?>"><?php echo $value['cuisine_name']; ?></a>
                         </li>   
                     <?php
                     }
@@ -162,10 +159,10 @@ if(isset($banner_list) && !empty($banner_list)){
                         <div class="dropdown delivery review-star ">                          
                             <div class="form-group">
                                 <label class="sort-title-ab">Sort :</label>
-                                <select class="form-control review-star" id="deliver-fee">                                            
+                                <select class="form-control review-star filter" id="deliver-fee">                                            
                                      <option class="sort-dev" value="" disabled selected hidden > Delivery Fee</option>                                
-                                     <option value="">Sort By High</option>
-                                     <option value="">Sort By Low</option>                                                                      
+                                     <option value="1">Sort By High</option>
+                                     <option value="2">Sort By Low</option>                                                                      
                                 </select>
                             </div>                           
                         </div>  
@@ -174,19 +171,18 @@ if(isset($banner_list) && !empty($banner_list)){
                               <div class="form-group">
                                         <label  for="#review-star1" class="review-title">Over</label>
                                         <label  for="#review-star1" class="review-icon"><img src="<?php echo $assets; ?>images/bookmark-star.png"></label>
-                                    <select class="form-control review-star" id="review-star1">                                     
-                                         <option class="sort-dev" value="Over" disabled selected hidden data-imagesrc="<?php echo $assets; ?>images/01.png">4.5</option>       
-                                         <option selected value='' >all</option>
+                                    <select class="form-control review-star filter" id="review-star1">                                     
+                                         <option selected value='' >All</option>
                                          <option value="1" >1</option>
-                                         <option value="1" >1.5</option>
+                                         <option value="1.50" >1.5</option>
                                          <option value="2" >2</option>
-                                         <option value="2" >2.5</option>
+                                         <option value="2.50" >2.5</option>
                                          <option value="3" >3</option>
-                                         <option value="3" >3.5</option>
+                                         <option value="3.50" >3.5</option>
                                          <option value="4" >4</option>     
-                                         <option value="4" >4.5</option>     
+                                         <option value="4.50" >4.5</option>     
                                          <option value="5" >5</option>                                   
-                                         <option value="5" >5.5</option>                                   
+                                         <option value="5.50" >5.5</option>                                   
                                     </select>
                                 </div>                           
                         </div>                        
@@ -198,23 +194,39 @@ if(isset($banner_list) && !empty($banner_list)){
                             <input class="form-check-input filter" type="checkbox" id="filter-popular" value="1" name="filter-popular">
                             <label class="form-check-label" for="filter-popular">Popular</label>
                         </div>
-                        <div class="form-check form-check-inline  Pickup-check delivery">
+                        <!-- <div class="form-check form-check-inline  Pickup-check delivery">
                             <input class="form-check-input" type="checkbox" id="Vegetarian1" value="option1" name="Pickup">
                             <label class="form-check-label" for="Vegetarian1">Vegetarian</label>
-                        </div>
+                        </div> -->
                         <div class="dropdown delivery review-star">                          
                             <div class="form-group">
-                                <select class="form-control review-star" id="order-price">
+                                <select class="form-control review-star filter" id="order-price">
                                     <option value="" disabled selected hidden>$.$$</option>                                                                          
-                                     <option value="" >Sort By High</option>
-                                     <option value="" >Sort By Low</option>                                                                      
+                                     <option value="1" >Sort By High</option>
+                                     <option value="2" >Sort By Low</option>                                                                      
+                                </select>
+                            </div> 
+                        </div>  
+                        <div class="dropdown delivery review-star">                          
+                            <div class="form-group">
+                                <select class="form-control review-sta filter" id="order-category">
+                                    <option value="" disabled selected hidden>Category</option>
+                                    <?php
+                                    if(isset($category) && !empty($category)){
+                                        foreach ($category as $key => $value) {
+                                    ?>
+                                            <option value="<?php echo $value['id']; ?>" ><?php echo $value['category_name']; ?></option>
+                                    <?php
+                                        }
+                                    }
+                                    ?>                                 
                                 </select>
                             </div> 
                         </div>  
                     </div> 
                 </div>
             </div>
-    </div> 
+        </div> 
         <div class="offer-title2 mt-5">
             <ul class="nav nav-tabs justify-content-center border-bottom-0" id="home-tabs" role="tablist">
                 <li class="nav-item mr-3">
@@ -226,7 +238,7 @@ if(isset($banner_list) && !empty($banner_list)){
             </ul>
         </div>
         <div class="tab-content">
-            <div class="tab-pane fade show active restaurant row mt-4" id="nearby" role="tabpanel" aria-labelledby="nearby-tab">
+            <div class="tab-pane fade show active restaurant row mt-4 w-100" id="nearby" role="tabpanel" aria-labelledby="nearby-tab">
                 <?php
                 if(isset($shops) && !empty($shops)){
                     foreach ($shops as $key => $value){
@@ -594,8 +606,8 @@ if(isset($banner_list) && !empty($banner_list)){
         <h4 class="m-0">Get the food you love</h4>
         <h4 class="m-1">with the clicklunch app.</h4>
          <div class="mt-4">
-            <a href="https://bnc.lt/download-zomato-ios"><img src="<?php echo base_url(); ?>/assets/images/home-page/Apple-Play-Store.png" alt="Apple Play Store" class="mr-3"></a>
-            <a href="https://bnc.lt/download-z-android"><img src="<?php echo base_url(); ?>/assets/images/home-page/Google-Play-Store.png" alt="Google Play Store"></a>
+            <a href="https://www.apple.com/in/ios/app-store/"><img src="<?php echo base_url(); ?>/assets/images/home-page/Apple-Play-Store.png" alt="Apple Play Store" class="mr-3"></a>
+            <a href="https://play.google.com/store?hl=en"><img src="<?php echo base_url(); ?>/assets/images/home-page/Google-Play-Store.png" alt="Google Play Store"></a>
         </div>
     </div>
     <div class="col-xs-12 col-sm-6 pt-5 pb-5">
@@ -616,6 +628,10 @@ var zoom_out_img_url = '<?php echo base_url().'web-assets/images/zoom-in-out.png
 var cuisine_id = '';
 var pickup = '';
 var popular = '';
+var delivery_fee = '';
+var minimum_order_amount = '';
+var category = '';
+var rating = '';
 $(document).ready(function() {
 
     $('[data-toggle="tooltip"]').tooltip();

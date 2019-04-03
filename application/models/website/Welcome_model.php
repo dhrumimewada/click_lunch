@@ -4,6 +4,7 @@ class Welcome_model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 		$this->load->library('cart');
+		$this->load->library('parser');
 	}
 
 	public function get_popular_shops(){
@@ -22,11 +23,72 @@ class Welcome_model extends CI_Model {
 		return $return_data;
 	}
 
-	public function get_shops($short_name = NULL, $cuisine_id = NULL, $pickup = NULL, $popular = NULL){
+	public function get_current_lat_long(){
+		$ipaddress = '';
+		$location = array();
+        if (isset($_SERVER['HTTP_CLIENT_IP']))
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        else if(isset($_SERVER['HTTP_X_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        else if(isset($_SERVER['HTTP_FORWARDED']))
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        else if(isset($_SERVER['REMOTE_ADDR']))
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        else
+            $ipaddress = 'UNKNOWN';
+
+
+		$json  = file_get_contents("http://ipinfo.io/".$ipaddress."/geo");
+		$json  =  json_decode($json ,true);
+
+		if(is_array($json['loc']) && !empty($json['loc'])){
+			$location = explode(',', $json['loc']);
+		}
+		
+
+		return $location;
+	}
+
+	public function get_shops($short_name = NULL, $cuisine_id = NULL, $pickup = NULL, $popular = NULL, $latitude = NULL, $longitude = NULL, $delivery_fee = NULL, $minimum_order_amount = NULL, $category = NULL, $rating = NULL){
 		$return_data = array();
-		$this->db->select('t1.id,t1.shop_name,t1.short_name,t1.profile_picture,t1.order_by_time,t1.delivery_time, t1.contact_no1,CONCAT(t1.city, ", ", t1.zip_code, ", ", t1.state) as address');
+		$new_data = array();
+
+		// get delivery_available_mile
+        $delivery_available_mile = '';
+        $this->db->select('data');
+        $this->db->where("name", 'delivery_available_mile');
+        $this->db->from('setting');
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+            $delivery_available_mile_data = $sql_query->row();
+            $delivery_available_mile = $delivery_available_mile_data->data;
+        }
+
+		$sql_select = array(
+						't1.id',
+						't1.shop_name',
+						't1.short_name',
+						't1.profile_picture',
+						't1.order_by_time',
+						't1.delivery_time',
+						't1.contact_no1',
+						'CONCAT(t1.city, ", ", t1.zip_code, ", ", t1.state) as address',
+						);
+
+		if(isset($latitude) && $latitude != "" && isset($longitude) && $longitude != ""){
+
+            $distance = "(3956 * 2 * ASIN(SQRT( POWER(SIN((".$latitude." - t1.latitude) * pi()/180 / 2), 2) +COS( ".$latitude." * pi()/180) * COS(t1.longitude * pi()/180) * POWER(SIN(( ".$longitude." - t1.longitude) * pi()/180 / 2), 2) ))) as distance";
+            array_push($sql_select,$distance);
+
+        }
+
+		$this->db->select($sql_select);
 		$this->db->from('shop t1');
-		$this->db->join('shop_cuisines t2', 't1.id = t2.shop_id','right');
+		$this->db->join('shop_cuisines t2', 't1.id = t2.shop_id');
 		$this->db->where("t1.deleted_at", NULL);
 		$this->db->group_by('t2.shop_id');
 		$this->db->where("t1.status", 1);
@@ -42,11 +104,39 @@ class Welcome_model extends CI_Model {
 		if (isset($short_name) && !is_null($short_name)) {
 			$this->db->where('t1.short_name',$short_name);
 		}
+
+		if(isset($latitude) && $latitude != "" && isset($longitude) && $longitude != ""){
+			$this->db->order_by("distance", "asc");
+            $this->db->having("distance <=",$delivery_available_mile);
+		}
+
+		if (isset($delivery_fee) && !is_null($delivery_fee)){
+			if($delivery_fee == 1){
+				$this->db->order_by("t1.charges_of_minimum_mile", "desc");
+			}else{
+				$this->db->order_by("t1.charges_of_minimum_mile", "asc");
+			}
+			
+		}
+
+		if (isset($minimum_order_amount) && !is_null($minimum_order_amount)){
+			if($minimum_order_amount == 1){
+				$this->db->order_by("t1.min_order", "desc");
+			}else{
+				$this->db->order_by("t1.min_order", "asc");
+			}
+			
+		}
+
+		$this->db->where("t1.longitude !=", '');
+        $this->db->where("t1.latitude !=", '');
+
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
 			$return_data = $sql_query->result_array();		
 
 			if (isset($popular) && !is_null($popular)){
+				$new_shops = array();
 				$this->db->select('shop_id');
 				$this->db->from('orders');
 				$this->db->where("order_status", 6);
@@ -60,7 +150,7 @@ class Welcome_model extends CI_Model {
 					$popular_shops = array_count_values($popular_shops);
 					arsort($popular_shops);
 
-					$new_shops = array();
+					
 					foreach ($popular_shops as $key => $value) {
 						foreach ($return_data as $key1 => $value1) {
 							if($key == $value1['id']){
@@ -68,8 +158,8 @@ class Welcome_model extends CI_Model {
 							}
 						}
 					}
-					$return_data = $new_shops;
 				}
+				$return_data = $new_shops;
 			}
 
 			$this->db->select('shop_id');
@@ -108,14 +198,66 @@ class Welcome_model extends CI_Model {
 					$return_data[$key]['availibality'] = (array)$sql_query->row();
 				}
 
+				if(isset($short_name)){
+					$this->db->select('day, from_time, to_time, full_day, is_closed');
+					$this->db->from('shop_availibality');
+					$this->db->where("shop_id", $value['id']);
+					$sql_query = $this->db->get();
+					if ($sql_query->num_rows() > 0){
+						$return_data[$key]['all_working_time'] = $sql_query->result_array();
+					}
+				}
+
+				if(empty($return_data[$key]['cuisine']) || empty($return_data[$key]['availibality'])){
+					unset($return_data[$key]);
+					continue;
+				}
+
 				if(in_array($value['id'], $combo_shops)){
 					$return_data[$key]['combo_available'] = true;
 				}else{
 					$return_data[$key]['combo_available'] = false;
 				}
+
 			}
+
+			$return_data = array_values($return_data);
+
+			$new_shops = array();
+			if (isset($category) && !is_null($category)){
+				$this->db->select('shop_id');
+				$this->db->from('item');
+				$this->db->where("category_id", $category);
+				$this->db->where_in("shop_id", array_column($return_data, 'id'));
+				$sql_query = $this->db->get();
+				if ($sql_query->num_rows() > 0){
+					$query = $this->db->last_query();
+					$category_shops_data = $sql_query->result_array();
+					$category_shops = array_column($category_shops_data, 'shop_id');
+					$category_shops = array_unique($category_shops);
+					$new_shops = array();
+					foreach ($category_shops as $key => $value) {
+						foreach ($return_data as $key1 => $value1) {
+							if($value == $value1['id']){
+								array_push($new_shops, $return_data[$key1]);
+							}
+						}
+					}
+				}
+				$return_data = $new_shops;
+			}
+
 		}
-		//$return_data['new_shops'] = $new_shops;
+		return $return_data;
+	}
+
+	public function get_shop_data($short_name = NULL){
+		$return_data = array();
+
+		$sql_select = array('t1.id','t1.name','t1.short_name','t1.price','t1.offer_price','t1.item_picture');
+		$this->db->select($sql_select);
+		$this->db->from('item t1');
+
 		return $return_data;
 	}
 
@@ -219,6 +361,38 @@ class Welcome_model extends CI_Model {
 		return $return_data;
 	}
 
+	public function get_cuisines(){
+		$return_data = array();
+		$sql_select = array('id','cuisine_name','cuisine_picture');
+
+		$this->db->select($sql_select);
+		$this->db->where('is_active',1);
+		$this->db->where('deleted_at', NULL);
+		$this->db->order_by('created_at','desc');
+		$this->db->from('cuisine');
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$return_data = $sql_query->result_array();
+		}
+		return $return_data;
+	}
+
+	public function get_category($value=''){
+		$return_data = array();
+		$sql_select = array('id','category_name');
+
+		$this->db->select($sql_select);
+		$this->db->where('status',1);
+		$this->db->where('deleted_at', NULL);
+		$this->db->order_by('created_at','desc');
+		$this->db->from('category');
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$return_data = $sql_query->result_array();
+		}
+		return $return_data;
+	}
+
 	public function subscribe(){
 		$return = false;
 
@@ -229,7 +403,33 @@ class Welcome_model extends CI_Model {
 		if ($sql_query->num_rows() <= 0){
 			$data = array('email' => $_POST['email']);
 			if($this->db->insert("subscriber", $data)){
-				$return = true;
+
+				$this->db->select('emat_email_subject,emat_email_message');
+				$this->db->from('email_template');
+				$this->db->where('emat_email_type', 6);
+				$this->db->where("emat_is_active", 1);
+				$sql_query = $this->db->get();
+				$return_data = $sql_query->row();
+
+				if (!isset($return_data) && empty($return_data)){
+					$this->auth->set_error_message("Email template not found. Error into sending mail.");
+					return FALSE;
+				}
+
+				$from = "";
+				$to = $_POST['email'];
+				$subject = $return_data->emat_email_subject;
+				$encrypted_email = encrypt($_POST['email']);
+				$email_var_data = array();
+				$email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+				$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+				$mail = sendmail($from, $to, $subject, $message);
+
+				if(!$mail){
+					$return = false;
+				}else{
+					$return = true;
+				}
 			}
 		}else{
 			$return = true;
@@ -240,21 +440,103 @@ class Welcome_model extends CI_Model {
 	public function post_restaurant_partner(){
 		$this->db->trans_begin();
 		$return_value = FALSE;
+
+		$mobile_number = str_replace("+1 ", "",  $this->input->post("mobile_number"));
+
+		$shop_name = preg_replace("/[^a-zA-Z ]/", "", strtolower($this->input->post("shop_name")));
+		$name_array =  explode(" ",$shop_name);
+		$short_name_array = array();
+
+		foreach($name_array as $key => $value){
+		    $value1 = trim($value);
+		    if($value1 != ''){
+		        $short_name_array[$key] = $value1;
+		    }
+		}
+		$short_name = implode("-",$short_name_array);
+
+		$this->db->select('short_name');
+		$this->db->from('shop');
+		$this->db->where("short_name LIKE '$short_name%'");
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$exists_data = $sql_query->num_rows();
+			$short_name = $short_name."-".$exists_data;
+		}
+
+
 		$user_data = array(
 						'shop_name' => ucwords(addslashes($this->input->post("shop_name"))),
+						'vender_name' => ucwords(addslashes($this->input->post("vender_name"))),
 						'email' => $this->input->post("email"),
 						'address' => addslashes($this->input->post("address")),
-						'contact_no' => $this->input->post("mobile_number"),
+						'city' => addslashes($this->input->post("city")),
+						'state' => addslashes($this->input->post("state")),
+						'country' => addslashes($this->input->post("country")),
+						'zip_code' => $this->input->post("zipcode"),
+						'latitude' => $this->input->post("latitude"),
+						'longitude' => $this->input->post("longitude"),
+						'contact_no1' => $mobile_number,
+						'short_name' => $short_name,
 						'message' => addslashes($this->input->post("message"))
 					);
-		$this->db->insert("shop_request", $user_data);
+		$response = $this->db->insert("shop", $user_data);
+		$user_id = $this->db->insert_id();
+
+		$shop_code = str_replace(' ', '', $this->input->post("shop_name"));
+		$shop_code = preg_replace('/[^A-Za-z0-9\-]/', '', $shop_code);
+		$shop_code = strtoupper(substr($shop_code, 0, 3)).$user_id;
+
+		$user_data = array('shop_code' => $shop_code );
+		$this->db->where("id", $user_id);
+		$this->db->update("shop", $user_data);
+
+		$this->db->select('emat_email_subject,emat_email_message');
+		$this->db->from('email_template');
+		$this->db->where('emat_email_type', 1);
+		$this->db->where("emat_is_active", 1);
+		$sql_query = $this->db->get();
+		$return_data = $sql_query->row();
+
+
+		if (!isset($return_data) && empty($return_data)){
+			$this->auth->set_error_message("Email template not found. Please try again later or contact clicklunch team.");
+			return FALSE;
+		}
+
+		if($response){
+
+			$activation_token = bin2hex(random_bytes(20));
+			$email_var_data["activation_link"] = base_url() . 'vender-setpassword/'. $activation_token;
+
+			$from = "";
+			$to = $this->input->post("email");
+			$subject = $return_data->emat_email_subject;
+
+			$email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+			$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+			$mail = sendmail($from, $to, $subject, $message);
+
+			if(!$mail){
+				$this->db->where("id", $user_id);
+				$this->db->delete("shop");
+
+				$this->auth->set_error_message("Error into sending activation mail. Please try again later");
+				return FALSE;
+			}else{
+				$token_array = array('activation_token' => $activation_token);
+				$this->db->where("id", $user_id);
+				$this->db->update("shop", $token_array);
+			}
+
+		}
 		
 		if ($this->db->trans_status() === FALSE) {
 			$this->db->trans_rollback();
 			$this->auth->set_error_message("Error into registation. Please try again");
 		} else {
 			$this->db->trans_commit();
-			$this->auth->set_status_message("Your registration request submitted successfully");
+			$this->auth->set_status_message("You are successfully registered into clicklunch. You have got activation mail on your email address.");
 			$return_value = TRUE;
 		}
 

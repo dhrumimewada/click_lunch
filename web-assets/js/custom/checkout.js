@@ -149,13 +149,17 @@ $(document).on('click','#takeout-instead',function(){
 	$("#takeout").show();
 	$("#deliver").hide();
 	$(".select-time").hide();
-	$("#deliverOption3").prop("checked", true)
+	$("#deliverOption3").prop("checked", true);
+
+    $("#delivery-amount-div").hide();
 });
 $(document).on('click','#deliver-instead',function(){
 	$("#takeout").hide();
 	$("#deliver").show();
 	$(".select-time").hide();
-	$("#deliverOption1").prop("checked", true)
+	$("#deliverOption1").prop("checked", true);
+
+    $("#delivery-amount-div").show();
 });
 $(document).on('click','.deliver-now',function(){
 	$(".select-time").hide();
@@ -285,6 +289,11 @@ $(document).on('click','#placeorder',function(){
 });
 
 $( document ).ready(function(){
+
+    if(takeout_delivery_status == 2){
+        $('#deliver').hide();
+        $('#takeout').show();
+    }
 
 	$("#cvv").inputmask("9999",{"placeholder": ""});
 	$("#card_number").inputmask("9999999999999999999",{"placeholder": ""});

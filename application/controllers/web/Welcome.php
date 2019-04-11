@@ -5,6 +5,8 @@ class Welcome extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
+		header('Access-Control-Allow-Origin: *');  
+		
 		$this->load->model("admin/banner_model");
 		$this->load->model("website/welcome_model");
 		$this->load->library('parser');
@@ -18,25 +20,26 @@ class Welcome extends CI_Controller {
 	}
 
 	public function index(){
-		$banner_list = $this->banner_model->get_banner();
-		$output_data["banner_list"] = $banner_list;
 
 		$output_data["cuisines"] = $this->welcome_model->get_cuisines();
 		$output_data["category"] = $this->welcome_model->get_category();
+		$output_data["banner_list"] = $this->welcome_model->get_banners();
 
 		$select = array('txt1','txt2','txt3');
 		$output_data["highlight"] = get_data_by_filter('highlight',$select);
 
-		$loc = $this->welcome_model->get_current_lat_long();
+		//$loc = $this->welcome_model->get_current_lat_long();
 
 		// echo "<pre>";
 		// print_r($loc);
+		// $ipaddress = $_SERVER['REMOTE_ADDR'];
+		// echo $ipaddress;
 		// exit;
 
 		// $loc[0] = 23.0333;
 		// $loc[1] = 72.6167;
 
-		$output_data["shops"] = $this->welcome_model->get_shops(NULL, NULL, NULL, NULL, $loc[0], $loc[1]);
+		//$output_data["shops"] = $this->welcome_model->get_shops(NULL, NULL, NULL, NULL, $loc[0], $loc[1]);
 		$output_data["combo_shops"] = $this->welcome_model->get_shops();
 
 		//echo "<pre>";
@@ -48,31 +51,32 @@ class Welcome extends CI_Controller {
 		$this->load->view('web/template',$output_data);
 	}
 
-	public function shop($short_name = NULL){
+	public function shop($order_type = NULL, $tab_pan = NULL, $short_name = NULL){
 		$shop = $this->welcome_model->get_shops($short_name);
 		$output_data["shop"] = $shop[0];
 		if(is_empty($shop[0])){
 			$this->load->view('web/error_page');
 		}else{
-			$select = array('id','name','short_name','price','offer_price','item_picture');
-			$where = array('shop_id' => $shop[0]['id'] ,'deleted_at' => NULL, 'is_active' => 1, 'quantity !=' => 0 );
-			$output_data["item"] = get_data_by_filter('item',$select,$where);
-
-			// echo "<pre>";
-			// print_r($output_data["shop"]);
-			// exit;
+			$output_data["item"] = $this->welcome_model->get_items($shop[0]['id']);
+			$output_data["tab_pan"] = $tab_pan;
+			$output_data["order_type"] = $order_type;
+			//echo "<pre>";
+			// print_r($output_data["item"]);
+			//print_r($items);
+			//exit;
 			$output_data['main_content'] = 'restaurant_detail';
 			$this->load->view('web/template',$output_data);
 		}
 	}
 
-	public function item($short_name = NULL){
+	public function item($order_type = NULL, $short_name = NULL){
 
 		$item = $this->welcome_model->get_item_data($short_name);
 		if(is_empty($item)){
 			$this->load->view('web/error_page');
 		}else{
 			$output_data["item"] = $item;
+			$output_data["order_type"] = $order_type;
 			//echo "<pre>"; print_r($item); exit;
 			$output_data['main_content'] = 'item_detail';
 			$this->load->view('web/template',$output_data);
@@ -123,9 +127,47 @@ class Welcome extends CI_Controller {
 			$rating = NULL;
 		}
 
-		$shops = $this->welcome_model->get_shops(NULL, $cuisine_id, $pickup, $popular, NULL, NULL, $delivery_fee, $minimum_order_amount, $category, $rating);
-		echo json_encode(array("is_success" => true, "shops" => $shops));
-		return TRUE;
+		if(isset($_POST['weekly']) && $_POST['weekly'] != ''){
+			$weekly = $_POST['weekly'];
+		}else{
+			$weekly = NULL;
+		}
+
+		if(isset($_POST['delivery_restaurants']) && $_POST['delivery_restaurants'] != ''){
+			$delivery_restaurants = $_POST['delivery_restaurants'];
+		}else{
+			$delivery_restaurants = NULL;
+		}
+
+		if(isset($_POST['pickup_restaurants']) && $_POST['pickup_restaurants'] != ''){
+			$pickup_restaurants = $_POST['pickup_restaurants'];
+		}else{
+			$pickup_restaurants = NULL;
+		}
+
+		if(isset($_POST['latitude']) && $_POST['latitude'] != ''){
+			$this->session->set_userdata('latitude', $_POST['latitude']);
+			$latitude = $_POST['latitude'];
+		}else{
+			$latitude = NULL;
+		}
+
+		if(isset($_POST['longitude']) && $_POST['longitude'] != ''){
+			$this->session->set_userdata('longitude',  $_POST['longitude']);
+			$longitude = $_POST['longitude'];
+		}else{
+			$longitude = NULL;
+		}
+
+		$shops = $this->welcome_model->get_shops(NULL, $cuisine_id, $pickup, $popular, $latitude, $longitude, $delivery_fee, $minimum_order_amount, $category, $rating, $weekly, $delivery_restaurants, $pickup_restaurants);
+		if(is_array($shops) && !empty($shops)){
+			echo json_encode(array("is_success" => true, "shops" => $shops));
+			return TRUE;
+		}else{
+			echo json_encode(array("is_success" => false));
+			return FALSE;
+		}
+		
 	}
 
 	public function get_shops(){
@@ -203,6 +245,7 @@ class Welcome extends CI_Controller {
 				);
 				$this->form_validation->set_rules($validation_rules);
 				if ($this->form_validation->run() === true) {
+
 					if($this->welcome_model->post_restaurant_partner()){
 						$this->session->set_flashdata($this->auth->get_messages_array());
 						redirect(base_url() . "restaurant-partner-form");
@@ -405,6 +448,43 @@ class Welcome extends CI_Controller {
 		$this->load->view('web/template',$output_data);
 	}
 
+	public function request_add_popular_address(){
+
+		$this->auth->clear_messages();
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
+
+		if (isset($_POST) && !empty($_POST)){
+			if (isset($_POST['submit'])){
+
+				$validation_rules = array(
+				
+					array('field' => 'house_no', 'label' => 'house/office number', 'rules' => 'trim|required|max_length[250]'),
+					array('field' => 'street', 'label' => 'street', 'rules' => 'trim|required|max_length[250]'),
+					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[250]'),
+					array('field' => 'zipcode', 'label' => 'zipcode', 'rules' => 'trim|required|numeric|max_length[5]|min_length[5]'),
+					array('field' => 'nickname', 'label' => 'nick name', 'rules' => 'trim'),
+					array('field' => 'address_type', 'label' => 'address type', 'rules' => 'trim|required')
+				);
+				$this->form_validation->set_rules($validation_rules);
+				
+				if ($this->form_validation->run() === true) {
+					if($this->welcome_model->request_add_popular_address()){
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "add-request-address");
+					}else{
+						$this->session->set_flashdata($this->auth->get_messages_array());
+						redirect(base_url() . "add-request-address");
+					}	
+				} 
+			}
+		}
+
+		$output_data["address_type"] = $this->config->item("address_type");
+		$output_data['main_content'] = 'add_popular_address';
+		$this->load->view('web/template',$output_data);
+	}
+
 	public function about_us(){
 		$output_data['main_content'] = 'about_us';
 		$this->load->view('web/template',$output_data);
@@ -413,6 +493,79 @@ class Welcome extends CI_Controller {
 	public function coming_soon(){
 		$output_data['main_content'] = 'coming_soon';
 		$this->load->view('web/template',$output_data);
+	}
+
+	public function weekly_planner(){
+		$days = $this->config->item("days");
+		$today = date('l');
+		foreach ($days as $key => $value) {
+			if($today == $value){
+				$days[$key] = 'Today';
+			}
+		}
+		$output_data["days"] = $this->config->item("days");
+		$output_data["total_days"] = $this->config->item("days");
+		$data = $this->welcome_model->get_shops_by_weekly_days();
+		// echo "<pre>";
+		// print_r($data);
+		// exit;
+		$output_data["shop_data"] = $data;
+		$this->session->set_userdata('order_type', 3);
+		$output_data['main_content'] = 'weekly_planner';
+		$this->load->view('web/template',$output_data);
+	}
+
+	public function delivery_restaurants(){
+		$output_data['main_content'] = 'delivery_restaurants';
+		$this->load->view('web/template',$output_data);
+	}
+
+	public function takeout_restaurants(){
+		$output_data['main_content'] = 'takeout_restaurants';
+		$this->load->view('web/template',$output_data);
+	}
+
+	public function set_order_type_session(){
+
+		$this->db->select('takeout_delivery_status');
+		$this->db->from('shop');
+		$this->db->where("id",  $_POST['shopid']);
+		if($_POST['order_type'] == 1){
+			$this->db->group_start();
+                $this->db->where("takeout_delivery_status", 1);
+                $this->db->or_where("takeout_delivery_status", 3);
+            $this->db->group_end();
+		}else if($_POST['order_type'] == 2){
+			$this->db->group_start();
+                $this->db->where("takeout_delivery_status", 2);
+                $this->db->or_where("takeout_delivery_status", 3);
+            $this->db->group_end();
+		}else{
+			echo json_encode(array("is_success" => false, "message" => 'Order type not found'));
+			return false;
+		}
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$this->session->set_userdata('order_type', $_POST['order_type']);
+			if($this->session->userdata('order_type')){
+				echo json_encode(array("is_success" => true));
+				return TRUE;
+			}else{
+				echo json_encode(array("is_success" => false));
+				return false;
+			}
+		}else{
+			if($_POST['order_type'] == 1){
+				echo json_encode(array("is_success" => false, "message" => 'This restaurant not providing delivery. Please select takeout for order.'));
+				return false;
+			}else{
+				echo json_encode(array("is_success" => false, "message" => 'This restaurant not providing takeout. Please select takeout for delivery.'));
+				return false;
+			}
+			
+		}
+
+		
 	}
 
 	public function takeout_restaurant()

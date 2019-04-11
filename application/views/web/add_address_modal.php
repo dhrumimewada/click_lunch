@@ -84,7 +84,7 @@ $address_type = $this->config->item("address_type");
 <script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
 <script type="text/javascript" charset="utf-8" async defer>
 
-	$("#zipcode").inputmask("99999",{"placeholder": ""});
+	$("#zipcode").inputmask("999999",{"placeholder": ""});
 
 	var validator = $("#addNewAddress").validate({
 
@@ -128,7 +128,7 @@ $address_type = $this->config->item("address_type");
             zipcode: {
                 required:true,
                 digits: true,
-                maxlength:5,
+                maxlength:6,
                 minlength:5,
                 normalizer: function (value) {
                     return $.trim(value);

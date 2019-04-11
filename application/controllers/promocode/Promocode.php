@@ -175,7 +175,7 @@ class Promocode extends CI_Controller {
 					array('field' => 'to_date', 'label' => 'to date', 'rules' => 'trim|required|callback_checkfromto[' . $this->input->post("from_date") . ']')
 				);
 
-				if($is_vender){
+				if($is_vender|| $is_employee){
 
 					$promo_type_validation = array('field' => 'promo_type', 'label' => 'promocode type', 'rules' => 'trim|required|numeric');
 					array_push($validation_rules, $promo_type_validation);

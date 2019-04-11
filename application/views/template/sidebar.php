@@ -1,4 +1,4 @@
-<!-- ========== Left Sidebar Start ========== -->
+========== Left Sidebar Start ========== -->
 <?php
 $is_admin = $this->auth->is_admin();
 $is_vender = $this->auth->is_vender();
@@ -41,18 +41,24 @@ if($is_admin){
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Orders <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="<?php echo base_url().'maintenance7'; ?>">New Order</a></li>
-                        <li><a href="<?php echo base_url().'maintenance2'; ?>">Live Order</a></li>
-                        <li><a href="<?php echo base_url().'maintenance3'; ?>">Cancelled</a></li>
-                        <li><a href="<?php echo base_url().'maintenance4'; ?>">Completed</a></li>
-                        <li><a href="<?php echo base_url().'maintenance5'; ?>">See Weekly Order</a></li>
-                        <li><a href="<?php echo base_url().'maintenance6'; ?>">All Order</a></li>
+                        <li><a href="<?php echo base_url().'new-orders'; ?>">New Order</a></li>
+                        <li><a href="<?php echo base_url().'live-orders'; ?>">Live Order</a></li>
+                        <li><a href="<?php echo base_url().'cancel-orders'; ?>">Cancelled</a></li>
+                        <li><a href="<?php echo base_url().'completed-orders'; ?>">Completed</a></li>
+                        <li><a href="<?php echo base_url().'all-weekly-orders'; ?>">Weekly Order</a></li>
+                        <li><a href="<?php echo base_url().'all-orders'; ?>">All Order</a></li>
                     </ul>
                 </li>
 
                 <li>
                     <a href="<?php echo base_url().'delivery-boy-list'; ?>" class="waves-effect">
                         <i class="mdi mdi-truck-delivery"></i><span> Delivery Boy </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="<?php echo base_url().'custom-push-deliveryboy'; ?>" class="waves-effect">
+                        <i class="mdi mdi-bell-ring"></i><span> Push to Delivery Boy</span>
                     </a>
                 </li>
 
@@ -217,11 +223,14 @@ if($is_admin){
                 <li>
                     <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-cart"></i><span> Orders <span class="float-right menu-arrow"><i class="mdi mdi-chevron-right"></i></span> </span></a>
                     <ul class="submenu">
-                        <li><a href="<?php echo base_url().'order-single-assign'; ?>">Pending</a></li>
-                        <li><a href="<?php echo base_url().'restaurant-scheduled'; ?>">Scheduled</a></li>
-                        <li><a href="<?php echo base_url().'order-processing'; ?>">Processing</a></li>
-                        <li><a href="<?php echo base_url().'maintenance7'; ?>">Completed</a></li>
-                        <li><a href="<?php echo base_url().'maintenance8'; ?>">Trashed</a></li>
+                        <li><a href="<?php echo base_url().'order-single-assign'; ?>">Arrived</a></li>
+                        <li><a href="<?php echo base_url().'order-accepted'; ?>">Accepted</a></li>
+                        <li><a href="<?php echo base_url().'order-rejected'; ?>">Rejected / Cancelled</a></li>
+                        <li><a href="<?php echo base_url().'order-today'; ?>">Today</a></li>
+                        <li><a href="<?php echo base_url().'order-upcoming'; ?>">Upcoming</a></li>
+                        <li><a href="<?php echo base_url().'order-completed'; ?>">Completed</a></li>
+                        <!-- <li><a href="<?php echo base_url().'order-trashed'; ?>">Trashed</a></li> -->
+                        <li><a href="<?php echo base_url().'order-all'; ?>">All Orders</a></li>
                     </ul>
                 </li>
 
@@ -313,4 +322,4 @@ if($is_admin){
     <!-- Sidebar -left -->
 
 </div>
-<!-- Left Sidebar End -->
+<!-- Left Sidebar End

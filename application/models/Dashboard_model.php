@@ -12,6 +12,7 @@ class Dashboard_model extends CI_Model {
 		$this->db->from('shop');
 		$this->db->where("deleted_at", NULL);
 		$this->db->where("status", 1);
+		$this->db->where("admin_verified", 1);
 		$total_shop = $this->db->get()->result_array();
 		$return_data['total_shop'] = $total_shop[0]['COUNT(id)'];
 

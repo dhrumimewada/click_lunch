@@ -3,6 +3,7 @@
     <title>Home</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="<?php echo $assets; ?>/icon.png" type="image/gif" sizes="16x16">
     <link href="https://fonts.googleapis.com/css?family=Muli:200,300,400,600,700,800,900" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $assets; ?>css/bootstrap-grid.min.css">
@@ -34,7 +35,7 @@
     <script type="text/javascript" src="<?php echo $assets; ?>js/popper.js"></script>
     <script type="text/javascript" src="<?php echo $assets; ?>js/bootstrap.min.js"></script>
     <!-- <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script> -->
-    <script type="text/javascript" src="<?php echo $assets; ?>js/bootstrap-input-spinner.js"></script>
+    <!-- <script type="text/javascript" src="<?php echo $assets; ?>js/bootstrap-input-spinner.js"></script> -->
     <script type="text/javascript" src="<?php echo $assets; ?>js/owl.carousel.js"></script>
     <script type="text/javascript" src="<?php echo $assets; ?>js/custom.js"></script>
 

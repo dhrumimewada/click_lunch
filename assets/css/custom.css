@@ -209,6 +209,11 @@
   background-color: #fff;
   border-color: #6c757d;
 }
+.btn-primary.disabled, .btn-primary:disabled{
+  background-color: #3e3d63;
+  border-color: #3e3d63;
+  cursor: default;
+}
 .table > tbody > tr > td, .table > tfoot > tr > td, .table > thead > tr > td{
   padding: 0.5rem 1.5rem;
 }

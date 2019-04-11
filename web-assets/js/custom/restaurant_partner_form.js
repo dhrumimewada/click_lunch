@@ -93,7 +93,17 @@
             }
         },
         submitHandler: function(form) {
-            form.submit();
+            if(($("#latitude").val() == '') || ($("#longitude").val() == '') ||($("#zipcode").val() == '') ||($("#country").val() == '') ||($("#administrative_area_level_2").val() == '') ||($("#administrative_area_level_1").val() == '') )
+            {
+                swal(
+                    'Your address seems wrong',
+                    'Please select your address from suggestions',
+                    'warning'
+                )
+            }else{
+                form.submit();
+            }
+            
         }
     });
 
@@ -106,4 +116,14 @@
 
 $( document ).ready(function() {
     $("#mobile_number").inputmask("+1 999 999 9999",{"placeholder": ""});
+});
+
+$(document).on('change','#autocomplete',function(){
+    console.log($(this).val());
+    $("#latitude").val('');
+    $("#longitude").val('');
+    $("#zipcode").val('');
+    $("#country").val('');
+    $("#administrative_area_level_2").val('');
+    $("#administrative_area_level_1").val('');
 });

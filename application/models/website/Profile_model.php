@@ -303,9 +303,9 @@ class Profile_model extends CI_Model {
                 $this->db->select($sql_select);
 
                 $this->db->from('orders t1');
-                $this->db->join('customer t2', 't1.customer_id = t2.id','left');
-                $this->db->join('shop t3', 't1.shop_id = t3.id','left');
-                $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
+                $this->db->join('customer t2', 't1.customer_id = t2.id');
+                $this->db->join('shop t3', 't1.shop_id = t3.id');
+                $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id');
 
                 $this->db->where('t1.id', $id);
                 $this->db->where('t1.customer_id',$this->auth->get_user_id());
@@ -324,7 +324,84 @@ class Profile_model extends CI_Model {
                     $this->db->select($sql_select);
                     $this->db->from('order_items t1');
                     $this->db->where('t1.order_id', $id);
-                    $this->db->join('item t2', 't1.item_id = t2.id','left');
+                    $this->db->join('item t2', 't1.item_id = t2.id');
+                    $sql_query = $this->db->get();
+                    if ($sql_query->num_rows() > 0){
+                        $return_data['products'] = $sql_query->result_array();
+                    }               
+                }
+        }
+        return $return_data;
+    }
+
+    public function order_detail2($id = NULL){
+        $return_data = array();
+        if(isset($id) && !is_null($id)){
+            $sql_select = array(
+                                't1.id',
+                                't1.total',
+                                't2.username',
+                                't1.order_type',
+                                'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
+                                't4.latitude as address_latitude',
+                                't4.longitude as address_longitude',
+                                't3.shop_name',
+                                't3.profile_picture',
+                                't3.address as shop_address',
+                                't3.latitude as shop_latitude',
+                                't3.longitude as shop_longitude',
+                                't3.profile_picture as shop_picture',
+                                't1.payment_mode',
+                                't1.subtotal',
+                                't1.promo_amount',
+                                'ROUND((((t1.subtotal + t1.promo_amount) * t1.tax) / 100), 2) as tax_amount',
+                                'ROUND((((t1.subtotal + t1.promo_amount) * t1.service_charge) / 100), 2) as service_charge_amount',
+                                't1.delivery_charges',
+                                't1.total',
+                                'IF(t1.order_type=5, t1.schedule_date, "") as schedule_date',
+                                'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
+                                'IF(t1.order_type=2, t1.later_time, "") as later_time',
+                                't1.created_at',
+                                't1.QR_code'
+                );
+                $this->db->select($sql_select);
+
+                $this->db->from('orders t1');
+                $this->db->join('customer t2', 't1.customer_id = t2.id');
+                $this->db->join('shop t3', 't1.shop_id = t3.id');
+                $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id');
+
+                $this->db->where('t1.id', $id);
+                $this->db->where('t1.customer_id',$this->auth->get_user_id());
+                $sql_query = $this->db->get();
+
+                if ($sql_query->num_rows() > 0){
+                    $return_data = (array)$sql_query->row();
+                    $return_data['rating'] = '3.5';
+
+                    if($return_data['delivery_address'] != 0 && $return_data['delivery_address'] != ''){
+
+                         $sql_select = array(
+                                'CONCAT_WS(", ", house_no, street, city, zipcode) AS delivery_address',
+                                'latitude as address_latitude',
+                                'longitude as address_longitude'
+                                );
+
+                        $this->db->select($sql_select);
+                        $this->db->from('order_items');
+                        $this->db->where('id', $return_data['delivery_address']);
+                    }
+
+                    $sql_select = array(
+                                    't2.name',
+                                    't1.quantity',
+                                    't1.total_product_price'
+                    );
+
+                    $this->db->select($sql_select);
+                    $this->db->from('order_items t1');
+                    $this->db->where('t1.order_id', $id);
+                    $this->db->join('item t2', 't1.item_id = t2.id');
                     $sql_query = $this->db->get();
                     if ($sql_query->num_rows() > 0){
                         $return_data['products'] = $sql_query->result_array();
@@ -352,11 +429,11 @@ class Profile_model extends CI_Model {
         $this->db->select($sql_select);
 
         $this->db->from('orders t1');
-        $this->db->join('shop t3', 't1.shop_id = t3.id','left');
+        $this->db->join('shop t3', 't1.shop_id = t3.id');
 
         if(isset($cuisines) && is_array($cuisines) && !empty($cuisines)){
-            $this->db->join('order_items t4', 't1.id = t4.order_id','left');
-            $this->db->join('item t5', 't4.item_id = t5.id','left');
+            $this->db->join('order_items t4', 't1.id = t4.order_id');
+            $this->db->join('item t5', 't4.item_id = t5.id');
             $this->db->where_in('t5.cuisine_id',$cuisines);
         }
 
@@ -403,34 +480,5 @@ class Profile_model extends CI_Model {
             $return = true;
         }
         return $return;
-    }
-
-    public function request_add_popular_address() {
-
-        $location_data = array(
-                        'house_no' => $this->input->post("house_no"),
-                        'street' => $this->input->post("street"),
-                        'city' => $this->input->post("city"),
-                        'zipcode' => intval($this->input->post("zipcode")),
-                        'address_type' => intval($this->input->post("address_type")),
-                        'customer_id' => $this->auth->get_user_id()
-                    );
-
-        if($this->input->post("nickname")){
-            $location_data['nickname'] = $this->input->post("nickname");
-        }
-
-        $this->db->insert("delivery_address_popular_request", $location_data);
-        
-        if ($this->db->trans_status() === FALSE) {
-            $this->db->trans_rollback();
-            $this->auth->set_error_message("Error into inserting data");
-        } else {
-            $this->db->trans_commit();
-            $this->auth->set_status_message("Popular location requested successfully");
-            $return_value = TRUE;
-        }
-
-        return $return_value;
     }
 }

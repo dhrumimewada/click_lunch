@@ -116,7 +116,7 @@
                                             if($value['profile_picture'] != ''){
                                                 $shop_img = base_url().$this->config->item("profile_path") . '/'.$value['profile_picture'];
                                             }else{
-                                                $shop_img = 'https://bootdey.com/img/Content/avatar/avatar6.png';
+                                                $shop_img = base_url().'web-assets/images/logo-3.png';
                                             }
                                             echo "<tr><td><img src='".$shop_img."' class='thumb-sm img-fit rounded-circle mr-2'>".$value['shop_name']."</td>";
                                             if($value['status'] == 0){

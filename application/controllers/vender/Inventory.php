@@ -55,7 +55,7 @@ class Inventory extends CI_Controller {
 
 		       $data[] = array(
 		            $inventory['id'],
-		            stripslashes($inventory["name"]),
+		            stripslashes($inventory["cuisine_name"]),
 		            stripslashes($inventory["name"]),
 		            $price,
 		           	$quantity_str,

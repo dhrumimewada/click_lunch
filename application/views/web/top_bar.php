@@ -25,47 +25,89 @@ if($is_customer){
               </button>
 
                 <div class="collapse navbar-collapse header-menu" id="navbarSupportedContent">
-                  <ul class="navbar-nav ">
-                    <li class="dropdown notification-list active">
-                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>welcome" role="button" aria-haspopup="false" aria-expanded="false">
-                            <strong class="text-uppercase active">Home</strong>
-                        </a>       
-                    </li>
-                    <li class="dropdown notification-list">
-                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>weekly" role="button" aria-haspopup="false" aria-expanded="false">
-                            <strong class="text-uppercase">Weekly Planner</strong>
-                        </a>       
-                    </li>
-                     <li class="dropdown notification-list">
-                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>welcome" role="button" aria-haspopup="false" aria-expanded="false">
-                            <strong class="text-uppercase">Delivery</strong>
-                        </a>       
-                    </li>                  
-                    <li class="dropdown notification-list">
-                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>welcome" role="button" aria-haspopup="false" aria-expanded="false">
-                            <strong class="text-uppercase">Takeout</strong>
-                        </a>       
-                    </li>
-                    <li class="dropdown notification-list">
-                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>restaurant-partner-form" role="button" aria-haspopup="false" aria-expanded="false">
-                            <strong class="text-uppercase">Restaurant Partners</strong>
-                        </a>       
-                    </li>
-                    <li class="dropdown notification-list">
-                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>faq" role="button" aria-haspopup="false" aria-expanded="false">
-                            <strong class="text-uppercase">FAQ</strong>
-                        </a>       
-                    </li>
-                    
-                    <?php
-                    if($is_customer && $this->auth->is_logged_in()){
+                  <ul class="navbar-nav">
+                    <?php 
+                    if($this->uri->segment(1) == 'welcome'){
+                        $active = 'active';
+                    }else{
+                        $active = '';
+                    }
                     ?>
+                    <li class="dropdown notification-list <?php echo $active; ?>">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>welcome" role="button" aria-haspopup="false" aria-expanded="false">
+                            <strong class="text-uppercase <?php echo $active; ?>">Home</strong>
+                        </a>       
+                    </li>
+                    <?php 
+                    if($this->uri->segment(1) == 'weekly-planner'){
+                        $active = 'active';
+                    }else{
+                        $active = '';
+                    }
+                    ?>
+                    <li class="dropdown notification-list <?php echo $active; ?>">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>weekly-planner" role="button" aria-haspopup="false" aria-expanded="false">
+                            <strong class="text-uppercase <?php echo $active; ?>">Weekly Planner</strong>
+                        </a>       
+                    </li>
+                    <?php 
+                    if($this->uri->segment(1) == 'delivery-restaurants'){
+                        $active = 'active';
+                    }else{
+                        $active = '';
+                    }
+                    ?>
+                     <li class="dropdown notification-list <?php echo $active; ?>">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>delivery-restaurants" role="button" aria-haspopup="false" aria-expanded="false">
+                            <strong class="text-uppercase <?php echo $active; ?>">Delivery</strong>
+                        </a>       
+                    </li>
+                    <?php 
+                    if($this->uri->segment(1) == 'takeout-restaurants'){
+                        $active = 'active';
+                    }else{
+                        $active = '';
+                    }
+                    ?>                
+                    <li class="dropdown notification-list <?php echo $active; ?>">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>takeout-restaurants" role="button" aria-haspopup="false" aria-expanded="false">
+                            <strong class="text-uppercase <?php echo $active; ?>">Takeout</strong>
+                        </a>       
+                    </li>
+                    <?php 
+                    if($this->uri->segment(1) == 'restaurant-partner-form'){
+                        $active = 'active';
+                    }else{
+                        $active = '';
+                    }
+                    ?>
+                    <li class="dropdown notification-list <?php echo $active; ?>">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>restaurant-partner-form" role="button" aria-haspopup="false" aria-expanded="false">
+                            <strong class="text-uppercase <?php echo $active; ?>">Restaurant Partners</strong>
+                        </a>       
+                    </li>
+                    <?php 
+                    if($this->uri->segment(1) == 'faq'){
+                        $active = 'active';
+                    }else{
+                        $active = '';
+                    }
+                    ?>
+                    <li class="dropdown notification-list <?php echo $active; ?>">
+                        <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>faq" role="button" aria-haspopup="false" aria-expanded="false">
+                            <strong class="text-uppercase <?php echo $active; ?>">FAQ</strong>
+                        </a>       
+                    </li>
 
                     <li class="dropdown notification-list">
                         <a class="nav-link waves-effect" href="<?php echo BASE_URL(); ?>add-request-address" role="button" aria-haspopup="false" aria-expanded="false">
                             <strong class="text-uppercase">Popular Address</strong>
                         </a>       
                     </li>
+                    
+                    <?php
+                    if($is_customer && $this->auth->is_logged_in()){
+                    ?>
 
                     <?php
                     }else{
@@ -77,7 +119,7 @@ if($is_customer){
                     </li>
                     <li class="dropdown notification-list">
                         <a class="dropdown-item drop-down-icon" href="javascript:void(0)" data-toggle="modal" data-target="#registerFormModal">
-                            <strong class="text-uppercase">Create an Account</strong>
+                            <strong class="text-uppercase">Register</strong>
                         </a>       
                     </li>
                     <?php
@@ -194,3 +236,8 @@ if($is_customer){
         </div>
     </div>
 </header>
+<script type="text/javascript" charset="utf-8" async defer>
+    $(document).on('change','#order-price',function(){
+
+    });
+</script>

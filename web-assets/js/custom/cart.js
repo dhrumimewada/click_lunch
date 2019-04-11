@@ -431,8 +431,18 @@ $(document).on('click','.recommendation-add',function(){
 
     $(document).on('click','#checkout-btn',function(){
         
-        if(logged_in && is_customer && (defualt_delivery_address_id != '') && (cart_contents_data == '1')){
-            window.location.href = checkout_url;
+        if(logged_in && is_customer && (cart_contents_data == '1')){
+            if((cart_order_type == 'delivery') && ((defualt_delivery_address_id == '') || (defualt_delivery_address_id == null)))
+            {
+                swal(
+                        'Please select delivery address',
+                        'You have to set delivery address for checkout',
+                        'warning'
+                    )
+            }else{
+                window.location.href = checkout_url;
+            }
+            
         }else{
             if(cart_contents_data != '1'){
                 swal(
@@ -440,7 +450,7 @@ $(document).on('click','.recommendation-add',function(){
                         'Add an item to begin',
                         'warning'
                     )
-            }else if(defualt_delivery_address_id == '' || defualt_delivery_address_id == null){
+            }else if((cart_order_type == 'delivery') && (defualt_delivery_address_id == '' || defualt_delivery_address_id == null)){
                 swal(
                         'Please select delivery address',
                         'You have to set delivery address for checkout',

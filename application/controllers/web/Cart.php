@@ -13,7 +13,8 @@ class Cart extends CI_Controller {
 	public function cart_destroy(){
 		echo "<pre>";
 		echo "Before destroy";
-		//print_r($this->cart->contents());
+		print_r($this->cart->contents());
+		exit;
 		echo "after destroy";
 		//print_r($_SESSION);
 		$shops = $this->welcome_model->get_popular_shops();
@@ -46,6 +47,31 @@ class Cart extends CI_Controller {
 		//          print_r($insert_data);
 		//         print_r($this->cart->contents());
 		        exit;
+	}
+
+	public function check_exists_cart(){
+		if(isset($_POST['order_type']) && $_POST['order_type'] != ''){
+
+			if(!empty($this->cart->contents())){
+
+				$cart_order_type= array_column($this->cart->contents(), 'order_type');
+				$shop_id= array_column($this->cart->contents(), 'shop_id');
+				if(($cart_order_type[0] == $_POST['order_type']) && ($shop_id[0] == $_POST['shop_id'])){
+					echo json_encode(array("is_success" => true, 'diff_order_type' => 0, 'cart_order_type' => $cart_order_type));
+					return true;
+				}else{
+					echo json_encode(array("is_success" => true, 'diff_order_type' => 1, 'cart_order_type' => $cart_order_type));
+					return true;
+				}
+
+			}else{
+				echo json_encode(array("is_success" => true, 'diff_order_type' => 0));
+				return true;
+			}
+		}else{
+			echo json_encode(array("is_success" => false));
+			return false;
+		}	
 	}
 
 	public function my_cart(){
@@ -82,12 +108,19 @@ class Cart extends CI_Controller {
 		$this->load->view('web/template',$output_data);
 	}
 
-	public function cart_add(){
+	public function cart_add($order_type = NULL){
 
 		// echo "<pre>";
-		// print_r($_POST);
-		// print_r($_SESSION);
+		// print_r($order_type);
 		// exit;
+
+		if(!empty($this->cart->contents())){
+			$cart_order_type= array_column($this->cart->contents(), 'order_type');
+			$cart_shop_id= array_column($this->cart->contents(), 'shop_id');
+			if($cart_order_type[0] != $order_type || $_POST['shop_id'] != $cart_shop_id[0]){
+				$this->cart->destroy();
+			}
+		}
 
 		if(isset($_POST['item_id']) && !empty($_POST["item_id"])){
 			$this->db->select('id,shop_id,name,item_picture,is_combo,offer_price,price');
@@ -99,13 +132,13 @@ class Cart extends CI_Controller {
 	        if ($sql_query->num_rows() > 0){
 	        	$item_data = (array)$sql_query->row();
 
-	        	if (isset($_SESSION['cart_shop']) && $_SESSION['cart_shop'] != ''){
-	        		if($item_data['shop_id'] != $_SESSION['cart_shop']){
-	        			$this->cart->destroy();
-	        		}
-	        	}else{
-	        		$this->session->set_userdata('cart_shop', $_POST['shop_id']);
-	        	}
+	        	// if (isset($_SESSION['cart_shop']) && $_SESSION['cart_shop'] != ''){
+	        	// 	if($item_data['shop_id'] != $_SESSION['cart_shop']){
+	        	// 		$this->cart->destroy();
+	        	// 	}
+	        	// }else{
+	        	// 	$this->session->set_userdata('cart_shop', $_POST['shop_id']);
+	        	// }
 
 	        	// get all varients array
 	        	$all_varients = array();
@@ -149,6 +182,7 @@ class Cart extends CI_Controller {
 				$insert_data = array(
 									'id' => $unique_id,
 									'item_id' => $item_data['id'],
+									'order_type' => $order_type,
 									'name' => $item_data['name'],
 									'price' => number_format((float)$total_price, 2, '.', ''),
 									'item_price' => number_format((float)$price, 2, '.', ''),

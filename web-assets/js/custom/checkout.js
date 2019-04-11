@@ -64,6 +64,7 @@ $(document).on('click','#apply-promo',function(){
 });
 
 function validate_promocode(data_name) {
+    $(".overlay").css("display", "block");
     $.ajax({
             url: validate_promocode_url,
             type: "POST",
@@ -86,9 +87,10 @@ function validate_promocode(data_name) {
                         $("#promocode-div").show();
 
                         apply_promocode($('.applied-promo').val());
+                        $(".overlay").css("display", "none");
 
                     }else{
-
+                        $(".overlay").css("display", "none");
                        swal(
                             'Promocode '+$('.applied-promo').val().toUpperCase()+' is invalid!',
                             'Please try another one',
@@ -100,6 +102,7 @@ function validate_promocode(data_name) {
                 
             },
             error: function (xhr, ajaxOptions, thrownError){
+                $(".overlay").css("display", "none");
                 return false;
             }
         });
@@ -107,6 +110,7 @@ function validate_promocode(data_name) {
     
 }
 function apply_promocode(data_name) {
+    $(".overlay").css("display", "block");
     $.ajax({
             url: get_promocode_data_url,
             type: "POST",
@@ -129,6 +133,7 @@ function apply_promocode(data_name) {
 
                     var total = parseFloat(new_sub_total) + parseFloat(delivery_amount) + parseFloat(tax_amount) + parseFloat(service_charge_amount);
                     $('#total').text(Number(total).toFixed(2));
+                    promocode_applied = data_name;
 
                     swal(
                         'Promocode applied',
@@ -136,7 +141,7 @@ function apply_promocode(data_name) {
                         'success'
                     )
 
-                    promocode_applied = data_name;
+                    $(".overlay").css("display", "none");
 
                     return true;
                 }
@@ -174,6 +179,12 @@ $(document).on('click','#orderSuccessful .close-btn',function(){
     }
 });
 
+$(document).on('hidden.bs.modal','#orderSuccessful',function(){
+    if(order_placed == true){
+        window.location.href = order_success_url+'/'+order_id;
+    }
+});
+
 $(document).on('click','#placeorder',function(){
     if($("input[name='deliveroption']:checked")){
         if( (($("input[name='deliveroption']:checked").val() == 2) && ($('#deliver_time').val() == '')) ||  (($("input[name='deliveroption']:checked").val() == 4) && ($('#takeout_time').val() == '')) ){
@@ -184,6 +195,8 @@ $(document).on('click','#placeorder',function(){
             )
             return false;
         }else{
+
+            $(".overlay").css("display", "block");
 
             if($("input[name='deliveroption']:checked").val() == 2){
                 var later_time =  $('#deliver_time').val();
@@ -217,6 +230,7 @@ $(document).on('click','#placeorder',function(){
                 // console.log(today.getTime() + (30 * 60000));
 
                 if(later_obj <= today_plus_30min){
+                    $(".overlay").css("display", "none");
                     swal(
                         'Deliver/takeout time invalid',
                         'Please select deliver/takout now if you want order into 30 min from now or select time later from 30 mins now',
@@ -232,12 +246,14 @@ $(document).on('click','#placeorder',function(){
                 card_id = $("input[name='payment_card']:checked").val();
             }
 
-            // console.log('promocode_applied'+promocode_applied+' ');
-            // console.log('payment_type'+payment_type+'   ');
-            // console.log('card_id'+card_id+' ');
-            // console.log('delivery_amount'+delivery_amount+' ');
-            // console.log('tax'+tax+' ');
-            // console.log('service_charge'+service_charge+'   ');
+            console.log('order_type'+order_type+' ');
+            console.log('later_time'+later_time+' ');
+            console.log('promocode_applied'+promocode_applied+' ');
+            console.log('payment_type'+payment_type+'   ');
+            console.log('card_id'+card_id+' ');
+            console.log('delivery_amount'+delivery_amount+' ');
+            console.log('tax'+tax+' ');
+            console.log('service_charge'+service_charge+'   ');
             // return false;
 
             $.ajax({
@@ -259,6 +275,7 @@ $(document).on('click','#placeorder',function(){
                     // return false;
                     if (typeof returnData != "undefined"){
                         if(returnData.is_success == false){
+                            $(".overlay").css("display", "none");
                             swal(
                                 'Please update your cart',
                                 returnData.message,
@@ -266,6 +283,7 @@ $(document).on('click','#placeorder',function(){
                             )
                             return false;
                         }else{
+                            $(".overlay").css("display", "none");
                             console.log("checkout");
                             $('#orderSuccessful').modal('show');
                             order_placed = true;
@@ -279,6 +297,7 @@ $(document).on('click','#placeorder',function(){
         }
         
     }else{
+        $(".overlay").css("display", "none");
         swal(
             'Please select delivery or takeout',
             'Order type is required',

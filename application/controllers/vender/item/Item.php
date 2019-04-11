@@ -64,13 +64,23 @@ class Item extends CI_Controller {
 		$status = $_POST['status'];
 		if (isset($id) && !is_null($id) && !empty($id)) {
 
+			if($this->auth->is_vender()){
+				$shop_id = $this->auth->get_user_id();
+			}elseif ($this->auth->is_employee()) {
+				$shop_id = $this->auth->get_emp_shop_id();
+			}else{
+				echo json_encode(array("is_success" => false));
+				return FALSE;
+			}
+
+
 			if($status == 1){
-				$where = array('recommended' => 1, 'deleted_at' => NULL);
+				$where = array('recommended' => 1, 'deleted_at' => NULL, 'shop_id' => $shop_id);
 	            $select = array('id');
 	            $table = 'item';
 	            $recommended_items = get_data_by_filter($table,$select, $where);
 	            if(count($recommended_items) >= 3){
-	            	echo json_encode(array("is_success" => false));
+	            	echo json_encode(array("is_success" => false, "recommended_items" => $recommended_items));
 					return TRUE;
 	            }
 			}
@@ -135,27 +145,27 @@ class Item extends CI_Controller {
 							$file_upload_data = $this->upload->data();
 							$modal_data['item_picture'] = $file_upload_data;
 
-							$this->load->library('image_lib');
+							// $this->load->library('image_lib');
 
-							$config['image_library'] = 'gd2';
-							$config['source_image'] = FCPATH . $this->config->item("item_photo_path").'/'.$file_upload_data['file_name'];
-							$config['create_thumb'] = TRUE;
-							$config['thumb_marker'] = '';
-						    $config['maintain_ratio'] = TRUE;
-						    $config['width'] = 600;
-	    					$config['height'] = 600;
+							// $config['image_library'] = 'gd2';
+							// $config['source_image'] = FCPATH . $this->config->item("item_photo_path").'/'.$file_upload_data['file_name'];
+							// $config['create_thumb'] = TRUE;
+							// $config['thumb_marker'] = '';
+						 //    $config['maintain_ratio'] = TRUE;
+						 //    $config['width'] = 600;
+	    		// 			$config['height'] = 600;
 
-						    $this->image_lib->clear();
-						    $this->image_lib->initialize($config);
+						 //    $this->image_lib->clear();
+						 //    $this->image_lib->initialize($config);
 
-						    if (!$this->image_lib->resize()){
-							    ucfirst($this->upload->display_errors());
-								$this->auth->set_error_message(ucfirst($this->upload->display_errors()));
-								$this->session->set_flashdata($this->auth->get_messages_array());
-								$file_upload = false;
-							}else{
-								$file_upload = true;
-							}
+						 //    if (!$this->image_lib->resize()){
+							//     ucfirst($this->upload->display_errors());
+							// 	$this->auth->set_error_message(ucfirst($this->upload->display_errors()));
+							// 	$this->session->set_flashdata($this->auth->get_messages_array());
+							// 	$file_upload = false;
+							// }else{
+							// 	$file_upload = true;
+							// }
 						}
 
 					}
@@ -176,7 +186,7 @@ class Item extends CI_Controller {
 
 		//$output_data['category_data'] = $this->item_model->get_active_category();
 		$output_data['variant_groups'] = $this->item_model->get_variant_groups();
-		$output_data['cuisines_data'] = get_cuisine();
+		$output_data['cuisines_data'] = get_cuisine2();
 		$output_data['category_data'] = $this->category_model->get_category();
 		$output_data['item_type'] = $type;
 
@@ -243,27 +253,27 @@ class Item extends CI_Controller {
 							$file_upload_data = $this->upload->data();
 							$modal_data['item_picture'] = $file_upload_data;
 
-							$this->load->library('image_lib');
+							// $this->load->library('image_lib');
 
-							$config['image_library'] = 'gd2';
-							$config['source_image'] = FCPATH . $this->config->item("item_photo_path").'/'.$file_upload_data['file_name'];
-							$config['create_thumb'] = TRUE;
-							$config['thumb_marker'] = '';
-						    $config['maintain_ratio'] = TRUE;
-						    $config['width'] = 600;
-	    					$config['height'] = 600;
+							// $config['image_library'] = 'gd2';
+							// $config['source_image'] = FCPATH . $this->config->item("item_photo_path").'/'.$file_upload_data['file_name'];
+							// $config['create_thumb'] = TRUE;
+							// $config['thumb_marker'] = '';
+						 //    $config['maintain_ratio'] = TRUE;
+						 //    $config['width'] = 600;
+	    		// 			$config['height'] = 600;
 
-						    $this->image_lib->clear();
-						    $this->image_lib->initialize($config);
+						 //    $this->image_lib->clear();
+						 //    $this->image_lib->initialize($config);
 
-						    if (!$this->image_lib->resize()){
-							    ucfirst($this->upload->display_errors());
-								$this->auth->set_error_message(ucfirst($this->upload->display_errors()));
-								$this->session->set_flashdata($this->auth->get_messages_array());
-								$file_upload = false;
-							}else{
-								$file_upload = true;
-							}
+						 //    if (!$this->image_lib->resize()){
+							//     ucfirst($this->upload->display_errors());
+							// 	$this->auth->set_error_message(ucfirst($this->upload->display_errors()));
+							// 	$this->session->set_flashdata($this->auth->get_messages_array());
+							// 	$file_upload = false;
+							// }else{
+							// 	$file_upload = true;
+							// }
 						}
 
 					}
@@ -282,17 +292,17 @@ class Item extends CI_Controller {
 			}
 		}
 
-		$output_data['cuisines_data'] = get_cuisine();
+		$output_data['cuisines_data'] = get_cuisine2();
 		$output_data['item_variant_data'] = $this->item_model->get_item_variants(decrypt($id));
 		$output_data['item_data'] = $this->item_model->get_item(decrypt($id));
 		$output_data['category_data'] = $this->category_model->get_category();
 		$output_data['variant_groups'] = $this->item_model->get_variant_groups();
 		
-		if (!isset($output_data['item_data']) || empty($output_data['item_data']) || count($output_data['item_data']) <= 0){
-			$this->auth->set_error_message("Item data not found");
-			$this->session->set_flashdata($this->auth->get_messages_array());
-			redirect(base_url() . "item-list");
-		}
+		// if (!isset($output_data['item_data']) || empty($output_data['item_data']) || count($output_data['item_data']) <= 0){
+		// 	$this->auth->set_error_message("Item data not found");
+		// 	$this->session->set_flashdata($this->auth->get_messages_array());
+		// 	redirect(base_url() . "item-list");
+		// }
 
 		$output_data['main_content'] = "vender/item/put";
 		$this->load->view('template/template',$output_data);	

@@ -36,7 +36,7 @@
                 digits: true,
                 greaterThanZero:true,
                 minlength: 13,
-                maxlength: 19,
+                maxlength: 16,
                 normalizer: function (value) {
                     return $.trim(value);
                 }
@@ -158,7 +158,7 @@ $(document).ready(function (){
 	});
 
 	$("#cvv").inputmask("9999",{"placeholder": ""});
-	$("#card_number").inputmask("9999999999999999999",{"placeholder": ""});
+	$("#card_number").inputmask("9999999999999999",{"placeholder": ""});
 });
 
 function GetCardType(number)

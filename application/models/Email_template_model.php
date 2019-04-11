@@ -511,8 +511,8 @@ class Email_template_model extends CI_Model {
 		$this->db->select('device_token');
 		$this->db->from('shop');
 		$this->db->where('device_token !=', '');
-		$this->db->where('t1.deleted_at', NULL);
-		$this->db->where('t1.status', 1);
+		$this->db->where('deleted_at', NULL);
+		$this->db->where('status', 1);
 
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0){
@@ -527,6 +527,55 @@ class Email_template_model extends CI_Model {
 			$return_value = TRUE;
 		}else{
 			$this->auth->set_error_message("No any logged in restaurant found");
+		}	
+		return $return_value;
+	}
+
+	public function send_custom_push_db(){
+		$return_value = FALSE;
+
+		$notification_title = $this->input->post("notification_title");
+		$notification_message = $this->input->post("notification_message");
+
+		$this->db->select('device_token,device_type');
+		$this->db->from('delivery_boy');
+		$this->db->where('device_token !=', '');
+		$device_type = array('1','2');
+		$this->db->where_in("device_type", $device_type);
+		$this->db->where('deleted_at', NULL);
+		$this->db->where('status', 1);
+
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$delivery_boy_data = $sql_query->result_array();
+			$delivery_boy_devices = array_column($delivery_boy_data, 'device_token');
+
+			$ios_data = array();
+  			$android_data = array();
+
+			foreach ($delivery_boy_devices as $key => $value) {
+				if($value['device_type'] == 1){
+	  				array_push($android_data, $value['device_token']);
+	  			}else if($value['device_type'] == 2){
+	  				array_push($ios_data, $value['device_token']);
+	  			}else{
+
+	  			}
+			}
+
+			$notification_message_array = array('message' => $notification_message);
+
+			if(!empty($android_data)){
+				$data1 = send_push_multiple_android($android_data, $notification_title, $notification_message_array,'general_notification');
+			}
+			if(!empty($ios_data)){
+				$data2 = send_push_multiple_ios($ios_data, $notification_title, $notification_message_array, 'general_notification');
+			}
+
+			$this->auth->set_status_message("Notification(s) sent successfully");
+			$return_value = TRUE;
+		}else{
+			$this->auth->set_error_message("No any logged in delivery boy found");
 		}	
 		return $return_value;
 	}

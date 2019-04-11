@@ -88,6 +88,22 @@ class Promocode_model extends CI_Model {
 
 		if(isset($_POST['promo_type']) && $_POST['promo_type'] != '' && ($is_vender || $is_employee)){
 			$user_data['promo_type'] = $_POST['promo_type'];
+
+			if(($_POST['promo_type'] == 1) && (intval($this->input->post("discount_type")) == 0)){
+				$this->db->select('IF(offer_price = "", price, offer_price) as price');
+                $this->db->from('item');
+                $this->db->order_by('ABS(price)','asc');
+                $this->db->limit(1);
+                $this->db->where_in('id', $_POST['applied_on_products']);
+                 $sql_query = $this->db->get();
+            	if ($sql_query->num_rows() > 0){
+            		$minimum_item_price = (array)$sql_query->row();
+            		if($user_data['amount'] > $minimum_item_price['price']){
+            			$this->auth->set_error_message("Discount amount should be less than selected products price");
+						return FALSE;
+            		}
+            	}
+			}
 		}
 
 		if(intval($this->input->post("discount_type")) == 1){

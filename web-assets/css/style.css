@@ -672,12 +672,12 @@ input#usermobile { padding-left: 30px;}
 .home-filter-list .nav-pills .nav-link.active, .nav-pills .show>.nav-link { color: #000;  background: #d2d2d2;}
 
 .Pickup-check.delivery label.form-check-label {    font-size: 1rem !important;  color: #000 !important; background: transparent !important; padding: 5px 25px !important; font-weight: 600 !important; margin-left:0px; border:2px solid #a4d3da;    border-radius: 30px !important;  cursor: pointer;    }
-
+.Pickup-check.delivery #filter-clear ~ label.form-check-label:hover{ background: #a4d3da !important; color: #fff !important;}
 .list-filter-detail input[type=checkbox]:checked + label { color: #fff !important; font-style: normal; border-radius: 30px; border:2px solid #a4d3da; background: #a4d3da !important;} 
 
 .list-filter-detail input { visibility: hidden; display: none;}
 
-.delivery { float: left; margin: 10px;}
+.delivery { float: left; margin: 10px 5px;}
 
 .home-filter-list { margin: 10px 0 10px; display: inline-block; width: 100%;}
 
@@ -712,7 +712,7 @@ a#dropdownMenuLink { position: relative;  padding: 9px 20px;}
 .list-filter-detail select#order-category { padding: 0 55px 0 20px;  background-position: 93% 10px;}
 .list-filter-detail select#review-star1 { padding: 0 60px 0 60px;  background-position: 90% 10px;}
 .dropdown.delivery.review-star .form-group:after { position: absolute; content: ""; top: 10px; bottom: 0; border-left: 1px solid #0000007a; height: 18px; right: 35px;}
-.list-filter-detail select#order-price { padding-left: 15px; padding-right: 40px;}
+.list-filter-detail select#order-price { padding-left: 60px; padding-right: 40px;}
  .restaurants-food .results{   margin-top: 30px; }
 
 

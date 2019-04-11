@@ -90,8 +90,7 @@ $post_link = base_url().'restaurant-partner-form';
                             <input type="hidden" name="longitude" id="longitude" value="">
                             <input type="hidden" name="zipcode" id="zipcode" value="">
                             <input type="hidden" name="country" id="country" value="">
-                            <input type="hidden" name="state" id="state" value="">
-                            <input type="hidden" name="city" id="city" value="">
+
                             <div class="validation-error-label">
                                 <?php echo form_error('address'); ?>
                             </div>
@@ -112,7 +111,7 @@ $post_link = base_url().'restaurant-partner-form';
                         </div>
 
                         <div class="col-md-12 d-flex justify-content-center mt-5 mb-5">
-                            <button type="submit" class="small-red-btn" name="submit">Submit</button>
+                            <button type="submit" class="small-red-btn pointer" name="submit">Submit</button>
                         </div>
 
                     </form>
@@ -206,7 +205,7 @@ $post_link = base_url().'restaurant-partner-form';
   function initAutocomplete() {
     autocomplete = new google.maps.places.Autocomplete(
        (document.getElementById('autocomplete')),
-        {types: ['geocode'] });
+        {types: ['establishment'] });
     autocomplete.addListener('place_changed', fillInAddress);
   }
 
@@ -234,10 +233,10 @@ $post_link = base_url().'restaurant-partner-form';
                     $('#country').val(place.address_components[i].long_name);
                 }
                 if (place.address_components[i].types[j] == "administrative_area_level_1") {
-                    $('#state').val(place.address_components[i].long_name);
+                    $('#administrative_area_level_1').val(place.address_components[i].long_name);
                 }
                 if (place.address_components[i].types[j] == "administrative_area_level_2") {
-                    $('#city').val(place.address_components[i].long_name);
+                    $('#administrative_area_level_2').val(place.address_components[i].long_name);
                 }
             }
             var addressType = place.address_components[i].types[0];

@@ -109,6 +109,29 @@ function get_cuisine($id=NULL){
 	return $return_data;
 }
 
+function get_cuisine2($id=NULL){
+	$CI = &get_instance();
+	$return_data = array();
+	$CI->db->select('id,cuisine_name,cuisine_picture,created_at');
+	$CI->db->from('cuisine');
+	if (isset($id) && !is_null($id)) {
+		$CI->db->where('id', $id);
+	}
+	$CI->db->where("deleted_at", NULL);
+	$CI->db->where("is_active", 1);
+	$CI->db->where("cuisine_name !=", 'All');
+	$sql_query = $CI->db->get();
+	if ($sql_query->num_rows() > 0) {
+		if (isset($id) && !is_null($id)) {
+			$return_data = $sql_query->row();
+		}else{
+			$return_data = $sql_query->result_array();
+		}
+		
+	}
+	return $return_data;
+}
+
 function get_user_type($email=NULL){
 
 	if($email== NULL){
@@ -379,7 +402,8 @@ function send_push($device_type = '',$device_token = '', $push_title = '', $push
                 'sound' => 'default',
                 'notification' => array( 
                     "title"=> $push_title,
-                    "body"=> $push_data,
+                    "body"=> $push_data['message'],
+                    "data"=> $push_data,
                     "type"=> $push_type
                     )
                 );

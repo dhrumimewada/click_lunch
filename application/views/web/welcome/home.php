@@ -1,7 +1,15 @@
 <style type="text/css" media="screen">
    .tab-content>.active{
         display: inline-flex !important;
-   } 
+   }
+   .swal2-radio label{
+        display: inline-block;
+        margin: 0px 40px;
+   }
+   .swal2-radio span{
+        font-size: 20px;
+        padding: 0 10px;
+   }
 </style>
 <!-- SLider Start-->
 <?php
@@ -49,13 +57,15 @@ if(isset($banner_list) && !empty($banner_list)){
                                 <span class="caption-1"><b>
                                     <?php echo $value['title']; ?>
                                 </b></span>
-                                <form method="post" action="#" class="m-l-15">
+                                <!-- <form method="post" action="#" class="m-l-15">
                                     <div class="search-div row">
                                         
                                         <input type="text" name="search-txt" class="search-txt col-lg-6" placeholder="Enter Your Delivery Address">
-                                        <input type="submit" name="submit" class="search-btn col-lg-5 float-right" value="Find Restaurant">
+                                        
+                                        <input type="hidden" class="zipcode" name="zipcode">
+                                        <input type="button" name="submit" class="search-btn col-lg-5 float-right" value="Find Restaurant">
                                     </div>
-                                </form>
+                                </form> -->
                             </div>
                         </div>
 
@@ -65,6 +75,22 @@ if(isset($banner_list) && !empty($banner_list)){
 
                     </div>
                 </div>
+
+                <div id="search-div">
+                    <div class="m-l-15">
+                        <div class="search-div row">
+                            
+                            <input type="text" name="search-txt" class="search-txt col-lg-6" placeholder="Enter Your Location" onFocus="geolocate()" id="autocomplete">
+                            <input type="hidden" id="administrative_area_level_2" name="city">
+                            <input type="hidden" id="administrative_area_level_1" name="state">
+                            <input type="hidden" id="latitude" name="latitude">
+                            <input type="hidden" id="longitude" name="longitude">
+
+                            <input type="button" id="find-shops-by-address" class="search-btn col-lg-5 float-right" value="Find Restaurant">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="social-links">
                     <ul>
                         <li>
@@ -127,6 +153,9 @@ if(isset($banner_list) && !empty($banner_list)){
     <div class="container">
         <div class="offer-title text-center">
             <h2><b>Discover Restaurants by Popular Cuisine</b></h2>
+            <!-- <input type="text" name="search-txt1" class="col-lg-6" placeholder="Enter Your Delivery Address" onFocus="geolocate()" id="autocomplete">
+            <input type="hidden" id="administrative_area_level_2" name="city">
+            <input type="hidden" id="administrative_area_level_1" name="state"> -->
         </div>
         <div class="home-filter-list">
             <div class="home-filter-box">
@@ -135,7 +164,7 @@ if(isset($banner_list) && !empty($banner_list)){
                     $all_cuisines_url = base_url() . 'web-assets/images/all.png';
 
                     foreach ($cuisines as $key => $value) {
-                        $active = ($value['cuisine_name'] == 'All')?'active':'';
+                        $active = ($value['cuisine_name'] == 'All')?'active all':'';
                         $photo_url = base_url() . 'web-assets/images/all.png';
                         if (isset($value['cuisine_picture']) && ($value['cuisine_picture'] != '')) {
                             if (file_exists($this->config->item("cuisine_photo_path") . '/'.$value['cuisine_picture'])){
@@ -158,9 +187,9 @@ if(isset($banner_list) && !empty($banner_list)){
                     <div class="list-filter-detail">                      
                         <div class="dropdown delivery review-star ">                          
                             <div class="form-group">
-                                <label class="sort-title-ab">Sort :</label>
+                                <label class="sort-title-ab">SORT :</label>
                                 <select class="form-control review-star filter" id="deliver-fee">                                            
-                                     <option class="sort-dev" value="" disabled selected hidden > Delivery Fee</option>                                
+                                     <option class="sort-dev" value="" disabled selected > Delivery Fee</option>                                
                                      <option value="1">Sort By High</option>
                                      <option value="2">Sort By Low</option>                                                                      
                                 </select>
@@ -172,17 +201,11 @@ if(isset($banner_list) && !empty($banner_list)){
                                         <label  for="#review-star1" class="review-title">Over</label>
                                         <label  for="#review-star1" class="review-icon"><img src="<?php echo $assets; ?>images/bookmark-star.png"></label>
                                     <select class="form-control review-star filter" id="review-star1">                                     
-                                         <option selected value='' >All</option>
-                                         <option value="1" >1</option>
-                                         <option value="1.50" >1.5</option>
-                                         <option value="2" >2</option>
-                                         <option value="2.50" >2.5</option>
-                                         <option value="3" >3</option>
-                                         <option value="3.50" >3.5</option>
-                                         <option value="4" >4</option>     
-                                         <option value="4.50" >4.5</option>     
-                                         <option value="5" >5</option>                                   
-                                         <option value="5.50" >5.5</option>                                   
+                                         <option selected value=''>All</option>
+                                         <option value="1">1</option>
+                                         <option value="2">2</option>
+                                         <option value="3">3</option>
+                                         <option value="4">4</option>                                                                            
                                     </select>
                                 </div>                           
                         </div>                        
@@ -200,10 +223,11 @@ if(isset($banner_list) && !empty($banner_list)){
                         </div> -->
                         <div class="dropdown delivery review-star">                          
                             <div class="form-group">
+                                <label class="sort-title-ab">SORT:</label>
                                 <select class="form-control review-star filter" id="order-price">
-                                    <option value="" disabled selected hidden>$.$$</option>                                                                          
-                                     <option value="1" >Sort By High</option>
-                                     <option value="2" >Sort By Low</option>                                                                      
+                                    <option value="" disabled selected>$.$$</option>                                                                          
+                                     <option value="1" >High</option>
+                                     <option value="2" >Low</option>                                                                      
                                 </select>
                             </div> 
                         </div>  
@@ -215,14 +239,26 @@ if(isset($banner_list) && !empty($banner_list)){
                                     if(isset($category) && !empty($category)){
                                         foreach ($category as $key => $value) {
                                     ?>
-                                            <option value="<?php echo $value['id']; ?>" ><?php echo $value['category_name']; ?></option>
+                                            <option value="<?php echo $value['id']; ?>" >
+                                                <?php 
+                                                echo substr($value['category_name'], 0, 12);
+                                                if(strlen($value['category_name']) > 12){
+                                                    echo '...';
+                                                }
+                                                ?>
+                                                    
+                                            </option>
                                     <?php
                                         }
                                     }
                                     ?>                                 
                                 </select>
                             </div> 
-                        </div>  
+                        </div>
+                        <div class="form-check form-check-inline  Pickup-check delivery">
+                            <input class="form-check-input filter" type="button" id="filter-clear" value="1" name="filter-clear">
+                            <label class="form-check-label" for="filter-clear">Clear All</label>
+                        </div>
                     </div> 
                 </div>
             </div>
@@ -234,171 +270,20 @@ if(isset($banner_list) && !empty($banner_list)){
                 </li>
                 <li class="nav-item mr-3">
                     <a class="nav-link active" id="nearby-tab" data-toggle="tab" href="#nearby" role="tab" aria-controls="nearby" aria-selected="true">Nearby Restaurant</a>
+                    <?php //echo "<pre>"; print_r($_SESSION); ?>
                 </li>
             </ul>
         </div>
         <div class="tab-content">
             <div class="tab-pane fade show active restaurant row mt-4 w-100" id="nearby" role="tabpanel" aria-labelledby="nearby-tab">
-                <?php
-                if(isset($shops) && !empty($shops)){
-                    foreach ($shops as $key => $value){
-                        $photo_url = base_url() . 'web-assets/images/logo-3.png';
-                        if (isset($value['profile_picture']) && ($value['profile_picture'] != '')) {
-                            if (file_exists($this->config->item("profile_path") . '/'.$value['profile_picture'])){
-                                $photo_url = base_url() . $this->config->item("profile_path") . '/'.$value['profile_picture'];
-                            }
-                        }
-                        ?>
-                    <div class="col-lg-3 px-2">
-                        <div class="card">
-                            <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>">
-                                <div class="restaurant-img position-relative">
-                                    <img class="card-img-top" src="<?php echo $photo_url; ?>" alt="Card image cap">
-                                    <div class="rating txt1">Ratings</div>
-                                    <div class="rating txt2 txt-red">4.2</div>
-                                </div>
-                                <div class="card-body restaurant-body">
-                                        <div class="card-title txt-red font-md text-center cut-text">
-                                            <?php echo stripcslashes($value['shop_name']); ?>
-                                        </div>
-                                        <b>
-                                            <div class="d-inline-block txt-black font-small">Delivery <?php echo $value['delivery_time']; ?></div>
-                                            <div class="d-inline-block txt-black float-right font-small">Order by <?php echo $value['order_by_time']; ?></div>
-                                        </b>
-                                        <?php
-                                        if(isset($value['cuisine']) && $value['cuisine'] != ''){
-                                        ?>
-                                        <div class="position-relative txt-black font-14 pl-4 cusion cut-text">
-                                            <?php
-                                            $total = count($value['cuisine']) - 1;
-                                            foreach ($value['cuisine'] as $key1 => $value1) {
-                                                echo '<span data-id="'.$value1['cuisine_id'].'" data-toggle="tooltip" data-placement="bottom" title="View all '.$value1['cuisine_name'].' Restaurants" class="search-cuisine d-inline-block pointer">'.$value1['cuisine_name'].'</span>';
-                                                if($key1 != $total){
-                                                    echo ', ';
-                                                }
-                                            }
-                                            ?>
-                                        </div>
-                                        <?php
-                                        }
-                                        ?>
-                                        <div class="card-text txt-black font-11">
-                                            <?php
-                                            if($value['availibality']['is_closed'] == 1){
-                                                echo $time = 'TODAY CLOSED';
-                                            }else if($value['availibality']['full_day'] == 1){
-                                                echo $time = 'FULL DAY OPEN';
-                                            }else if($value['availibality']['from_time'] != '' && $value['availibality']['to_time'] != ''){
-                                                echo $time = $value['availibality']['from_time'].' to '.$value['availibality']['to_time'];
-                                            }else{
-                                                echo '&nbsp;';
-                                            }
-                                            ?>
-                                        </div>
-                                        <!-- <div class="text-right txt-black mt-1"><b>0.71mi</b></div> -->
-                                </div>
-                                <div class="restaurant-hover">
-                                    <div class="restaurant-hover-list">
-                                         <div class="restaurant-hover-img">
-                                            <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>"><img src="<?php echo $assets; ?>images/zoom-in-out.png"></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                <?php
-                    }
-                }else{
-                ?>
-                <div class="text-muted no-shops-found">
-                    No any restaurant found
+                <div class="">
+                    Allow Location For Nearby Restaurants 
                 </div>
-                <?php
-                }
-                ?>
             </div>
-            <div class="tab-pane fade restaurant row mt-4" id="combo" role="tabpanel" aria-labelledby="combo-tab">
-                <?php
-                if(isset($combo_shops) && !empty($combo_shops)){
-                    foreach ($combo_shops as $key => $value){
-                        $photo_url = base_url() . 'web-assets/images/logo-3.png';
-                        if (isset($value['profile_picture']) && ($value['profile_picture'] != '')) {
-                            if (file_exists($this->config->item("profile_path") . '/'.$value['profile_picture'])){
-                                $photo_url = base_url() . $this->config->item("profile_path") . '/'.$value['profile_picture'];
-                            }
-                        }
-                        ?>
-                    <div class="col-lg-3 px-2">
-                        <div class="card">
-                            <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>">
-                                <div class="restaurant-img position-relative">
-                                    <img class="card-img-top" src="<?php echo $photo_url; ?>" alt="Card image cap">
-                                    <div class="rating txt1">Ratings</div>
-                                    <div class="rating txt2 txt-red">4.2</div>
-                                </div>
-                                <div class="card-body restaurant-body">
-                                        <div class="card-title txt-red font-md text-center cut-text">
-                                            <?php echo stripcslashes($value['shop_name']); ?>
-                                        </div>
-                                        <b>
-                                            <div class="d-inline-block txt-black font-small">Delivery <?php echo $value['delivery_time']; ?></div>
-                                            <div class="d-inline-block txt-black float-right font-small">Order by <?php echo $value['order_by_time']; ?></div>
-                                        </b>
-                                        <?php
-                                        if(isset($value['cuisine']) && $value['cuisine'] != ''){
-                                        ?>
-                                        <div class="position-relative txt-black font-14 pl-4 cusion cut-text">
-                                            <?php
-                                            $total = count($value['cuisine']) - 1;
-                                            foreach ($value['cuisine'] as $key1 => $value1) {
-                                                echo '<span data-id="'.$value1['cuisine_id'].'" data-toggle="tooltip" data-placement="bottom" title="View all '.$value1['cuisine_name'].' Restaurants" class="search-cuisine d-inline-block pointer">'.$value1['cuisine_name'].'</span>';
-                                                if($key1 != $total){
-                                                    echo ', ';
-                                                }
-                                            }
-                                            ?>
-                                        </div>
-                                        <?php
-                                        }
-                                        ?>
-                                        <div class="card-text txt-black font-11">
-                                            <?php
-                                            if($value['availibality']['is_closed'] == 1){
-                                                echo $time = 'TODAY CLOSED';
-                                            }else if($value['availibality']['full_day'] == 1){
-                                                echo $time = 'FULL DAY OPEN';
-                                            }else if($value['availibality']['from_time'] != '' && $value['availibality']['to_time'] != ''){
-                                                echo $time = $value['availibality']['from_time'].' to '.$value['availibality']['to_time'];
-                                            }else{
-                                                echo '&nbsp;';
-                                            }
-                                            ?>
-                                        </div>
-                                        <!-- <div class="text-right txt-black mt-1"><b>0.71mi</b></div> -->
-                                </div>
-                                <div class="restaurant-hover">
-                                    <div class="restaurant-hover-list">
-                                         <div class="restaurant-hover-img">
-                                            <a href="<?php echo BASE_URL().'restaurant/'.$value['short_name']; ?>"><img src="<?php echo $assets; ?>images/zoom-in-out.png"></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                <?php
-                    }
-                }else{
-                ?>
-                <div class="text-muted no-shops-found">
-                    No any combo restaurant found
+            <div class="tab-pane fade restaurant row mt-4 w-100" id="combo" role="tabpanel" aria-labelledby="combo-tab">
+                <div class="">
+                    Allow Location For Combo Restaurants 
                 </div>
-                <?php
-                }
-                ?>
             </div>
         </div>
     </div>
@@ -614,6 +499,12 @@ if(isset($banner_list) && !empty($banner_list)){
         <img class="app-image" src="<?php echo base_url(); ?>/assets/images/home-page/Mobile.png" alt="Click Lunch">
     </div>
 </div>
+
+
+<?php
+$google_key = $this->config->item("google_key");
+?>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_key; ?>&libraries=places&callback=initAutocomplete" async defer></script>
 <script type="text/javascript">
 var latitude = '<?php echo $_SESSION['lat']; ?>';
 var longitude = '<?php echo $_SESSION['long']; ?>';
@@ -625,6 +516,8 @@ var defualt_photo_url = '<?php echo base_url() . 'web-assets/images/logo-3.png';
 var shop_url = '<?php echo base_url().'restaurant/'; ?>';
 var zoom_out_img_url = '<?php echo base_url().'web-assets/images/zoom-in-out.png'; ?>';
 
+var set_order_type_session = "<?php echo base_url().'set-order-type-session'; ?>";
+
 var cuisine_id = '';
 var pickup = '';
 var popular = '';
@@ -632,7 +525,12 @@ var delivery_fee = '';
 var minimum_order_amount = '';
 var category = '';
 var rating = '';
+
+var delivery_restaurants = '';
+var pickup_restaurants = '';
 $(document).ready(function() {
+
+    $('#wait').show();
 
     $('[data-toggle="tooltip"]').tooltip();
     
@@ -663,52 +561,86 @@ $(document).ready(function() {
                     loop:true
                 }
             }
-        });       
-// if (latitude == '' || longitude == ''){
-
-//     window.onload = function() {
-
-//         function initMap(position) {
-//              var latitude = parseFloat(position.coords.latitude);
-//              var longitude = parseFloat(position.coords.longitude);
-//              console.log('js fetch' + latitude+' ** '+longitude);
-//         }
-//         if (navigator.geolocation){
-//             navigator.permissions && navigator.permissions.query({name: 'geolocation'}).then(function(PermissionStatus) {
-//                 navigator.geolocation.getCurrentPosition(initMap);
-//             });
-//         }
-
-//     }
-// }else{
-//     console.log('php lat long fetch'+ latitude +' - '+longitude);
-// }
-    
-//     var get_shops_url = "<?php // echo base_url().'get-shops'; ?>";
-
-// if (latitude !== '' || longitude !== ''){
-//     $.ajax({
-//         url: get_shops_url,
-//         type: "POST",
-//         data:{
-//             latitude:latitude,
-//             longitude:longitude
-//             },
-//         success: function (returnData) {
-//             if (typeof returnData != "undefined"){
-//                 returnData = $.parseJSON(returnData);
-//                 console.log(returnData);
-//             }
-//         },
-//         error: function (xhr, ajaxOptions, thrownError) {
-//             console.log('error');
-//         }
-//     });
-// }else{
-//     console.log("blank");
-// }
-     
+        });   
 
 });
 </script>
 <script src="<?php echo base_url().'web-assets/js/custom/home.js'; ?>"></script>
+<script>
+
+  var placeSearch, autocomplete;
+
+  var componentForm = {
+
+        administrative_area_level_2: 'long_name',
+        administrative_area_level_1: 'long_name'
+      };
+
+
+
+  function initAutocomplete() {
+    autocomplete = new google.maps.places.Autocomplete(
+       (document.getElementById('autocomplete')),
+        {types: ['(regions)'] });
+    autocomplete.addListener('place_changed', fillInAddress);
+  }
+
+  function fillInAddress() {
+    var place = autocomplete.getPlace();
+
+     for (var component in componentForm) {
+      document.getElementById(component).value = '';
+      document.getElementById(component).disabled = false;
+    }
+
+   if (typeof place.address_components != "undefined" || place.address_components != null){
+
+    $('#latitude').val(place.geometry.location.lat());
+    $('#longitude').val(place.geometry.location.lng());
+
+    console.log(place.address_components);
+
+        for (var i = 0; i < place.address_components.length; i++) {
+            for (var j = 0; j < place.address_components[i].types.length; j++){
+                if (place.address_components[i].types[j] == "postal_code") {
+                    $('.zipcode').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "country") {
+                    $('.country').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "administrative_area_level_1") {
+                    $('.state').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "administrative_area_level_2") {
+                    $('.city').val(place.address_components[i].long_name);
+                }
+            }
+            var addressType = place.address_components[i].types[0];
+            if (componentForm[addressType]) {
+                var val = place.address_components[i][componentForm[addressType]];
+                document.getElementById(addressType).value = val;
+            }
+        }
+    }
+  }
+
+  function geolocate() {
+    $('.loader').show();
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var geolocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        // console.log(geolocation);
+        var circle = new google.maps.Circle({
+          center: geolocation,
+          radius: position.coords.accuracy
+        });
+        autocomplete.setBounds(circle.getBounds());
+      });
+    }
+     $('.loader').hide();
+  }
+</script>

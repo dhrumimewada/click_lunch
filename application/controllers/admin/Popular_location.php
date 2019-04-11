@@ -70,7 +70,7 @@ class Popular_location extends CI_Controller {
 					array('field' => 'house_no', 'label' => 'house/office number', 'rules' => 'trim|required|max_length[250]'),
 					array('field' => 'street', 'label' => 'street', 'rules' => 'trim|required|max_length[250]'),
 					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[250]'),
-					array('field' => 'zipcode', 'label' => 'zipcode', 'rules' => 'trim|numeric|max_length[5]|min_length[5]'),
+					array('field' => 'zipcode', 'label' => 'zipcode', 'rules' => 'trim|numeric|max_length[6]|min_length[5]'),
 					array('field' => 'nickname', 'label' => 'nick name', 'rules' => 'trim'),
 					array('field' => 'address_type', 'label' => 'address type', 'rules' => 'trim|required'),
 					 array('field' => 'delivery_instruction', 'label' => 'delivery instruction', 'rules' => 'trim')

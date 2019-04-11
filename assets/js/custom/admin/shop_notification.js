@@ -17,6 +17,9 @@
             'shop[]': {
                 required:true
             },
+            'delivery_boy[]': {
+                required:true
+            },
             notification_title:{
                 required:true
             },
@@ -28,6 +31,9 @@
 
             'shop[]': {
                 required: "Please select at least one restaurant."
+            },
+            'delivery_boy[]': {
+                required: "Please select at least one delivery boy."
             },
             notification_title:{
                 required: "The title field is required."

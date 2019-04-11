@@ -1,4 +1,4 @@
- var validator = $(".form-validate").validate({
+ var validator = $(".form-validate1").validate({
 
         ignore: 'input[type=hidden], .select2-search__field', // ignore hidden fields
         errorClass: 'validation-error-label',
@@ -89,7 +89,7 @@
             zipcode: {
                 required:true,
                 digits: true,
-                maxlength:5,
+                maxlength:6,
                 minlength:5,
                 normalizer: function (value) {
                     return $.trim(value);
@@ -197,11 +197,11 @@
             },
             profile_picture:{
                 accept: "image/jpg, image/jpeg, image/png",
-                filesize: 10
+                filesize: 2
             },
             broacher:{
                 accept: "application/pdf",
-                filesize: 10
+                filesize: 2
             }
         },
         messages: {
@@ -326,11 +326,11 @@
             },
             profile_picture:{
                 accept: "Accepted image formats: jpg, jpeg, png",
-                filesize: "File size limit executed: 10MB Maximum"
+                filesize: "File size limit executed: 2MB Maximum"
             },
             broacher:{
                 accept: "Accepted file formats: pdf",
-                filesize: "File size limit executed: 10MB Maximum"
+                filesize: "File size limit executed: 2MB Maximum"
             }
         },
         submitHandler: function(form) {
@@ -440,7 +440,7 @@ $( document ).ready(function() {
 
     $("#contact_no1, #contact_no2").inputmask("999 999 9999",{"placeholder": ""});
 
-    $("#zip_code").inputmask("99999",{"placeholder": ""});
+    $("#zip_code").inputmask("999999",{"placeholder": ""});
 
     var dt = new Date();
     $.each(available_time, function(k, v) {
@@ -594,7 +594,7 @@ $( document ).ready(function() {
   function initAutocomplete() {
     autocomplete = new google.maps.places.Autocomplete(
        (document.getElementById('autocomplete')),
-        {types: ['geocode'] , componentRestrictions: {country: "us"} });
+        {types: ['establishment'] });
     autocomplete.addListener('place_changed', fillInAddress);
   }
 

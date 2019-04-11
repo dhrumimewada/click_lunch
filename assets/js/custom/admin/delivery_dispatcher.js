@@ -71,7 +71,7 @@
             zipcode: {
                 required:true,
                 digits: true,
-                maxlength:5,
+                maxlength:6,
                 minlength:5,
                 normalizer: function (value) {
                     return $.trim(value);
@@ -174,7 +174,7 @@ $( document ).ready(function() {
         return false;
     });
 
-    $("#zipcode").inputmask("99999",{"placeholder": ""});
+    $("#zipcode").inputmask("999999",{"placeholder": ""});
 
     $("#contact_no").inputmask("999 999 9999",{"placeholder": ""});
 

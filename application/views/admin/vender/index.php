@@ -27,7 +27,6 @@ $edit_link = base_url().'vender-update';
                                 <th>Restaurant Name</th>
                                 <th>Contact Person</th>
                                 <th>Email</th>
-                                <th>Restaurant Code</th>
                                 <th class='text-center'>Status</th>
                                 <th>Created Date</th>
                                 <th class='text-center'>Action</th>
@@ -45,7 +44,7 @@ $edit_link = base_url().'vender-update';
                                     echo "<td>" . stripslashes($value["shop_name"]) . "</td>";
                                     echo "<td>" . stripslashes($value["vender_name"]). "</td>";
                                     echo "<td>" . $value["email"] . "</td>";
-                                    echo "<td>" . $value["shop_code"] . "</td>";
+                                    //echo "<td>" . $value["shop_code"] . "</td>";
                                     if($value["status"] == 1){
                                         $btn_name = 'Active';
                                         $btn_class = 'btn-success';
@@ -54,21 +53,22 @@ $edit_link = base_url().'vender-update';
                                         $btn_class = 'btn-deactive';
                                     }
                                     if($value["password"] == ''){
+
+                                        $resend_str = "<button type='button' class='btn btn-primary btn-sm waves-effect waves-light resend-mail' title='Resend Activation Mail' data-popup='tooltip'>Resend Mail</button>";
                                         echo "<td class='text-center'><button type='button' class='btn btn-sm btn-yellow waves-effect waves-light pending' title='Pending' data-popup='tooltip' disabled>Pending</button></td>";
                                     }else{
+                                        $resend_str = "<button type='button' class='btn btn-primary btn-sm waves-effect waves-light resend-mail-disabled'>Resend Mail</button>";
                                         echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_shop' status-id='" . $value["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";
                                     }
                                     
                                     echo "<td data-order='" . $created_date_ts . "'>" . $created_date . "</td>";
                                     $disabled = '';
-                                    //if(empty($value["password"])){
-                                      //  echo "<td class='text-center'><button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vender' title='Delete' data-popup='tooltip'>Delete</button></td>";
-                                    //}else{
-                                        echo "<td class='text-center'><a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary btn-sm waves-effect waves-light ". $disabled ."' title='Edit' data-popup='tooltip' > Edit</a>
-                                        <button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vender' title='Delete' data-popup='tooltip'>Delete</button></td>
+
+                                    echo "<td class='text-center'>
+                                        <a href='".$edit_link."/".encrypt($id)."' class='btn btn-outline-primary btn-sm waves-effect waves-light ". $disabled ."' title='Edit' data-popup='tooltip' > Edit</a>
+                                        <button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vender' title='Delete' data-popup='tooltip'>Delete</button>".$resend_str."
+                                        
                                         </td>";
-                                   // }
-                                    //echo "<td>".var_dump($value["password"])."</td>";
                                         
                                    
                                     
@@ -91,13 +91,14 @@ $edit_link = base_url().'vender-update';
 <script type="text/javascript">
     var vender_list = $('.vender_list').DataTable({
             keys: true,
-            "order": [[5, "desc"]],
+            "order": [[4, "desc"]],
             'iDisplayLength': 10,
-            columnDefs: [{orderable: false, targets: [6]},{visible: false,targets: [5]}],
+            columnDefs: [{orderable: false, targets: [5]},{visible: false,targets: [4]}],
     });
 
     var delete_url = "<?php echo base_url().'vender-delete'; ?>";
     var status_url = "<?php echo base_url().'vender-status'; ?>";
+    var resend_mail_url = "<?php echo base_url().'vender-resend-activation-mail/'; ?>";
 
     $(document).ready(function () {
 
@@ -114,7 +115,8 @@ $edit_link = base_url().'vender-update';
                     showCancelButton: true,
                     confirmButtonClass: 'btn btn-success',
                     cancelButtonClass: 'btn btn-danger m-l-10',
-                    confirmButtonText: 'Yes, delete it!'
+                    confirmButtonText: 'Yes, delete it!',
+                    confirmButtonColor: '#2E2D4D',
                 }).then(
                     function () {
 
@@ -129,7 +131,7 @@ $edit_link = base_url().'vender-update';
                                 returnData = $.parseJSON(returnData);
                                 swal(
                                     'Deleted!',
-                                    'Vender has been deleted.',
+                                    'Restaurant has been deleted.',
                                     'success'
                                 )
                                 remove_row($this);
@@ -144,6 +146,40 @@ $edit_link = base_url().'vender-update';
                     });    
                 })
             }    
+        });
+
+        $(document).on('click',".resend-mail", function(){
+
+            $this = $(this);
+            var data_id = get_dataid($this);
+
+            if (typeof data_id != "undefined" && data_id != null && data_id.length > 0){
+                swal.queue([{
+                    title: 'Resend Mail to Restaurant',
+                    confirmButtonText: 'Yes, Resend it!',
+                    confirmButtonColor: '#2E2D4D',
+                    text: 'Are you sure you want to resend activation mail?',
+                    showLoaderOnConfirm: true,
+                    preConfirm: function () {
+                        return new Promise(function (resolve) {
+                            $.get(resend_mail_url+data_id)
+                                .done(function (data) {
+                                    data = $.parseJSON(data);
+                                    swal.insertQueueStep(data.message);
+                                    resolve();
+                                })
+                        })
+                    }
+                }]) 
+            }    
+        });
+
+        $(document).on('click',".resend-mail-disabled", function(){
+            swal(
+                'Restaurant is already activated',
+                'You can not resend account activation mail',
+                'warning'
+            )
         });
 
         $(document).on('click',".deactive_shop", function() {
@@ -173,6 +209,7 @@ $edit_link = base_url().'vender-update';
                     showCancelButton: true,
                     confirmButtonClass: 'btn btn-success',
                     cancelButtonClass: 'btn btn-danger m-l-10',
+                    confirmButtonColor: '#2E2D4D',
                     confirmButtonText: 'Yes'
                 }).then(
                     function () {
@@ -188,12 +225,22 @@ $edit_link = base_url().'vender-update';
                             returnData = $.parseJSON(returnData);
                             if (typeof returnData != "undefined")
                             {
-                                swal(
-                                    change_status_to1,
-                                    'Shop has been '+change_status_to1,
-                                    'success'
-                                )
-                                $this.replaceWith("<button type='button' class='btn "+btn_cls_replace+ " btn-sm waves-effect waves-light deactive_shop' status-id='" +status+ "' title='"+btn_name_replace+"' data-popup='tooltip'>" +btn_name_replace+ "</button>");
+
+                                if(returnData.is_success == true){
+                                    swal(
+                                        change_status_to1,
+                                        'Shop has been '+change_status_to1,
+                                        'success'
+                                    )
+                                    $this.replaceWith("<button type='button' class='btn "+btn_cls_replace+ " btn-sm waves-effect waves-light deactive_shop' status-id='" +status+ "' title='"+btn_name_replace+"' data-popup='tooltip'>" +btn_name_replace+ "</button>");
+                                }else{
+                                    swal(
+                                        'Something went wrong',
+                                        'Server encounter error',
+                                        'warning'
+                                    )
+                                }
+                                
                                 
                             } 
                         },

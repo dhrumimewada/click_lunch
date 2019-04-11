@@ -218,6 +218,244 @@ $( document ).ready(function() {
         ]
     });
 
+    var all_orders_url = base_url+ 'dispatcher/order/all_orders_list/';
+    $('.all_orders').DataTable( {
+        "ajax": {
+            url : all_orders_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+    var db_assigned_orders_url = base_url+ 'dispatcher/order/db_assigned_orders_list/';
+    $('.db_assigned_orders').DataTable( {
+        "ajax": {
+            url : db_assigned_orders_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+    var live_orders_url = base_url+ 'dispatcher/order/live_orders_list/';
+    $('.live_orders').DataTable( {
+        "ajax": {
+            url : live_orders_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+    var cancel_orders_url = base_url+ 'dispatcher/order/cancel_orders_list/';
+    $('.cancel_orders').DataTable( {
+        "ajax": {
+            url : cancel_orders_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+    var completed_orders_url = base_url+ 'dispatcher/order/completed_orders_list/';
+    $('.completed_orders').DataTable( {
+        "ajax": {
+            url : completed_orders_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+    var all_weekly_orders_url = base_url+ 'dispatcher/order/all_weekly_orders_list/';
+    $('.all_weekly_orders').DataTable( {
+        "ajax": {
+            url : all_weekly_orders_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+    var accepted_orders_url = base_url+ 'vender/order/accepted_order_list/';
+    $('.accepted_orders').DataTable( {
+        "ajax": {
+            url : accepted_orders_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+    var rejected_orders_url = base_url+ 'vender/order/rejected_order_list/';
+    $('.rejected_orders').DataTable( {
+        "ajax": {
+            url : rejected_orders_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+    var today_orders_url = base_url+ 'vender/order/today_order_list/';
+    $('.today_orders').DataTable( {
+        "ajax": {
+            url : today_orders_url,
+            type : 'GET'
+        },
+        "order":[ 6, "desc" ],
+        createdRow: function(row, data, dataIndex ) {
+                $(row).attr("data-id",data[0]);
+
+                var $deliver_by_Cell = $(row).find('td:eq(6)');
+                $($deliver_by_Cell).addClass("text-center");
+
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 , 6],
+                "visible": false
+            },
+            { "orderable": false, "targets": 7 }
+        ]
+    });
+
+    var upcoming_orders_url = base_url+ 'vender/order/upcoming_order_list/';
+    $('.upcoming_orders').DataTable( {
+        "ajax": {
+            url : upcoming_orders_url,
+            type : 'GET'
+        },
+        "order":[ 6, "desc" ],
+        createdRow: function(row, data, dataIndex ) {
+                $(row).attr("data-id",data[0]);
+
+                var $deliver_by_Cell = $(row).find('td:eq(6)');
+                $($deliver_by_Cell).addClass("text-center");
+
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 , 6],
+                "visible": false
+            },
+            { "orderable": false, "targets": 7 }
+        ]
+    });
+
+    var completed_orders_vender_url = base_url+ 'vender/order/completed_order_list/';
+    $('.completed_orders_vender').DataTable( {
+        "ajax": {
+            url : completed_orders_vender_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+    var all_orders_vender_url = base_url+ 'vender/order/all_order_list/';
+    $('.all_orders_vender').DataTable( {
+        "ajax": {
+            url : all_orders_vender_url,
+            type : 'GET'
+        },
+        "order":[[ 0, "desc" ]],
+        createdRow: function(row, data, dataIndex ) {
+                   $(row).attr("data-id",data[0]);
+              },
+        "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false
+            },
+            { "orderable": false, "targets": 8 }
+        ]
+    });
+
+
+
 });
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];

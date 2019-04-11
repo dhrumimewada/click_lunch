@@ -11,7 +11,7 @@ class Item_model extends CI_Model {
 		$sql_select = array("t1.*", "t2.cuisine_name");
 		$this->db->select($sql_select);
 		$this->db->from('item t1');
-		$this->db->join('cuisine t2', 't1.cuisine_id = t2.id', "left join");
+		$this->db->join('cuisine t2', 't1.cuisine_id = t2.id');
 		if (isset($id) && !is_null($id)) {
 			$this->db->where('t1.id', $id);
 		}
@@ -96,9 +96,6 @@ class Item_model extends CI_Model {
 			$quantity = intval($this->input->post("quantity"));
 		}
 
-		// echo "<pre>";
-		// print_r($_POST);
-		// exit;
 
 		$item_name = preg_replace("/[^a-zA-Z ]/", "", strtolower($this->input->post("name")));
 		$name_array =  explode(" ",$item_name);
@@ -138,10 +135,18 @@ class Item_model extends CI_Model {
 						'created_at' => date('Y-m-d H:i:s')
 					);
 
+
+
 		$this->db->insert("item", $user_data);
 		$insert_id = $this->db->insert_id();
 
-		if(($this->input->post("variant_group")) && ($this->input->post("variant_name")) && ($this->input->post("variant_price"))){
+		// echo "<pre>";
+		// print_r($insert_id);
+		// exit;
+
+
+		if(($_POST['variant_group']) && ($_POST['variant_name']) && ($_POST['variant_price']))
+		{
 			$group_array = array();
 
 			foreach ($this->input->post("variant_group") as $key => $value) {
@@ -261,7 +266,8 @@ class Item_model extends CI_Model {
 		$this->db->where('item_id', $this->input->post("item_id"));
 		$this->db->delete('variant_items');
 
-		if(($this->input->post("variant_group")) && ($this->input->post("variant_name")) && ($this->input->post("variant_price"))){
+		if(($_POST['variant_group']) && ($_POST['variant_name']) && ($_POST['variant_price']))
+		{
 			$group_array = array();
 
 			foreach ($this->input->post("variant_group") as $key => $value) {

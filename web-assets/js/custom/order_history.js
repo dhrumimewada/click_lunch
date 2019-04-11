@@ -58,6 +58,9 @@ $( document ).ready(function(){
 	});
 
 	$(document).on('click',"#filterbtn", function(){
+
+		$(".overlay").css("display", "block");
+
 		var ids = [];
 		selected_cuisines = [];
 		$('.cuisines:checkbox:checked').each(function() {
@@ -182,6 +185,7 @@ $( document ).ready(function(){
                     	$('.favourites-order-list').html(data_str);
                     	$('#filterModal').modal('hide');
                     	console.log(selected_cuisines);
+                    	$(".overlay").css("display", "none");
                     }
                 }
             }

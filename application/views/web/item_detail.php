@@ -1,11 +1,11 @@
 <?php
-$photo_url = base_url() . 'assets/images/default/cuisine.jpg';
+$photo_url = base_url() . 'web-assets/images/logo-3.png';
 if (isset($item['item_data']['item_picture']) && ($item['item_data']['item_picture'] != '')) {
     if (file_exists($this->config->item("item_photo_path") . '/'.$item['item_data']['item_picture'])){
         $photo_url = base_url() . $this->config->item("item_photo_path") . '/'.$item['item_data']['item_picture'];
     }
 }
-$add_to_cart_link = base_url()."add-to-cart";
+$add_to_cart_link = base_url()."add-to-cart/".$order_type;
 //$add_to_cart_link = "#";
 ?>
 <style type="text/css" media="screen">
@@ -213,7 +213,11 @@ $add_to_cart_link = base_url()."add-to-cart";
 		</div>
 	</div>
 </div>
+<script type="text/javascript" src="<?php echo base_url(). 'web-assets/js/bootstrap-input-spinner.js'; ?>"></script>
 <script type="text/javascript">
 	$("input[type='number']").inputSpinner();
+	var order_type = '<?php echo $order_type; ?>';
+	var shop_id = '<?php echo $item['item_data']['shop_id']; ?>';
+	var check_cart_url = '<?php echo base_url().'check-exists-cart/'; ?>';
 </script>
 <script src="<?php echo base_url().'web-assets/js/custom/item_detail.js'; ?>"></script>

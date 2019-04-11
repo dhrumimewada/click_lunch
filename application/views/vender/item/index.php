@@ -267,7 +267,7 @@ $edit_link = base_url().'item-update';
                             },
                         success: function (returnData) {
                             returnData = $.parseJSON(returnData);
-                            
+                            console.log(returnData);
                             if (typeof returnData != "undefined"){
                                 if(returnData.is_success == true){
                                     swal(

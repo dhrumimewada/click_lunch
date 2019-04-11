@@ -131,9 +131,8 @@ class Popular_location_model extends CI_Model {
 
 	public function get_requests() {
 		$return_data = array();
-		$this->db->select('t1.*, t2.username');
+		$this->db->select('t1.*');
 		$this->db->from('delivery_address_popular_request t1');
-		$this->db->join('customer t2', 't1.customer_id = t2.id');
 		$this->db->where("t1.deleted_at", NULL);
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {

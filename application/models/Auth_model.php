@@ -110,6 +110,10 @@ class Auth_model extends CI_Model {
 		$this->db->where("deleted_at", NULL);
 		$this->db->where("status", "1");
 		$this->db->where("email", $identity);
+
+		if($user_type == 'vender'){
+			$this->db->where("admin_verified !=", "2");
+		}
 		$sql_query = $this->db->get();
 
 		// User exists, now validate credentials.

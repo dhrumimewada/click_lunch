@@ -12,84 +12,88 @@ class Checkout extends CI_Controller {
 	}
 
 	public function index(){
-		$tax = '';
-        $this->db->select('data');
-        $this->db->where("name", 'tax');
-        $this->db->from('setting');
-        $sql_query = $this->db->get();
-        if ($sql_query->num_rows() > 0){
-            $tax_data = $sql_query->row();
-            $tax = $tax_data->data;
-        }
 
-		$output_data['cart_contents'] = $this->cart->contents();
-		$output_data['cart_total'] = $this->cart->total();
-		$output_data['tax'] = $tax;
+		if(!empty($this->cart->contents())){
 
-		$shop_id = '';
-		$service_charge = '';
-		$subtotal = 0;
-		foreach ($this->cart->contents() as $key => $value) {
-			$shop_id = $value['shop_id'];
-			break;
+			$tax = '';
+	        $this->db->select('data');
+	        $this->db->where("name", 'tax');
+	        $this->db->from('setting');
+	        $sql_query = $this->db->get();
+	        if ($sql_query->num_rows() > 0){
+	            $tax_data = $sql_query->row();
+	            $tax = $tax_data->data;
+	        }
+
+			$output_data['cart_contents'] = $this->cart->contents();
+			$output_data['cart_total'] = $this->cart->total();
+			$output_data['tax'] = $tax;
+
+			$shop_id = '';
+			$order_type = '';
+			$service_charge = '';
+			$subtotal = 0;
+			foreach ($this->cart->contents() as $key => $value) {
+				$shop_id = $value['shop_id'];
+				$order_type = $value['order_type'];
+				break;
+			}
+			$this->db->select('service_charge,payment_mode,takeout_delivery_status');
+	        $this->db->where("id", $shop_id);
+	        $this->db->from('shop');
+	        $sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0){
+	            $shop_data = $sql_query->row();
+	            $service_charge = $shop_data->service_charge;
+	            $payment_mode = $shop_data->payment_mode;
+	            $payment_mode_array = explode(',', $payment_mode);
+	            if(in_array('0', $payment_mode_array)){
+	            	$output_data['payment_card'] = true;
+
+	            	$customer_cards = $this->profile_model->get_cards();
+	        		$output_data['cards'] = $customer_cards;
+	            }
+	            if(in_array('1', $payment_mode_array)){
+	            	$output_data['payment_apple_pay'] = true;
+	            }
+	            if(in_array('2', $payment_mode_array)){
+	            	$output_data['payment_google_pay'] = true;
+	            }
+	        }
+	        $output_data['takeout_delivery_status'] = $shop_data->takeout_delivery_status;
+	        $output_data['service_charge'] = $service_charge;
+
+	        if($order_type == 'delivery'){
+
+	        	$address_id = decrypt($_SESSION['delivery_address_id']);
+
+		        if(isset($_SESSION['delivery_fee']) && $_SESSION['delivery_fee'] != ''){
+					$delivery_fee = $_SESSION['delivery_fee'];
+		        }else{
+		        	$delivery_fee = $this->welcome_model->fetch_delivery_charge($shop_id, $address_id);
+		        	$this->session->set_userdata('delivery_fee', $delivery_fee);
+		        }
+		        
+		        if($delivery_fee == FALSE){
+		        	$this->auth->set_error_message("Delivery is not available on this location");
+		        	$this->session->set_flashdata($this->auth->get_messages_array());
+		        	redirect(base_url() . "cart");
+		        }
+	        }else{
+	        	$delivery_fee = 0.00;
+	        }
+
+
+	        $output_data['delivery_fee'] = $delivery_fee;
+
+	        $valid_promocodes = $this->welcome_model->fetch_promocode();
+	        $output_data['promocodes'] = $valid_promocodes;
+
+			$output_data['main_content'] = "checkout";
+			$this->load->view('web/template',$output_data);
+		}else{
+			redirect(base_url() . "cart");
 		}
-		$this->db->select('service_charge,payment_mode,takeout_delivery_status');
-        $this->db->where("id", $shop_id);
-        $this->db->from('shop');
-        $sql_query = $this->db->get();
-		if ($sql_query->num_rows() > 0){
-            $shop_data = $sql_query->row();
-            $service_charge = $shop_data->service_charge;
-            $payment_mode = $shop_data->payment_mode;
-            $payment_mode_array = explode(',', $payment_mode);
-            if(in_array('0', $payment_mode_array)){
-            	$output_data['payment_card'] = true;
-
-            	$customer_cards = $this->profile_model->get_cards();
-        		$output_data['cards'] = $customer_cards;
-            }
-            if(in_array('1', $payment_mode_array)){
-            	$output_data['payment_apple_pay'] = true;
-            }
-            if(in_array('2', $payment_mode_array)){
-            	$output_data['payment_google_pay'] = true;
-            }
-        }
-        $output_data['takeout_delivery_status'] = $shop_data->takeout_delivery_status;
-        $output_data['service_charge'] = $service_charge;
-        $address_id = decrypt($_SESSION['delivery_address_id']);
-
-        if(isset($_SESSION['delivery_fee']) && $_SESSION['delivery_fee'] != ''){
-			$delivery_fee = $_SESSION['delivery_fee'];
-        }else{
-        	$delivery_fee = $this->welcome_model->fetch_delivery_charge($shop_id, $address_id);
-        	$this->session->set_userdata('delivery_fee', $delivery_fee);
-        }
-
-        // echo "<pre>";
-        // //$abc = $this->welcome_model->fetch_delivery_charge($shop_id, $address_id);
-         //print_r($output_data['cards']);
-        // echo "ABC";
-        // exit;
-        
-        if($delivery_fee == FALSE){
-        	$this->auth->set_error_message("Delivery is not available on this location");
-        	$this->session->set_flashdata($this->auth->get_messages_array());
-        	redirect(base_url() . "cart");
-        }
-        $output_data['delivery_fee'] = $delivery_fee;
-
-        $valid_promocodes = $this->welcome_model->fetch_promocode();
-        $output_data['promocodes'] = $valid_promocodes;
-
-        
-
-        // echo "<pre>";
-        // print_r($output_data['takeout_delivery_status']);
-        // exit;
-
-		$output_data['main_content'] = "checkout";
-		$this->load->view('web/template',$output_data);
 	}
 
 	public function add_card(){
@@ -195,6 +199,30 @@ class Checkout extends CI_Controller {
 		}
 	}
 
+	public function send_test(){
+		
+		echo "<pre>";
+		print_r($this->cart->contents());
+
+
+		exit;
+
+		$output_data['order_id'] = 32;
+		$output_data['total_amount'] = number_format((float)35.0, 2, '.', '');
+		//$this->load->view('email_templates/order_receipt', $output_data);
+		$email_data = $this->load->view('email_templates/order_receipt', $output_data, true);
+
+		// echo "<pre>";
+		// print_r($email_data);
+		// exit;
+
+
+		 $result = sendmail($from = '', $to = 'bob66@mailinator.com', $subject = 'TEST', $email_data);
+		// echo "<pre>";
+		// print_r($result);
+		// exit;
+	}
+
 	public function place_order(){
 
 		$cart_contents = $this->cart->contents();
@@ -207,7 +235,21 @@ class Checkout extends CI_Controller {
             $this->db->from('item');
             $this->db->where('id', $value['item_id']);
             $this->db->where('shop_id', $value['shop_id']);
-            $this->db->where('quantity >=', intval($value['qty']));
+            //$this->db->where('quantity >=', intval($value['qty']));
+
+            $this->db->group_start();
+
+                $this->db->group_start();
+                    $this->db->where('quantity >=', intval($value['qty']));
+                    $this->db->where('inventory_status', 1);
+                $this->db->group_end();
+
+                $this->db->or_group_start();
+                     $this->db->where('inventory_status', 0);
+                $this->db->group_end();
+
+            $this->db->group_end();
+
             $this->db->where('deleted_at',NULL);
             $this->db->where('is_active',1);
             $sql_query = $this->db->get();
@@ -250,7 +292,7 @@ class Checkout extends CI_Controller {
                 }
             }
 
-            if($_POST['order_type'] == 3 || 4 || 6){
+            if(($_POST['order_type'] == 3) || ($_POST['order_type'] == 4) || ($_POST['order_type'] == 6)){
 	            $delivery_charges = 0;
 	        }else{
 	            $delivery_charges = $_POST['delivery_amount'];
@@ -279,13 +321,13 @@ class Checkout extends CI_Controller {
             if($this->db->insert('orders', $data)){
 
             	$order_id = $this->db->insert_id();
-                $my_product_data = array();
-                $my_variant_data = array();
                 $sub_total = 0;
+
+                $reciept_data = array();
 
                 foreach ($cart_contents as $key => $value){
 
-                	$this->db->select('IF(offer_price = "", price, offer_price) as price'); 
+                	$this->db->select('IF(offer_price = "", price, offer_price) as price, name'); 
                     $this->db->where('id',$value['item_id']); 
                     $this->db->where('shop_id',$value['shop_id']); 
                     $this->db->from('item'); 
@@ -308,36 +350,58 @@ class Checkout extends CI_Controller {
 
                     $this->db->insert('order_items', $product_data);
                     $product_insert_id = $this->db->insert_id();
-                    $my_product_data[] = $product_data;
+
+                    $reciept_data['item_data'][$key]['item_name'] = $product_price_array->name;
+                    $reciept_data['item_data'][$key]['quantity'] = $value['qty'];
+                    $reciept_data['item_data'][$key]['groups'] = array();
 
                     $varients_price = 0;
-                    foreach ($value['group_data'] as $group_key => $group_value){
-                    	foreach ($group_value as $variant_key => $variant_value) {
+                    if(isset($value['group_data']) && is_array($value['group_data'])){
+                    	$count = 0;
+	                    foreach ($value['group_data'] as $group_key => $group_value){
 
-                    		$this->db->select('id,variant_group_id,price'); 
-                            $this->db->where('id',$variant_value); 
-                            $this->db->where('item_id',$value['item_id']);
-                            $this->db->from('variant_items'); 
+	                    	$this->db->select('name'); 
+                            $this->db->where('id',$group_key); 
+                            $this->db->from('variant_group'); 
                             $sql_query = $this->db->get();
-                            if ($sql_query->num_rows() > 0){
-                                $variant_array = $sql_query->row();
+	                        if ($sql_query->num_rows() > 0){
+	                        	$group_name_data = (array)$sql_query->row();
+	                        	$reciept_data['item_data'][$key]['groups'][$count]['group_name'] = $group_name_data['name'];
+	                        }
 
-                                $variant_data = 
-                                    array(
-                                        'order_item_id' => $product_insert_id,
-                                        'variant_group_id' => $variant_array->variant_group_id,
-                                        'variant_id' => $variant_value,
-                                        'price' => number_format((float)$variant_array->price, 2, '.', '')
-                                    );
-                                $this->db->insert('order_item_variant', $variant_data);
+	                    	foreach ($group_value as $variant_key => $variant_value) {
 
-                                $varients_price +=  number_format((float)$variant_array->price, 2, '.', '');
-                                $my_variant_data[] = $variant_data;
-                    		}
-                    	}
-                	}
+	                    		$this->db->select('id,variant_group_id,price,name'); 
+	                            $this->db->where('id',$variant_value); 
+	                            $this->db->where('item_id',$value['item_id']);
+	                            $this->db->from('variant_items'); 
+	                            $sql_query = $this->db->get();
+	                            if ($sql_query->num_rows() > 0){
+	                                $variant_array = $sql_query->row();
+
+	                                $reciept_data['item_data'][$key]['groups'][$count]['varients'][] = $variant_array->name;
+
+	                                $variant_data = 
+	                                    array(
+	                                        'order_item_id' => $product_insert_id,
+	                                        'variant_group_id' => $variant_array->variant_group_id,
+	                                        'variant_id' => $variant_value,
+	                                        'price' => number_format((float)$variant_array->price, 2, '.', '')
+	                                    );
+	                                $this->db->insert('order_item_variant', $variant_data);
+
+	                                $varients_price +=  number_format((float)$variant_array->price, 2, '.', '');
+	                    		}
+	                    	}
+
+	                    	$count++;
+	                	}
+                    }
+                    
 
                 	$total_product_price = ($item_price + $varients_price) * $value['qty'];
+
+                	$reciept_data['item_data'][$key]['total_product_price'] = $total_product_price;
 
 	                $product_data_edited = 
 	                        array(
@@ -356,6 +420,8 @@ class Checkout extends CI_Controller {
             $order_data_edited = array(
                                 'subtotal' => $sub_total
                                 );
+
+            $reciept_data['subtotal'] = $sub_total;
 
             $promo_discount = 0;
             $promocode_data = array();
@@ -408,7 +474,7 @@ class Checkout extends CI_Controller {
 	                                $sql_query = $this->db->get();
 	                                if ($sql_query->num_rows() > 0){
 	                                    $total_product_price_array = $sql_query->row();
-	                                    $total_product_price = $total_product_price_array->total_product_price;
+	                                    $total_product_price = ($total_product_price_array->total_product_price * $cart_value['qty']);
 	                                    $promo_discount += (floatval($total_product_price) * floatval($promocode_data->amount)) / 100;
 	                                }
 	                            }   
@@ -428,10 +494,19 @@ class Checkout extends CI_Controller {
             $tax = (floatval($sub_total2) * floatval($_POST['tax'])) / 100;
             $tax = number_format((float)$tax, 2, '.', '');
 
+            $reciept_data['tax'] = $tax;
+
             $service_charge = (floatval($sub_total2) * floatval($_POST['service_charge'])) / 100;
             $service_charge = number_format((float)$service_charge, 2, '.', '');
 
-            $delivery_charges = number_format((float)$_POST['delivery_amount'], 2, '.', '');
+            $reciept_data['service_charge'] = $service_charge;
+
+            if(($_POST['order_type'] == 3) || ($_POST['order_type'] == 4) || ($_POST['order_type'] == 6)){
+            	$delivery_charges = 0.00;
+            }else{
+            	$delivery_charges = number_format((float)$_POST['delivery_amount'], 2, '.', '');
+            }
+            
 
 
             $total = $sub_total2 + $tax + $service_charge + $delivery_charges;
@@ -444,9 +519,19 @@ class Checkout extends CI_Controller {
             $this->db->where('id',$order_id);  
             $this->db->update('orders', $order_data_edited);
 
+            $reciept_data['delivery_charges'] = $delivery_charges;
+            $reciept_data['promo_amount'] = $order_data_edited['promo_amount'];
+            $reciept_data['total'] = $order_data_edited['total'];
+            $reciept_data['order_id'] = $order_id;
+            $reciept_data['line1'] = 'Thank You for Your Order!';
+            $reciept_data['line2'] = 'Satisfy your cravings with a huge selection of restaurants.';
+
             $this->cart->destroy();
 
-            echo json_encode(array("is_success" => true, "order_id" => $order_id , 'message' => 'Order success'));
+            $email_data = $this->load->view('email_templates/order_receipt', $reciept_data, true);
+            $result = sendmail($from = '', $to = $_SESSION['customer_user']['email'], $subject = 'Your Order: CL'.$order_id.' Has been Confirmed', $email_data);
+
+            echo json_encode(array("is_success" => true, "order_id" => $order_id , 'message' => 'order success', 'reciept_data' => $reciept_data, 'email_result' => $result));
 			return TRUE;
 
 		}else{
@@ -488,7 +573,7 @@ class Checkout extends CI_Controller {
     public function order_success($order_id = NULL){
     	if(isset($order_id) && $order_id != ''){
     	
-    		$order = $this->profile_model->order_detail($order_id);
+    		$order = $this->profile_model->order_detail2($order_id);
 
     		// echo '<pre>';
     		// print_r($order);

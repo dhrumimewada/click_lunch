@@ -37,7 +37,7 @@
 
     function forgot() {
     
-        $("#wait").css("display", "block");
+        $(".overlay").css("display", "block");
         var forgot_password_customer_url = 'forgot-password-customer';
         var email =$('#forgot_email').val();
 
@@ -50,7 +50,7 @@
                 success: function (returnData) {
                     //returnData = $.parseJSON(returnData);
                     //console.log(returnData);
-                    $("#wait").css("display", "none");
+                    $(".overlay").css("display", "none");
                     if(returnData == '1'){
                         console.log('account does not exists');
                         $(".validation-forgot-email").append('<label id="forgot_email-error" class="validation-error-label" for="forgot_email">Your account is does not exists. Click on <b>Register</b> to create your account.</label>');

@@ -247,8 +247,9 @@ class Customer extends CI_Controller {
 				if($status == 2){
 					$result = $this->customer_model->send_silent_push($_POST['id']);
 				}
+				$is_success = $this->customer_model->customer_status_update_sendmail($id , $status);
 			}
-			echo json_encode(array("is_success" => true));
+			echo json_encode(array("is_success" => $is_success));
 			return TRUE;
 		}else{
 			return FALSE;

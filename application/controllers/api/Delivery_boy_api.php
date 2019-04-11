@@ -199,7 +199,7 @@ class Delivery_boy_api extends REST_Controller {
                 $this->db->update('delivery_boy', $update_data);
 
                 $response['status'] = true;
-                $response['message'] = 'Reset Password mail is sent on this email address';
+                $response['message'] = 'Password recovery mail has been sent on this email address';
 
              }else{
 
@@ -385,9 +385,10 @@ class Delivery_boy_api extends REST_Controller {
 
         if(empty($errorPost)){
 
-            $this->db->select('t2.device_type, t2.device_token, t1.customer_id, t1.id');
+            $this->db->select('t3.shop_name, t2.device_type, t2.device_token, t1.customer_id, t1.id, t2.email');
             $this->db->from('orders t1');
             $this->db->join('customer t2', 't1.customer_id = t2.id');
+            $this->db->join('shop t3', 't1.shop_id = t3.id');
             $this->db->where('t1.id', $_POST['order_id']);
             $sql_query = $this->db->get();
             if ($sql_query->num_rows() > 0){
@@ -410,6 +411,7 @@ class Delivery_boy_api extends REST_Controller {
                             $message = 'Your order no. CL'.$_POST['order_id'].' has been delivered';
                             $push_type = 'order_completed';
                             $notification_type = 7;
+
                         }else if($_POST['status'] == 7){
                             $push_title = 'Order Delivery Fail';
                             $message = 'Your order no. CL'.$_POST['order_id'].' has not been delivered';
@@ -432,10 +434,38 @@ class Delivery_boy_api extends REST_Controller {
 
                         $success_data = notification_add($notification_type, $customer['customer_id'], $push_title, $message, $_POST['order_id']);
 
+                        if($_POST['status'] == 6){
+                            // send mail
+                            $this->db->select('emat_email_subject,emat_email_message');
+                            $this->db->from('email_template');
+                            $this->db->where('emat_email_type', 10);
+                            $this->db->where("emat_is_active", 1);
+                            $sql_query = $this->db->get();
+                            $return_data = $sql_query->row();
+
+                            if (!isset($return_data) && empty($return_data)){
+                                $response['status'] = false;
+                                $response['message'] = 'Email template not found. Error into sending mail.';
+                            }else{
+
+                                $email_var_data["order_id"] = 'CL'.$_POST['order_id'];
+                                $email_var_data["shop_name"] = $customer['shop_name'];
+
+                                $from = "";
+                                $to =  array($customer['email']);
+                                $subject = $return_data->emat_email_subject;
+
+                                $email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+                                $message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+                                $mail = $this->send_mail2($to, $subject, $message);
+                            }
+                        }
+
                     }
 
                     $response['status'] = true;
                     $response['message'] = 'Order updated successfully';
+                    $response['mail'] = $mail;
                     //$response['send_push'] = $result;
                 }else{
                     $response['status'] = false;
@@ -587,20 +617,36 @@ class Delivery_boy_api extends REST_Controller {
             $this->db->group_end();
 
             $this->db->group_start();
-                $this->db->where('t1.order_type', 1);
-                $this->db->or_where('t1.order_type', 2);
+
+                $this->db->group_start();
+                
+                    $order_type = array('1','2');
+                    $this->db->where_in('t1.order_type', $order_type);
+
+                    if($_POST['order_type'] == 1){
+                        $this->db->where('DATE(t1.created_at)', date('Y-m-d'));
+                    }else{
+                        $this->db->where('DATE(t1.created_at) >', date('Y-m-d'));
+                    }
+                $this->db->group_end();
+
+                // $this->db->where('t1.order_type', 1);
+                // $this->db->or_where('t1.order_type', 2);
 
                 $this->db->or_group_start();
                     $this->db->where('t1.order_type', 5);
-                    $this->db->where('DATE(t1.schedule_date)', date('Y-m-d'));
+
+                    if($_POST['order_type'] == 1){
+                        $this->db->where('DATE(t1.schedule_date)', date('Y-m-d'));
+                    }else{
+                        $this->db->where('DATE(t1.schedule_date) >', date('Y-m-d'));
+                    }
+
                 $this->db->group_end();
+
             $this->db->group_end();
 
-            if($_POST['order_type'] == 1){
-                $this->db->where('DATE(t1.created_at)', date('Y-m-d'));
-            }else{
-                $this->db->where('DATE(t1.created_at) !=', date('Y-m-d'));
-            }
+            
 
             $sql_query = $this->db->get();
             $last_query = $this->db->last_query();

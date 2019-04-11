@@ -21,7 +21,6 @@ $edit_link = base_url().'vender-request-update';
                         <table class="table table-hover dt-responsive nowrap request_list" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
                             <tr>
-                                <th>Request By</th>
                                 <th>Location</th>
                                 <th>Zip Code</th>
                                 <th>Location Type</th>
@@ -38,7 +37,6 @@ $edit_link = base_url().'vender-request-update';
                                     $created_date = date("j M, Y", $created_date_ts);
 
                                     echo '<tr data-id="' . $id . '">';
-                                    echo "<td>" . ucfirst(stripslashes($value["username"])) . "</td>";
                                     echo "<td>" . stripslashes($value["house_no"]).", ".stripslashes($value["street"]).", ".stripslashes($value["city"]) . "</td>";
 
                                     echo "<td>" . $value["zipcode"] . "</td>";
@@ -70,9 +68,9 @@ $edit_link = base_url().'vender-request-update';
 
     var request_list = $('.request_list').DataTable({
             keys: true,
-            "order": [[4, "desc"]],
+            "order": [[3, "desc"]],
             'iDisplayLength': 10,
-            columnDefs: [{orderable: false, targets: [5]},{visible: false,targets: [4]}],
+            columnDefs: [{orderable: false, targets: [4]},{visible: false,targets: [3]}],
     });
 
     var delete_url = "<?php echo base_url().'location-request-delete'; ?>";

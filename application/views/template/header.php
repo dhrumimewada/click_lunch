@@ -1,3 +1,4 @@
+<?php $assets = $this->config->item('website_assest'); ?>
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -5,7 +6,7 @@
     <title>Click Lunch</title>
     <meta content="Admin Dashboard" name="description" />
     <meta content="Themesbrand" name="author" />
-    <link rel="shortcut icon" href="<?php echo base_url() . 'assets/images/favicon.ico'; ?>">
+    <link rel="icon" href="<?php echo $assets; ?>/icon.png" type="image/gif" sizes="16x16">
     <!-- chart -->
     <link rel="stylesheet" href="<?php echo base_url() . 'plugins/chartist/css/chartist.min.css'; ?>">
     

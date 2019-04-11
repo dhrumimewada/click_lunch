@@ -53,7 +53,7 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    public function register_post(){
+    public function register_old_post(){
         $postFields['fullname'] = $_POST['username'];        
         $postFields['email'] = $_POST['email'];        
         $postFields['password'] = $_POST['password']; 
@@ -190,6 +190,153 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
+    public function register_post(){
+        $postFields['fullname'] = $_POST['username'];        
+        $postFields['email'] = $_POST['email'];        
+        $postFields['password'] = $_POST['password']; 
+        $postFields['mobile_number'] = $_POST['mobile_number']; 
+        $postFields['date_of_birth'] = $_POST['date_of_birth']; 
+        $postFields['gender'] = $_POST['gender']; 
+        $postFields['device_token'] = $_POST['device_token']; 
+        $postFields['device_type'] = $_POST['device_type']; 
+        $postFields['latitude'] = $_POST['latitude'];
+        $postFields['longitude'] = $_POST['longitude'];   
+
+        $errorPost = $this->ValidatePostFields($postFields);
+        if(empty($errorPost)){
+
+            $this->db->select('*');
+            $this->db->where("email",$_POST['email']);
+            $this->db->where("deleted_at",NULL);
+            $this->db->from("customer");
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+
+                $response['status'] = false;
+                $response['message'] = 'Your email account is already exists. Please login instead register.';
+
+            }else{
+
+                $this->db->select('*');
+                $this->db->where("mobile_number",$_POST['mobile_number']);
+                $this->db->where("deleted_at",NULL);
+                $this->db->from("customer");
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $response['status'] = false;
+                    $response['message'] = 'Your contact number is already exists. Please use another number.';
+                }else{
+
+                    $social_user_exists = array();
+                    if(isset($_POST['social_id']) && $_POST['social_id'] != "" && isset($_POST['social_type']) && $_POST['social_type'] != "0" && !is_null($_POST['social_id']) && !is_null($_POST['social_type'])){
+
+                        $this->db->select('id');
+                        $this->db->where("social_id",$_POST['social_id']);
+                        $this->db->where("social_type",$_POST['social_type']);
+                        $this->db->from("customer");
+                        $sql_query = $this->db->get();
+                        if ($sql_query->num_rows() > 0){
+                            $social_user_exists = $sql_query->result_array();
+                        }
+                    }
+
+                    if(empty($social_user_exists)){
+
+                        $google_api_key = $this->config->item("google_key");
+                        $geocodeFromLatLong = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?latlng='.$_POST['latitude'].','.$_POST['longitude'].'&key='.$google_api_key);
+                        $output = json_decode($geocodeFromLatLong);
+                        $status = $output->status;
+
+                        $address = ($status=="OK")?$output->results[1]->formatted_address:'';
+
+                        $user = array( 
+                                'username' => $_POST['username'], 
+                                'email'=> $_POST['email'], 
+                                'password' => password_hash($_POST['password'], PASSWORD_DEFAULT),
+                                'device_token'=> $_POST['device_token'], 
+                                'device_type'=> $_POST['device_type'], 
+                                'mobile_number'=> $_POST['mobile_number'],
+                                'latitude'=> $_POST['latitude'],
+                                'longitude'=> $_POST['longitude'],
+                                'gender'=> $_POST['gender'],
+                                'dob'=> $_POST['date_of_birth'],
+                                'address'=> $address
+                            );
+
+                        if(isset($_POST['social_id']) && $_POST['social_id'] != "" && isset($_POST['social_type']) && $_POST['social_type'] != "0" && !is_null($_POST['social_id']) && !is_null($_POST['social_type'])){
+
+                            $user['social_id'] = $_POST['social_id'];
+                            $user['social_type'] = $_POST['social_type'];
+                        }
+
+                        $this->db->insert('customer', $user);
+                        $insert_id = $this->db->insert_id();
+
+                        if($insert_id){
+
+                            $this->db->select('emat_email_subject,emat_email_message');
+                            $this->db->from('email_template');
+                            $this->db->where('emat_email_type', 1);
+                            $this->db->where("emat_is_active", 1);
+                            $sql_query = $this->db->get();
+                            $return_data = $sql_query->row();
+
+                            if (!isset($return_data) && empty($return_data)){
+                                $response['status'] = false;
+                                $response['message'] = 'Email template not found. Error into sending mail.';
+                            }else{
+
+                                $activation_token = bin2hex(random_bytes(20));
+                                $email_var_data["activation_link"] = base_url() . 'customer-activate/'. $activation_token;
+
+                                $from = "";
+                                $to =  array($_POST['email']);
+                                $subject = $return_data->emat_email_subject;
+
+                                $email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+                                $message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+                                $mail = $this->send_mail($to, $subject, $message);
+
+                            }
+
+                            if($mail){
+
+                                $update_data = array('activation_token' => $activation_token);
+                                $this->db->where('id', $insert_id);
+                                $this->db->update('customer', $update_data);
+
+                                $response['status'] = true;
+                                $response['message'] = 'Account activation mail is sent on your email address';
+
+                            }else{
+                                $this->db->where('id', $insert_id);
+                                $this->db->delete('customer');
+
+                                $response['status'] = false;
+                                $response['message'] = 'Error into sending mail. please try again later';
+
+                            }
+
+                        }else{
+                            $response['status'] = false;
+                            $response['message'] = 'Error into register. please try again later';
+                        }
+
+                    }else{
+                        $response['status'] = false;
+                        $response['message'] = 'This social account already used buy another account.';
+                    }
+                }
+            }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+
+        $this->response($response);
+    }
+
     public function login_post(){
               
         $postFields['email'] = $_POST['email'];        
@@ -225,9 +372,9 @@ class Customer_api extends REST_Controller {
                 $this->db->update('customer',$data);
 
                 $this->db->select('*');
-                $this->db->where("customer_id",$customer->id);
+                //$this->db->where("customer_id",$customer->id);
                 $this->db->where("deleted_at",NULL);
-                $this->db->where("default_address",1);
+                $this->db->where("id",$customer->default_address);
                 $this->db->from("delivery_address");
                 $sql_query = $this->db->get();
                 if ($sql_query->num_rows() > 0){
@@ -235,8 +382,16 @@ class Customer_api extends REST_Controller {
                     $response['default_delivery_address'] = $default_delivery_address;
                 }
 
+                $this->db->select('*');
+                $this->db->where("id",$customer->id);
+                $this->db->from("customer");
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $customer_data = $sql_query->row();
+                    $response['profile'] = $customer_data;
+                }
+
                 $response['status'] = true;
-                $response['profile'] = $customer;
                 
 
                 }else{
@@ -426,20 +581,48 @@ class Customer_api extends REST_Controller {
                 $response['status'] = false;
                 $response['message'] = 'User not found';
             }else{
-                $to =  array($_POST['email']);
-                $subject = $this->config->item('site_name').' - Reset Password';
-                $path = BASE_URL().'email_template/reset_password.html';
-                $template = file_get_contents($path);
 
-                $remember_token = bin2hex(random_bytes(20));
-                $reset_url = base_url() . 'customer-reset-password/'. $remember_token;
 
-                $template = str_replace('##RESETPWURL##', $reset_url, $template);
-                $template = str_replace('##USERNAME##', $user['username'], $template);
+                $this->db->select('emat_email_subject,emat_email_message');
+                $this->db->from('email_template');
+                $this->db->where('emat_email_type', 2);
+                $this->db->where("emat_is_active", 1);
+                $sql_query = $this->db->get();
+                $return_data = $sql_query->row();
 
-                $template = $this->create_email_template($template);
+                if (!isset($return_data) && empty($return_data)){
+                    $response['status'] = false;
+                    $response['message'] = 'Email template not found. Error into sending mail.';
+                }else{
 
-                $mail = $this->send_mail($to,$subject,$template);
+                    $remember_token = bin2hex(random_bytes(20));
+                    $email_var_data["recovery_link"] = base_url() . 'customer-reset-password/'. $remember_token;
+
+                    $from = "";
+                    $to =  array($_POST['email']);
+                    $subject = $return_data->emat_email_subject;
+
+                    $email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+                    $message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+                    $mail = $this->send_mail($to, $subject, $message);
+
+                }
+
+
+                // $to =  array($_POST['email']);
+                // $subject = $this->config->item('site_name').' - Reset Password';
+                // $path = BASE_URL().'email_template/reset_password.html';
+                // $template = file_get_contents($path);
+
+                // $remember_token = bin2hex(random_bytes(20));
+                // $reset_url = base_url() . 'customer-reset-password/'. $remember_token;
+
+                // $template = str_replace('##RESETPWURL##', $reset_url, $template);
+                // $template = str_replace('##USERNAME##', $user['username'], $template);
+
+                // $template = $this->create_email_template($template);
+
+                // $mail = $this->send_mail($to,$subject,$template);
 
                 if($mail){
 
@@ -448,7 +631,7 @@ class Customer_api extends REST_Controller {
                     $this->db->update('customer', $update_data);
 
                     $response['status'] = true;
-                    $response['message'] = 'Reset Password mail is sent on this email address';
+                    $response['message'] = 'Password recovery mail has been sent on this email address';
 
                  }else{
 
@@ -660,6 +843,7 @@ class Customer_api extends REST_Controller {
                     $default_address = $default_address_data->default_address;
 
                     foreach ($delivery_addresses as $key => $value) {
+                        $delivery_addresses[$key]['default_address'] = 0;
                         if($default_address == $value['id']){
                             $delivery_addresses[$key]['default_address'] = 1;
                         }
@@ -680,22 +864,62 @@ class Customer_api extends REST_Controller {
         $this->response($response);
     }
 
-    public function popular_delivery_addresses_get(){
+    // public function popular_delivery_addresses_get(){
 
-        $this->db->select('*');
-        $this->db->where("deleted_at",NULL);
-        $this->db->where("popular",1);
-        $this->db->from("delivery_address");
-        $sql_query = $this->db->get();
-        if ($sql_query->num_rows() > 0){
-            $delivery_address = $sql_query->result_array();
-            $response['status'] = true;
-            $response['delivery_addresses'] = $delivery_address;
+    //     $this->db->select('*');
+    //     $this->db->where("deleted_at",NULL);
+    //     $this->db->where("popular",1);
+    //     $this->db->from("delivery_address");
+    //     $sql_query = $this->db->get();
+    //     if ($sql_query->num_rows() > 0){
+    //         $delivery_address = $sql_query->result_array();
+    //         $response['status'] = true;
+    //         $response['delivery_addresses'] = $delivery_address;
+    //     }else{
+    //         $response['status'] = false;
+    //         $response['message'] = 'No any address found';
+    //     }
+
+    //     $this->response($response);
+    // }
+
+    public function popular_delivery_addresses_post(){
+
+        $postFields['customer_id'] = $_POST['customer_id']; 
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+
+            $where = array('id' => $_POST['customer_id'],'default_address !=' => 0);
+            $customer_default_address = (array)$this->db->get_where('customer',$where)->row();
+
+            $this->db->select('*');
+            $this->db->where("deleted_at",NULL);
+            $this->db->where("popular",1);
+            $this->db->from("delivery_address");
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $delivery_address = $sql_query->result_array();
+
+                if(isset($customer_default_address) && !empty($customer_default_address)){
+                    foreach ($delivery_address as $key => $value) {
+                        if($value['id'] == $customer_default_address['default_address']){
+                            $delivery_address[$key]['default_address'] = '1';
+                        }
+                    }
+                }
+
+                $response['status'] = true;
+                $response['delivery_addresses'] = $delivery_address;
+            }else{
+                $response['status'] = false;
+                $response['message'] = 'No any address found';
+            }
+
         }else{
             $response['status'] = false;
-            $response['message'] = 'No any address found';
+            $response['message'] = $errorPost;
         }
-
         $this->response($response);
     }
 
@@ -1172,10 +1396,15 @@ class Customer_api extends REST_Controller {
         if(!empty($cuisine_shops)){
             $this->db->where_in("id", $cuisine_shops);
         }
+
+        if(isset($_POST['keyword']) && $_POST['keyword'] != ""){
+            $this->db->where("shop_name LIKE '%".$_POST['keyword']."%'");
+        }
         $this->db->where("longitude !=", '');
         $this->db->where("latitude !=", '');
         $this->db->where("deleted_at", NULL);
         $this->db->where("status", 1);
+        $this->db->where("admin_verified", 1);
 
         if(isset($_POST['filter_by']) && $_POST['filter_by'] != ""){
             if($_POST['filter_by'] == 1){
@@ -1360,6 +1589,7 @@ class Customer_api extends REST_Controller {
         $this->db->where("deleted_at", NULL);
         $this->db->where("status", 1);
         $this->db->where("weekly_status", 1);
+        $this->db->where("admin_verified", 1);
 
         $this->db->from('shop');
         $sql_query = $this->db->get();
@@ -1598,6 +1828,60 @@ class Customer_api extends REST_Controller {
                 $response['item'] = $item;
                 $response['variants'] = $variant_group;
             }
+
+        }else{
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
+
+    public function like_to_try_products_post(){
+        $postFields['shop_id'] = $_POST['shop_id']; 
+        $errorPost = $this->ValidatePostFields($postFields);
+
+        if(empty($errorPost)){
+            
+            $items = array();
+
+            //$this->db->select('id,name,quantity,inventory_status,price,offer_price,item_picture'); 
+            $this->db->select('*'); 
+            $this->db->where("deleted_at", NULL);
+
+            if(isset($_POST['products']) && $_POST['products'] != ''){
+                $products_array = explode(',',$_POST['products']);
+                $this->db->where_not_in('id',$products_array);
+            }
+            
+            $this->db->where("is_active", 1);
+            $this->db->where("recommended", 1);
+            $this->db->where("shop_id",$_POST['shop_id']);
+            $this->db->limit(3);
+            $this->db->order_by("id", "desc");
+
+            $this->db->group_start();
+
+                $this->db->group_start();
+                    $this->db->where('quantity >', 0);
+                    $this->db->where('inventory_status', 1);
+                $this->db->group_end();
+
+                $this->db->or_group_start();
+                     $this->db->where('inventory_status', 0);
+                $this->db->group_end();
+
+            $this->db->group_end();
+
+            $this->db->from('item');
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+                $items = $sql_query->result_array();
+                $response['status'] = true;
+            }else{
+                $response['status'] = false;
+            }
+
+            $response['items'] = $items;
 
         }else{
             $response['status'] = false;
@@ -2229,20 +2513,21 @@ class Customer_api extends REST_Controller {
 
             if(empty($errorPost)){
 
-                $this->db->select('id');
+                $this->db->select('id, device_token, email');
                 $this->db->from('shop');
                 $this->db->where('id', $order_data['shop_id']);
                 $this->db->where('deleted_at',NULL);
+                $this->db->where('admin_verified',1);
                 $this->db->where('status', 1);
 
                 $shop_error = 'Restaurant not found';
-                if($order['order_type'] == 1 || 2 || 5){
+                if(($order['order_type'] == 1) || ($order['order_type'] == 2) || ($order['order_type'] == 5)){
                     $shop_error = 'Restaurant is not providing delivery order for now.';
                     $this->db->group_start();
                         $this->db->where("takeout_delivery_status", 1);
                         $this->db->or_where("takeout_delivery_status", 3);
                     $this->db->group_end();
-                }else if($order['order_type'] == 3 || 4 || 6){
+                }else if(($order['order_type'] == 3) || ($order['order_type'] == 4) || ($order['order_type'] == 6)){
                     $shop_error = 'Restaurant is not providing takeout order for now.';
                     $this->db->group_start();
                         $this->db->where("takeout_delivery_status", 2);
@@ -2250,12 +2535,14 @@ class Customer_api extends REST_Controller {
                     $this->db->group_end();
                 }
 
-                if($order['order_type'] == 5 || 6){
+                if(($order['order_type'] == 5) || ($order['order_type'] == 6)){
                     $this->db->where("weekly_status", 1);
                     $shop_error = 'Restaurant is not providing weekly order for now.';
                 }
                 $sql_query = $this->db->get();
                 if ($sql_query->num_rows() > 0){
+
+                    $shop_data = (array)$sql_query->row();
 
                     $this->db->select('id');
                     $this->db->from('delivery_address');
@@ -2270,7 +2557,8 @@ class Customer_api extends REST_Controller {
                     $this->db->group_end();
 
                     $sql_query = $this->db->get();
-                    if ($sql_query->num_rows() > 0 || $address_not_required == TRUE){
+                    if (($sql_query->num_rows() > 0) || ($address_not_required == TRUE))
+                    {
 
                         $this->db->select('id');
                         $this->db->from('customer_payment_card');
@@ -2328,13 +2616,13 @@ class Customer_api extends REST_Controller {
 
                                 if($order_type_error == FALSE){
 
-                                    if($order_data['order_type'] == 1 || 3){
+                                    if(($order_data['order_type'] == 1) || ($order_data['order_type'] == 3)){
                                         //avaliable in curent time
                                         $day = date('l');
-                                    }else if($order_data['order_type'] == 2 || 4){
+                                    }else if(($order_data['order_type'] == 2) || ($order_data['order_type'] == 4)){
                                         //available in today later time
                                         $day = date('l');
-                                    }else if($order_data['order_type'] == 5 || 6){
+                                    }else if(($order_data['order_type'] == 5) || ($order_data['order_type'] == 6)){
                                         // available in schedule date & time
                                         $my_schedule_date = DateTime::createFromFormat('Y-m-d', $order_data['schedule_date']);
                                         $day = $my_schedule_date->format('l');
@@ -2410,15 +2698,17 @@ class Customer_api extends REST_Controller {
                                             $varient_error = FALSE;
                                             if(isset($order_varients_array) && !empty($order_varients_array)){
                                                 $order_varients_data_array = array();
-                                                $this->db->select('*');
-                                                $this->db->from('variant_items');
-                                                $this->db->where_in('id', $order_varients_array);
-                                                $sql_query = $this->db->get();
-                                                if ($sql_query->num_rows() > 0){
-                                                    $order_varients_data_array = $sql_query->result_array();
-                                                }
-                                                if(count($order_varients_data_array) != count($order_varients_array)){
-                                                    $varient_error = TRUE;
+                                                foreach ($order_varients_array as $key => $value) {
+                                                    $this->db->select('*');
+                                                    $this->db->from('variant_items');
+                                                    $this->db->where('id', $value);
+                                                    $sql_query = $this->db->get();
+                                                    if ($sql_query->num_rows() > 0){
+
+                                                    }else{
+                                                        $varient_error = TRUE;
+                                                        break;
+                                                    }
                                                 }
                                             }
                                             if($varient_error == FALSE){
@@ -2455,7 +2745,8 @@ class Customer_api extends REST_Controller {
 
                                                 if($error == ''){
 
-                                                    if($order_data['order_type'] == 3 || 4 || 6){
+                                                    if(($order_data['order_type'] == 3) || ($order_data['order_type'] == 4) || ($order_data['order_type'] == 6))
+                                                    {
                                                         $delivery_charges = 0;
                                                     }else{
                                                         $delivery_charges = $order_data['delivery_charges'];
@@ -2495,9 +2786,11 @@ class Customer_api extends REST_Controller {
                                                         $sub_total = 0;
 
                                                         $update_quantity = array();
+                                                        $reciept_data = array();
+                                                        $count = 0;
                                                         foreach ($order_data['products'] as $products_key => $products_value){
 
-                                                            $this->db->select('IF(offer_price = "", price, offer_price) as price, quantity'); 
+                                                            $this->db->select('IF(offer_price = "", price, offer_price) as price, quantity, name'); 
                                                             $this->db->where('id',$products_value['product_id']); 
                                                             $this->db->where('shop_id',$order_data['shop_id']); 
                                                             $this->db->from('item'); 
@@ -2506,6 +2799,11 @@ class Customer_api extends REST_Controller {
                                                                 $product_price_array = $sql_query->row();
                                                                 $item_price = $product_price_array->price;
                                                                 
+                                                                $reciept_data['item_data'][$count]['item_name'] = $product_price_array->name;
+                                                                $reciept_data['item_data'][$count]['quantity'] = $products_value['qty'];
+                                                                $reciept_data['item_data'][$count]['groups'] = array();
+
+
                                                                 $update_quantity[$products_value['product_id']] = $product_price_array->quantity - $products_value['qty'];
                                                             }else{
                                                                 $item_price = '';
@@ -2526,29 +2824,58 @@ class Customer_api extends REST_Controller {
                                                             $my_product_data[] = $product_data;
 
                                                             $varients_price = 0;
-                                                            foreach ($products_value['variants_id'] as $variant_key => $variant_value){
+                                                            $product_groups = array();
+                                                            if(isset($products_value['variants_id']) && !empty($products_value['variants_id'])){
+                                                                foreach ($products_value['variants_id'] as $variant_key => $variant_value){
 
-                                                                $this->db->select('id,variant_group_id,price'); 
-                                                                $this->db->where('id',$variant_value); 
-                                                                $this->db->where('item_id',$products_value['product_id']);
-                                                                $this->db->from('variant_items'); 
-                                                                $sql_query = $this->db->get();
-                                                                if ($sql_query->num_rows() > 0){
-                                                                    $variant_array = $sql_query->row();
+                                                                    $this->db->select('id,variant_group_id,price'); 
+                                                                    $this->db->where('id',$variant_value); 
+                                                                    $this->db->where('item_id',$products_value['product_id']);
+                                                                    $this->db->from('variant_items'); 
+                                                                    $sql_query = $this->db->get();
+                                                                    if ($sql_query->num_rows() > 0){
+                                                                        $variant_array = $sql_query->row();
 
-                                                                    $variant_data = 
-                                                                        array(
-                                                                            'order_item_id' => $product_insert_id,
-                                                                            'variant_group_id' => $variant_array->variant_group_id,
-                                                                            'variant_id' => $variant_value,
-                                                                            'price' => number_format((float)$variant_array->price, 2, '.', '')
-                                                                        );
-                                                                    $this->db->insert('order_item_variant', $variant_data);
+                                                                        $variant_data = 
+                                                                            array(
+                                                                                'order_item_id' => $product_insert_id,
+                                                                                'variant_group_id' => $variant_array->variant_group_id,
+                                                                                'variant_id' => $variant_value,
+                                                                                'price' => number_format((float)$variant_array->price, 2, '.', '')
+                                                                            );
+                                                                        $this->db->insert('order_item_variant', $variant_data);
 
-                                                                    $varients_price +=  number_format((float)$variant_array->price, 2, '.', '');
-                                                                    $my_variant_data[] = $variant_data;
+                                                                        $varients_price +=  number_format((float)$variant_array->price, 2, '.', '');
+                                                                        //$my_variant_data[] = $variant_data;
+
+                                                                        $product_groups[] = $variant_array->variant_group_id;
+                                                                    }
+                                                                }
+
+                                                                $product_groups = array_unique($product_groups);
+                                                                foreach ($product_groups as $group_key => $group_value) {
+                                                                    $this->db->select('name');
+                                                                    $this->db->where('id',$group_value);
+                                                                    $this->db->from('variant_group'); 
+                                                                    $sql_query = $this->db->get();
+                                                                    if ($sql_query->num_rows() > 0){
+                                                                        $group_name_data = (array)$sql_query->row();
+                                                                        $reciept_data['item_data'][$count]['groups'][$group_key]['group_name'] = $group_name_data['name'];
+
+                                                                        $this->db->select('name');
+                                                                        $this->db->where_in('id',$products_value['variants_id']);
+                                                                        $this->db->where('variant_group_id',$group_value);
+                                                                        $this->db->from('variant_items');
+                                                                        $sql_query = $this->db->get();
+                                                                        if ($sql_query->num_rows() > 0){
+                                                                            $my_varients = $sql_query->result_array();
+                                                                            $reciept_data['item_data'][$count]['groups'][$group_key]['varients'] = array_column($my_varients, 'name');
+                                                                        }
+
+                                                                    }
                                                                 }
                                                             }
+
 
                                                             $total_product_price = ($item_price + $varients_price) * $products_value['qty'];
 
@@ -2560,7 +2887,11 @@ class Customer_api extends REST_Controller {
                                                             $this->db->where('id',$product_insert_id); 
                                                             $this->db->update('order_items', $product_data_edited);
 
+                                                            $reciept_data['item_data'][$count]['total_product_price'] = $total_product_price;
+
                                                             $sub_total += $total_product_price;
+
+                                                            $count++;
                                                         }
 
                                                         $sub_total = number_format((float)$sub_total, 2, '.', '');
@@ -2643,20 +2974,40 @@ class Customer_api extends REST_Controller {
                                                             }
                                                         }
 
-                                                         // $response['data'] = true;    
-                                                         // $response['sub_total'] = $sub_total;    
-                                                         // $response['promo_discount'] = number_format((float)$promo_discount, 2, '.', '');
-                                                         // $response['sub_total2'] = $sub_total2;    
-                                                         // $response['tax'] = $tax;    
-                                                         // $response['service_charge'] = $service_charge;    
-                                                         // $response['delivery_charges'] = $delivery_charges;    
-                                                         // $response['total'] = number_format((float)$total, 2, '.', '');
-                                                           
-                                                        // $response['order_varients_data_array'] = $order_varients_data_array;    
-                                                        // $response['product_data'] = $order_products_array;
+
+                                                        $device_type = 2;
+                                                        $device_token = $shop_data['device_token'];
+                                                        // $device_token = 'dmNrhhh4XkU:APA91bGlecM_fLypvGUtEoOTw3HhspbioIFlJzjz2JpNBPHGnwRjXGVLelKlcQ0D_E31bjFTYho47CuMBrZg9NUfqbH1JytQG1UbCstGITYmiCDnS-rDTNMBgKvxPtLKdVJw_Oe0NwfW';
+                                                        $push_title = 'Order Arrived';
+                                                        $message = 'Order no. CL'.$order_id.' has been arrived';
+                                                        $push_data = array(
+                                                            'order_id' => $order_id,
+                                                            'customer_id' => $order_data['customer_id'],
+                                                            'message' => $message
+                                                            );
+                                                        $push_type = 'order_arrived';
+
+                                                        $result = send_push($device_type, $device_token, $push_title, $push_data, $push_type);
+
+                                                        // Send mail to vender for order recieved
+                                                        $reciept_data['subtotal'] = $sub_total2;
+                                                        $reciept_data['tax'] = $tax;
+                                                        $reciept_data['service_charge'] = $service_charge;
+                                                        $reciept_data['delivery_charges'] = $delivery_charges;
+                                                        $reciept_data['promo_amount'] = $order_data_edited['promo_amount'];
+                                                        $reciept_data['total'] = $order_data_edited['total'];
+                                                        $reciept_data['order_id'] = $order_id;
+                                                        $reciept_data['line1'] = 'You Got New Order!';
+                                                        $reciept_data['line2'] = 'Accept the order as soon as possible';
+
+                                                        $email_data = $this->load->view('email_templates/order_receipt', $reciept_data, true);
+                                                        $result = sendmail($from = '', $to = $shop_data['email'], $subject = 'New Order Recieved', $email_data);
+
 
                                                         $response['order'] = true;    
+                                                        $response['status'] = true;    
                                                         $response['order_id'] = $order_id;    
+                                                        $response['reciept_data'] = $reciept_data;    
 
                                                     }else{
                                                         $response['status'] = false;
@@ -2728,6 +3079,7 @@ class Customer_api extends REST_Controller {
 
             $this->db->select('*');
             $this->db->from('orders');
+            $this->db->where("id", $_POST['order_id']);
             $sql_query = $this->db->get();
             if ($sql_query->num_rows() > 0){
                 $order = (array)$sql_query->row();
@@ -2736,18 +3088,20 @@ class Customer_api extends REST_Controller {
                 $this->db->select('id,service_charge,charges_of_minimum_mile');
                 $this->db->from('shop');
 
-                if($order['order_type'] == 5 || 6){
+                if(($order['order_type'] == 5) || ($order['order_type'] == 6)){
                     $this->db->where("weekly_status", 1);
                     $order_type = 'weekly ';
                 }
 
-                if($order['order_type'] == 1 || 2 || 5){
+                if($order['order_type'] == 1 || ($order['order_type'] == 2) || ($order['order_type'] == 5))
+                {
                     $order_type .= 'delivery';
                     $this->db->group_start();
                         $this->db->where("takeout_delivery_status", 1);
                         $this->db->or_where("takeout_delivery_status", 3);
                     $this->db->group_end();
-                }else if($order['order_type'] == 3 || 4 || 6){
+                }else if(($order['order_type'] == 3) || ($order['order_type'] == 4) || ($order['order_type'] == 6))
+                {
                     $order_type .= 'takeout';
                     $this->db->group_start();
                         $this->db->where("takeout_delivery_status", 2);
@@ -3048,6 +3402,18 @@ class Customer_api extends REST_Controller {
         if(empty($errorPost)){
 
             if(strlen($_POST['keyword']) > 0){
+
+                // get delivery_available_mile
+                $delivery_available_mile = '';
+                $this->db->select('data');
+                $this->db->where("name", 'delivery_available_mile');
+                $this->db->from('setting');
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $delivery_available_mile_data = $sql_query->row();
+                    $delivery_available_mile = $delivery_available_mile_data->data;
+                }
+                
                 $sql_select = array(
                                 "id",
                                 "shop_name",
@@ -3072,17 +3438,6 @@ class Customer_api extends REST_Controller {
                 }
 
                 $this->db->select($sql_select);
-
-                // get delivery_available_mile
-                $delivery_available_mile = '';
-                $this->db->select('data');
-                $this->db->where("name", 'delivery_available_mile');
-                $this->db->from('setting');
-                $sql_query = $this->db->get();
-                if ($sql_query->num_rows() > 0){
-                    $delivery_available_mile_data = $sql_query->row();
-                    $delivery_available_mile = $delivery_available_mile_data->data;
-                }
 
                 if(isset($_POST['latitude']) && $_POST['latitude'] != "" && isset($_POST['longitude']) && $_POST['longitude'] != "" && $delivery_available_mile != ''){
                     $this->db->order_by("distance", "asc");
@@ -3501,7 +3856,7 @@ class Customer_api extends REST_Controller {
         $return_data = NULL;
         if(isset($data_string) && !is_null($data_string)){
 
-            $unique_code = $data_string.'_'.time();
+            $unique_code = $data_string;
             $googleapis = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=".$unique_code."&choe=UTF-8";
             $file = file_get_contents($googleapis);
 

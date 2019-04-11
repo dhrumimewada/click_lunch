@@ -200,4 +200,56 @@ class Customer_model extends CI_Model {
 			return true;
 		}
 	}
+
+	public function customer_status_update_sendmail($customer_id = NULL, $status =  NULL){
+
+		$return = array();
+
+		$this->db->select('email');
+		$this->db->from('customer');
+		$this->db->where('id', $customer_id);
+		$sql_query = $this->db->get();
+		$customer_data = $sql_query->row();
+
+		$this->db->select('emat_email_subject,emat_email_message');
+		$this->db->from('email_template');
+		if($status == 2){
+			$this->db->where('emat_email_type', 7);
+		}else if($status == 1){
+			$this->db->where('emat_email_type', 8);
+		}else{
+			return false;
+		}
+		
+		$this->db->where("emat_is_active", 1);
+		$sql_query = $this->db->get();
+		$return_data = $sql_query->row();
+
+
+		if (!isset($return_data) && empty($return_data)){
+			//return $return = array('is_success' =>FALSE, 'message' => 'Email template not found. Error into sending mail.');
+			return false;
+		}
+
+		$email_var_data = array();
+
+		$from = "";
+		$to = $customer_data->email;
+		$subject = $return_data->emat_email_subject;
+
+		$email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+		$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+		$mail = sendmail($from, $to, $subject, $message);
+
+		if(!$mail){
+
+			//return $return = array('is_success' =>FALSE, 'message' => 'Error into sending mail');
+			return false;
+		}else{
+
+			//return $return = array('is_success' => TRUE, 'message' => 'Mail resent successfully');
+			return true;
+		
+		}
+	}
 }

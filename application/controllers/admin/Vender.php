@@ -29,6 +29,15 @@ class Vender extends CI_Controller {
 		$this->load->view('template/template',$output_data);	
 	}
 
+	public function vender_resend_activation_mail($shop_id = NULL){
+		if(isset($shop_id) && $shop_id != ''){
+			$send_mail = $this->vender_model->vender_resend_activation_mail($shop_id);
+			echo json_encode($send_mail);
+			return TRUE;
+		}
+		
+	}
+
 	public function sendmail()
 	{
 		//$this->load->view('email_templates/activation_mail');
@@ -295,8 +304,14 @@ class Vender extends CI_Controller {
 		if (isset($id) && !is_null($id) && !empty($id)) {
 			$user_data = array('status' => $status );
 			$this->db->where('id', $id);
-			$this->db->update('shop', $user_data);
-			echo json_encode(array("is_success" => true));
+			if($this->db->update('shop', $user_data)){
+				// $is_success = TRUE;
+				$is_success = $this->vender_model->vender_status_update_sendmail($id , $status);
+
+			}else{
+				$is_success = FALSE;
+			}
+			echo json_encode(array("is_success" => $is_success));
 			return TRUE;
 		}else{
 			return FALSE;
@@ -408,7 +423,7 @@ class Vender extends CI_Controller {
 
 		foreach($vendor_request_list as $key => $vendor_request) {
 				// <a href='".$edit_link."/".encrypt($vendor_request['id'])."' class='btn btn-outline-primary waves-effect waves-light btn-sm' title='Edit' data-popup='tooltip' > Edit</a>
-		       $action_data = "<span class='text-center d-block'> <button type='button' class='btn btn-yellow btn-sm waves-effect waves-light view-msg' title='Accept' data-popup='tooltip' data-shopname='".$vendor_request['shop_name']."'  data-msg='".$vendor_request['message']."' data-toggle='modal' data-target='#myModal'>View</button><button type='button' class='btn btn-success btn-sm waves-effect waves-light accept_vendor_request' title='Accept' data-popup='tooltip' >Accept</button> <button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vendor_request' title='Verified' data-popup='tooltip' >Delete</button> <span>";
+		       $action_data = "<span class='text-center d-block'> <button type='button' class='btn btn-yellow btn-sm waves-effect waves-light view-msg' title='Accept' data-popup='tooltip' data-shopname='".$vendor_request['shop_name']."'  data-msg='".$vendor_request['message']."' data-toggle='modal' data-target='#myModal'>View</button><button type='button' class='btn btn-success btn-sm waves-effect waves-light accept_vendor_request' title='Accept' data-popup='tooltip' data-toggle='modal' data-target='#accept-modal'  data-shopname='".$vendor_request['shop_name']."'>Accept</button> <button type='button' class='btn btn-danger btn-sm waves-effect waves-light delete_vendor_request' title='Verified' data-popup='tooltip' >Delete</button> <span>";
 
 		       $data[] = array(
 		            $vendor_request['id'],

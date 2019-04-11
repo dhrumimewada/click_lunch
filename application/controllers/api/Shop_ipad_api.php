@@ -64,6 +64,7 @@ class Shop_ipad_api extends REST_Controller {
             $this->db->select('*');
             $this->db->where("email",$_POST['email']);
             $this->db->where("password !=",'');
+            $this->db->where("admin_verified",1);
             $this->db->where("deleted_at",NULL);
             $this->db->where("status",1);
             $this->db->from("shop");
@@ -84,8 +85,18 @@ class Shop_ipad_api extends REST_Controller {
 
                 $response['status'] = true;
                 $response['message'] = 'Login successfully.';
-                $response['profile'] = (array)$shop_details;
+                $response['profile'] = (array)$shop_details;               
                 $response['apple_pay_api'] = (array)$this->db->get_where('payment_settings',array('shop_id'=>$shop_details->id,'payment_type'=>1))->row();
+                $timing = $this->db->get_where('shop_availibality',array('shop_id'=>$shop_details->id))->result_array();
+                $timing_list = array();               
+                foreach ($timing as $key => $time) 
+                {
+                    $timing_list[$time['day']] = $time;
+                   
+                }
+                $response['store_timing'] = $timing_list;
+               
+
 
                 }else{
                     $response['status'] = false;
@@ -311,32 +322,113 @@ class Shop_ipad_api extends REST_Controller {
 
     public function update_profile_post(){
         $postFields['shop_id'] = $_POST['shop_id'];
+        $postFields['shop_name'] = $_POST['shop_name'];
+        $postFields['address'] = $_POST['address'];
+        $postFields['mobile_number'] = $_POST['mobile_number'];
+        $postFields['email'] = $_POST['email'];
 
         $errorPost = $this->ValidatePostFields($postFields);
 
         if(empty($errorPost))
         {
             $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
-            $shop = (array)$this->db->get_where('shop',$where)->row();
+            $shop = (array)$this->db->get_where('shop',$where)->row();           
             if(empty($shop)){
                 $response['status'] = false;
                 $response['message'] = 'User not found';
             }else{
-
-                if(isset($_POST['shop_name']) && $_POST['shop_name'] != ""){
-                    $user_data['shop_name'] = ucwords($_POST['shop_name']);
+                if($shop['email'] == $_POST['email'])
+                {
+                    $user_data['email'] = trim($_POST['email']);    
                 }
-                if(isset($_POST['mobile_number']) && $_POST['mobile_number'] != ""){
-                    $user_data['mobile_number'] = $_POST['mobile_number'];
+                else
+                {
+                    $check_mail = $this->db->get_where('shop',array('email'=>$_POST['email']))->num_rows();   
+                    if($check_mail > 0)
+                    {
+                        $response['status'] = false;
+                        $response['message'] = 'Email is already exist.';
+                        $this->response($response);
+                        exit;
+                    }
+                    else
+                    {
+                        $user_data['email'] = trim($_POST['email']);           
+                    }
+                }
+                
+                $user_data['shop_name'] = ucwords(addslashes($_POST['shop_name']));
+                $user_data['address'] = trim($_POST['address']);                
+                $user_data['contact_no1'] = str_replace("+1 ", "",  $_POST['mobile_number']);
+
+                $shop_name = preg_replace("/[^a-zA-Z ]/", "", strtolower($_POST["shop_name"]));
+                $name_array =  explode(" ",$shop_name);
+                $short_name_array = array();
+
+                foreach($name_array as $key => $value){
+                    $value1 = trim($value);
+                    if($value1 != ''){
+                        $short_name_array[$key] = $value1;
+                    }
+                }
+                $short_name = implode("-",$short_name_array);
+               
+                $this->db->select('short_name');
+                $this->db->from('shop');
+                $this->db->where("short_name LIKE '$short_name%'");
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $exists_data = $sql_query->num_rows();
+                    $short_name = $short_name."-".$exists_data;
                 }
 
-                if (isset($_FILES['image']) && !empty($_FILES['image']) && strlen($_FILES['image']['name']) > 0) {
+                $user_data['short_name'] = $short_name;
 
-                    //save new image in folder
-                    $config['upload_path'] = FCPATH . $this->config->item("delivery_boy_profile_path");
+                $address = urlencode($_POST['address']);
+
+                $google_key = $this->config->item('google_key');
+
+                $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key='.$google_key;              
+                $address_json = file_get_contents($url);            
+                $json = (array)json_decode($address_json);                
+                $city = "";
+                $state = "";
+                $country = "";
+                $zip_code = "";
+                foreach ($json['results'][0]->address_components as $key) 
+                {
+                    if($key->types[0] == 'administrative_area_level_2')
+                    {
+                        $city = $key->long_name;
+                    }
+                    if($key->types[0] == 'administrative_area_level_1')
+                    {
+                        $state = $key->long_name;
+                    }
+                    if($key->types[0] == 'country')
+                    {
+                        $country = $key->long_name;
+                    }
+                    if($key->types[0] == 'postal_code')
+                    {
+                        $zip_code = $key->long_name;
+                    }
+                }
+
+                $user_data['latitude'] = $json['results'][0]->geometry->location->lat;
+                $user_data['longitude'] = $json['results'][0]->geometry->location->lng;
+                $user_data['city'] = $city;
+                $user_data['state'] = $state;
+                $user_data['country'] = $country;
+                $user_data['zip_code'] = $zip_code; 
+                $user_data['updated_at'] = date('Y-m-d H:i:s');
+
+                if (isset($_FILES['image']) && !empty($_FILES['image']) && strlen($_FILES['image']['name']) > 0) 
+                {                    //save new image in folder
+                    $config['upload_path'] = FCPATH . $this->config->item("profile_path");
                     $config['allowed_types'] = 'jpg|jpeg|png';
                     $config['encrypt_name'] = false;
-                    $config['file_name'] = 'delivery_boy' . '_' . time();
+                    $config['file_name'] = 'vender' . '_' . time();
                     $config['file_ext_tolower'] = true;
 
                     $this->load->library('upload');
@@ -351,16 +443,16 @@ class Shop_ipad_api extends REST_Controller {
 
                         //remove old image from user folder
                         $this->db->select('profile_picture');
-                        $this->db->where('id', intval($_POST['delivery_boy_id']));
-                        $this->db->from('delivery_boy');
+                        $this->db->where('id', intval($_POST['shop_id']));
+                        $this->db->from('shop');
                         $sql_query = $this->db->get();
                         if ($sql_query->num_rows() > 0) {
                             $return_data = $sql_query->row();
                             $image_old = $return_data->image;
 
                             if (isset($image_old) && !empty($image_old)) {
-                                if (file_exists(FCPATH . $this->config->item("delivery_boy_profile_path") . "/" . $image_old)) {
-                                    unlink(FCPATH . $this->config->item("delivery_boy_profile_path") . "/" . $image_old);
+                                if (file_exists(FCPATH . $this->config->item("profile_path") . "/" . $image_old)) {
+                                    unlink(FCPATH . $this->config->item("profile_path") . "/" . $image_old);
                                 }
                             }
                         }
@@ -369,18 +461,16 @@ class Shop_ipad_api extends REST_Controller {
                     }
                 }
 
+                
 
+                $this->db->where('id',$_POST['shop_id']);
+                if($this->db->update('shop',$user_data)){
 
-                $user_data['updated_at'] = date('Y-m-d H:i:s');
-
-                $this->db->where('id',$_POST['delivery_boy_id']);
-                if($this->db->update('delivery_boy',$user_data)){
-
-                    $where = array('id' => $_POST['delivery_boy_id'],'status' => '1', 'deleted_at' => NULL);
-                    $updated_user_data = (array)$this->db->get_where('delivery_boy',$where)->row();
+                    $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
+                    $updated_shop_data = (array)$this->db->get_where('shop',$where)->row();
 
                     $response['status'] = true;
-                    $response['profile'] = $updated_user_data;
+                    $response['profile'] = $updated_shop_data;
                     $response['message'] = 'Profile updated successfully';
                 }else{
                     $response['status'] = false;
@@ -412,16 +502,16 @@ class Shop_ipad_api extends REST_Controller {
                 $response['message'] = 'Shop not found';
             }else{
 
-            	$data['takeout_delivery_status'] = $_POST['takeout_delivery_status'];
-            	$data['min_order'] = number_format($_POST['min_order'],2);
-            	//$data['service_charge'] = number_format($_POST['service_charge'],2);
+                $data['takeout_delivery_status'] = $_POST['takeout_delivery_status'];
+                $data['min_order'] = number_format($_POST['min_order'],2);
+                //$data['service_charge'] = number_format($_POST['service_charge'],2);
                 $data['weekly_status'] = $_POST['weekly_status'];
-            	$this->db->update('shop',$data,array('id'=>$_POST['shop_id']));
+                $this->db->update('shop',$data,array('id'=>$_POST['shop_id']));
 
                 $response['status'] = true;
                 $response['message'] = 'Services updated successfully.';
                 $where = array('id' => $_POST['shop_id'],'status' => '1', 'deleted_at' => NULL);
-            	$shop = (array)$this->db->get_where('shop',$where)->row();
+                $shop = (array)$this->db->get_where('shop',$where)->row();
                 $response['profile'] = $shop;
             }
 
@@ -434,9 +524,10 @@ class Shop_ipad_api extends REST_Controller {
 
     public function store_time_post(){
         //$jsondata = $_POST['jsondata'];
-    	$data = json_decode($_POST['jsondata'], true);
+        //print_r($_POST);exit;
+        $data = json_decode($_POST['jsondata'], true);
 
-    	//print_r($data);exit;
+        //print_r($data);exit;
         $postFields['shop_id'] = $data['shop_id'];        
         $errorPost = $this->ValidatePostFields($postFields);
 
@@ -448,41 +539,46 @@ class Shop_ipad_api extends REST_Controller {
                 $response['status'] = false;
                 $response['message'] = 'Shop not found';
             }else{
-            	if(!empty($data['Sunday']) && !empty($data['Monday']) && !empty($data['Tuesday']) && !empty($data['Thursday']) && !empty($data['Friday']) && !empty($data['Saturday']) && !empty($data['Wednesday']))
-            	{
-            		$day_array = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+                if(!empty($data['Sunday']) && !empty($data['Monday']) && !empty($data['Tuesday']) && !empty($data['Thursday']) && !empty($data['Friday']) && !empty($data['Saturday']) && !empty($data['Wednesday']))
+                {
+                    $day_array = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
 
-	            	foreach ($day_array as $day) 
-	            	{
-	            		$update_data['is_closed'] = $data[$day]['is_closed'];
-	            		$update_data['full_day'] = $data[$day]['full_day'];
-	            		if($data[$day]['is_closed'] == 1 || $data[$day]['full_day'] == 1)
-	            		{
-	            			$update_data['from_time'] =  "";
-	            			$update_data['to_time'] = "";
-	            		}
-	            		else
-	            		{
-	            			$update_data['from_time'] = $data[$day]['from_time'];
-	            			$update_data['to_time'] = $data[$day]['to_time'];
-	            		}
-	            		if($data[$day]['is_closed'] == 1)
-	            		{
-	            			$update_data['full_day'] = 0;
-	            		}
-	            		
-	            		//print_r($update_data);exit;
-	            		$this->db->update('shop_availibality',$update_data,array('day'=>$day,'shop_id'=>$data['shop_id']));
-	            	}	
-            	}
+                    foreach ($day_array as $day) 
+                    {
+                        $update_data['is_closed'] = $data[$day]['is_closed'];
+                        $update_data['full_day'] = $data[$day]['full_day'];
+                        if($data[$day]['is_closed'] == 1 || $data[$day]['full_day'] == 1)
+                        {
+                            $update_data['from_time'] =  "";
+                            $update_data['to_time'] = "";
+                        }
+                        else
+                        {
+                            $update_data['from_time'] = $data[$day]['from_time'];
+                            $update_data['to_time'] = $data[$day]['to_time'];
+                        }
+                        if($data[$day]['is_closed'] == 1)
+                        {
+                            $update_data['full_day'] = 0;
+                        }
+                        
+                        //print_r($update_data);exit;
+                        $this->db->update('shop_availibality',$update_data,array('day'=>$day,'shop_id'=>$data['shop_id']));
+                    }   
+                }
 
-            	
-            	
-            	$time_info = $this->db->get_where('shop_availibality',array('shop_id'=>$data['shop_id']))->result_array();    	
+                
+                
+                $time_info = $this->db->get_where('shop_availibality',array('shop_id'=>$data['shop_id']))->result_array();      
+                $time_list =array();
+                foreach ($time_info as $key => $time)
+                {
+                    $time_list[$time['day']] = $time;
+                }
 
                 $response['status'] = true;
                 $response['message'] = 'Store time updated successfully.';
-                $response['time_data'] = $time_info;
+                $response['time_data'] = $time_list;
             
             }
 
@@ -495,45 +591,168 @@ class Shop_ipad_api extends REST_Controller {
 
     public function register_post()
     {
-	    $postFields['email'] = $_POST['email'];
-	    $postFields['shop_name'] = $_POST['shop_name'];
-	    $postFields['address'] = $_POST['address'];
-	    $postFields['contact_no'] = $_POST['contact_no'];
-	 //   $postFields['password'] = $_POST['password'];	    	   
+        $postFields['email'] = $_POST['email'];
+        $postFields['shop_name'] = $_POST['shop_name'];
+        $postFields['address'] = $_POST['address'];
+        $postFields['mobile_number'] = $_POST['mobile_number'];
+        $postFields['message'] = $_POST['message'];
+        $postFields['vender_name'] = $_POST['vender_name'];            
 
-	    $errorPost = $this->ValidatePostFields($postFields);
+        $errorPost = $this->ValidatePostFields($postFields);
 
-	    if(empty($errorPost))
-	    {
-	    	$shop_request_count = $this->db->get_where('shop_request',array('email'=>$_POST['email']))->num_rows();
-	    	$shop_count = $this->db->get_where('shop',array('email'=>$_POST['email']))->num_rows();
-	    	if($shop_count == 0 && $shop_request_count == 0)
-	    	{
-	    		$data['email'] = $_POST['email'];
-	    		$data['shop_name'] = $_POST['shop_name'];
-	    		$data['address'] = $_POST['address'];
-	    		$data['contact_no'] = $_POST['contact_no'];
-	    	//	$data['password'] = password_hash($_POST['password']);
-	    		$data['created_at'] = date('Y-m-d H:i:s');
-	    		$data['updated_at'] = NULL;
-	    		$data['deleted_at'] = NULL;
-	    		$this->db->insert('shop_request',$data);
-	    		$response['status'] = true;
-	        	$response['message'] = 'Register successfully, admin will cantact to you soon.';
-	    	}
-	    	else
-	    	{
-	    		$response['status'] = false;
-	        	$response['message'] = 'Email is already exist';
-	    	}
-	    }
-	    else
-	    {
-	    	$response['status'] = false;
-	        $response['message'] = $errorPost;
-	    }
-	    $this->response($response);
-	}
+        if(empty($errorPost))
+        {
+            $shop_request_count = $this->db->get_where('shop_request',array('email'=>$_POST['email']))->num_rows();
+            $shop_count = $this->db->get_where('shop',array('email'=>$_POST['email']))->num_rows();
+            if($shop_count == 0 && $shop_request_count == 0)
+            {
+                $data['email'] = trim($_POST['email']);
+                $data['shop_name'] = ucwords(addslashes($_POST['shop_name']));
+                $data['address'] = trim($_POST['address']);                
+                $data['contact_no1'] = str_replace("+1 ", "",  $_POST['mobile_number']);     
+                $data['message'] = addslashes($_POST['message']);  
+                $data['vender_name'] = ucwords(addslashes($_POST['vender_name']));
+                $data['admin_verified'] = 0;
+
+                $shop_name = preg_replace("/[^a-zA-Z ]/", "", strtolower($_POST["shop_name"]));
+                $name_array =  explode(" ",$shop_name);
+                $short_name_array = array();
+
+                foreach($name_array as $key => $value){
+                    $value1 = trim($value);
+                    if($value1 != ''){
+                        $short_name_array[$key] = $value1;
+                    }
+                }
+                $short_name = implode("-",$short_name_array);
+
+                $this->db->select('short_name');
+                $this->db->from('shop');
+                $this->db->where("short_name LIKE '$short_name%'");
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $exists_data = $sql_query->num_rows();
+                    $short_name = $short_name."-".$exists_data;
+                }
+
+                $data['short_name'] = $short_name;
+
+                $address = urlencode($_POST['address']);
+
+                $google_key = $this->config->item('google_key');
+
+                $url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.$address.'&key='.$google_key;              
+                $address_json = file_get_contents($url);            
+                $json = (array)json_decode($address_json);                
+                $city = "";
+                $state = "";
+                $country = "";
+                $zip_code = "";
+                foreach ($json['results'][0]->address_components as $key) 
+                {
+                    if($key->types[0] == 'administrative_area_level_2')
+                    {
+                        $city = $key->long_name;
+                    }
+                    if($key->types[0] == 'administrative_area_level_1')
+                    {
+                        $state = $key->long_name;
+                    }
+                    if($key->types[0] == 'country')
+                    {
+                        $country = $key->long_name;
+                    }
+                    if($key->types[0] == 'postal_code')
+                    {
+                        $zip_code = $key->long_name;
+                    }
+                }
+
+                $data['latitude'] = $json['results'][0]->geometry->location->lat;
+                $data['longitude'] = $json['results'][0]->geometry->location->lng;
+                $data['city'] = $city;
+                $data['state'] = $state;
+                $data['country'] = $country;
+                $data['zip_code'] = $zip_code;          
+                
+                $data['created_at'] = date('Y-m-d H:i:s');
+                $data['updated_at'] = NULL;
+                $data['deleted_at'] = NULL;
+
+                //print_r($data);exit;
+                $this->db->insert('shop',$data);
+
+                $user_id = $this->db->insert_id();
+                //print_r($user_id);exit;
+                $shop_code = str_replace(' ', '', $_POST['shop_name']);
+                $shop_code = preg_replace('/[^A-Za-z0-9\-]/', '', $shop_code);
+                $shop_code = strtoupper(substr($shop_code, 0, 3)).$user_id;
+
+                $update_data['shop_code'] = $shop_code;
+
+                $this->db->update('shop',$update_data,array('id'=>$user_id));
+
+                $this->db->select('emat_email_subject,emat_email_message');
+                $this->db->from('email_template');
+                $this->db->where('emat_email_type', 1);
+                $this->db->where("emat_is_active", 1);
+                $sql_query = $this->db->get();
+                $return_data = $sql_query->row();
+
+                if (!isset($return_data) && empty($return_data)){
+                    $this->auth->set_error_message("Email template not found. Please try again later or contact clicklunch team.");
+                    return FALSE;
+                }
+
+                $activation_token = bin2hex(random_bytes(20));
+                $email_var_data["activation_link"] = base_url() . 'vender-setpassword/'. $activation_token;
+
+                $from = "";
+                $to = $this->input->post("email");
+                $subject = $return_data->emat_email_subject;
+
+                $email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+                $message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+                $mail = $this->send_mail($to, $subject, $message);
+
+                if(!$mail){
+                    $this->db->where("id", $user_id);
+                    $this->db->delete("shop");
+
+                    $this->auth->set_error_message("Error into sending activation mail. Please try again later");
+                    return FALSE;
+                }else{
+                    $token_array = array('activation_token' => $activation_token);
+                    $this->db->where("id", $user_id);
+                    $this->db->update("shop", $token_array);
+                }
+
+                if ($this->db->trans_status() === FALSE) {
+                    $this->db->trans_rollback();
+                    $this->auth->set_error_message("Error into registation. Please try again");
+                } else {
+                    $this->db->trans_commit();
+                    $this->auth->set_status_message("You are successfully registered into clicklunch. You have got activation mail on your email address.");
+                    $return_value = TRUE;
+                }
+
+
+                $response['status'] = true;
+                $response['message'] = 'Register successfully, admin will cantact to you soon.';
+            }
+            else
+            {
+                $response['status'] = false;
+                $response['message'] = 'Email is already exist';
+            }
+        }
+        else
+        {
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+    }
 
 
     public function create_email_template($template){
@@ -559,58 +778,194 @@ class Shop_ipad_api extends REST_Controller {
         exit;
     }
 
-    public function order_action_post(){
+    public function order_history_get($shop_id = "",$Page = 1)
+    {
+        if($shop_id != "")
+        {
+            if($Page == 0)
+            {
+                $Page = 1;
+            }
+
+            if($Page == 1)
+            {
+                $start = 0;
+            }
+            else
+            {
+                $start = ($Page - 1) * 10;
+            }
+            $limit = 10;
+
+            $order_data = $this->db->query('SELECT orders.*,customer.username From orders join customer on customer.id = orders.customer_id where orders.shop_id = "'.$shop_id.'" and orders.order_status IN(6,7,8) ORDER By orders.id DESC LIMIT '.$start.','.$limit)->result_array();
+            $i = 0;
+            $order_data_list = array();
+            foreach ($order_data as $row) 
+            {
+                $order_data_list[$i] = $row;
+                if($row['order_status'] == 6)
+                {
+                    $order_data_list[$i]['order_of_status'] = 'delivered';
+                }
+                else if($row['order_status'] == 7)
+                {
+                    $order_data_list[$i]['order_of_status'] = 'delivery_fail';
+                }
+                else
+                {
+                    $order_data_list[$i]['order_of_status'] = 'cancel_by_customer';
+                }
+                $i++;
+            }
+            $response['status'] = true;
+            $response['message'] = 'Order History';
+            $response['data'] = $order_data_list;
+
+        }
+        else
+        {
+            $response['status'] = false;
+            $response['message'] = 'Paramater missing';
+        }
+        $this->response($response);
+    }
+
+    public function order_action_post()
+    {
         $postFields['order_id'] = $_POST['order_id']; 
         $postFields['accept_reject'] = $_POST['accept_reject']; 
-        $postFields['delivery_boy_id'] = $_POST['delivery_boy_id']; 
+        //$postFields['delivery_boy_id'] = $_POST['delivery_boy_id']; 
 
-        if(empty($errorPost)){
-
-            $where = array('id' => intval($_POST['delivery_boy_id']) ,'deleted_at' => NULL, 'status' => 1);
-            $delivery_boy = (array)$this->db->get_where('delivery_boy',$where)->row();
-            if(empty($delivery_boy)){
-                $response['status'] = false;
-                $response['message'] = 'User not found';    
-            }else{
-
-                $where = array('id' => intval($_POST['order_id']) ,'order_status' => 3, 'delivery_boy_id' => intval($_POST['delivery_boy_id']));
-                $order = (array)$this->db->get_where('orders',$where)->row();
-                if(empty($order)){
-                    $response['status'] = false;
-                    $response['message'] = 'Order not found';    
-                }else{
-
-                    if($_POST['accept_reject'] == 0){
-
-                        $order_update = array('order_status' => 1 , 'delivery_boy_id' => 0 );
-                        $this->db->where("id",$_POST['order_id']);
-                        if($this->db->update("orders",$order_update)){
-                            $response['status'] = true;
-                            $response['message'] = 'Order CL'.$_POST['order_id'].' rejected';
-                        }else{
-                            $response['status'] = false;
-                            $response['message'] = 'Server encountered an error. please try again';
-                        }
-
-                    }else if($_POST['accept_reject'] == 1){
-
-                        $order_update = array('order_status' => 4);
-                        $this->db->where("id",$_POST['order_id']);
-                        if($this->db->update("orders",$order_update)){
-                            $response['status'] = true;
-                            $response['message'] = 'Order CL'.$_POST['order_id'].' accepted';
-                        }else{
-                            $response['status'] = false;
-                            $response['message'] = 'Server encountered an error. please try again';
-                        }
-
-                    }else{
-                        $response['status'] = false;
-                        $response['message'] = 'Something went wrong';
-                    }
+        if(empty($errorPost))
+        {            
+            if($_POST['accept_reject'] == 0)
+            {
+                $order_update = array('order_status' => 2 , 'delivery_boy_id' => 0 );
+                $this->db->where("id",$_POST['order_id']);
+                if($this->db->update("orders",$order_update))
+                {
+                    $response['status'] = true;
+                    $response['message'] = 'Order CL'.$_POST['order_id'].' rejected';
                 }
+                else
+                {
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+
             }
-        }else{
+            else if($_POST['accept_reject'] == 1)
+            {
+                $order_update = array('order_status' => 1);
+                $this->db->where("id",$_POST['order_id']);
+                if($this->db->update("orders",$order_update))
+                {
+                    $response['status'] = true;
+                    $response['message'] = 'Order CL'.$_POST['order_id'].' accepted by shop';
+                }
+                else
+                {
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+
+            }
+            else
+            {
+                $response['status'] = false;
+                $response['message'] = 'Something went wrong';
+            }                
+            
+        }
+        else
+        {
+            $response['status'] = false;
+            $response['message'] = $errorPost;
+        }
+        $this->response($response);
+
+        $errorPost = $this->ValidatePostFields($postFields);
+    }
+
+    public function order_action_complete_post()
+    {
+        $postFields['order_id'] = $_POST['order_id']; 
+        $postFields['accept_reject'] = $_POST['accept_reject'];        
+        $order_details = (array)$this->db->get_where('orders',array('id'=>$_POST['order_id']))->row();
+        $customer = (array)$this->db->get_where('customer',array('id'=>$order_details['customer_id']))->row();
+        if(empty($errorPost))
+        {            
+            if($_POST['accept_reject'] == 0)
+            {
+                $order_update = array('order_status' => 2 , 'delivery_boy_id' => 0 );
+                $this->db->where("id",$_POST['order_id']);
+                if($this->db->update("orders",$order_update))
+                {
+                    $order_data = (array)$this->db->get_where('orders',array('id'=>$_POST['order_id']))->row();
+                    $order_data['message'] = 'Order CL'.$_POST['order_id'].' rejected';
+                    send_push($customer['device_type'],$customer['device_token'],'Order Cancel By Shop',$order_data,'CancelByShop');
+                    $response['status'] = true;
+                    $response['message'] = 'Order CL'.$_POST['order_id'].' rejected';
+                }
+                else
+                {
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+
+            }
+            else if($_POST['accept_reject'] == 1)
+            {
+                $order_update = array('order_status' => 6);
+                $this->db->where("id",$_POST['order_id']);
+                if($this->db->update("orders",$order_update))
+                {
+                    
+                    $this->db->select('emat_email_subject,emat_email_message');
+                    $this->db->from('email_template');
+                    $this->db->where('emat_email_type', 10);
+                    $this->db->where("emat_is_active", 1);
+                    $sql_query = $this->db->get();
+                    $return_data = $sql_query->row();
+
+                    if (!isset($return_data) && empty($return_data)){
+                    $response['status'] = false;
+                    $response['message'] = 'Email template not found. Error into sending mail.';
+                    }else{
+
+                    $email_var_data["order_id"] = 'CL'.$_POST['order_id'];
+                    $email_var_data["shop_name"] = $customer['shop_name'];
+
+                    $from = "";
+                    $to = array($customer['email']);
+                    $subject = $return_data->emat_email_subject;
+
+                    $email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+                    $message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+                    $mail = $this->send_mail2($to, $subject, $message);
+                    }
+                    $order_data = (array)$this->db->get_where('orders',array('id'=>$_POST['order_id']))->row();
+                    $order_data['message'] = 'Order CL'.$_POST['order_id'].' completed by shop';
+                    send_push($customer['device_type'],$customer['device_token'],'Order Completed By Shop',$order_data,'order_completed');
+                    $response['status'] = true;
+                    $response['message'] = 'Order CL'.$_POST['order_id'].' completed by shop';
+                }
+                else
+                {
+                    $response['status'] = false;
+                    $response['message'] = 'Server encountered an error. please try again';
+                }
+
+            }
+            else
+            {
+                $response['status'] = false;
+                $response['message'] = 'Something went wrong';
+            }                
+            
+        }
+        else
+        {
             $response['status'] = false;
             $response['message'] = $errorPost;
         }
@@ -646,9 +1001,10 @@ class Shop_ipad_api extends REST_Controller {
                                 't3.latitude as shop_latitude',
                                 't3.longitude as shop_longitude',
                                 't3.profile_picture as shop_picture',
+                                't1.later_time as later_time',
                                 'IF(t1.order_type=5, t1.schedule_date, "") as schedule_date',
                                 'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
-                                'IF(t1.order_type=2, t1.later_time, "") as later_time',
+                                //'IF(t1.order_type=2, t1.later_time, "") as later_time',
                                 't1.created_at'
                 );
                 $this->db->select($sql_select);
@@ -661,18 +1017,24 @@ class Shop_ipad_api extends REST_Controller {
                 $this->db->where('t1.shop_id', $_POST['shop_id']);
                 if($_POST['order_type'] == 1)
                 {
-                	$wh = '(t1.order_type = 1 OR t1.order_type = 2) ';
-                	$this->db->where($wh);                	
+                    $wh = '(t1.order_type = 1 OR t1.order_type = 2) ';
+                    $this->db->where($wh);                  
                 }
                 else if($_POST['order_type'] == 2)
                 {
-                	$wh = '(t1.order_type = 3 OR t1.order_type = 4) ';
-                	$this->db->where($wh);
+                    $wh = '(t1.order_type = 3 OR t1.order_type = 4) ';
+                    $this->db->where($wh);
                 }
                 else if($_POST['order_type'] == 3)
                 {
-                	$wh = '(t1.order_type = 5 OR t1.order_type = 6) ';
-                	$this->db->where('t1.order_type', $wh);                	
+                    $current_date = date('Y-m-d');
+                    $to_date = date('Y-m-d', strtotime("+6 days")).' 23:59:59';
+
+                    
+                    $wh = '(t1.order_type = 5 OR t1.order_type = 6) ';
+                    $wh .= ' AND (t1.schedule_date between "'.$current_date.'" and "'.$to_date.'") ';
+                    //echo $wh;exit;
+                    $this->db->where('t1.order_type', $wh);                 
                 }
 
                 
@@ -705,6 +1067,8 @@ class Shop_ipad_api extends REST_Controller {
                                     't2.name'
                     );
 
+                   // print_r($orders_data);exit;
+
                     foreach ($orders_data as $key => $value) {
                         $this->db->select($sql_select);
                         $this->db->from('order_items t1');
@@ -736,7 +1100,7 @@ class Shop_ipad_api extends REST_Controller {
                     $response['orders_data'] = $orders_data;                   
                     $response['status'] = TRUE;                  
                 }else{
-                    $response['message'] = 'No any order pending';                  
+                    $response['message'] = 'No order available';                  
                     $response['status'] = FALSE; 
                 }
                 //$response['last_query'] = $last_query; 

@@ -71,6 +71,7 @@
     var return_val = false;
     var theImage = new Image();
     theImage.src = $('#copy-img').attr('src');
+    console.log($('#copy-img').attr('src'));
 
     var return_val = theImage.onload = function() {
         if(theImage.height < 900 || theImage.width < 1920){

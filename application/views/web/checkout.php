@@ -175,47 +175,34 @@ $img_path = base_url().'web-assets/images/card-icons/';
 							</form>
                             <a href="#offer-pop" class="view-offers" data-toggle="modal">View Offers</a>
 						</div>
+
                         <?php
-                        //if(($takeout_delivery_status == 1) || ($takeout_delivery_status == 3)){
+                        $order_type = array_column($cart_contents, 'order_type');
+                        if($order_type[0] == 'delivery'){
                         ?>
-						<div class="col-md-6" id="deliver">
-							<div class="delivery-address d-flex justify-content-around">
-								<div class="form-check deliver-now">
-									<input class="form-check-input" type="radio" name="deliveroption" id="deliverOption1" value="1" checked>
-									<label class="form-check-label" for="deliverOption1">Deliver Now</label>
-								</div>
-								<div class="form-check deliver-later">
-									<input class="form-check-input" type="radio" name="deliveroption" id="deliverOption2" value="2">
-									<label class="form-check-label" for="deliverOption2">Deliver Later</label>
-								</div>
-							</div>
-							<div class="select-time">
-                                <label for="input_starttime">Select Delivery Time</label>
-                                <input type="text" name="timepicker" id="deliver_time" class="time_element" placeholder="00:00" />
-							</div>
-                            <?php
-                            if(($takeout_delivery_status == 2) || ($takeout_delivery_status == 3)){
-                            ?>
-                            <div class="select-instead">
-                                <div class="md-form text-center">
-                                   <a href="javascript:void(0)" id="takeout-instead">Take out instead</a>
-                                </div>
-                            </div>
-                            <?php
-                            }
-                            ?>
-						</div>
-                        <?php
-                        //}
-                        //if(($takeout_delivery_status == 2) || ($takeout_delivery_status == 3)){
-                            // if($takeout_delivery_status == 2){
-                            //     $checked = 'checked';
-                            // }
-                        ?>
-                        <div class="col-md-6" id="takeout" style="display: none;">
+                        <div class="col-md-6" id="deliver">
                             <div class="delivery-address d-flex justify-content-around">
                                 <div class="form-check deliver-now">
-                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption3" value="3" <?php echo $checked; ?>>
+                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption1" value="1" checked>
+                                    <label class="form-check-label" for="deliverOption1">Deliver Now</label>
+                                </div>
+                                <div class="form-check deliver-later">
+                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption2" value="2">
+                                    <label class="form-check-label" for="deliverOption2">Deliver Later</label>
+                                </div>
+                            </div>
+                            <div class="select-time">
+                                <label for="input_starttime">Select Delivery Time</label>
+                                <input type="text" name="timepicker" id="deliver_time" class="time_element" placeholder="00:00" />
+                            </div>
+                        </div>
+                        <?php
+                        }else if($order_type[0] == 'takeout'){
+                        ?>
+                        <div class="col-md-6" id="takeout">
+                            <div class="delivery-address d-flex justify-content-around">
+                                <div class="form-check deliver-now">
+                                    <input class="form-check-input" type="radio" name="deliveroption" id="deliverOption3" value="3" checked>
                                     <label class="form-check-label" for="deliverOption3">Takeout</label>
                                 </div>
                                 <div class="form-check deliver-later">
@@ -227,20 +214,9 @@ $img_path = base_url().'web-assets/images/card-icons/';
                                 <label for="input_starttime">Select Pickup Time</label>                        
                                 <input type="text" name="timepicker" id="takeout_time" class="time_element" placeholder="00:00" />
                             </div>
-                            <?php
-                            if(($takeout_delivery_status == 1) || ($takeout_delivery_status == 3)){
-                            ?>
-                            <div class="select-instead">
-                                <div class="md-form text-center">
-                                   <a href="javascript:void(0)" id="deliver-instead">Deliver Instead</a>
-                                </div>
-                            </div>
-                            <?php
-                            }
-                            ?>
                         </div>
                         <?php
-                        //}
+                        }
                         ?>
 					</div>
 				</div>

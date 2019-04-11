@@ -56,7 +56,7 @@
 						<div class="reorder-block col-md-2 text-center d-flex flex-wrap justify-content-md-end align-items-center">
 							<div class="favourite-reorder"><a href="<?php echo BASE_URL(); ?>web/home/cart" class="reorder">Reorder</a></div>
 							<div class="favourite"><img src="<?php echo $assets; ?>images/favourite.png" /></div>
-							<div class="favourite-order-type"><span class="canceled order-type">Canceled</span></div>
+							<div class="favourite-order-type"><span class="canceled order-type">Cancelled</span></div>
 						</div>
 					</div>
 					<div class="favourites-order row m-0 align-items-center justify-content-between">

@@ -57,8 +57,9 @@ $edit_link = base_url().'inventory-update';
                             <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Product Name</th>
+                                
                                 <th>Cuisine</th>
+                                <th>Product Name</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Notify Stock</th>
@@ -96,6 +97,10 @@ $edit_link = base_url().'inventory-update';
             $('#quantity').val(quantity);
             $('#stock').val(stock);
             $('#item-id').val(data_id);
+
+            // console.log(' quantity-'+quantity);
+            // console.log(' stock-'+stock);
+            // console.log(' item-id-'+data_id);
             
         });
 
@@ -123,8 +128,17 @@ $edit_link = base_url().'inventory-update';
                         if (typeof returnData != "undefined"){
 
                             var $row = $('tr[data-id="' + data_id + '"]');
+                            if(quantity_data == ''){
+                                quantity_data = 0;
+                            }
+                            if(stock_data == ''){
+                                stock_data = 0;
+                            }
                             $row.find(".label-quantity").text(quantity_data);
                             $row.find(".label-notify-stock").text(stock_data);
+
+                            $row.find(".quantity-stock-update").attr('data-quantity', quantity_data);
+                            $row.find(".quantity-stock-update").attr('data-stock', stock_data);
 
                             $('#myModal').modal('toggle');
                             swal(

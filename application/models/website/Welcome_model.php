@@ -53,7 +53,7 @@ class Welcome_model extends CI_Model {
 		return $location;
 	}
 
-	public function get_shops($short_name = NULL, $cuisine_id = NULL, $pickup = NULL, $popular = NULL, $latitude = NULL, $longitude = NULL, $delivery_fee = NULL, $minimum_order_amount = NULL, $category = NULL, $rating = NULL){
+	public function get_shops($short_name = NULL, $cuisine_id = NULL, $pickup = NULL, $popular = NULL, $latitude = NULL, $longitude = NULL, $delivery_fee = NULL, $minimum_order_amount = NULL, $category = NULL, $rating = NULL, $weekly = NULL, $delivery_restaurants = NULL, $pickup_restaurants = NULL){
 		$return_data = array();
 		$new_data = array();
 
@@ -95,14 +95,21 @@ class Welcome_model extends CI_Model {
 		if (isset($cuisine_id) && !is_null($cuisine_id)) {
 			$this->db->where('t2.cuisine_id',$cuisine_id);
 		}
-		if (isset($pickup) && !is_null($pickup)) {
-			$this->db->group_start();
-			$this->db->where('t1.takeout_delivery_status',2);
-			$this->db->or_where('t1.takeout_delivery_status',3);
-			$this->db->group_end();
+		if (((isset($pickup) && !is_null($pickup))) || ((isset($pickup_restaurants) && !is_null($pickup_restaurants)))) {
+			$takout = array('2', '3');
+			$this->db->where_in('t1.takeout_delivery_status',$takout);
 		}
 		if (isset($short_name) && !is_null($short_name)) {
 			$this->db->where('t1.short_name',$short_name);
+		}
+
+		if (isset($weekly) && !is_null($weekly)) {
+			$this->db->where('t1.weekly_status',$weekly);
+		}
+
+		if (isset($delivery_restaurants) && !is_null($delivery_restaurants)) {
+			$delivery = array('1', '3');
+			$this->db->where_in('t1.takeout_delivery_status',$delivery);
 		}
 
 		if(isset($latitude) && $latitude != "" && isset($longitude) && $longitude != ""){
@@ -116,7 +123,6 @@ class Welcome_model extends CI_Model {
 			}else{
 				$this->db->order_by("t1.charges_of_minimum_mile", "asc");
 			}
-			
 		}
 
 		if (isset($minimum_order_amount) && !is_null($minimum_order_amount)){
@@ -133,7 +139,9 @@ class Welcome_model extends CI_Model {
 
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0) {
-			$return_data = $sql_query->result_array();		
+			$return_data = $sql_query->result_array();	
+			// $qu = $this->db->last_query();	
+			// $return_data['query'] = $qu;
 
 			if (isset($popular) && !is_null($popular)){
 				$new_shops = array();
@@ -162,19 +170,171 @@ class Welcome_model extends CI_Model {
 				$return_data = $new_shops;
 			}
 
-			$this->db->select('shop_id');
-			$this->db->from('item');
-			$this->db->where("quantity !=", 0);
-			$this->db->where("deleted_at", NULL);
-			$this->db->where("is_active", 1);
-			$this->db->where("is_combo", 1);
-			$this->db->where_in("shop_id", array_column($return_data, 'id'));
-			$sql_query = $this->db->get();
-			if ($sql_query->num_rows() > 0){
-				$combo_shops_data = $sql_query->result_array();
-				$combo_shops = array_column($combo_shops_data, 'shop_id');
+			if (isset($rating) && !is_null($rating)){
+				$new_shops = array();
+				foreach ($return_data as $key => $value) {
+					$rate = get_rating($value['id']);
+					if($rate >= $rating){
+						array_push($new_shops, $return_data[$key]);
+					}
+				}
+				$return_data = $new_shops;
 			}
+
+			//return $return_data;
+
+			if(!empty($return_data)){
+
+				$combo_shops = array();
+				$this->db->select('shop_id');
+				$this->db->from('item');
+				$this->db->where("quantity !=", 0);
+				$this->db->where("deleted_at", NULL);
+				$this->db->where("is_active", 1);
+				$this->db->where("is_combo", 1);
+				$this->db->where_in("shop_id", array_column($return_data, 'id'));
+				$sql_query = $this->db->get();
+				if ($sql_query->num_rows() > 0){
+					$combo_shops_data = $sql_query->result_array();
+					$combo_shops = array_column($combo_shops_data, 'shop_id');
+				}
+
+				foreach ($return_data as $key => $value) {
+
+					// get cuisines of shop
+					$sql_select = array("t2.cuisine_name","t1.cuisine_id");
+					$this->db->select($sql_select);
+					$this->db->from('shop_cuisines t1');
+					$this->db->where("t1.shop_id", $value['id']);
+					$this->db->join('cuisine t2', 't1.cuisine_id = t2.id');
+					$sql_query = $this->db->get();
+					if ($sql_query->num_rows() > 0){
+						$cuisines_data = $sql_query->result_array();
+						$return_data[$key]['cuisine'] = $cuisines_data;
+					}
+
+					$this->db->select('day, from_time, to_time, full_day, is_closed');
+					$this->db->from('shop_availibality');
+					$this->db->where("shop_id", $value['id']);
+					$this->db->where("day", date('l'));
+					$sql_query = $this->db->get();
+					if ($sql_query->num_rows() > 0){
+						$return_data[$key]['availibality'] = (array)$sql_query->row();
+					}
+
+					if(isset($short_name)){
+						$this->db->select('day, from_time, to_time, full_day, is_closed');
+						$this->db->from('shop_availibality');
+						$this->db->where("shop_id", $value['id']);
+						$sql_query = $this->db->get();
+						if ($sql_query->num_rows() > 0){
+							$return_data[$key]['all_working_time'] = $sql_query->result_array();
+						}
+					}
+
+					if(empty($return_data[$key]['cuisine']) || empty($return_data[$key]['availibality'])){
+						unset($return_data[$key]);
+						continue;
+					}
+
+					if(!empty($combo_shops)){
+						if(in_array($value['id'], $combo_shops)){
+							$return_data[$key]['combo_available'] = true;
+						}else{
+							$return_data[$key]['combo_available'] = false;
+						}
+					}else{
+						$return_data[$key]['combo_available'] = false;
+					}
+
+				}
+
+				$return_data = array_values($return_data);
+
+				$new_shops = array();
+				if (isset($category) && !is_null($category)){
+					$this->db->select('shop_id');
+					$this->db->from('item');
+					$this->db->where("category_id", $category);
+					$this->db->where_in("shop_id", array_column($return_data, 'id'));
+					$sql_query = $this->db->get();
+					if ($sql_query->num_rows() > 0){
+						$query = $this->db->last_query();
+						$category_shops_data = $sql_query->result_array();
+						$category_shops = array_column($category_shops_data, 'shop_id');
+						$category_shops = array_unique($category_shops);
+						$new_shops = array();
+						foreach ($category_shops as $key => $value) {
+							foreach ($return_data as $key1 => $value1) {
+								if($value == $value1['id']){
+									array_push($new_shops, $return_data[$key1]);
+								}
+							}
+						}
+					}
+					$return_data = $new_shops;
+				}
+
+				foreach ($return_data as $key => $value) {
+					$rating = get_rating($value['id']);
+					$return_data[$key]['rating'] =number_format((float)$rating, 1, '.', '');
+				}
 			
+			}
+
+		}
+		return $return_data;
+	}
+
+	public function get_shops_by_weekly_days($latitude = NULL, $longitude = NULL){
+		$return_data = array();
+		$new_data = array();
+
+		// get delivery_available_mile
+        $delivery_available_mile = '';
+        $this->db->select('data');
+        $this->db->where("name", 'delivery_available_mile');
+        $this->db->from('setting');
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+            $delivery_available_mile_data = $sql_query->row();
+            $delivery_available_mile = $delivery_available_mile_data->data;
+        }
+
+		$sql_select = array(
+						't1.id',
+						't1.shop_name',
+						't1.short_name',
+						't1.profile_picture',
+						't1.order_by_time',
+						't1.delivery_time',
+						't1.contact_no1',
+						'CONCAT(t1.city, ", ", t1.zip_code, ", ", t1.state) as address',
+						);
+
+		if(isset($latitude) && $latitude != "" && isset($longitude) && $longitude != ""){
+
+            $distance = "(3956 * 2 * ASIN(SQRT( POWER(SIN((".$latitude." - t1.latitude) * pi()/180 / 2), 2) +COS( ".$latitude." * pi()/180) * COS(t1.longitude * pi()/180) * POWER(SIN(( ".$longitude." - t1.longitude) * pi()/180 / 2), 2) ))) as distance";
+            array_push($sql_select,$distance);
+
+        }
+
+		$this->db->select($sql_select);
+		$this->db->from('shop t1');
+		$this->db->join('shop_cuisines t2', 't1.id = t2.shop_id');
+		$this->db->where("t1.deleted_at", NULL);
+		$this->db->group_by('t2.shop_id');
+		$this->db->where("t1.status", 1);
+
+		$this->db->where('t1.weekly_status',1);
+
+		$this->db->where("t1.longitude !=", '');
+        $this->db->where("t1.latitude !=", '');
+
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0) {
+			$return_data = $sql_query->result_array();		
+
 			foreach ($return_data as $key => $value) {
 
 				// get cuisines of shop
@@ -189,66 +349,50 @@ class Welcome_model extends CI_Model {
 					$return_data[$key]['cuisine'] = $cuisines_data;
 				}
 
-				$this->db->select('day, from_time, to_time, full_day, is_closed');
-				$this->db->from('shop_availibality');
-				$this->db->where("shop_id", $value['id']);
-				$this->db->where("day", date('l'));
-				$sql_query = $this->db->get();
-				if ($sql_query->num_rows() > 0){
-					$return_data[$key]['availibality'] = (array)$sql_query->row();
-				}
-
-				if(isset($short_name)){
-					$this->db->select('day, from_time, to_time, full_day, is_closed');
-					$this->db->from('shop_availibality');
-					$this->db->where("shop_id", $value['id']);
-					$sql_query = $this->db->get();
-					if ($sql_query->num_rows() > 0){
-						$return_data[$key]['all_working_time'] = $sql_query->result_array();
-					}
-				}
-
-				if(empty($return_data[$key]['cuisine']) || empty($return_data[$key]['availibality'])){
+				if(empty($return_data[$key]['cuisine'])){
 					unset($return_data[$key]);
 					continue;
-				}
-
-				if(in_array($value['id'], $combo_shops)){
-					$return_data[$key]['combo_available'] = true;
-				}else{
-					$return_data[$key]['combo_available'] = false;
 				}
 
 			}
 
 			$return_data = array_values($return_data);
 
-			$new_shops = array();
-			if (isset($category) && !is_null($category)){
-				$this->db->select('shop_id');
-				$this->db->from('item');
-				$this->db->where("category_id", $category);
-				$this->db->where_in("shop_id", array_column($return_data, 'id'));
-				$sql_query = $this->db->get();
-				if ($sql_query->num_rows() > 0){
-					$query = $this->db->last_query();
-					$category_shops_data = $sql_query->result_array();
-					$category_shops = array_column($category_shops_data, 'shop_id');
-					$category_shops = array_unique($category_shops);
-					$new_shops = array();
-					foreach ($category_shops as $key => $value) {
-						foreach ($return_data as $key1 => $value1) {
-							if($value == $value1['id']){
-								array_push($new_shops, $return_data[$key1]);
+			foreach ($return_data as $key => $value) {
+				$rating = get_rating($value['id']);
+				$return_data[$key]['rating'] =number_format((float)$rating, 1, '.', '');
+			}
+
+			$days = array();
+
+			if(!empty($return_data)){
+				foreach ($this->config->item("days") as $day_val => $day_name) {
+					foreach ($return_data as $key => $value) {
+						$this->db->select('day');
+						$this->db->from('shop_availibality');
+						$this->db->where("shop_id", $value['id']);
+						$this->db->where("day",$day_name);
+						$this->db->where("is_closed",0);
+						$sql_query = $this->db->get();
+						if ($sql_query->num_rows() > 0){
+							$days[$day_name][$key] = $value;
+
+							$this->db->select('day, from_time, to_time, full_day, is_closed');
+							$this->db->from('shop_availibality');
+							$this->db->where("shop_id", $value['id']);
+							$this->db->where("day",$day_name);
+							$sql_query = $this->db->get();
+							if ($sql_query->num_rows() > 0){
+								$days[$day_name][$key]['availibality'] = (array)$sql_query->row();
 							}
+					
 						}
 					}
 				}
-				$return_data = $new_shops;
 			}
-
+		
 		}
-		return $return_data;
+		return $days;
 	}
 
 	public function get_shop_data($short_name = NULL){
@@ -257,6 +401,34 @@ class Welcome_model extends CI_Model {
 		$sql_select = array('t1.id','t1.name','t1.short_name','t1.price','t1.offer_price','t1.item_picture');
 		$this->db->select($sql_select);
 		$this->db->from('item t1');
+
+		return $return_data;
+	}
+
+	public function get_items($shop_id = NULL){
+		$return_data = array();
+
+		$sql_select = array('id','name','short_name','price','offer_price','item_picture','is_combo');
+		$this->db->select($sql_select);
+		$this->db->from('item');
+		$this->db->where("shop_id", $shop_id);
+		$this->db->where("deleted_at", NULL);
+		$this->db->where("is_active", 1);
+
+		 $this->db->group_start();
+            $this->db->group_start();
+                $this->db->where('quantity >=', 1);
+                $this->db->where('inventory_status', 1);
+            $this->db->group_end();
+
+            $this->db->or_group_start();
+                 $this->db->where('inventory_status', 0);
+            $this->db->group_end();
+        $this->db->group_end();
+        $sql_query = $this->db->get();
+        if ($sql_query->num_rows() > 0){
+        	$return_data = $sql_query->result_array();
+        }
 
 		return $return_data;
 	}
@@ -354,6 +526,22 @@ class Welcome_model extends CI_Model {
 		$this->db->select($sql_select);
 		$this->db->from('variant_items');
 		$this->db->where_in("id", $values);
+		$sql_query = $this->db->get();
+		if ($sql_query->num_rows() > 0){
+			$return_data = $sql_query->result_array();
+		}
+		return $return_data;
+	}
+
+	public function get_banners(){
+		$return_data = array();
+		$sql_select = array('title','sub_title','banner_picture');
+
+		$this->db->select($sql_select);
+		$this->db->where('status',1);
+		$this->db->where('deleted_at', NULL);
+		$this->db->order_by('created_at','desc');
+		$this->db->from('banner');
 		$sql_query = $this->db->get();
 		if ($sql_query->num_rows() > 0){
 			$return_data = $sql_query->result_array();
@@ -498,8 +686,20 @@ class Welcome_model extends CI_Model {
 		$sql_query = $this->db->get();
 		$return_data = $sql_query->row();
 
+		$this->db->select('emat_email_subject,emat_email_message');
+		$this->db->from('email_template');
+		$this->db->where('emat_email_type', 9);
+		$this->db->where("emat_is_active", 1);
+		$sql_query = $this->db->get();
+		$email_return_data = $sql_query->row();
+
 
 		if (!isset($return_data) && empty($return_data)){
+			$this->auth->set_error_message("Email template not found. Please try again later or contact clicklunch team.");
+			return FALSE;
+		}
+
+		if (!isset($email_return_data) && empty($email_return_data)){
 			$this->auth->set_error_message("Email template not found. Please try again later or contact clicklunch team.");
 			return FALSE;
 		}
@@ -517,7 +717,20 @@ class Welcome_model extends CI_Model {
 			$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
 			$mail = sendmail($from, $to, $subject, $message);
 
-			if(!$mail){
+			// 
+
+			$to = 'clicklunch24@gmail.com';
+			$subject = $email_return_data->emat_email_subject;
+
+			$email_var_data["person_name"] = 'jogn';
+			$email_var_data["shop_name"] = 'shop_name';
+
+			$email_message_string = $this->parser->parse_string($email_return_data->emat_email_message, $email_var_data, TRUE);
+			$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+			$mail2 = sendmail($from, $to, $subject, $message);
+			// 
+
+			if(!$mail || !$mail2){
 				$this->db->where("id", $user_id);
 				$this->db->delete("shop");
 
@@ -559,7 +772,20 @@ class Welcome_model extends CI_Model {
 			$this->db->where("shop_id",$shop_id[0]);
 			$this->db->limit(3);
 			$this->db->order_by("id", "desc");
-			$this->db->where("quantity !=",0);
+
+			$this->db->group_start();
+
+                $this->db->group_start();
+                    $this->db->where('quantity >', 0);
+                    $this->db->where('inventory_status', 1);
+                $this->db->group_end();
+
+                $this->db->or_group_start();
+                     $this->db->where('inventory_status', 0);
+                $this->db->group_end();
+
+            $this->db->group_end();
+
 			$sql_query = $this->db->get();
 			if ($sql_query->num_rows() > 0){
 				$return_data = $sql_query->result_array();
@@ -949,5 +1175,33 @@ class Welcome_model extends CI_Model {
 		}
 
 		return $return_value;
+    }
+
+    public function request_add_popular_address() {
+
+        $location_data = array(
+                        'house_no' => $this->input->post("house_no"),
+                        'street' => $this->input->post("street"),
+                        'city' => $this->input->post("city"),
+                        'zipcode' => intval($this->input->post("zipcode")),
+                        'address_type' => intval($this->input->post("address_type"))
+                    );
+
+        if($this->input->post("nickname")){
+            $location_data['nickname'] = $this->input->post("nickname");
+        }
+
+        $this->db->insert("delivery_address_popular_request", $location_data);
+        
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $this->auth->set_error_message("Error into inserting data");
+        } else {
+            $this->db->trans_commit();
+            $this->auth->set_status_message("Popular location requested successfully");
+            $return_value = TRUE;
+        }
+
+        return $return_value;
     }
 }

@@ -233,8 +233,11 @@
     </div>
 </div>
 
-<a href="#" id="scroll" class="scroll" style="display: none;"><span></span></a>
-<div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:50%;padding:2px;z-index: 9999;"><img src='<?php echo base_url()."assets/images/loader.gif"; ?>' width="100" height="100" />
+<div class="overlay" style="display: none;">
+    <div class="overlay__inner">
+        <div class="overlay__content"><span class="spinner"></span></div>
+    </div>
+</div>
 
 <script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
 <script src="<?php echo base_url().'web-assets/js/custom/register.js'; ?>"></script>
@@ -259,6 +262,7 @@
             }else if(!re.test(email)){
                 $('#invalid-error').show();
             }else{
+                $(".overlay").css("display", "block");
                 $(this).prop("disabled", true);
                 $.ajax({
                     url: subscribe_url,
@@ -268,13 +272,15 @@
                         if (typeof returnData != "undefined" && returnData == true){
                             $('#subscribe').prop("disabled", false);
                             $('#valid').show();
-                        } 
+                        }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         console.log('error');
+                        $(".overlay").css("display", "none");
                     },
                     complete: function () {
                         $(this).prop("disabled", false);
+                        $(".overlay").css("display", "none");
                     }
                 });    
             }

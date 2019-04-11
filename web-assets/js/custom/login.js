@@ -49,7 +49,7 @@
 
     function login() {
     
-        $("#wait").css("display", "block");
+        $(".overlay").css("display", "block");
         //$("#register-btn").attr("disabled", true);
 
         var login_customer_url = 'login-customer';
@@ -67,7 +67,7 @@
                 success: function (returnData) {
                     //returnData = $.parseJSON(returnData);
                     //console.log(returnData);
-                    $("#wait").css("display", "none");
+                    $(".overlay").css("display", "none");
                     if(returnData == '1'){
                         console.log('account does not exists');
                         $(".validation-login-email").append('<label id="login_email-error" class="validation-error-label" for="register_email">Your account is does not exists. Click on <b>Register</b> to create your account.</label>');

@@ -273,7 +273,7 @@ $back_link = base_url().'order-single-assign';
                                                 }
                                                 if(!$is_admin){
                                                 ?>
-                                                <a href="<?php echo $back_link; ?>" class="btn btn-secondary waves-effect">Back</a>
+                                                <!-- <a href="<?php echo $back_link; ?>" class="btn btn-secondary waves-effect">Back</a> -->
                                                 <?php
                                                 }
                                                 ?>

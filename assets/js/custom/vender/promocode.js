@@ -172,7 +172,20 @@
             }
         },
         submitHandler: function(form) {
+            
             form.submit();
+
+            // if(($('#discount_type').is(':checked') == false) && ($('#promo_type').val() == 1)){
+
+            //     var applied_on_products = $('#applied_on_products').val();
+            //     console.log(applied_on_products);
+            //     return false;
+            // }else{
+            //     console.log('submit');
+            //     return false;
+            //     form.submit();
+            // }
+            
         }
     });
 

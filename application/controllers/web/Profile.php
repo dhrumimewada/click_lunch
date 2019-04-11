@@ -202,7 +202,7 @@ class Profile extends CI_Controller {
 					
 					array('field' => 'card_holder_name', 'label' => 'card holder name', 'rules' => 'trim|required|callback_customAlpha|min_length[3]|max_length[50]'),
 					array('field' => 'nickname', 'label' => 'nick name', 'rules' => 'trim|callback_customAlpha|min_length[3]|max_length[50]'),
-					array('field' => 'card_number', 'label' => 'card number', 'rules' => 'trim|required|is_natural|min_length[13]|max_length[19]|callback_validate_card_number[' . $this->input->post("card_type") . ']'),
+					array('field' => 'card_number', 'label' => 'card number', 'rules' => 'trim|required|is_natural|min_length[13]|max_length[16]|callback_validate_card_number[' . $this->input->post("card_type") . ']'),
 					array('field' => 'expiry_date', 'label' => 'expiry date', 'rules' => 'trim|required|callback_validate_expiry_date'),
 					array('field' => 'cvv', 'label' => 'cvv', 'rules' => 'trim|required|is_natural|min_length[3]|max_length[4]'),
 					array('field' => 'card_type', 'label' => 'card type', 'rules' => 'trim|required|is_natural')
@@ -429,6 +429,7 @@ class Profile extends CI_Controller {
 		$this->db->from('cuisine');
 		$this->db->where("deleted_at", NULL);
 		$this->db->where("is_active", 1);
+		$this->db->where("cuisine_name !=", 'All');
 
 		if(isset($_POST['str']) && $_POST['str'] != ''){
 			$this->db->where("cuisine_name LIKE '%".$_POST['str']."%'");
@@ -503,43 +504,6 @@ class Profile extends CI_Controller {
 				}
 			}
 		}
-	}
-
-	public function request_add_popular_address(){
-
-		$this->auth->clear_messages();
-		$this->load->library('form_validation');
-		$this->form_validation->set_error_delimiters($this->config->item("form_field_error_prefix"), $this->config->item("form_field_error_suffix"));
-
-		if (isset($_POST) && !empty($_POST)){
-			if (isset($_POST['submit'])){
-
-				$validation_rules = array(
-				
-					array('field' => 'house_no', 'label' => 'house/office number', 'rules' => 'trim|required|max_length[250]'),
-					array('field' => 'street', 'label' => 'street', 'rules' => 'trim|required|max_length[250]'),
-					array('field' => 'city', 'label' => 'city', 'rules' => 'trim|required|max_length[250]'),
-					array('field' => 'zipcode', 'label' => 'zipcode', 'rules' => 'trim|required|numeric|max_length[5]|min_length[5]'),
-					array('field' => 'nickname', 'label' => 'nick name', 'rules' => 'trim'),
-					array('field' => 'address_type', 'label' => 'address type', 'rules' => 'trim|required')
-				);
-				$this->form_validation->set_rules($validation_rules);
-				
-				if ($this->form_validation->run() === true) {
-					if($this->profile_model->request_add_popular_address()){
-						$this->session->set_flashdata($this->auth->get_messages_array());
-						redirect(base_url() . "add-request-address");
-					}else{
-						$this->session->set_flashdata($this->auth->get_messages_array());
-						redirect(base_url() . "add-request-address");
-					}	
-				} 
-			}
-		}
-
-		$output_data["address_type"] = $this->config->item("address_type");
-		$output_data['main_content'] = 'add_popular_address';
-		$this->load->view('web/template',$output_data);
 	}
 
 }

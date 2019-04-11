@@ -72,7 +72,7 @@
             zipcode: {
                 required:true,
                 digits: true,
-                maxlength:5,
+                maxlength:6,
                 minlength:5,
                 normalizer: function (value) {
                     return $.trim(value);
@@ -228,17 +228,17 @@
             delivery_charges: {
                 required: "The delivery charges field is required.",
                 number: "The delivery charges field is invalid.",
-                greaterThanZeroEqualTo: "The delivery charges field is invalid.",
+                greaterThanZeroEqualTo: "The delivery charges field is invalid."
             },
             minimum_mile: {
                 required: "The minimum mile field is required.",
                 number: "The minimum mile field is invalid.",
-                greaterThanZeroEqualTo: "The minimum mile field is invalid.",
+                greaterThanZeroEqualTo: "The minimum mile field is invalid."
             },
             charges_of_minimum_mile: {
                 required: "The charges of minimum mile field is required.",
                 number: "The charges of minimum mile field is invalid.",
-                greaterThanZeroEqualTo: "The charges of minimum mile field is invalid.",
+                greaterThanZeroEqualTo: "The charges of minimum mile field is invalid."
             },
             'payment_mode[]': {
                 required: "Please select at least one payment mode."
@@ -280,7 +280,7 @@ $( document ).ready(function() {
 
     $(".tax-mask").inputmask("999-99-9999",{"placeholder": ""});
     $("#contact_no1, #contact_no2").inputmask("999 999 9999",{"placeholder": ""});
-    $("#zipcode").inputmask("99999",{"placeholder": ""});
+    $("#zipcode").inputmask("999999",{"placeholder": ""});
 
     $(document).on('click', '.upload-txt, #blah', function(){
         $('#imgInp').click();

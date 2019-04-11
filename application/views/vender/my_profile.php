@@ -497,16 +497,26 @@ $delivery_evening_to = $delivery['evening']['to'];
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
+                                        <?php
+                                        $temp_value = set_value('cuisines');
+                                        ?>
                                         <label class="required">Restaurant Cuisines</label>
                                         <div>
                                             <select class="select2 form-control select2-multiple" multiple="multiple" multiple data-placeholder="Choose cuisines that you are serving..." name="cuisines[]">
-                                                <?php 
-                                                
+                                                <?php
+
                                                 foreach ($cuisines_data as $key => $value) {
                                                     $selected = '';
-                                                    if (in_array($value['id'], array_column($vender_cuisine_detail, 'cuisine_id'))){
-                                                        $selected = 'selected';
+                                                    if (isset($temp_value) && !empty($temp_value)){
+                                                        if(in_array($value['id'], $temp_value)){
+                                                            $selected = 'selected';
+                                                        }
+                                                    }else{
+                                                        if (in_array($value['id'], array_column($vender_cuisine_detail, 'cuisine_id'))){
+                                                            $selected = 'selected';
+                                                        }
                                                     }
+                                                    
                                                     echo "<option value='".$value['id']."' ".$selected.">".$value['cuisine_name']."</option>";
                                                 }
                                                 ?>
@@ -524,7 +534,7 @@ $delivery_evening_to = $delivery['evening']['to'];
                                         <div class="d-block mt-2">
                                             <?php
     $field_value = '';
-    $temp_value = set_value('takeout_delivery_status[]');
+    $temp_value = set_value('takeout_delivery_status');
     if (isset($temp_value) && !empty($temp_value)) {
        if (in_array("1", $temp_value)){
             $field_value = 'checked';
@@ -542,7 +552,7 @@ $delivery_evening_to = $delivery['evening']['to'];
                                             </div>
 <?php
     $field_value = '';
-    $temp_value = set_value('takeout_delivery_status[]');
+    $temp_value = set_value('takeout_delivery_status');
     if (isset($temp_value) && !empty($temp_value)) {
        if (in_array("2", $temp_value)){
             $field_value = 'checked';
@@ -777,7 +787,7 @@ $delivery_evening_to = $delivery['evening']['to'];
                                         <div class="d-block mt-2">
                                             <?php
     $field_value = '';
-    $temp_value = set_value('payment_mode[]');
+    $temp_value = set_value('payment_mode');
     if (isset($temp_value) && !empty($temp_value)) {
        if (in_array("0", $temp_value)){
             $field_value = 'checked';
@@ -795,7 +805,7 @@ $delivery_evening_to = $delivery['evening']['to'];
                                             </div>
                                             <?php
     $field_value = '';
-    $temp_value = set_value('payment_mode[]');
+    $temp_value = set_value('payment_mode');
     if (isset($temp_value) && !empty($temp_value)) {
        if (in_array("1", $temp_value)){
             $field_value = 'checked';
@@ -813,7 +823,7 @@ $delivery_evening_to = $delivery['evening']['to'];
                                             </div>
                                             <?php
     $field_value = '';
-    $temp_value = set_value('payment_mode[]');
+    $temp_value = set_value('payment_mode');
     if (isset($temp_value) && !empty($temp_value)) {
        if (in_array("2", $temp_value)){
             $field_value = 'checked';

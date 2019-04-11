@@ -434,6 +434,10 @@ if($field_value == 1){
 
     </div>
 </div>
+
+<script>
+    var mindate = "<?php echo date('d-m-Y'); ?>";
+</script>
 <script src="<?php echo base_url().'assets/js/custom/vender/promocode.js'; ?>"></script>
 <script type="text/javascript" charset="utf-8" async defer>
     var is_admin = '<?php echo $is_admin; ?>';

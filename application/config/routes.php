@@ -187,6 +187,9 @@ $route['custom-email-deliveryboy'] = 'admin/email_template/custom_email/delivery
 $route['custom-push-customer'] = 'admin/email_template/custom_push_customer';
 $route['custom-push-restaurant'] = 'admin/email_template/custom_push_shop';
 
+// admin & dispatcher- send custom push to deliebry boy
+$route['custom-push-deliveryboy'] = 'admin/custom_push/custom_push_deliveryboy';
+
 //Admin- History
 $route['transaction-history'] = 'admin/history/transaction_history'; 
 $route['receipt-history'] = 'admin/history/receipt_history'; 
@@ -201,6 +204,7 @@ $route['vender-save'] = 'admin/vender/post';
 $route['vender-status'] = 'admin/vender/active_deactive_vender';  
 $route['vender-delete'] = 'admin/vender/delete';  
 $route['vender-update'] = 'admin/vender/put';  
+$route['vender-resend-activation-mail/(:num)'] = 'admin/vender/vender_resend_activation_mail/$1';  
 
 // admin - shop requests list
 $route['vender-requests'] = 'admin/vender/vendor_requests'; 
@@ -307,10 +311,26 @@ $route['order-single-assign'] = 'dispatcher/order/order_new';
 $route['order-status-update'] = 'dispatcher/order/order_status_update';
 $route['order-detail/(:any)'] = 'dispatcher/order/order_detail/$1';
 
+$route['order-accepted'] = 'vender/order/accepted';
+$route['order-rejected'] = 'vender/order/rejected';
+$route['order-today'] = 'vender/order/today';
+$route['order-upcoming'] = 'vender/order/upcoming';
+$route['order-completed'] = 'vender/order/completed';
+$route['order-trashed'] = 'vender/order/trashed';
+$route['order-all'] = 'vender/order/all';
+$route['vender-order-detail/(:any)'] = 'vender/order/order_detail/$1';
+
 $route['fetch-db'] = 'dispatcher/order/get_all_db';
 $route['set-db'] = 'dispatcher/order/set_db';
 
 $route['quantity-update-reject-order'] = 'dispatcher/order/quantity_update_reject_order';
+
+$route['all-orders'] = 'dispatcher/order/all_orders';
+$route['new-orders'] = 'dispatcher/order/db_assigned_orders';
+$route['live-orders'] = 'dispatcher/order/live_orders';
+$route['cancel-orders'] = 'dispatcher/order/cancel_orders';
+$route['completed-orders'] = 'dispatcher/order/completed_orders';
+$route['all-weekly-orders'] = 'dispatcher/order/weekly_orders';
 
 //--------------------------------------------------
 
@@ -334,10 +354,10 @@ $route['delivery-boy-reset-password'] = 'dispatcher/dispatcher_login/deliveryboy
 // Front
 $route['welcome'] = 'web/welcome';
 $route['get-shops'] = 'web/welcome/get_shops';
-$route['restaurant/(:any)'] = 'web/welcome/shop/$1';
-$route['product/(:any)'] = 'web/welcome/item/$1';
+$route['restaurant/(:any)/(:any)/(:any)'] = 'web/welcome/shop/$1/$2/$3';
+$route['product/(:any)/(:any)'] = 'web/welcome/item/$1/$2';
 $route['cart'] = 'web/cart/my_cart';
-$route['add-to-cart'] = 'web/cart/cart_add';
+$route['add-to-cart/(:any)'] = 'web/cart/cart_add/$1';
 $route['cart-destroy'] = 'web/cart/cart_destroy';
 $route['cart-item-delete'] = 'web/cart/cart_item_delete';
 $route['get-cart-item-data'] = 'web/cart/get_cart_item_data';
@@ -346,10 +366,17 @@ $route['get-recommendation-item-data'] = 'web/cart/get_recommendation_item_data'
 $route['add-recommended-item-cart'] = 'web/cart/add_recommendation_item_cart';
 $route['add-direct-recommended-item-cart/(:any)'] = 'web/cart/add_direct_recommendation_item_cart/$1';
 
+$route['check-exists-cart'] = 'web/cart/check_exists_cart';
+
 $route['update-quantity'] = 'web/cart/update_quantity';
 $route['subscribe'] = 'web/welcome/subscribe';
 $route['faq'] = 'web/welcome/faq';
 $route['restaurant-partner-form'] = 'web/welcome/restaurant_partner_form';
+$route['weekly-planner'] = 'web/welcome/weekly_planner';
+$route['delivery-restaurants'] = 'web/welcome/delivery_restaurants';
+$route['takeout-restaurants'] = 'web/welcome/takeout_restaurants';
+
+$route['add-request-address'] = 'web/welcome/request_add_popular_address';
 
 
 /*Customer login - register */
@@ -395,11 +422,10 @@ $route['about-us'] = 'web/welcome/about_us';
 $route['contact-us'] = 'web/welcome/contact_us';
 $route['coming-soon'] = 'web/welcome/coming_soon';
 
-$route['add-request-address'] = 'web/profile/request_add_popular_address';
-
 $route['favourite-orders'] = 'web/profile/get_favourite_orders';
 
 $route['get-shops-by-filter'] = 'web/welcome/get_shops_by_filter';
+$route['set-order-type-session'] = 'web/welcome/set_order_type_session';
 
 
 

@@ -117,7 +117,7 @@
 
 function register() {
 	
-	$("#wait").css("display", "block");
+	$(".overlay").css("display", "block");
 	//$("#register-btn").attr("disabled", true);
 
 	var register_customer_url = 'register-customer';
@@ -142,7 +142,7 @@ function register() {
             },
             success: function (returnData) {
             	//returnData = $.parseJSON(returnData);
-            	$("#wait").css("display", "none");
+            	$(".overlay").css("display", "none");
             	if(returnData == '1'){
             		console.log('email exists');
             		$(".validation-email").append('<label id="register_email-error" class="validation-error-label" for="register_email">This e-mail is already in use.</label>');

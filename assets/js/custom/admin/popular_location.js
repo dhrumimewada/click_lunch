@@ -37,7 +37,7 @@
             zipcode: {
                 required:true,
                 digits: true,
-                maxlength:5,
+                maxlength:6,
                 minlength:5,
                 normalizer: function (value) {
                     return $.trim(value);
@@ -96,7 +96,7 @@
  $( document ).ready(function() {
      $(".select2").select2();
 
-     $("#zipcode").inputmask("99999",{"placeholder": ""});
+     $("#zipcode").inputmask("999999",{"placeholder": ""});
  });    
 
 

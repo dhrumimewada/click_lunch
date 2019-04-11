@@ -8,12 +8,21 @@ class Inventory_model extends CI_Model {
 
 	public function get_inventory($id = NULL) {
 		$return_data = array();
-		$this->db->select('*');
-		$this->db->from('item');
-		$this->db->where("deleted_at", NULL);
-		$this->db->where("is_active", 1);
-		$this->db->where("shop_id", $this->auth->get_user_id());
-		$this->db->where("inventory_status", 1);
+		$sql_select = array("t1.*", "t2.cuisine_name");
+		$this->db->select($sql_select);
+		$this->db->from('item t1');
+		$this->db->join('cuisine t2', 't1.cuisine_id = t2.id');
+		$this->db->where("t1.deleted_at", NULL);
+		$this->db->where("t1.is_active", 1);
+
+		if($this->auth->is_vender()){
+			$this->db->where("t1.shop_id",$this->auth->get_user_id());
+		}elseif ($this->auth->is_employee()) {
+			$this->db->where("t1.shop_id",$this->auth->get_emp_shop_id());
+		}else{
+		}
+
+		$this->db->where("t1.inventory_status", 1);
 		if (isset($id) && !is_null($id)) {
 			$this->db->where('id', $id);
 		}

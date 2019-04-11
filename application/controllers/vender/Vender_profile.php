@@ -71,13 +71,15 @@ class Vender_profile extends CI_Controller {
 					array('field' => 'facebook_link', 'label' => 'facebook link', 'rules' => 'trim|valid_url'),
 					array('field' => 'twitter_link', 'label' => 'twitter link', 'rules' => 'trim|valid_url'),
 					array('field' => 'pinterest_link', 'label' => 'pinterest link', 'rules' => 'trim|valid_url'),
-					array('field' => 'payment_mode[]', 'label' => 'payment mode', 'rules' => 'trim|required|numeric'),
+					array('field' => 'payment_mode[]', 'label' => 'payment mode', 'rules' => 'trim|required'),
 					array('field' => 'takeout_delivery_status[]', 'label' => 'available service', 'rules' => 'trim|required|numeric'),
 					array('field' => 'about', 'label' => 'description', 'rules' => 'trim|required|min_length[150]')
 				);
 
 				$this->form_validation->set_rules($validation_rules);
-
+				// echo "<pre>";
+				// print_r($_POST);
+				// exit;
 
 				if ($this->form_validation->run() === TRUE) {
 
@@ -90,6 +92,7 @@ class Vender_profile extends CI_Controller {
 						$config['encrypt_name'] = FALSE;
 						$config['file_name'] = 'vender' . '_' . time();
 						$config['file_ext_tolower'] = TRUE;
+						$config['max_size'] = '2';
 
 						$this->load->library('upload');
 						$this->upload->initialize($config, TRUE);
@@ -103,27 +106,27 @@ class Vender_profile extends CI_Controller {
 							$file_upload_data = $this->upload->data();
 							$modal_data['profile_picture'] = $file_upload_data;
 
-							$this->load->library('image_lib');
+							// $this->load->library('image_lib');
 
-							$config['image_library'] = 'gd2';
-							$config['source_image'] = FCPATH . $this->config->item("profile_path").'/'.$file_upload_data['file_name'];
-							$config['create_thumb'] = TRUE;
-							$config['thumb_marker'] = '';
-						    $config['maintain_ratio'] = TRUE;
-						    $config['width'] = 600;
-	    					$config['height'] = 600;
+							// $config['image_library'] = 'gd2';
+							// $config['source_image'] = FCPATH . $this->config->item("profile_path").'/'.$file_upload_data['file_name'];
+							// $config['create_thumb'] = TRUE;
+							// $config['thumb_marker'] = '';
+						 //    $config['maintain_ratio'] = TRUE;
+						 //    $config['width'] = 600;
+	    		// 			$config['height'] = 600;
 
-						    $this->image_lib->clear();
-						    $this->image_lib->initialize($config);
+						 //    $this->image_lib->clear();
+						 //    $this->image_lib->initialize($config);
 
-						    if (!$this->image_lib->resize()){
-							    ucfirst($this->upload->display_errors());
-								$this->auth->set_error_message(ucfirst($this->upload->display_errors()));
-								$this->session->set_flashdata($this->auth->get_messages_array());
-								$file_upload = false;
-							}else{
-								$file_upload = true;
-							}
+						 //    if (!$this->image_lib->resize()){
+							//     ucfirst($this->upload->display_errors());
+							// 	$this->auth->set_error_message(ucfirst($this->upload->display_errors()));
+							// 	$this->session->set_flashdata($this->auth->get_messages_array());
+							// 	$file_upload = false;
+							// }else{
+							// 	$file_upload = true;
+							// }
 
 						}
 
@@ -136,6 +139,7 @@ class Vender_profile extends CI_Controller {
 						$config['encrypt_name'] = FALSE;
 						$config['file_name'] = 'brochure' . '_' . time();
 						$config['file_ext_tolower'] = TRUE;
+						$config['max_size'] = '2';
 
 						$this->load->library('upload');
 						$this->upload->initialize($config, TRUE);

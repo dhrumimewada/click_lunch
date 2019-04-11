@@ -173,11 +173,11 @@ class Vender_model extends CI_Model {
 			$this->db->where("id", $user_id);
 			$this->db->update("shop", $token_array);
 
-			if(isset($_POST['request_id']) && $_POST['request_id'] != ''){
-				$delete_data = array('deleted_at' => date('Y-m-d H:i:s'));
-				$this->db->where('id', $this->input->post("request_id"));
-				$this->db->update("shop_request", $delete_data);
-			}
+			// if(isset($_POST['request_id']) && $_POST['request_id'] != ''){
+			// 	$delete_data = array('deleted_at' => date('Y-m-d H:i:s'));
+			// 	$this->db->where('id', $this->input->post("request_id"));
+			// 	$this->db->update("shop_request", $delete_data);
+			// }
 		
 		}
 
@@ -315,5 +315,103 @@ class Vender_model extends CI_Model {
 		}
 
 		return $return_value;
+	}
+
+	public function vender_resend_activation_mail($shop_id = NULL){
+
+		$return = array();
+
+		$this->db->select('email');
+		$this->db->from('shop');
+		$this->db->where('id', $shop_id);
+		$sql_query = $this->db->get();
+		$shop_data = $sql_query->row();
+
+		$this->db->select('emat_email_subject,emat_email_message');
+		$this->db->from('email_template');
+		$this->db->where('emat_email_type', 1);
+		$this->db->where("emat_is_active", 1);
+		$sql_query = $this->db->get();
+		$return_data = $sql_query->row();
+
+
+		if (!isset($return_data) && empty($return_data)){
+			return $return = array('is_success' =>FALSE, 'message' => 'Email template not found. Error into sending mail.');
+		}
+
+		$activation_token = bin2hex(random_bytes(20));
+		$email_var_data["activation_link"] = base_url() . 'vender-setpassword/'. $activation_token;
+
+		$from = "";
+		$to = $shop_data->email;
+		$subject = $return_data->emat_email_subject;
+
+		$email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+		$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+		$mail = sendmail($from, $to, $subject, $message);
+
+		if(!$mail){
+
+			return $return = array('is_success' =>FALSE, 'message' => 'Error into sending mail');
+		}else{
+			$token_array = array('activation_token' => $activation_token);
+			$this->db->where("id", $shop_id);
+			$this->db->update("shop", $token_array);
+
+			return $return = array('is_success' => TRUE, 'message' => 'Mail resent successfully');
+		
+		}
+	}
+
+	public function vender_status_update_sendmail($shop_id = NULL, $status =  NULL){
+
+		$return = array();
+
+		$this->db->select('email');
+		$this->db->from('shop');
+		$this->db->where('id', $shop_id);
+		$sql_query = $this->db->get();
+		$shop_data = $sql_query->row();
+
+		$this->db->select('emat_email_subject,emat_email_message');
+		$this->db->from('email_template');
+		if($status == 2){
+			$this->db->where('emat_email_type', 7);
+		}else if($status == 1){
+			$this->db->where('emat_email_type', 8);
+		}else{
+			return false;
+		}
+		
+		$this->db->where("emat_is_active", 1);
+		$sql_query = $this->db->get();
+		$return_data = $sql_query->row();
+
+
+		if (!isset($return_data) && empty($return_data)){
+			//return $return = array('is_success' =>FALSE, 'message' => 'Email template not found. Error into sending mail.');
+			return false;
+		}
+
+		$email_var_data = array();
+
+		$from = "";
+		$to = $shop_data->email;
+		$subject = $return_data->emat_email_subject;
+
+		$email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+		$message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+		$mail = sendmail($from, $to, $subject, $message);
+
+		if(!$mail){
+
+			//return $return = array('is_success' =>FALSE, 'message' => 'Error into sending mail');
+			return false;
+		}else{
+
+			//return $return = array('is_success' => TRUE, 'message' => 'Mail resent successfully');
+			return true;
+		
+		}
 	}
 }

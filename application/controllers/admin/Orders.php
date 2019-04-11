@@ -82,7 +82,7 @@ class Orders extends CI_Controller {
                 }else if($value['order_status'] == 7){
                 	$order_status = '<span class="badge badge-danger">Delivery Fail</span>';
                 }else if($value['order_status'] == 8){
-                	$order_status = '<span class="badge badge-danger">Canceled by Customer</span>';
+                	$order_status = '<span class="badge badge-danger">Cancelled by Customer</span>';
                 }else{
                 	$order_status ='';
                 }
@@ -174,7 +174,7 @@ class Orders extends CI_Controller {
                 }else if($value['order_status'] == 7){
                 	$order_status = '<span class="badge badge-danger">Delivery Fail</span>';
                 }else if($value['order_status'] == 8){
-                	$order_status = '<span class="badge badge-danger">Canceled by Customer</span>';
+                	$order_status = '<span class="badge badge-danger">Cancelled by Customer</span>';
                 }else{
                 	$order_status ='';
                 }
@@ -266,7 +266,7 @@ class Orders extends CI_Controller {
                 }else if($value['order_status'] == 7){
                 	$order_status = '<span class="badge badge-danger">Delivery Fail</span>';
                 }else if($value['order_status'] == 8){
-                	$order_status = '<span class="badge badge-danger">Canceled by Customer</span>';
+                	$order_status = '<span class="badge badge-danger">Cancelled by Customer</span>';
                 }else{
                 	$order_status ='';
                 }

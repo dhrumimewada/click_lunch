@@ -3,7 +3,11 @@ $cart_link = base_url().'cart';
 $image_base_url = base_url().'web-assets/images/';
 $img_path = base_url().'web-assets/images/card-icons/';
 ?>
-
+<style type="text/css" media="screen">
+    .place-order-block #weekly .select-time{
+        margin-top: 0;
+    }
+</style>
 <!-- Order Successful Modal  -->
 <div class="modal fade pop-form" id="orderSuccessful" tabindex="-1" role="dialog" aria-labelledby="orderSuccessful" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -177,8 +181,19 @@ $img_path = base_url().'web-assets/images/card-icons/';
 						</div>
 
                         <?php
-                        $order_type = array_column($cart_contents, 'order_type');
-                        if($order_type[0] == 'delivery'){
+                        $order_type_data = array_column($cart_contents, 'order_type');
+                        $order_type = $order_type_data[0];
+                        if (strpos($order_type, 'weekly') !== false){
+                            $weekly_array = explode("_",$order_type);
+                            $order_type = $weekly_array[0];
+                            $order_weekly = 1;
+                            $order_weekly_day = $weekly_array[2];
+                        }else{
+                            $order_weekly = 0;
+                            $order_weekly_day = '';
+                        }
+                        
+                        if($order_type == 'delivery' && $order_weekly == 0){
                         ?>
                         <div class="col-md-6" id="deliver">
                             <div class="delivery-address d-flex justify-content-around">
@@ -197,7 +212,7 @@ $img_path = base_url().'web-assets/images/card-icons/';
                             </div>
                         </div>
                         <?php
-                        }else if($order_type[0] == 'takeout'){
+                        }else if($order_type == 'takeout' && $order_weekly == 0){
                         ?>
                         <div class="col-md-6" id="takeout">
                             <div class="delivery-address d-flex justify-content-around">
@@ -213,6 +228,22 @@ $img_path = base_url().'web-assets/images/card-icons/';
                             <div class="select-time">   
                                 <label for="input_starttime">Select Pickup Time</label>                        
                                 <input type="text" name="timepicker" id="takeout_time" class="time_element" placeholder="00:00" />
+                            </div>
+                        </div>
+                        <?php
+                        }else if($order_weekly == 1){
+                        ?>
+                        <div class="col-md-6" id="weekly">
+                            <div class="select-time">
+                                <?php
+                                if(ucfirst($order_weekly_day) == date('l')){
+                                    $day = 'Today';
+                                }else{
+                                    $day = ucfirst($order_weekly_day);
+                                }
+                                ?>
+                                <label for="input_starttime">Select <?php echo $order_type; ?> Time For <?php echo $day; ?></label>                        
+                                <input type="text" name="timepicker" id="weekly_time" class="time_element" placeholder="00:00" />
                             </div>
                         </div>
                         <?php
@@ -451,4 +482,7 @@ $img_path = base_url().'web-assets/images/card-icons/';
     var order_success_url = "<?php echo base_url().'order-success'; ?>";
 
     var takeout_delivery_status = "<?php echo $takeout_delivery_status; ?>";
+    var weekly_status = "<?php echo $order_weekly; ?>";
+    var weekly_day = "<?php echo $order_weekly_day; ?>";
+    var weekly_order_type = '<?php if($order_weekly == 1){ echo ($order_type == 'takout')?"6":"5"; } ?>';
 </script> 

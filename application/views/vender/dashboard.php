@@ -116,7 +116,7 @@
                         <div class="card-body">
                             <h4 class="mt-10 m-b-30 header-title d-inline-block">Latest Orders</h4>
                             <div class="float-right d-inline-block mb-3">
-                                <a class="btn btn-primary waves-effect waves-light" href="<?php echo base_url().'maintenance6'; ?>">View All</a>
+                                <a class="btn btn-primary waves-effect waves-light" href="<?php echo base_url().'order-all'; ?>">View All</a>
                             </div>
 
                             <div class="table-responsive">
@@ -124,69 +124,77 @@
                                     <thead>
                                         <tr>
                                             <th>Order ID</th>
-                                            <th>Type</th>
+                                            <th>Order Type</th>
                                             <th>Customer Name</th>
                                             <th>Amount</th>
-                                            <th>Status</th>
+                                            <th>Order Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>#4562</td>
-                                            <td>Takeout</td>
-                                            <td>Mr. Green pablow</td>
-                                            <td>$12.30</td>
-                                            <td>Completed</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#4563</td>
-                                            <td>Delivery</td>
-                                            <td>Mr. Green pablow</td>
-                                            <td>$12.30</td>
-                                            <td>Cancelled</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#4564</td>
-                                            <td>Takeout</td>
-                                            <td>Mr. Green pablow</td>
-                                            <td>$12.30</td>
-                                            <td>Completed</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#4565</td>
-                                            <td>Takeout</td>
-                                            <td>Mr. Green pablow</td>
-                                            <td>$13.30</td>
-                                            <td>Completed</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#4566</td>
-                                            <td>Takeout</td>
-                                            <td>Mr. Green pablow</td>
-                                            <td>$12.30</td>
-                                            <td>Completed</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#4563</td>
-                                            <td>Delivery</td>
-                                            <td>Mr. Green pablow</td>
-                                            <td>$12.30</td>
-                                            <td>Cancelled</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#4563</td>
-                                            <td>Delivery</td>
-                                            <td>Mr. Green pablow</td>
-                                            <td>$12.30</td>
-                                            <td>Cancelled</td>
-                                        </tr>
-                                        <tr>
-                                            <td>#4563</td>
-                                            <td>Delivery</td>
-                                            <td>Mr. Green pablow</td>
-                                            <td>$12.30</td>
-                                            <td>Cancelled</td>
-                                        </tr>
+                                        <?php
+                                        if(isset($order) && !empty($order)){
+                                            foreach ($order as $key => $value) {
+                                            ?>
+                                            <tr>
+                                                <td>#CL<?php echo $value['id']; ?></td>
+                                                <td>
+                                                    <?php
+
+                                                    if($value['order_type'] == 1){
+                                                        $order_type_str = 'Delivery Now';
+                                                    }else if($value['order_type'] == 2){
+                                                        $order_type_str = 'Delivery Later';
+                                                    }else if($value['order_type'] == 3){
+                                                        $order_type_str = 'Takeout Now';
+                                                    }else if($value['order_type'] == 4){
+                                                        $order_type_str = 'Takeout Later';
+                                                    }else if($value['order_type'] == 5){
+                                                        $order_type_str = 'Weekly Delivery';
+                                                    }else if($value['order_type'] == 6){
+                                                        $order_type_str = 'Weekly Takeout';
+                                                    }else{
+                                                       $order_type_str = '';
+                                                    }
+                                                    echo $order_type_str;
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $value['username']; ?>
+                                                </td>
+                                                <td>$
+                                                    <?php echo $value['total']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                    if($value['order_status'] == 0){
+                                                        echo $order_status = '<span class="badge badge-primary">Pending</span>';
+                                                    }else if($value['order_status'] == 1){
+                                                        echo $order_status = '<span class="badge badge-info">Accepted by Restaurant</span>';
+                                                    }else if($value['order_status'] == 2){
+                                                        echo $order_status = '<span class="badge badge-danger">Rejected by Restaurant</span>';
+                                                    }else if($value['order_status'] == 3){
+                                                        echo $order_status = '<span class="badge badge-info">Delivery Boy Assigned</span>';
+                                                    }else if($value['order_status'] == 4){
+                                                        echo $order_status = '<span class="badge badge-info">Accepted by Delivery Boy</span>';
+                                                    }else if($value['order_status'] == 5){
+                                                        echo $order_status = '<span class="badge badge-info">Picked up</span>';
+                                                    }else if($value['order_status'] == 6){
+                                                        echo $order_status = '<span class="badge badge-success">Delivered</span>';
+                                                    }else if($value['order_status'] == 7){
+                                                        echo $order_status = '<span class="badge badge-danger">Delivery Fail</span>';
+                                                    }else if($value['order_status'] == 8){
+                                                        echo $order_status = '<span class="badge badge-danger">Cancelled by Customer</span>';
+                                                    }else{
+                                                        $order_status ='';
+                                                    }
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                            }
+                                        }
+                                        ?>
+                                        
                                     </tbody>
                                 </table>
                             </div>

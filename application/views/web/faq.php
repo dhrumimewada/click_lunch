@@ -127,7 +127,7 @@
                           </div>
                           <div id="collapse7" class="collapse" aria-labelledby="heading7" data-parent="#accordion">
                           <div class="card-body">
-                            We know time is money, so we strictly monitor delivery times and notify you immediately when your food arrives. If your order is ever more than 15-30 minutes late, ClickLunch will provide reimbursement for the inconvenience.
+                            We know time is money, so we strictly monitor delivery times and notify you immediately when your food arrives. If your order is ever more than 15-30 minutes late, ClickLunch will give reimbursement for the inconvenience.
                             </div>
                           </div>
                       </div>
@@ -175,7 +175,7 @@
                           </div>
                           <div id="collapsbusiness1" class="collapse" aria-labelledby="business1" data-parent="#accordion1">
                             <div class="card-body">
-                              We’re excited to hear from you! First, check to see if your office building is currently in the network by searching your building address. [2] If your business is not already in the network, we can’t wait to have you join. Please submit a request, and we will be in touch soon!
+                              We’re excited to hear from you! First, check to see if your office building is now in the network by searching your building address. [2] If your business is not already in the network, we can’t wait to have you join. Please submit a request, and we will be in touch soon!
                             </div>
                           </div>
                       </div>                     
@@ -277,17 +277,16 @@
                           <div class="card-header" id="rest4">
                             <h5 class="mb-0">
                               <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapserest4" aria-expanded="false" aria-controls="collapserest4">
-                              How is clicklunch different than other 3rd party service providers?
+                              How is clicklunch different from other 3rd party service providers?
                               </button>
                             </h5>
                           </div>
                           <div id="collapserest4" class="collapse" aria-labelledby="rest4" data-parent="#accordion2">
                             <div class="card-body">
-                           ClickLunch is different in a lot of ways: our consumer base is STRICTLY BUSINESS PROFESSIONALS, our technology makes it easy and  rofitable for YOU TO DO THE DELIVERY, so we’re able to make it LOW COST  for everyone involved – meaning more control over your product and more money in your pocket!
+                           ClickLunch is different in many ways: our consumer base is STRICTLY BUSINESS PROFESSIONALS, our technology makes it easy and  profitable  for YOU TO DO THE DELIVERY, so we’re able to make it LOW COST  for everyone involved – meaning more control over your product and more money in your pocket!
                             </div>
                           </div>
                       </div>                     
-                     
                   </div>
               <div class="form-actions d-flex justify-content-center">
                   <a href="<?php echo BASE_URL(); ?>welcome" class="white-btn back-home-btn text-center" id="back-home-btn">Back to home</a>

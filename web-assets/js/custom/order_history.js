@@ -128,16 +128,22 @@ $( document ).ready(function(){
 								}
 
 								var order_status ='';
-								if(val.order_status == 0 || 1 || 3){
+								if(val.order_status == 0){
 									order_status = 'Pending';
+								}else if(val.order_status == 1){
+									order_status = 'Accepted by Restaurant';
 								}else if(val.order_status == 2){
-									order_status = 'Cancelled';
+									order_status = 'Cancelled by Restaurant';
+								}else if(val.order_status == 3){
+									order_status = 'Accepted by restaurant';
 								}else if(val.order_status == 4){
-									order_status = 'Accepted';
+									order_status = 'Delivery Boy Assigned';
 								}else if(val.order_status == 5){
 									order_status = 'Picked';
 								}else if(val.order_status == 6){
 									order_status = 'Delivered';
+								}else if(val.order_status == 7){
+									order_status = 'Cancelled';
 								}else{
 									order_status = 'Fail';
 								}

@@ -3,6 +3,7 @@ $( document ).ready(function() {
  	$(document).on('click','.delivery-address .form-check-label',function(){
  		var address_id = $(this).data("id");
  		console.log(address_id);
+ 		//return false;
  		window.location = my_delievry_address+'/'+address_id;
  	});
 

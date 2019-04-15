@@ -45,7 +45,7 @@ $edit_link = base_url().'cuisine-update';
                                         $btn_name = 'Active';
                                         $btn_class = 'btn-success';
                                     }else{
-                                        $btn_name = 'Deactivate';
+                                        $btn_name = 'Deactivated';
                                         $btn_class = 'btn-deactive';
                                     }
 

@@ -472,7 +472,7 @@
   function initAutocomplete() {
     autocomplete = new google.maps.places.Autocomplete(
        (document.getElementById('autocomplete')),
-        {types: ['geocode'] });
+        {types: ['establishment'] });
     autocomplete.addListener('place_changed', fillInAddress);
   }
 
@@ -516,7 +516,6 @@
   }
 
   function geolocate() {
-    $('.loader').show();
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         var geolocation = {
@@ -532,7 +531,6 @@
         autocomplete.setBounds(circle.getBounds());
       });
     }
-     $('.loader').hide();
   }
 </script>
 <?php

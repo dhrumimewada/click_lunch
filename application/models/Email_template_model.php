@@ -96,7 +96,7 @@ class Email_template_model extends CI_Model {
 			$emails = array_column($return_data, 'email');
 			$email_data = implode(',', $emails);
 			$total_sended = count($emails);
-			$mail = sendmail($from, $email_data, $subject, $message);
+			$mail = sendmail($from, NULL, $subject, $message, $email_data);
 
 			$this->auth->set_status_message("Total ".$total_sended. " emails sent successfully");
 			$return_value = TRUE;
@@ -212,7 +212,7 @@ class Email_template_model extends CI_Model {
 			$emails_array = array_unique($emails_array);
 			$email_data = implode(',', $emails_array);
 			$total_sended = count($emails_array);
-			$mail = sendmail($from, $email_data, $subject, $message);
+			$mail = sendmail($from, NULL , $subject, $message, $email_data);
 			
 			$this->auth->set_status_message("Total ".$total_sended. " emails sent successfully");
 			$return_value = TRUE;

@@ -80,7 +80,7 @@ if(isset($banner_list) && !empty($banner_list)){
                     <div class="m-l-15">
                         <div class="search-div row">
                             
-                            <input type="text" name="search-txt" class="search-txt col-lg-6" placeholder="Enter Your Location" onFocus="geolocate()" id="autocomplete">
+                            <input type="text" name="search-txt" class="search-txt col-lg-6" placeholder="Enter Your Location" onFocus="geolocate()" id="autocomplete" autocomplete="off">
                             <input type="hidden" id="administrative_area_level_2" name="city">
                             <input type="hidden" id="administrative_area_level_1" name="state">
                             <input type="hidden" id="latitude" name="latitude">

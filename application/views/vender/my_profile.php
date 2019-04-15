@@ -949,10 +949,6 @@ $delivery_evening_to = $delivery['evening']['to'];
 <?php
 $google_key = $this->config->item("google_key");
 ?>
-<script src="<?php echo base_url().'assets/js/custom/vender/vender_account.js'; ?>"></script>
-<script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_key; ?>&libraries=places&callback=initAutocomplete" async defer></script>
-
 <script type="text/javascript">
     var available_time = jQuery.parseJSON('<?php echo json_encode($available_time); ?>');
     var shop_availibality = jQuery.parseJSON('<?php echo json_encode($shop_availibality); ?>');
@@ -960,12 +956,11 @@ $google_key = $this->config->item("google_key");
     var from_time_selected = '<?php echo $from_time_selected; ?>';
     var to_time_selected = '<?php echo $to_time_selected; ?>';
 
-    // var delivery_morning_from = '<?php //echo $delivery_morning_from; ?>';
-    // var delivery_morning_to = '<?php //echo $delivery_morning_to; ?>';
-    // var delivery_evening_from = '<?php //echo $delivery_evening_from; ?>';
-    // var delivery_evening_to = '<?php //echo $delivery_evening_to; ?>';
-
     var delivery_time = '<?php echo $vender_detail->delivery_time; ?>';
     var order_by_time = '<?php echo $vender_detail->order_by_time; ?>';
 
 </script>
+<script src="<?php echo base_url().'assets/js/mask/jquery.inputmask.bundle.js'; ?>"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_key; ?>&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="<?php echo base_url().'assets/js/custom/vender/vender_account.js'; ?>"></script>
+

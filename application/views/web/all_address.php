@@ -51,8 +51,8 @@ $add_address_link = base_url()."update-delievry-address";
 														?>
 													</label>
 													<div class="delivery-address-btns" data-id="<?php echo $value['id']; ?>" data-house_no="<?php echo $value['house_no']; ?>" data-street="<?php echo $value['street']; ?>" data-city="<?php echo $value['city']; ?>" data-zipcode="<?php echo $value['zipcode']; ?>" data-delivery_instruction="<?php echo $value['delivery_instruction']; ?>" data-address_type="<?php echo $value['address_type']; ?>">
-														<i class="ion-edit mdi-18px text-danger pointer delivery-address-edit"></i>
-														<i class=" ion-trash-b mdi-18px text-success pointer ml-1 delivery-address-delete"></i>
+														<!-- <i class="ion-edit mdi-18px text-danger pointer delivery-address-edit"></i> -->
+														<i class=" ion-trash-b mdi-18px text-danger pointer ml-1 delivery-address-delete"></i>
 													</div>
 												</div>
 											</div>
@@ -80,8 +80,19 @@ $add_address_link = base_url()."update-delievry-address";
 											<div class="delivery-address d-flex align-items-center" data-id="<?php echo encrypt($value['id']); ?>">
 												<div class="form-check">
 													<input class="form-check-input" type="radio" name="address" id="<?php echo $value['id']; ?>" value="<?php echo $value['id']; ?>" >
-													<label class="form-check-label" for="<?php echo $value['id']; ?>">
-														<?php echo $value['house_no'].', '.$value['street'].', <br>'.$value['city'].', '.$value['zipcode']; ?>
+													<label class="form-check-label" for="<?php echo $value['id']; ?>" data-id="<?php echo encrypt($value['id']); ?>">
+														<?php
+														echo $value['house_no'].', '.$value['street'].', <br>'.$value['city'].', '.$value['zipcode'].' ';
+														if($value['address_type'] == 1){
+															echo "<span class='badge badge-primary'>Office</span>";
+														}else if($value['address_type'] == 2){
+															echo "<span class='badge badge-success'>Office Buliding</span>";
+														}else if($value['address_type'] == 3){
+															echo "<span class='badge badge-info'>Home</span>";
+														}else{
+															echo "<span class='badge badge-secondary'>Other</span>";
+														}
+														?>
 													</label>
 												</div>
 											</div>

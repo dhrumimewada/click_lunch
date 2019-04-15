@@ -2,6 +2,14 @@
    .tab-content>.active{
         display: inline-flex !important;
    } 
+   .swal2-radio label{
+        display: inline-block;
+        margin: 0px 40px;
+   }
+   .swal2-radio span{
+        font-size: 20px;
+        padding: 0 10px;
+   }
 </style>
 <div id="content">
     <div class="favourites-order-wrapper order-history-wrapper grey-bg">
@@ -50,14 +58,15 @@
                                     <div class="card">
                                         
                                             <div class="restaurant-img position-relative">
-                                                <img class="card-img-top" src="<?php echo $photo_url; ?>" alt="Card image cap">
+                                                <img class="card-img-top select-type pointer" src="<?php echo $photo_url; ?>" alt="Card image cap">
                                                 <div class="rating txt1">Ratings</div>
                                                 <div class="rating txt2 txt-red"><?php echo $value['rating']; ?></div>
                                             </div>
                                             <div class="card-body restaurant-body">
                                                     <div class="card-title font-md text-center cut-text">
                                                         <?php $selected_day = strtolower($shop_key); ?>
-                                                        <a href="<?php echo BASE_URL().'restaurant/weekly_'.$selected_day.'/nearby/'.$value['short_name']; ?>" class="txt-red" target="_blank">
+                                                        <!-- <a href="<?php echo BASE_URL().'restaurant/weekly_'.$selected_day.'/nearby/'.$value['short_name']; ?>" class="txt-red" target="_blank"> -->
+                                                        <a href="javascript:void(0);" class="select-type txt-red" data-name="<?php echo $value['short_name']; ?>" data-shopid="<?php echo $value['id']; ?>" data-day="<?php echo $selected_day; ?>">
                                                         <?php echo stripcslashes($value['shop_name']); ?>
                                                         </a>
                                                     </div>
@@ -132,6 +141,8 @@ var defualt_photo_url = '<?php echo base_url() . 'web-assets/images/logo-3.png';
 
 var shop_url = '<?php echo base_url().'restaurant/'; ?>';
 var zoom_out_img_url = '<?php echo base_url().'web-assets/images/zoom-in-out.png'; ?>';
+
+var set_order_type_session = "<?php echo base_url().'set-order-type-session'; ?>";
 
 $(document).ready(function(){
 

@@ -1035,7 +1035,8 @@ class Delivery_boy_api extends REST_Controller {
                             'IF(t1.order_type=5, t1.schedule_date, "") as schedule_date',
                             'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
                             'IF(t1.order_type=2, t1.later_time, "") as later_time',
-                            't1.created_at'
+                            't1.created_at',
+                            't1.rating'
                             // 'IF(t1.order_type=2, t1.schedule_date, "") as schedule_date',
                             // 'IF(t1.order_type=2, t1.schedule_time, "") as schedule_time',
                             // 'IF(t1.order_type=1, t1.created_at, "") as created_at'
@@ -1043,23 +1044,16 @@ class Delivery_boy_api extends REST_Controller {
             $this->db->select($sql_select);
 
             $this->db->from('orders t1');
-            $this->db->join('customer t2', 't1.customer_id = t2.id','left');
-            $this->db->join('shop t3', 't1.shop_id = t3.id','left');
-            $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id','left');
+            $this->db->join('customer t2', 't1.customer_id = t2.id');
+            $this->db->join('shop t3', 't1.shop_id = t3.id');
+            $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id');
 
             $this->db->where('t1.id', $_POST['order_id']);
-            //$this->db->where('t1.order_status', 4);
-
-            // $this->db->group_start();
-            //     $this->db->where('t1.order_type', 1);
-            //     $this->db->or_where('t1.order_type', 2);
-            // $this->db->group_end();
 
             $sql_query = $this->db->get();
 
             if ($sql_query->num_rows() > 0){
                 $orders_data = (array)$sql_query->row();
-                $orders_data['rating'] = '3.5';
 
                 $pickup_minutes = $this->config->item("pickup_minutes");
                 $delivery_minutes = $this->config->item("delivery_minutes");

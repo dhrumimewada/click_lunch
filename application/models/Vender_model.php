@@ -257,6 +257,8 @@ class Vender_model extends CI_Model {
 
 		$user_data['contact_no1'] = $this->input->post("contact_no1");
 		$user_data['contact_no2'] = $this->input->post("contact_no2");
+		$user_data['latitude'] = $this->input->post("latitude");
+		$user_data['longitude'] = $this->input->post("longitude");
 		$user_data['website'] = addslashes($this->input->post("website"));
 		$user_data['tax_number'] = addslashes($this->input->post("tax_number"));
 		$user_data['payment_mode'] = $payment_mode;

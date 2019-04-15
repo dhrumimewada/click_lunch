@@ -44,7 +44,7 @@
                                         $btn_name = 'Active';
                                         $btn_class = 'btn-success';
                                     }else{
-                                        $btn_name = 'Deactivate';
+                                        $btn_name = 'Deactivated';
                                         $btn_class = 'btn-deactive';
                                     }
                                     echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." btn-sm waves-effect waves-light deactive_user' status-id='" . $value["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button>

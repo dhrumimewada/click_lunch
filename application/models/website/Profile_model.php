@@ -342,9 +342,6 @@ class Profile_model extends CI_Model {
                                 't1.total',
                                 't2.username',
                                 't1.order_type',
-                                'CONCAT_WS(", ", t4.house_no, t4.street, t4.city, t4.zipcode) AS delivery_address',
-                                't4.latitude as address_latitude',
-                                't4.longitude as address_longitude',
                                 't3.shop_name',
                                 't3.profile_picture',
                                 't3.address as shop_address',
@@ -362,14 +359,15 @@ class Profile_model extends CI_Model {
                                 'IF(t1.order_type=5, t1.schedule_time, "") as schedule_time',
                                 'IF(t1.order_type=2, t1.later_time, "") as later_time',
                                 't1.created_at',
-                                't1.QR_code'
+                                't1.QR_code',
+                                't1.rating',
+                                't1.delivery_address_id'
                 );
                 $this->db->select($sql_select);
 
                 $this->db->from('orders t1');
                 $this->db->join('customer t2', 't1.customer_id = t2.id');
                 $this->db->join('shop t3', 't1.shop_id = t3.id');
-                $this->db->join('delivery_address t4', 't1.delivery_address_id = t4.id');
 
                 $this->db->where('t1.id', $id);
                 $this->db->where('t1.customer_id',$this->auth->get_user_id());
@@ -377,19 +375,23 @@ class Profile_model extends CI_Model {
 
                 if ($sql_query->num_rows() > 0){
                     $return_data = (array)$sql_query->row();
-                    $return_data['rating'] = '3.5';
 
-                    if($return_data['delivery_address'] != 0 && $return_data['delivery_address'] != ''){
+                    if($return_data['delivery_address_id'] != 0 && $return_data['delivery_address_id'] != ''){
 
                          $sql_select = array(
-                                'CONCAT_WS(", ", house_no, street, city, zipcode) AS delivery_address',
-                                'latitude as address_latitude',
-                                'longitude as address_longitude'
+                                'CONCAT_WS(", ", house_no, street, city, zipcode) AS delivery_address'
+                                // 'latitude as address_latitude',
+                                // 'longitude as address_longitude'
                                 );
 
                         $this->db->select($sql_select);
-                        $this->db->from('order_items');
-                        $this->db->where('id', $return_data['delivery_address']);
+                        $this->db->from('delivery_address');
+                        $this->db->where('id', $return_data['delivery_address_id']);
+                        $sql_query = $this->db->get();
+                        if ($sql_query->num_rows() > 0){
+                            $delivery_address = $sql_query->row();
+                            $return_data['delivery_address'] = $delivery_address->delivery_address;
+                        }
                     }
 
                     $sql_select = array(

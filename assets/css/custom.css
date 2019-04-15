@@ -325,3 +325,40 @@ a:hover .topbar-name{
 }
 
 .varient-data{ font-size: 10px; }
+
+.overlay {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 1999;
+    background: #222222a6;
+}
+
+.overlay__inner {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.overlay__content {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.spinner {
+    width: 85px;
+    height: 85px;
+    display: inline-block;
+    border-width: 6px;
+    border-color: #ff0000;
+    border-top-color: transparent;
+    animation: spin 1s infinite linear;
+    border-radius: 100%;
+    border-style: solid;
+}

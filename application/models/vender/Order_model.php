@@ -33,7 +33,15 @@ class Order_model extends CI_Model {
 			$this->db->where_in("t1.order_type", $order_type);
 		}
 
-		$this->db->where("t1.shop_id",$this->auth->get_user_id());
+		if($this->auth->is_vender()){
+			$this->db->where("t1.shop_id",$this->auth->get_user_id());
+		}else if($this->auth->is_employee()){
+			$this->db->where("t1.shop_id",$this->auth->get_emp_shop_id());
+		}else{
+
+		}
+
+		
 		
 
 		$sql_query = $this->db->get();
@@ -66,7 +74,15 @@ class Order_model extends CI_Model {
 		$this->db->join('customer t2', 't1.customer_id = t2.id');
 		$this->db->join('shop t3', 't1.shop_id = t3.id');
 
-		$this->db->where("t1.shop_id",$this->auth->get_user_id());
+		if($this->auth->is_vender()){
+			$this->db->where("t1.shop_id",$this->auth->get_user_id());
+		}else if($this->auth->is_employee()){
+			$this->db->where("t1.shop_id",$this->auth->get_emp_shop_id());
+		}else{
+			
+		}
+
+		
 
 		$this->db->group_start();
 		

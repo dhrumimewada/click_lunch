@@ -155,7 +155,11 @@ $route['add_admin'] = 'admin/admin/create_new_admin';
 $route['delete-admin'] = 'admin/admin/delete_admin';  
 $route['status-admin'] = 'admin/admin/active_deactive_admin';  
 $route['login-admin'] = 'admin/admin_login/login';  
-$route['logout-admin'] = 'admin/admin_login/logout';  
+$route['logout-admin'] = 'admin/admin_login/logout'; 
+
+$route['admin-forgot-password'] = 'admin/admin_login/admin_forgot_password';  
+$route['admin-reset-password/(:any)'] = 'admin/admin_login/admin_reset_password/$1'; 
+
 
 $route['vender-setpassword/(:any)'] = 'vender/vender_login/setpassword/$1'; 
 $route['vender-setnewpassword'] = 'vender/vender_login/setpassword';  
@@ -165,6 +169,9 @@ $route['customer-setnewpassword'] = 'customer/customer_login/setpassword';
 
 $route['dispatcher-setpassword/(:any)'] = 'dispatcher/dispatcher_login/setpassword/$1';
 $route['dispatcher-setnewpassword'] = 'dispatcher/dispatcher_login/setpassword';
+
+$route['dispatcher-forgot-password'] = 'dispatcher/dispatcher_login/dispatcher_forgot_password';
+$route['dispatcher-reset-password/(:any)'] = 'dispatcher/dispatcher_login/dispatcher_reset_password/$1'; 
 
 
 // Admin profile - change pw
@@ -319,6 +326,8 @@ $route['order-completed'] = 'vender/order/completed';
 $route['order-trashed'] = 'vender/order/trashed';
 $route['order-all'] = 'vender/order/all';
 $route['vender-order-detail/(:any)'] = 'vender/order/order_detail/$1';
+
+$route['vender-order-status-update'] = 'vender/order/vender_order_status_update';
 
 $route['fetch-db'] = 'dispatcher/order/get_all_db';
 $route['set-db'] = 'dispatcher/order/set_db';

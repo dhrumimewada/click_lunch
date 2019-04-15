@@ -95,7 +95,7 @@
                 <div class="col-xl-12">
                     <div class="card m-b-20">
                         <div class="card-body">
-                            <span class="mt-0 m-b-30 header-title">Recent Restaurants</span>
+                            <span class="mt-0 m-b-30 header-title">Recent New Restaurants</span>
                             <div class="float-right d-inline-block mb-3">
                                 <a class="btn btn-primary waves-effect waves-light" href="<?php echo base_url().'vender-list'; ?>">View All</a>
                             </div>

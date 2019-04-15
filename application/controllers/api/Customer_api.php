@@ -12,7 +12,7 @@ class Customer_api extends REST_Controller {
         $this->load->model("api/customer_api_model");
     }
 
-    public function init_get($app_version = '',$type = ''){
+    public function init_get($app_version = '',$type = '', $customer_id = ''){
 
         $postFields['app_version'] = $app_version;        
         $postFields['type'] = $type;               
@@ -43,6 +43,22 @@ class Customer_api extends REST_Controller {
             }
             else{
                 $response['status'] = true;
+            }
+
+            if($response['status'] == TRUE && $customer_id != ''){
+                $this->db->select('id');
+                $this->db->where("id",$customer_id);
+                $this->db->where("deleted_at",NULL);
+                $this->db->where("status",1);
+                $this->db->from("customer");
+                $sql_query = $this->db->get();
+                if ($sql_query->num_rows() > 0){
+                    $response['status'] = true;
+                }else{
+                    $response['status'] = true;
+                    $response['message'] = 'Customer is blocked';
+                }
+
             }
 
         }else{
@@ -1456,10 +1472,11 @@ class Customer_api extends REST_Controller {
 
             // Add cuisines to shop array
             foreach ($shop_data as $key => $value) {
-                $shop_data[$key]['rating'] = '4.5';
-                $shop_data[$key]['cuisine'] = array();
-                
 
+                $shop_data[$key]['cuisine'] = array();
+                $rating = get_rating($value['id']);
+                $shop_data[$key]['rating'] = number_format((float)$rating, 2, '.', '');
+                
                 foreach ($cuisine_data as $key1 => $value1) {
                     if($value['id'] == $value1['shop_id']){
                         array_push($shop_data[$key]['cuisine'], $value1['cuisine_name']);
@@ -1490,7 +1507,6 @@ class Customer_api extends REST_Controller {
                         if($value['id'] == $value1['shop_id']){
                             $shop_data[$key]['from_time'] = $value1['from_time'];
                             $shop_data[$key]['to_time'] = $value1['to_time'];
-                            //$shop_data[$key]['rating'] = '4.5';
                         }
                     }
                 }
@@ -1617,7 +1633,9 @@ class Customer_api extends REST_Controller {
 
             // Add cuisines to shop array
             foreach ($shop_data as $key => $value) {
-                $shop_data[$key]['rating'] = '4.5';
+
+                $rating = get_rating($value['id']);
+                $shop_data[$key]['rating'] = number_format((float)$rating, 2, '.', '');
                 $shop_data[$key]['cuisine'] = array();
                 
 
@@ -1664,6 +1682,7 @@ class Customer_api extends REST_Controller {
             
 
             $response['status'] = true;
+            $response['availibality_data'] = $availibality_data;
             $response['shop'] = $shop_data;
         }else{
             $response['status'] = false;
@@ -1705,6 +1724,20 @@ class Customer_api extends REST_Controller {
                 $this->db->select('*');
                 $this->db->where("deleted_at", NULL);
                 $this->db->where("is_active", 1);
+                
+                $this->db->group_start();
+
+                    $this->db->group_start();
+                        $this->db->where('quantity >', 0);
+                        $this->db->where('inventory_status', 1);
+                    $this->db->group_end();
+
+                    $this->db->or_group_start();
+                         $this->db->where('inventory_status', 0);
+                    $this->db->group_end();
+
+                $this->db->group_end();
+
                 $this->db->where("shop_id", $_POST['shop_id']);
                 $this->db->from('item');
                 $sql_query = $this->db->get();
@@ -1723,10 +1756,12 @@ class Customer_api extends REST_Controller {
                     $availibality = $sql_query->result_array();
                 }
 
+                $rating = get_rating($_POST['shop_id']);
+
                 $shop_data = array(
                                 'id' => $_POST['shop_id'],
                                 'shop_name' => $shop['shop_name'],
-                                'rating' => '1.5',
+                                'rating' => number_format((float)$rating, 2, '.', ''),
                                 'zip_code' => $shop['zip_code'],
                                 'city' => $shop['city'],
                                 'state' => $shop['state'],
@@ -2513,7 +2548,7 @@ class Customer_api extends REST_Controller {
 
             if(empty($errorPost)){
 
-                $this->db->select('id, device_token, email');
+                $this->db->select('id, device_token, email, shop_name');
                 $this->db->from('shop');
                 $this->db->where('id', $order_data['shop_id']);
                 $this->db->where('deleted_at',NULL);
@@ -2888,6 +2923,7 @@ class Customer_api extends REST_Controller {
                                                             $this->db->update('order_items', $product_data_edited);
 
                                                             $reciept_data['item_data'][$count]['total_product_price'] = $total_product_price;
+                                                            $reciept_data['item_data'][$count]['item_price'] = $item_price + $varients_price;
 
                                                             $sub_total += $total_product_price;
 
@@ -3001,13 +3037,29 @@ class Customer_api extends REST_Controller {
                                                         $reciept_data['line2'] = 'Accept the order as soon as possible';
 
                                                         $email_data = $this->load->view('email_templates/order_receipt', $reciept_data, true);
-                                                        $result = sendmail($from = '', $to = $shop_data['email'], $subject = 'New Order Recieved', $email_data);
+                                                        $email_to_vender = sendmail($from = '', $to = $shop_data['email'], $subject = 'New Order Recieved', $email_data);
 
+                                                        $this->db->select('email'); 
+                                                        $this->db->where('id',$order_data['customer_id']); 
+                                                        $this->db->from('customer'); 
+                                                        $sql_query = $this->db->get();
+                                                        if ($sql_query->num_rows() > 0){
+                                                            $customer_email = (array)$sql_query->row();
 
+                                                            $reciept_data['line1'] = 'Thank You for Your Order!';
+                                                            $reciept_data['line2'] = 'Satisfy your cravings with a huge selection of restaurants.';
+
+                                                            $email_data = $this->load->view('email_templates/order_receipt', $reciept_data, true);
+
+                                                             $email_to_customer = sendmail($from = '', $to = $customer_email['email'], $subject = 'Your Order: CL'.$order_id.' From '.$shop_data['shop_name'].' Has been Confirmed', $email_data);
+                                                        }
+
+                                                        
                                                         $response['order'] = true;    
                                                         $response['status'] = true;    
                                                         $response['order_id'] = $order_id;    
-                                                        $response['reciept_data'] = $reciept_data;    
+                                                        $response['email_to_vender'] = $email_to_vender;    
+                                                        $response['email_to_customer'] = $email_to_customer;    
 
                                                     }else{
                                                         $response['status'] = false;
@@ -3364,7 +3416,6 @@ class Customer_api extends REST_Controller {
 
             if ($sql_query->num_rows() > 0){
                 $orders_data = (array)$sql_query->row();
-                //$orders_data['rating'] = '3.5';
 
                 $sql_select = array(
                                 't2.name',
@@ -3476,7 +3527,10 @@ class Customer_api extends REST_Controller {
 
                     // Add cuisines to shop array
                     foreach ($shop_data as $key => $value) {
-                        $shop_data[$key]['rating'] = '4.5';
+
+                        $rating = get_rating($value['id']);
+                        $shop_data[$key]['rating'] = number_format((float)$rating, 2, '.', '');
+
                         $shop_data[$key]['cuisine'] = array();
                         
 
@@ -3510,7 +3564,6 @@ class Customer_api extends REST_Controller {
                                 if($value['id'] == $value1['shop_id']){
                                     $shop_data[$key]['from_time'] = $value1['from_time'];
                                     $shop_data[$key]['to_time'] = $value1['to_time'];
-                                    //$shop_data[$key]['rating'] = '4.5';
                                 }
                             }
                         }

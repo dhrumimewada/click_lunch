@@ -4,7 +4,8 @@ class Order extends CI_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		if (($this->auth->is_logged_in() == TRUE) && ($this->auth->is_vender())){
+		if (($this->auth->is_logged_in() == TRUE) && (($this->auth->is_vender()) || (($this->auth->is_employee()) && (is_allowed($this->auth->get_role_id(), 'orders')) ) ))
+		{
 			
 		}else{
 			if($this->auth->is_logged_in() == TRUE){
@@ -248,16 +249,11 @@ class Order extends CI_Controller {
 			$status_str = 
 					"<a href='".$order_view_url."/".$id."' class='btn btn-outline-primary waves-effect waves-light btn-sm' status-id='" . $value["order_status"] . "' title='View' data-popup='tooltip' > View</a>";
 
-			if(($value['order_type'] == 3) || ($value['order_type'] == 4) || ($value['order_type'] == 6)){
-				$status_str .= 
-					"<button type='button' class='btn btn-success btn-sm waves-effect waves-light update-status' status-id='1' title='Completed' data-popup='tooltip' > Completed</button>
-					<button type='button' class='btn btn-danger btn-sm waves-effect waves-light update-status' status-id='2' title='Cancel' data-popup='tooltip' > Cancel</button>";
-			}
 
 			$created_date_ts = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
 			$created_date = $created_date_ts->format('j M, Y h:i A');
 
-			if(($value['order_type'] == 1) || ($value['order_type'] == 3)){
+			if($value['order_type'] == 1){
 
                 $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
                 $my_delivery_minutes = $delivery_minutes + $pickup_minutes;
@@ -265,6 +261,21 @@ class Order extends CI_Controller {
                 $delivery_time = $my_delivery_time->format('j M, Y h:i A');
                 $delivery_time_ts = $my_delivery_time->format('Y-m-d H:i:s');
 
+            }else if($value['order_type'] == 3){
+
+            	$my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
+            	$my_delivery_time = $my_date->add(new DateInterval('PT'.$pickup_minutes.'M'));
+
+                $delivery_time = $my_delivery_time->format('j M, Y h:i A');
+                $delivery_time_ts = $my_date->format('Y-m-d H:i:s');
+
+                $current_datetime = new DateTime();
+                if($my_delivery_time <= $current_datetime){
+                	$status_str .= 
+						"<button type='button' class='btn btn-success btn-sm waves-effect waves-light update-status' title='Completed' data-popup='tooltip' status-id='6'> Completed</button>
+						<button type='button' class='btn btn-danger btn-sm waves-effect waves-light update-status' title='Cancel' data-popup='tooltip' status-id='8' > Cancel</button>";
+                }
+                
             }else if(($value['order_type'] == 2) || ($value['order_type'] == 4)){
 
                 $my_date = DateTime::createFromFormat('Y-m-d H:i:s', $value['created_at']);
@@ -273,18 +284,33 @@ class Order extends CI_Controller {
                 $delivery_time = $later_datetime->format('j M, Y h:i A');
                 $delivery_time_ts = $later_datetime->format('Y-m-d H:i:s');
 
+                $current_datetime = new DateTime();
 
+                if(($value['order_type'] == 4) && ($later_datetime <= $current_datetime)){
+                	$status_str .= 
+					"<button type='button' class='btn btn-success btn-sm waves-effect waves-light update-status' title='Completed' data-popup='tooltip' status-id='6'> Completed</button>
+					<button type='button' class='btn btn-danger btn-sm waves-effect waves-light update-status' title='Cancel' data-popup='tooltip' status-id='8'> Cancel</button>";
+                }
             }else if(($value['order_type'] == 5) || ($value['order_type'] == 6)){
 
                 $my_date = DateTime::createFromFormat('Y-m-d h:i A', $value['schedule_date'].' '.$value['schedule_time']);
                 $delivery_time = $my_date->format('j M, Y h:i A');
                 $delivery_time_ts = $my_date->format('Y-m-d H:i:s');
 
+                $current_datetime = new DateTime();
+
+                if(($value['order_type'] == 6) && ($my_date <= $current_datetime)){
+                	$status_str .= 
+					"<button type='button' class='btn btn-success btn-sm waves-effect waves-light update-status' status-id='6' title='Completed' data-popup='tooltip' > Completed</button>
+					<button type='button' class='btn btn-danger btn-sm waves-effect waves-light update-status' status-id='8' title='Cancel' data-popup='tooltip' > Cancel</button>";
+                }
+
             }else{
 
                 $delivery_time = '';
                 $delivery_time_ts = date('Y-m-d H:i:s');
             }
+
 	       	
 	       	$data[] = array(
 	            $value['id'],
@@ -586,5 +612,106 @@ class Order extends CI_Controller {
 	  	exit();
   	}
 
+  	public function vender_order_status_update(){
+
+  		$order_id = $_POST['id'];
+		$status = $_POST['status'];
+
+		if (isset($order_id) && !is_null($order_id) && !empty($order_id)){
+
+			$user_data = array('order_status' => $status,'updated_at' => date('Y-m-d H:i:s') );
+			$this->db->where('id', $order_id);
+			$this->db->update('orders', $user_data);
+
+			$customer_data = array();
+			$this->db->select('t2.customer_id, t1.device_type, t1.device_token, t1.email, t2.customer_id, t3.shop_name');
+			$this->db->from('customer t1');
+			$this->db->join('orders t2', 't1.id = t2.customer_id');
+			$this->db->join('shop t3', 't2.shop_id = t3.id');
+			$this->db->where('t2.id', $order_id);
+			$this->db->where('t1.device_type !=', '');
+			$this->db->where('t1.device_type !=', 0);
+			$this->db->where('t1.device_token !=', '');
+			$sql_query = $this->db->get();
+			if ($sql_query->num_rows() > 0){
+				$customer_data = (array)$sql_query->row();
+
+				$device_type = $customer_data['device_type'];
+				$device_token = $customer_data['device_token'];
+
+				if($status == 6){
+					$push_title = 'Order Completed';
+					$message = 'Your order no. CL'.$order_id.' from '.stripslashes($customer_data['shop_name']).' has been completed.';
+					$push_type = 'order_completed';
+					$notification_type = 7;
+				}else{
+					$push_title = 'Order Cancelled';
+					$message = 'Your order no. CL'.$order_id.' from '.stripslashes($customer_data['shop_name']).' has been cancelled.';
+					$push_type = 'order_rejected';
+					$notification_type = 3;
+				}
+				
+				$push_data = array(
+						'order_id' => $order_id,
+						'customer_id' => $customer_data['customer_id'],
+						'message' => $message
+						);
+				$result = send_push($device_type,$device_token, $push_title, $push_data, $push_type);
+
+				$success_data = notification_add($notification_type, $customer_data['customer_id'], $push_title, $message, $order_id);
+				$notification_store_data= array('notification_type' => $notification_type, 'customer_id' => $customer_data['customer_id'], 'push_title' => $push_title, 'message' => $message, 'order_id' => $order_id);
+
+				// send mail
+
+				// send mail
+                $this->db->select('emat_email_subject,emat_email_message');
+                $this->db->from('email_template');
+
+                 if($status == 6){
+                	$this->db->where('emat_email_type', 10);
+                }else{
+                	$this->db->where('emat_email_type', 11);
+                }
+                
+                $this->db->where("emat_is_active", 1);
+                $sql_query = $this->db->get();
+                $return_data = $sql_query->row();
+
+                if (!isset($return_data) && empty($return_data)){
+                    echo json_encode(array("is_success" => false, 'message' => 'Email template not found. Error into sending mail.'));
+					return TRUE;
+                }else{
+
+                    $email_var_data["order_id"] = 'CL'.$order_id;
+                    $email_var_data["shop_name"] = $customer_data['shop_name'];
+
+                    $from = "";
+                    $to =  array($customer_data['email']);
+                    $subject = $return_data->emat_email_subject;
+
+                    $email_message_string = $this->parser->parse_string($return_data->emat_email_message, $email_var_data, TRUE);
+                    $message = $this->load->view("email_templates/activation_mail", array("mail_body" => $email_message_string), TRUE);
+                    $mail = sendmail($from, $to, $subject, $message);
+                }
+
+
+			}
+
+			if($status == 6){
+				$str = 'completed.';
+			}else{
+				$str = 'cancelled.';
+			}
+
+			echo json_encode(array("is_success" => true, 'message' => 'Order CL'.$order_id.' has been '. $str));
+			return TRUE;
+
+		}else{
+			echo json_encode(array("is_success" => false, 'message' => 'Parameter not found'));
+			return TRUE;
+		}
+
+  		
+  	}
 
 }

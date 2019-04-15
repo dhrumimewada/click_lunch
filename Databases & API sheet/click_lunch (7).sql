@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 11, 2019 at 01:56 PM
+-- Generation Time: Apr 15, 2019 at 01:59 PM
 -- Server version: 5.6.41
 -- PHP Version: 7.0.32
 
@@ -35,6 +35,7 @@ CREATE TABLE `admin` (
   `profile_picture` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `status` int(5) NOT NULL DEFAULT '1',
+  `remember_token` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -44,14 +45,14 @@ CREATE TABLE `admin` (
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`, `email`, `password`, `profile_picture`, `username`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'admin@eww.com', '$2y$10$YYUjn0mq9TY2PdZluc5CcONAYY87JskbZMMaIvQEMKdMWsrnkO2iu', 'admin_1554829063.jpg', 'Dhrumi', 1, '2018-10-20 04:54:29', '2019-04-09 22:27:43', NULL),
-(2, 'admin@bobmail.info', '$2y$10$PFOMzMbtADnwHKHu79B6i.vztg1TMQeJhrJlkorzFGkYdaSJi/Ghe', '', 'john deo', 1, '2018-10-24 13:45:49', NULL, NULL),
-(4, 'CoolThunder@binkmail.com', '$2y$10$0xr4KB0YuGkrpDHx35ZaP..w3unC4Nnigh/Y/82IP5X7PIfrRBqu.', 'admin_1547204567.jpg', 'Miss Liby', 1, '2019-01-11 11:02:47', NULL, NULL),
-(6, 'sunvenk04@gmail.com', '$2y$10$EFlfcW7VetlzyaeDHzrNJeovTP7cbYb9QNtF2m9kY4ZodAIHr/cL.', '', 'Sunitha', 1, '2019-01-14 07:15:07', NULL, NULL),
-(7, 'happyadmin@streetwisemail.com', '$2y$10$ORemK88Ch9dAO.0OmpK2EOVjYZ3vryST.FVJkt4aVvlfzD098Kncq', '', 'Happy', 1, '2019-01-17 10:23:06', NULL, NULL),
-(8, 'DelicateElf@sendspamhere.com', '$2y$10$mp594I.O4nKHyDIGH5wjCOAYLarreUqOl279rx4msr.556Uvkjipm', 'admin_1547721740.png', 'Delicat eElf', 1, '2019-01-17 10:25:12', '2019-01-17 10:42:20', NULL),
-(9, 'BoogerDanger@safetymail.info', '$2y$10$I8nAXLKGaXZ1E2Keku2aKeLOLXki0bgje2WVLL91TXnhwhHKoxz7O', '', 'adminm', 0, '2019-01-23 09:42:21', NULL, NULL);
+INSERT INTO `admin` (`id`, `email`, `password`, `profile_picture`, `username`, `status`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'admin@eww.com', '$2y$10$chhoEmlZjGuhYqa9lzBJ9eJ8UBFbTOJR151IIFwkntWipTbSGWFTG', 'admin_1555164786.jpg', 'Dhrumi', 1, '', '2018-10-20 04:54:29', '2019-04-13 19:43:06', NULL),
+(2, 'admin@bobmail.info', '$2y$10$PFOMzMbtADnwHKHu79B6i.vztg1TMQeJhrJlkorzFGkYdaSJi/Ghe', '', 'john deo', 1, '', '2018-10-24 13:45:49', NULL, NULL),
+(4, 'CoolThunder@binkmail.com', '$2y$10$0xr4KB0YuGkrpDHx35ZaP..w3unC4Nnigh/Y/82IP5X7PIfrRBqu.', 'admin_1547204567.jpg', 'Miss Liby', 1, '', '2019-01-11 11:02:47', NULL, NULL),
+(6, 'sunvenk04@gmail.com', '$2y$10$EFlfcW7VetlzyaeDHzrNJeovTP7cbYb9QNtF2m9kY4ZodAIHr/cL.', '', 'Sunitha', 0, '', '2019-01-14 07:15:07', NULL, NULL),
+(7, 'happyadmin@streetwisemail.com', '$2y$10$ORemK88Ch9dAO.0OmpK2EOVjYZ3vryST.FVJkt4aVvlfzD098Kncq', '', 'Happy', 1, '', '2019-01-17 10:23:06', NULL, NULL),
+(8, 'DelicateElf@sendspamhere.com', '$2y$10$mp594I.O4nKHyDIGH5wjCOAYLarreUqOl279rx4msr.556Uvkjipm', 'admin_1547721740.png', 'Delicat eElf', 1, '', '2019-01-17 10:25:12', '2019-01-17 10:42:20', NULL),
+(9, 'BoogerDanger@safetymail.info', '$2y$10$I8nAXLKGaXZ1E2Keku2aKeLOLXki0bgje2WVLL91TXnhwhHKoxz7O', '', 'adminm', 0, '', '2019-01-23 09:42:21', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -103,7 +104,7 @@ INSERT INTO `banner` (`id`, `title`, `sub_title`, `banner_picture`, `status`, `c
 (1, 'Satisfy Your Cravings', 'Experience a world of food, with your favorite restaurants at your fingertips.', 'banner_1549456477.jpg', 1, '2019-01-18 07:31:30', '2019-04-02 07:43:14', NULL),
 (2, 'Delicious Food', 'Your one stop destination for1', 'banner_1549456614.jpg', 1, '2019-01-18 06:19:17', '2019-03-31 19:18:30', NULL),
 (3, 'Hungry?', 'Order food from favourite restaurants near you.', 'banner_1549456575.jpg', 1, '2019-01-18 06:29:51', '2019-04-02 07:44:07', NULL),
-(4, 'Office Lunch, Delivered', 'Lunch from local restaurants delivered straight to your office', 'banner_1549456737.jpg', 1, '2019-02-06 08:08:57', '2019-04-02 07:42:47', NULL);
+(4, 'Office Lunch Delivered', 'Lunch from local restaurants delivered straight to your office', 'banner_1549456737.jpg', 1, '2019-02-06 08:08:57', '2019-04-12 04:22:11', NULL);
 
 -- --------------------------------------------------------
 
@@ -214,7 +215,7 @@ INSERT INTO `cuisine` (`id`, `cuisine_name`, `cuisine_picture`, `is_active`, `cr
 (23, 'Desserts', 'cuisine_1549515937.png', 1, '2019-03-30 22:33:24', NULL, '2019-03-31 04:03:24'),
 (24, 'Ethiopian', 'cuisine_1554268731.png', 1, '2019-04-03 05:18:51', '2019-04-03 10:48:51', NULL),
 (25, 'Mangolian', 'cuisine_1553985374.png', 1, '2019-03-30 22:37:36', NULL, '2019-03-31 04:07:36'),
-(26, 'All', 'cuisine_1554268694.png', 1, '2019-04-03 10:48:14', NULL, NULL),
+(26, 'All', 'cuisine_1554268694.png', 1, '2019-04-13 16:16:07', '2019-04-13 21:46:07', NULL),
 (27, 'Punjabi', 'cuisine_1554650162.jpg', 1, '2019-04-07 15:19:51', NULL, '2019-04-07 20:49:51');
 
 -- --------------------------------------------------------
@@ -260,7 +261,7 @@ INSERT INTO `customer` (`id`, `email`, `password`, `username`, `profile_picture`
 (6, 'DullRat@mailinator.com', '$2y$10$s5xq4SSBkVvXZow/pR6f9.mNUDyTNaonrZSsLwjTNPI27tahx3ASO', 'Dhrumi', 'customer_1546514755.jpg', 'city center 2, science city', '8866541254', '1996-02-14', '', 0, '', '0', '', 1, '', '2019-01-03 06:55:55', '2019-01-22 07:36:53', NULL, '1', '42.34797469999999', '-71.08792840000001', '995e6926a53e0f52141048894f2c11324eb373c4', '', 1, 1, 1),
 (25, 'PieThunder@mailinator.com', '$2y$10$TJ0cFGhfYRvD.9OSimFFAekIE4ZLFHiUi0SKaZmemq4p9fGp1m7BG', 'Pie Thunder', 'customer_1548150942.jpg', 'Dallas-Fort Worth Metropolitan Area, TX, USA', '8866541254', '1996-02-14', '', 1, 'hjhjkhjkhjkhkj', '0', '', 1, '', '2019-01-09 01:35:17', '2019-01-22 09:55:42', NULL, '1', '121212', '1212154', 'f59c153f1b0653cd0b04228d133252259d027c74', '', 0, 1, 1),
 (32, 'vinodkummar@yahoo.com', '$2y$10$JK3VdLe5iFoXDN55go1d.uVBCLKqo7ZTyIewaogEWgAglV7BcbGKO', 'vinod kummar', 'customer_1547811554.jpg', '#5,1 floor,1 main road,rama chandra pura', '900 859 9119', '2001-01-08', '', 0, '', '0', '', 1, '', '2019-01-14 07:22:20', '2019-04-01 23:22:49', NULL, '0', '', '', '', '', 1, 1, 1),
-(33, 'developer.eww@gmail.com', '$2y$10$hsCiT/pbtJWi1kBhB6FffOKEVivrYAKG60XMfQqHSWeCbJHiqjYKu', 'Developer', 'customer_1554118912.jpeg', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '333 222 1111', '1996-12-12', '', 1, 'cbRVqOgewWs:APA91bHPkRiRN2BHboAATS9xjtFniyNXLWpG6LB0ZKuoYA4Wp1G9y_4xOVh44ualCY5QPKDcZj5MCtgYl0vj1Z7IYzsvu6CYPAKdcyMg3pqOMg_VTzTBupKPx6kwesfbAN3r_xASPfFP', '0', '', 1, '47', '2019-01-21 11:40:41', '2019-04-11 13:23:48', NULL, '0', '23.0727809', '72.5163534', '', '', 0, 0, 0),
+(33, 'developer.eww@gmail.com', '$2y$10$L8J5ytNjm6iJgSH3ctn3QOPnbWAHnXYf5QcTWz.7yvIhJX9/vHn/G', 'Developer', 'customer_1554118912.jpeg', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '333 222 1111', '1996-12-12', '', 2, 'eTRh7aY-m00:APA91bEJkh42HtRuGeb3M9rL1zxLgyp3Czie7k7RA29knhQAAh6-_EAarXJvIRcG8QxqvDT7BbTrqMtcvtJ1Pf1jAYyc48Ns0RvofRVPb16zWNjMrOZ5amkfZwa3WJcHP7wb6TXhs34L', '0', '', 1, '18', '2019-01-21 11:40:41', '2019-04-12 11:46:21', NULL, '0', '23.0728284104351', '72.51638378613029', '', '', 0, 0, 0),
 (34, 'RhymePaladin@mailinator.com', '$2y$10$0LU.1X2e9RFtwmuRj7u2NeO1TlLB4UHPL3fw5PicVJVQLixo0eCT2', 'Dhrumi', '', '', '8866541254', '1996-02-14', '', 1, 'hjhjkhjkhjkhkj', '0', '', 0, '', '2019-01-23 11:37:07', NULL, NULL, '1', '13.666', '66.3333333', '', '487a25ca64324b9504fc260da580f06938197cb5', 1, 1, 1),
 (35, 'Rehan@gmail.com', '$2y$10$ZrD6PhBniRrXQBr8rJ/K1./4RvOPNExosmqA8owjy/7GuYPXW8OoK', 'Dhrumi', 'customer_1554117792.jpeg', '', '333 222 1111', '0000-00-00', '', 2, 'eZbi6tjcrvU:APA91bFyRnf7MWA53oDZ3zb4DsIilOHDEB22byzl73308RMqHm4X4sC3dmwTCzunRzUa1VmI-dXSN9d-NwkRXiosbrY9SZTvUG5qthBubG2uXOzQ0VKCQDXx4s25RdDo8k14tMheIMXd', '0', '', 1, '14', '2019-01-28 08:59:31', '2019-04-01 16:53:12', NULL, '1', '23.07129066383203', '72.51543549012378', '', '', 0, 1, 0),
 (36, 'pooja@excellentwebworld.in', '$2y$10$lmY8XIuPSNGwDoxNHjwFd.XsfXeS.Q9KHOm0PSciYzx5H/5BvSsjS', 'Pooja', 'customer_1551427005.jpg', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '777-807-5528', '2019-03-30', '', 2, 'f3xS2tcdokw:APA91bGTJrtOslG7rZPxe5Ln9Omds4tmafGpd09_7QlBoKeNBPntwM-1zTS8mDkLVPj1nzG8AXRj_Wd4obDIJ2xwkut5p8hfG-3eo816LXGdYb9SIISi84fUac02ZJqMOMqUooSso2PQ', '0', '', 1, '33', '2019-03-01 06:14:02', '2019-03-02 07:03:35', NULL, '1', '23.07271841026387', '72.51637852397903', '', '', 1, 1, 1),
@@ -268,11 +269,11 @@ INSERT INTO `customer` (`id`, `email`, `password`, `username`, `profile_picture`
 (38, 'developer.ewweww2@gmail.com', '$2y$10$GbJgiU7VHBgoHOaL5JRq4O3G3Z47f5KUWpWO3mGpcjUPlIx953j06', 'Dhrumi', '', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '111-111-1111', '1996-12-12', '', 0, 'ej1d0qJEZsU:APA91bGBLPdUqLEMJaDUYAs0o27Vu7JLLa3rStanyp2RZn8NZwEncRRNTegQvap7YfU3IwZ_3GnAM-qGbmlhX9dHb2Wzx6WXFvSB5csgCbnHcLGINEbBcskGM8NIs_DhkNNh6LBTw_BB', '0', '', 0, '', '2019-03-01 06:37:32', NULL, NULL, '0', '23.0727664', '72.5163406', '', '9fc031ca9c43028a29a6d1e16d8bafcc65f52c07', 1, 1, 1),
 (39, 'dianahedlund123@gmail.com', '$2y$10$.u67p3.xpo5M33.WK4/kkuMfsMgTHAZhgSBhJ/wQ1P/Yx/6T7hzrO', 'Dhrumi', '', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '777-807-5528', '1994-12-25', '', 0, 'fAQoL84MV60:APA91bGFDEWSxdbWd2kFlGi2iSzBW2k-PcxeRUoj3Q2H3_yghSi6bcDzqmbVUKnGJxi9_ec5fp30dL6fI7hY76FZV1XoZNB_NKQcb185tSoQuq4zyM2a3sZ6IoNIcybybMyQwoeK27JO', '0', '', 1, '', '2019-03-01 06:48:38', NULL, NULL, '1', '23.07275', '72.5163385', '', '', 1, 1, 1),
 (40, 'r@r.com', '$2y$10$vWn4yoO9j80noylM8SmeJ.W0Enui99kvfTJvqof9WP0V0J6xPep5m', 'Dhrumi', '', 'Sarvanad Society Opp. Ramdev Mandir, 14, CIMS Hospital Road, Ahmedabad, Gujarat 380060, India', '999-999-9999', '2019-03-01', '', 0, 'af8b52580c7e6f275ba5f99dd45d4881428e5b2e479fcbdc8c6a1c3f063f2442', '0', '', 0, '', '2019-03-01 12:09:57', NULL, NULL, '0', '23.07094709289872', '72.51622031254746', '', '5b73e1486c470f37e7a297b6d9576b0867bd3e2e', 1, 1, 1),
-(41, 'r@t.com', '$2y$10$PS0p2rCqnWCJdPdAIKhFGOquXaFOOK4Tnc0yDWoj98WdBk2sahG1y', 'Dhrumi', '', 'Science City Rd, Sola, Ahmedabad, Gujarat 380059, India', '999-999-9999', '2019-03-01', '', 0, 'd6qLopAf8Qw:APA91bEbZnJLZYnRV2zisLEpJARvKJmKdybVblsm3Y2g5z_FEPx0ZwqJAZsh7bVrJ37P__7ADEVG6jZoFDNKDqqMv_e3NeYk8Tagu8LchO_efv-WZXLiFBvdA7JtQiCDTDKFZkZ5NoD8', '0', '', 1, '', '2019-03-01 12:14:11', NULL, NULL, '0', '23.0727542', '72.5163489', '', '', 1, 1, 1),
+(41, 'r@t.com', '$2y$10$PS0p2rCqnWCJdPdAIKhFGOquXaFOOK4Tnc0yDWoj98WdBk2sahG1y', 'Dhrumi', '', 'Science City Rd, Sola, Ahmedabad, Gujarat 380059, India', '999-999-9999', '2019-03-01', '', 2, 'eTRh7aY-m00:APA91bEJkh42HtRuGeb3M9rL1zxLgyp3Czie7k7RA29knhQAAh6-_EAarXJvIRcG8QxqvDT7BbTrqMtcvtJ1Pf1jAYyc48Ns0RvofRVPb16zWNjMrOZ5amkfZwa3WJcHP7wb6TXhs34L', '0', '', 1, '95', '2019-03-01 12:14:11', NULL, NULL, '0', '23.07081604003906', '72.51264953613278', '', '', 1, 1, 1),
 (42, 'poojapanchal8512@gmail.com', '$2y$10$vbHV9Y2VbzhXyN7geFat5.ICRVq1mo6qa.Ed1.lPOuJgPi12Xdkk2', 'Dhrumi', '', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '777-807-5528', '2019-04-19', '', 0, 'fAQoL84MV60:APA91bGFDEWSxdbWd2kFlGi2iSzBW2k-PcxeRUoj3Q2H3_yghSi6bcDzqmbVUKnGJxi9_ec5fp30dL6fI7hY76FZV1XoZNB_NKQcb185tSoQuq4zyM2a3sZ6IoNIcybybMyQwoeK27JO', '0', '', 1, '', '2019-03-04 05:31:21', NULL, NULL, '1', '23.07275', '72.5163385', '', '', 1, 1, 1),
 (43, 'dhrumi_cl@mailinator.com', '$2y$10$0fLYzRKhLakLC.OhZcQEyeW5wGLhcmTxex7xTkkYg8n7KxfEEDYky', 'Dhrumi', '', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '886-658-0502', '2015-02-01', '', 1, 'dvhmaXXa9OY:APA91bEWtwXyhYdcWERiXbLsMSv8UMmK_ZJ1qAjxydeMQUgFDRzZXkHxl8oI0Ww4d4bpIetX4VmdQzWD7rD6-S6TR8pOOIWb8MltRF6P8djOL3lE45Gb5zr0-9ceyALIZrCL279cEJEE', '0', '', 1, '', '2019-03-05 07:05:35', NULL, NULL, '1', '23.0727445', '72.5163463', '', '', 1, 1, 1),
 (44, 'BoogerDanger12@mailinator.com', '$2y$10$rbOqEIZxgXl7scZsYYoYneMJfX5voBiFFbRRxy9dUZGqQCiB7udn.', 'Dhrumi', '', '', '774 587 1458', '2019-03-05', '', 0, '', '0', '', 1, '', '2019-03-06 13:55:05', NULL, NULL, '0', '', '', '', '51189b74c7d0a99a7ee15977e958f280fdc5bd4b', 1, 1, 1),
-(45, 'sunvenk04@gmail.com', '$2y$10$5POx1wYJJcHog1m.WY2BseTo5fb9xp0Zas4GPINGh2VIJxRgK.Sc2', 'Sunvek', 'customer_1553567521.jpg', '25, 1st Cross Rd, Prakash Nagar, Rajaji Nagar, Bengaluru, Karnataka 560021, India', '866 016 6775', '1986-03-28', '', 1, 'cYJ9POWMV0U:APA91bF0ePsXE1bhJziPciKR1lH0-DxPz5_qd4InH8Ox3ICg5Qq7gEY1dv1ijjKoltoBCaxSGMJFGd06sBaqqljWK6HkrpuxVBcNhA9B0M9mldIv_HSSqrt8jvDOJAJ_cWpO0xhGRryz', '0', '', 1, '53', '2019-03-07 02:27:30', '2019-04-09 16:37:55', NULL, '1', '12.9872985', '77.5635158', '', '', 1, 1, 0),
+(45, 'sunvenk04@gmail.com', '$2y$10$5POx1wYJJcHog1m.WY2BseTo5fb9xp0Zas4GPINGh2VIJxRgK.Sc2', 'Sunvek', 'customer_1553567521.jpg', '25, 1st Cross Rd, Prakash Nagar, Rajaji Nagar, Bengaluru, Karnataka 560021, India', '866 016 6775', '1986-03-28', '', 1, 'cYJ9POWMV0U:APA91bF0ePsXE1bhJziPciKR1lH0-DxPz5_qd4InH8Ox3ICg5Qq7gEY1dv1ijjKoltoBCaxSGMJFGd06sBaqqljWK6HkrpuxVBcNhA9B0M9mldIv_HSSqrt8jvDOJAJ_cWpO0xhGRryz', '0', '', 1, '86', '2019-03-07 02:27:30', '2019-04-15 17:11:22', NULL, '1', '12.9226916', '77.5446627', '', '', 1, 1, 1),
 (46, 'kv@excellentwebworld.com', '$2y$10$k.rZnFVGeWqVCSG.uTHEfOpCBTKrAn03H.o9zbwczRceQhwvUtKkS', 'Dhrumi', '', '', '999 835 9464', '1991-09-12', '', 0, '', '0', '', 1, '', '2019-03-07 12:06:20', '2019-04-01 10:12:20', NULL, '0', '', '', '', '', 1, 1, 1),
 (47, 'Belgians123@mailinator.com', '$2y$10$88QTuFa/NeNLP4EwQYRdzOP9Fe8DuMZrbwOeoK9YLCFVzQMpbmChi', 'Dhrumi', '', '', '565 655 6545', '2019-03-03', '', 0, '', '0', '', 1, '', '2019-03-07 13:44:53', NULL, NULL, '1', '', '', '', '', 1, 1, 1),
 (48, 'cl_customer@yopmail.com', '$2y$10$NzXLtcX04VqUo/bZAUiEV.hPdFy2Qv.BcO/ufLrgR6xKPLTIiSqPG', 'Dhrumi', 'customer_1552312125.jpg', '', '775 765 8768', '2019-03-13', '', 1, 'fqIMGxz0PQg:APA91bEVujgp8ZCvd9Z-zJAa4PExqGOHTjoSocDvE1ASqA_0tARPjUuC4yhRv-F15WsWfsB8kMqhMmonO2fY1mcdAwJwwG_uXSnkYsMO4jtptA2KQJpc1jLBqYa2GHxmAbpinFgtMakB', '0', '', 1, '', '2019-03-07 14:02:05', '2019-04-01 11:25:43', NULL, '0', '', '', '', '', 1, 1, 1),
@@ -299,7 +300,7 @@ INSERT INTO `customer` (`id`, `email`, `password`, `username`, `profile_picture`
 (69, 'clicklunch246@gmail.com', '', 'Dhrumi', '', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '248 675 5518', '1996-12-12', '', 0, 'dvhmaXXa9OY:APA91bEWtwXyhYdcWERiXbLsMSv8UMmK_ZJ1qAjxydeMQUgFDRzZXkHxl8oI0Ww4d4bpIetX4VmdQzWD7rD6-S6TR8pOOIWb8MltRF6P8djOL3lE45Gb5zr0-9ceyALIZrCL279cEJEE', '143842899943087', '1', 1, '', '2019-03-20 07:33:59', '2019-03-31 04:45:27', '2019-04-02 00:00:00', '0', '23.0728456', '72.5163479', '', '', 1, 1, 1),
 (70, 'developer.eww4@gmail.com', '', 'Dhrumi', '', '208 Siya Info sundram arcate, Sola, Ahmedabad, Gujarat 380060, India', '111-111-1111', '1996-12-12', '', 0, '', '9223372036854775807', '2', 1, '', '2019-03-20 07:51:36', NULL, NULL, '1', '', '', '', '', 1, 1, 1),
 (71, 'cl_customer@yomail.com', '$2y$10$TdXvq/d2Ajp.gPZUbWypNudG8jcayhL5vD9Lzk.DJwzwr6tevXx7C', 'Dhrumi', '', 'Google Building 40, 1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA', '248-522-9427', '1990-01-01', '', 0, 'eCEGqE-f7kw:APA91bEMnYqSifuhIcV-kKpeRku5nIVpcv1yB8OXIJR83I1n__L-bdupJpAysfV5wi9ZG4xfLQx5DpL6EsPvuZEELXmkL7ZLY24C5pVQXqo0HEOIWZIztjXkguVf1iY5hiFhnBpq2xHB', '', '', 0, '', '2019-03-26 02:20:19', NULL, NULL, '0', '37.4220459', '-122.0840279', '', 'af32d74a8f4e2c6a726560cd97e7d010b521e1af', 1, 1, 1),
-(72, 'suma@oviotechnologies.com', '$2y$10$Ty2k8DtIONaEANB7DJowWuSyTpFoBuMSCjNmrSM0ILdWw2IiLAUvC', 'Dhrumi', 'customer_1554038403.png', '747 South Main Street, Plymouth, MI, USA', '248 522 9427', '1960-03-18', '', 0, 'eCEGqE-f7kw:APA91bEMnYqSifuhIcV-kKpeRku5nIVpcv1yB8OXIJR83I1n__L-bdupJpAysfV5wi9ZG4xfLQx5DpL6EsPvuZEELXmkL7ZLY24C5pVQXqo0HEOIWZIztjXkguVf1iY5hiFhnBpq2xHB', '', '', 1, '', '2019-03-26 02:22:41', '2019-04-10 20:36:04', NULL, '1', '37.4220457', '-122.0840277', '', '', 1, 1, 1),
+(72, 'suma@oviotechnologies.com', '$2y$10$Ty2k8DtIONaEANB7DJowWuSyTpFoBuMSCjNmrSM0ILdWw2IiLAUvC', 'Suma', 'customer_1554038403.png', '747 South Main Street, Plymouth, MI, USA', '248 522 9427', '1960-03-18', '', 1, 'eAA8C-BbBws:APA91bFSn8r0tbwqAu99kHqosZIgvWnBMhghK1P0LCnoCZBEDVd0b8ToLIViH_Sm-U1ea154bqlt-OR-LYBPt4twWwW1awTADsrRFsdUMLu9kN68NBS7x_P7RdxMDbLxA_a9XtJl2afw', '', '', 1, '87', '2019-03-26 02:22:41', '2019-04-14 03:03:47', NULL, '1', '42.331633', '-83.484644', '', '', 1, 1, 1),
 (73, 'sheren@mailinator.com', '$2y$10$Jh.ekqBS.LSCq2icA5kbkujmujrUWN2fMF565cdVquvrFLNOidb0S', 'Dhrumi', '', '', '8876541254', '1996-02-19', '', 1, '3453f45534544', '', '', 1, '', '2019-03-26 05:04:09', NULL, NULL, '1', '0', '0', '', '', 1, 1, 1),
 (75, 'vinodkummar60@gmail.com', '$2y$10$yQAWraGiIEoqRDOpDjBPZOnx1VjqKbjeKthdGJVPcJlU99JtIlgz2', 'Dhrumi', '', '', '948 218 0768', '1980-02-26', '', 0, '', '', '', 1, '', '2019-03-26 17:50:34', '2019-03-26 23:23:27', NULL, '0', '', '', '', '', 1, 1, 1),
 (76, 'sheren2667@mailinator.com', '$2y$10$YBB2jl8uTOzFz5P3zsbmq.Hz3Y5a3Hqzwt/l0ijFm.o7kO82ljyje', 'Dhrumi', '', '', '8077545254', '1996-02-19', '', 1, '3453f45y34544', '', '', 2, '', '2019-03-29 06:59:18', NULL, NULL, '1', '0', '0', '', '', 1, 1, 1),
@@ -312,13 +313,17 @@ INSERT INTO `customer` (`id`, `email`, `password`, `username`, `profile_picture`
 (83, 'dhrumi_testt123@yopmail.com', '$2y$10$PkgFBnx.AfhnnOszdg9awOPOjL2IwZr7o0cLh/YZoykqpoS3b2PMS', 'dhrumii', '', '', '456 456 4564', '2019-04-02', '', 0, '', '', '', 0, '', '2019-04-02 05:28:23', NULL, NULL, '1', '', '', '', '', 1, 1, 1),
 (84, 'dhrumi_testt129@yopmail.com', '$2y$10$DjG3xjZJA3vEOTpjKG0W4..H5H1E/xecGFPjLT0cFbUtsB5XW7xXG', 'Dhrumii', '', 'sgnttmjmumnahnmmtmtnt', '456 456 4564', '2019-04-02', '', 0, '', '', '', 1, '', '2019-04-02 05:29:37', '2019-04-08 19:40:42', NULL, '1', '', '', '', '9f0c2924de4b046a272a0a7fa4cf31b8e041bdd2', 1, 1, 1),
 (86, 'clicklunch244@gmail.com', '$2y$10$if4sWh4CCRloRreebzx0XelLHawCFK58YZwiYbn6vD.OBcFOb1/nq', 'lunch click', '', '', '234 234 2324', '2019-03-31', '', 0, '', '', '', 1, '', '2019-04-02 05:59:51', NULL, NULL, '0', '', '', '', '', 1, 1, 1),
-(87, '1800sri@gmail.com', '$2y$10$bG7WC9k0IwHx49xQ04lwd.uWjqBngNc.2czVtg1.0rV/N15g0Ea52', 'Sam Venkat', '', '', '734 239 3131', '1979-09-09', '', 0, '', '', '', 1, '', '2019-04-08 00:51:54', NULL, NULL, '0', '', '', '', '', 1, 1, 1),
+(87, '1800sri@gmail.com', '$2y$10$paw2cgmrxEd8ZPb3pCzzp.xqdf5knYsrQCmcrYZAgQQ4zRBzLO2oa', 'Sam Venkat', '', '', '734 239 3131', '1979-09-09', '', 0, '', '', '', 1, '', '2019-04-08 00:51:54', '2019-04-14 19:10:57', NULL, '0', '', '', '', '', 1, 1, 1),
 (88, 'black@yopmail.com', '$2y$10$ycCVF1Voii5W1ILOwy1W4uP3v0ZcCiAQQZuR1BDIAl06racopAyiW', 'Sheren  Black', '', '', '8077595254', '1996-02-19', '', 1, 'ttttt', '', '', 0, '', '2019-04-09 05:04:18', NULL, NULL, '1', '0', '0', '', '9fb65a21265bd50751cfc66b969c42d79ae1c93b', 1, 1, 1),
 (90, 'black0@yopmail.com', '$2y$10$1WnqA3dmMRqVMV5/LtSCFeh0b7KVaKeCN8Gja/79YNBTgrSP.Oq1y', 'Sheren  r', '', '', '8077095254', '1996-02-19', '', 1, 'ttttt', '', '', 0, '', '2019-04-09 05:17:11', NULL, NULL, '1', '0', '0', '', '', 1, 1, 1),
 (91, 'black8@yopmail.com', '$2y$10$L.qsTf0qdG1HO/Ez5165lu41y6gVLtiInW6GBJkY3/VnJ2Hft.3gW', 'Sheren  tira', '', '', '8077995254', '1996-02-19', '', 1, 'ttttt', '', '', 0, '', '2019-04-09 05:18:20', NULL, NULL, '1', '0', '0', '', '', 1, 1, 1),
 (92, 'black45@yopmail.com', '$2y$10$lclte1GWvYauXchAAyrt/uHdMU3JsRjZuWt8/1FMQ4WJcwy.weCL2', 'Sheren  tira', '', '', '8077695254', '1996-02-19', '', 1, 'ttttt', '', '', 1, '', '2019-04-09 05:18:51', NULL, NULL, '1', '0', '0', '', '0cc391fb3c9842f457be00354aab8073f501d36d', 1, 1, 1),
 (93, 'clicklunch24@gmail.com', '$2y$10$NpL8OF86Q6uP7IPMHSpqyerjDpYTOqfBUEikJWIvHC9H4fpvcAaYu', 'Lunch Customer', '', '1 Market Street, San Francisco, CA, USA', '807 769 2258', '1998-02-19', '', 1, 'ttttt', '', '', 1, '', '2019-04-09 05:21:30', '2019-04-09 22:07:09', NULL, '1', '0', '0', '', '', 1, 1, 1),
-(94, 'smit@yopmail.com', '', 'lunch customer', '', 'Kwami, Nigeria', '8077692250', '2000-01-01', '', 1, '5646456555555555555555', '777777777777777', '1', 1, '', '2019-04-10 06:33:41', NULL, NULL, '1', '10.333333', '11.2541555', '', '', 1, 1, 1);
+(94, 'smit@yopmail.com', '', 'lunch customer', '', 'Kwami, Nigeria', '8077692250', '2000-01-01', '', 1, '5646456555555555555555', '777777777777777', '1', 1, '', '2019-04-10 06:33:41', NULL, NULL, '1', '10.333333', '11.2541555', '', '', 1, 1, 1),
+(95, 'dhrumi.m@gmail.com', '$2y$10$om83z9zPbHNtMtqNpIML8O.oHHOwY9d/0cS7ovaWxtPL0zDkWkhpO', 'Myrtle A White', '', '', '448 868 4512', '1996-02-15', '', 1, 'fkcY-2EF0LU:APA91bGcgvma2JJzAddFjrJj1dyTrKAlT1j4zVSJIoHKqdb4yyhTo83ZJbuRweQT3MGn5GLqh-oOWMbFtqMBUeRdTywH989KMSzkNgPRXvsV0yVvq97JAFe9-TkWihn0aWDpmff4JR2Z', '', '', 1, '89', '2019-04-12 11:16:54', NULL, NULL, '1', '23.0727448', '72.5162816', '', '', 1, 1, 1),
+(96, 't949113@nwytg.net', '$2y$10$mWoglzkeHggMOMngPpPwWeckGOX9Lz.XmJDh4gVNJK3rbYWJYr8uq', 'Tom', '', '', '616 543 8765', '2000-11-10', '', 0, '', '', '', 1, '', '2019-04-13 02:19:23', NULL, NULL, '0', '', '', '', '', 1, 1, 1),
+(97, 't1044129@nwytg.net', '$2y$10$KuJTYrPSGuqH82LcWPkYFOt97JGW6vnzHa7YjIwPpy0.kltr6qPMu', 'Tom', '', '', '234 234 2345', '1971-09-09', '', 0, '', '', '', 1, '', '2019-04-13 22:08:16', NULL, NULL, '0', '', '', '', '', 1, 1, 1),
+(98, 'dhrumi@mailinator.com', '$2y$10$Cds2DuieIxBDv9Xl7wm7PeCBUfO9mCPBsxLTjcOp06iB7TF67OGWS', 'Dhrumi S', 'customer_1555303985.jpg', '', '448 865 4123', '1990-02-06', '', 0, '', '', '', 2, '94', '2019-04-15 04:51:30', '2019-04-15 10:23:05', NULL, '1', '', '', '', '', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -372,7 +377,7 @@ INSERT INTO `customer_payment_card` (`id`, `customer_id`, `card_holder_name`, `c
 (24, 33, 'mayut', 'Z6GgpHFiY2ShoKRxYmNkoQ==', 'XXXX XXXX XXXX 1111', 'Y6aepXBiaw==', 'ZqOi', '', 1, '2019-02-28 07:38:05', NULL, '2019-02-28 09:15:19'),
 (25, 33, 'mayut', 'Z6CgpXhpamuop6t4YmproQ==', 'XXXX XXXX XXXX 1881', 'Y6aepXBiaw==', 'ZqOi', '', 1, '2019-02-28 07:39:18', NULL, '2019-02-28 09:15:11'),
 (26, 33, 'mayut', 'aaCgpHFiY2ShoKRxYmNkpw==', 'XXXX XXXX XXXX 1117', 'Y6aepXBiaw==', 'ZqOi', '', 5, '2019-02-28 07:41:11', NULL, '2019-02-28 09:14:48'),
-(27, 33, 'mayut', 'ZqenpXhjZGemoqRwYWJo', 'XXXX XXXX XXXX 0005', 'Y6aepXBiaw==', 'ZqOi', '', 3, '2019-02-28 08:56:08', NULL, NULL),
+(27, 33, 'mayut', 'ZqenpXhjZGemoqRwYWJo', 'XXXX XXXX XXXX 0005', 'Y6aepXBiaw==', 'ZqOi', '', 3, '2019-02-28 08:56:08', NULL, '2019-04-12 12:35:28'),
 (28, 33, 'mayut', 'Z6KhpXJjZGWioaVyY2Rlog==', 'XXXX XXXX XXXX 2222', 'Y6aepXBiaw==', 'ZqOi', '', 1, '2019-02-28 08:56:29', NULL, '2019-02-28 09:15:09'),
 (29, 33, 'ufuf', 'aKGfqHFhZ2SgpKRwZmNjoA==', 'XXXX XXXX XXXX 5100', 'Y6OepXBiaw==', 'ZaKh', '', 2, '2019-02-28 09:04:05', NULL, '2019-02-28 09:14:51'),
 (30, 33, 'ufuf', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'Y6eepXBiaw==', 'Zqao', 'jin', 1, '2019-02-28 09:15:44', NULL, '2019-03-22 05:44:19'),
@@ -401,7 +406,17 @@ INSERT INTO `customer_payment_card` (`id`, `customer_id`, `card_holder_name`, `c
 (53, 72, 'Suma', 'Z6WlqnNmaGeioqd2Y2Zppw==', 'XXXX XXXX XXXX 2467', 'Y6SepXBjYg==', 'aqak', 'Myvisa', 1, '2019-04-02 16:09:22', NULL, '2019-04-02 21:39:33'),
 (54, 72, 'Rovan', 'Z6KkpHNia2ihoqZ0YmJkqA==', 'XXXX XXXX XXXX 1018', 'Y6mepXBjYg==', 'aqan', 'Roro', 1, '2019-04-02 16:14:06', NULL, '2019-04-02 21:44:23'),
 (55, 33, 'saurav', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'Y6SepXBjYg==', 'ZaKh', 'mayur', 1, '2019-04-11 06:53:23', NULL, NULL),
-(56, 46, 'test', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'ZKKepXBjYg==', 'ZKKi', 'test', 1, '2019-04-11 12:15:23', NULL, NULL);
+(56, 46, 'test', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'ZKKepXBjYg==', 'ZKKi', 'test', 1, '2019-04-11 12:15:23', NULL, NULL),
+(57, 45, 'sunitha', 'aKWkp3NkZmmpp6x2Z2dopQ==', 'XXXX XXXX XXXX 6555', 'Y6WepXBiaw==', 'a6Wl', 'ghjdji', 2, '2019-04-11 16:41:20', NULL, '2019-04-15 16:55:09'),
+(58, 72, 'Sridhara Venkateshaiah', 'Z6KkpHNia2ihoqZ0YmJkqA==', 'XXXX XXXX XXXX 1018', 'ZKGepXBjYg==', 'a6mf', '', 1, '2019-04-11 22:04:21', NULL, '2019-04-12 03:34:54'),
+(59, 41, 'rehan', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'Y6SepXBiaw==', 'ZKGg', 'rj', 1, '2019-04-12 06:47:18', NULL, NULL),
+(60, 41, 'rehan hussain', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'Y6SepXBiaw==', 'ZKGg', 'rj', 1, '2019-04-12 06:55:52', NULL, NULL),
+(61, 95, 'dhrumi', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'Y6SepXBjZQ==', 'ZaKh', 'ddd', 1, '2019-04-12 12:47:26', NULL, NULL),
+(62, 33, 'rehab', 'Z6GgpHFiY2ShoKRxYmNkoQ==', 'XXXX XXXX XXXX 1111', 'Y6aepXBjaw==', 'ZKKf', 'rjjj', 1, '2019-04-12 13:12:10', NULL, NULL),
+(63, 72, 'Suma', 'Z6OkpXhoZmipp6xwZWVjow==', 'XXXX XXXX XXXX 4303', 'Y6WepXBiaw==', 'Y6Co', 'My card', 1, '2019-04-13 21:46:17', NULL, NULL),
+(64, 98, 'Dhrumi Suthar', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'ZKKepXBiaw==', 'a6in', 'Dhrumi', 1, '2019-04-15 05:15:54', NULL, NULL),
+(65, 98, 'Dhrumi Suthar', 'Z6KjpXRjZmWkoadyZWRnog==', 'XXXX XXXX XXXX 4242', 'ZKKepXBiaw==', 'a6in', 'Dhrumi', 1, '2019-04-15 05:15:57', NULL, NULL),
+(66, 45, 'sunitha', 'Z6aorHlpamumpal2ZmdopQ==', 'XXXX XXXX XXXX 5555', 'Y6WepXBiaw==', 'aaWh', 'Kkjhsji', 1, '2019-04-15 11:40:23', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -508,13 +523,22 @@ INSERT INTO `delivery_address` (`id`, `customer_id`, `default_address`, `popular
 (77, 45, 0, 0, '5', '5,1st Main Road,ramachandrapura', 'Bengaluru', '56002', '12.9907873', '77.5638528', '', '3', '', '2019-04-02 16:28:53', NULL, NULL),
 (78, 72, 0, 0, '12020', 'North Meadow Springs Drive', 'Holland', '49424', '42.824506', '-86.079039', '', '4', '', '2019-04-02 16:30:40', NULL, '2019-04-02 21:59:46'),
 (79, 72, 0, 0, '7017', '7017 Fox Hills Road', 'Canton', '48187', '42.3322208', '-83.4843788', '', '3', '', '2019-04-03 02:29:37', NULL, '2019-04-02 22:01:00'),
-(80, 72, 0, 0, '9401', 'Hurstbourne Trace', 'Louisville', '58393', '38.251764', '-85.5810275', '', '4', 'Homewood', '2019-04-03 02:34:22', NULL, NULL),
-(81, 72, 0, 0, '1', 'Anystree', 'Nevada', '84849', '38.8026097', '-116.419389', '', '4', '', '2019-04-05 12:22:13', NULL, NULL),
+(80, 72, 0, 0, '9401', 'Hurstbourne Trace', 'Louisville', '58393', '38.251764', '-85.5810275', '', '4', 'Homewood', '2019-04-11 15:29:57', NULL, '2019-04-11 20:48:17'),
+(81, 72, 0, 0, '1', 'Anystree', 'Nevada', '84849', '38.8026097', '-116.419389', '', '4', '', '2019-04-11 15:18:25', NULL, '2019-04-11 20:48:25'),
 (82, 48, 0, 0, 'Science City', 'Sola', 'Ahmedabad', '38001', '23.0734419', '72.5145094', '', '2', '', '2019-04-08 00:57:37', NULL, NULL),
 (83, 87, 0, 0, '43433 ', 'Cherrywood Lane', 'Canton', '48188', '42.3013697', '-83.4683268', '', '1', 'Office', '2019-04-11 10:33:59', NULL, NULL),
 (84, 36, 0, 0, 'J-101', 'akash residency', 'ahmedabad', '123456', '23.0070113', '72.4595104', '', '2', '', '2019-04-08 09:21:48', NULL, NULL),
 (85, 36, 0, 0, 'tesr', 'tesr', 'Ahmedabad ', '123456', '23.022505', '72.5713621', 'test', '2', 'test', '2019-04-09 11:44:01', NULL, NULL),
-(86, 45, 1, 0, '78,', '3 Cross,bda Layout,banasankari', 'Bengaluru', '560085', '12.9311176', '77.5532457', 'near ganesha temple', '1', 'amma', '2019-04-11 10:33:59', NULL, NULL);
+(86, 45, 0, 0, '78,', '3 Cross,bda Layout,banasankari', 'Bengaluru', '560085', '12.9311176', '77.5532457', 'near ganesha temple', '1', 'amma', '2019-04-11 15:29:57', NULL, NULL),
+(87, 72, 0, 0, '7017', '7017 Fox Hills Road', 'Canton', '48187', '42.3322208', '-83.4843788', '', '4', '', '2019-04-14 13:43:47', NULL, NULL),
+(88, 41, 0, 0, '204', 'science city', 'Ahmedabad ', '380056', '23.0720516', '72.5164557', '', '1', '', '2019-04-12 05:47:38', NULL, NULL),
+(89, 95, 0, 0, '199/2384, Pratikha Appartment', 'Sola Road, Naranpura', 'Ahmedabad', '380016', '23.0614738', '72.5347584', 'Be aware of street dogs', '4', 'Old Home', '2019-04-13 22:14:38', NULL, NULL),
+(90, 0, 0, 1, '78', '3 rd cross,4 th block,jayanagar', 'Bengaluru', '560021', '12.9306057', '77.5898167', 'Report to the security,,', '2', 'Bangalore location', '2019-04-12 15:17:07', NULL, NULL),
+(91, 45, 0, 0, '65', '26,jai mata temple Street', 'ahmedabad,gujrat', '38856', '23.0144279', '72.5447862', 'call before coming', '4', 'other loc', '2019-04-13 17:42:04', NULL, NULL),
+(92, 97, 0, 0, '7076', 'Foxhills Road', 'Canton', '48187', '42.3325309', '-83.4838242', '', '1', '', '2019-04-14 13:43:47', NULL, NULL),
+(93, 87, 0, 0, '43434', 'Cherrystone Drive', 'Canton', '48188', '42.3048582', '-83.4694027', '', '1', 'Nearby Office', '2019-04-15 05:15:21', NULL, NULL),
+(94, 98, 1, 0, 'City Center', 'Science City Road, Sola Road', 'Ahmedabad', '380016', '23.0708888', '72.5181041', 'Hrllo', '2', 'my name', '2019-04-15 05:15:21', NULL, NULL),
+(95, 41, 0, 0, 'city center', 'science city Road, sola', 'Ahmedabad ', '380016', '23.0708888', '72.5181041', 'hellop', '2', 'huh', '2019-04-15 05:26:46', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -536,6 +560,13 @@ CREATE TABLE `delivery_address_popular_request` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `delivery_address_popular_request`
+--
+
+INSERT INTO `delivery_address_popular_request` (`id`, `customer_id`, `house_no`, `street`, `city`, `zipcode`, `latitude`, `longitude`, `address_type`, `nickname`, `created_at`, `deleted_at`) VALUES
+(1, 0, '1', 'village center dr', 'Van buren', '48111', '', '', '1', '', '2019-04-13 13:11:35', NULL);
 
 -- --------------------------------------------------------
 
@@ -572,15 +603,17 @@ INSERT INTO `delivery_boy` (`id`, `email`, `password`, `cl_id`, `profile_picture
 (1, 'test@gmail.com', '', 'CL33', '', 'my boy', '8866584215', 0, '', 2, 'Kansas City', '', '', '2019-01-10 11:05:00', NULL, NULL, '', ''),
 (2, 'BusyToots@mailinator.com', '$2y$10$oq/zjIL6zGuPK6xRahxHsOxtn0f9Yy/Dglx7w.nUstBe.OPQIR9tS', 'CL33', 'delivery_boy_1549026759.jpg', 'Ooo', '5566845124', 0, 'hjhjkhjkhjkhkj', 1, 'Kansas City', '', '', '2019-01-10 07:00:44', '2019-02-01 13:12:39', NULL, 'ae7fc785053f9a90de64d3ce0a79675c3b71d8b5', ''),
 (3, 'vendor@eww.com', '$2y$10$9ks4zgxM0zo4RfkllPf6RefgpxTqWZaWwTFm064616mkg4TbCbnoO', 'CL33', '', 'Clicklunch', '2498976678', 0, '', 2, 'Kansas City', '', '', '2019-01-12 21:03:29', NULL, NULL, '', ''),
-(4, 'suma@oviotechnologies.com', '$2y$10$Y2RT0qnBCJdhw5B5drJBDOAlRvVWyCfIKpD0Q3nmI0Sa/El9TnjlK', 'CL33', '', 'Clicklunch', '2498976678', 0, '', 1, 'Kansas City', '', '', '2019-01-12 21:04:08', NULL, NULL, '', ''),
-(5, 'sunvenk04@gmail.com', '$2y$10$O8fPYMJwGEdYuYHp0uAVNeUA/zcegvr6VgeLDxghL/bl/NfMoUbWW', 'CL33', 'delivery_boy_1554813639.jpg', 'Sunitha Vinod', '9902366824', 1, 'elD8nqF2IOA:APA91bHEfxEyyC3G6KA626GXLEhpXwCKffW7jMR7odXJsoKy9mmGaD9Gi0FLXra1jYgH42X5XXCy2S5uyXKsvtjtHc1KAAK_o5IxmeacX-HUwc6T5mXUbK69o8vbDL0bHsoqqqerA2Pc', 1, 'Kansas City', '12.98795', '77.559971', '2019-01-14 09:23:15', '2019-04-09 18:10:39', NULL, '', ''),
+(4, 'suma@oviotechnologies.com', '$2y$10$Y2RT0qnBCJdhw5B5drJBDOAlRvVWyCfIKpD0Q3nmI0Sa/El9TnjlK', 'CL33', '', 'Clicklunch', '2498976678', 0, '', 2, 'Kansas City', '', '', '2019-01-12 21:04:08', NULL, NULL, '', ''),
+(5, 'sunvenk04@gmail.com', '$2y$10$O8fPYMJwGEdYuYHp0uAVNeUA/zcegvr6VgeLDxghL/bl/NfMoUbWW', 'CL33', 'delivery_boy_1554813639.jpg', 'Sunitha Vinod', '9902366824', 0, '', 1, 'Kansas City', '', '', '2019-01-14 09:23:15', '2019-04-09 18:10:39', NULL, '', ''),
 (6, 'PieGeek@mailinator.com', '$2y$10$CYf7oiAPLbu/oA7QrLHUNeZPmFKbrZmGWd0YK5XapgQ031ngGQzuK', 'CL33', '', 'Pie Geek', '333 333 3333', 0, '', 1, 'Kansas City', '26.4685668', '-81.76799640000002', '2019-01-23 11:10:19', '2019-02-01 05:43:35', NULL, '', ''),
 (7, 'Shabby@mailinator.com', '$2y$10$DzjXChZH73AsBEWFNbLmKOL4hwB1QZoXSiK/wEztLKdi3zSEZ1qPC', 'CL33', '', 'Shabby Dog', '777 777 7777', 0, '', 1, 'Kansas City', '', '', '2019-01-23 11:11:41', NULL, NULL, '', ''),
 (8, 'ZanyThunder@mailinator.com', '$2y$10$6Y.XcJuLYA9WqPwbXREu2.GRHyg4OCKo5pdZ2JWs78sp20Y5iRHIO', 'CL33', '', 'Zany T Hunder', '774 587 1466', 0, '', 1, 'Vienna, VA, USA', '38.9012225', '-77.26526039999999', '2019-01-23 11:33:04', '2019-02-07 05:45:00', NULL, '', ''),
-(9, 'dhrumi@reconmail.com', '$2y$10$oq/zjIL6zGuPK6xRahxHsOxtn0f9Yy/Dglx7w.nUstBe.OPQIR9tS', 'DB9', 'delivery_boy_1552288161.jpeg', 'Dhrumi', '9874563210', 1, 'e97Y-zWkWTw:APA91bGJJ5WdIc_NrlM7MDkgzM-cGGaV3Xu6KsS3Hhq9gDDLBAhkD7PPOz-4iOsXKTv3mjXe1oujVd52Qn8U2F3xmqv70t8IEH6qquOhFC6U52gnXZRwZlsX73Z50J4TAZ2RbDXU8UZm', 1, 'Buckingham Palace', '23.072775', '72.516346', '2019-01-10 07:00:44', '2019-04-03 10:29:50', NULL, '9172c0eaba6526baef1ea35aac620016e3d135d4', ''),
+(9, 'dhrumi@reconmail.com', '$2y$10$oq/zjIL6zGuPK6xRahxHsOxtn0f9Yy/Dglx7w.nUstBe.OPQIR9tS', 'DB9', 'delivery_boy_1552288161.jpeg', 'Dhrumi', '9874563210', 2, 'eOgQaO9mkjc:APA91bG5G1MjhOgZYccq99UOYGy-VeRRETlPEKk5_ShlRA0Fwdqrl7SqYsSa0KRmLxCnndVTZkigZyghbvNd_e4a80So_EjhMIB_3fh_tJXzg7bcKuajj8Xw-HAIU0IU_SUZMlyU92f0', 1, 'Buckingham Palace', '0', '0', '2019-01-10 07:00:44', '2019-04-03 10:29:50', NULL, '9172c0eaba6526baef1ea35aac620016e3d135d4', ''),
 (10, 'thomas@gmail.com', '$2y$10$5YLRV0iAz6BTaD2N1QP/ju8co4eqWljBkhwuQdqI5A.SC9brzsVHK', '', 'delivery_boy_1549518890.jpg', 'Thomas', '456 778 8899', 0, '', 1, 'Greensboro, NC, USA', '36.0726354', '-79.79197540000001', '2019-02-07 05:54:50', NULL, NULL, '', ''),
 (11, 'db2@yopmail.com', '$2y$10$Umi2xUIhIwDnSkpfpPWlQuvq7f.AXtYr0.Qq27NxpR9NzGL6cRhTG', 'DB11', 'delivery_boy_1552025401.jpg', 'Delivery Boy Brown', '546 456 4565', 0, '', 1, 'Houston, TX, USA', '', '', '2019-03-08 06:00:38', '2019-03-08 06:10:01', NULL, '', ''),
-(12, 'suma1@oviotechnologies.com', '$2y$10$h/XsyoT6R6StrJIZACk77OV3Y1l7cSKA8Xp7vacfX7FpRIsvYNq2i', 'DB12', '', 'DJT', '234 324 5245', 0, '', 1, 'Canton, MI, USA', '', '', '2019-03-27 05:27:04', NULL, NULL, '', '');
+(12, 'suma1@oviotechnologies.com', '$2y$10$h/XsyoT6R6StrJIZACk77OV3Y1l7cSKA8Xp7vacfX7FpRIsvYNq2i', 'DB12', '', 'DJT', '234 324 5245', 0, '', 2, 'Canton, MI, USA', '', '', '2019-03-27 05:27:04', NULL, NULL, '', ''),
+(13, 't999190@nwytg.net', '$2y$10$LNrvSSWywlEOII8XEhUjaergsXbNbQrZGm.M3l5lOpEFF.j3cLmdC', 'DB13', '', 'DJT', '123 434 3434', 0, '', 2, 'Canton', '', '', '2019-04-13 19:14:49', NULL, NULL, '', ''),
+(14, 'sumakpn@yahoo.com', '$2y$10$57Ekv683DBFig5ySZjpmd.oBlIbQ3GSwvkjeOGej2hZ7QAtaswEgC', 'DB14', '', 'Sumana', '248 605 8831', 0, '', 1, 'Canton, MI, USA', '', '', '2019-04-13 19:40:39', NULL, NULL, '', '');
 
 -- --------------------------------------------------------
 
@@ -604,6 +637,7 @@ CREATE TABLE `delivery_dispatcher` (
   `longitude` varchar(255) NOT NULL,
   `status` int(5) NOT NULL,
   `activation_token` varchar(255) NOT NULL,
+  `remember_token` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -613,15 +647,16 @@ CREATE TABLE `delivery_dispatcher` (
 -- Dumping data for table `delivery_dispatcher`
 --
 
-INSERT INTO `delivery_dispatcher` (`id`, `email`, `password`, `profile_picture`, `full_name`, `contact_no`, `address`, `city`, `state`, `country`, `zip_code`, `latitude`, `longitude`, `status`, `activation_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'dispatcher@gmail.com', '', '', 'dispatcher one', '', '', '', '', '', '', '', '', 1, '', '2019-01-02 09:31:53', '2019-01-14 08:51:46', NULL),
-(2, 'dispatcher2@gmail.com', '', '', 'dispatcher two', '', '', '', '', '', '', '', '', 2, '', '2019-01-03 09:31:53', NULL, '2019-01-02 06:49:34'),
-(3, 'deliverydispatcher@gmail.com', '$2y$10$5bllpD4EDDtQirrFD4Jr7u.6Osz.gQx6J.7pOr8rDvW5/CzNZErgG', 'dispatcher_1547186657.png', 'Deliverydispatcher Three', '5656657567567', 'DSS and E Middle Tpke, Manchester, CT, USA', '', '', '', '', '', '', 1, '', '2019-01-02 07:07:22', '2019-01-11 06:04:17', NULL),
-(4, 'deliverydispatcher4@excellentwebworld.in', '$2y$10$Z0crSvWW855EpkF7GKL0XeIbEHkcXhCOcvU4ECAJyEzIHvyuBmguG', 'dispatcher_1553619098.png', 'Jane Mark', '488 745 6897', 'Old Canton Lane, East Lansing, MI, USA', 'Ingham County', 'Michigan', 'United States', '48823', '', '', 1, '', '2019-01-02 07:09:10', '2019-04-09 23:00:36', NULL),
-(5, 'sunvenk04@gmail.com', '$2y$10$ri16BYgvYI9xXLkIFNIatuy14yoZVw5ELFsYQ2znlin.eq4WSGX3K', '', 'Sunitha', '9902366827', '#5,1 floor,1 main road,rama chandra purhgdsj', '', '', '', '', '', '', 2, '', '2019-01-14 08:47:16', '2019-01-14 08:50:39', '2019-01-14 08:50:47'),
-(6, 'sunvenk04@gmail.com', '$2y$10$xqb0fY30frqMsmacIf.VcOPxog6CWQ8FFD/5mBdyWin/J.PNzxQMO', '', 'Sunitha', '9902366824', '#5,1 floor,1 main road,rama chandra pura', '', '', '', '', '', '', 1, '', '2019-01-14 08:52:25', NULL, NULL),
-(7, 'admin@eww.com', '$2y$10$kl0O4pDCQyRwKm6leF.xEeuH5O001T0CQf0eOjNs9AQrwPlNBsg3q', 'delivery_dispatcher_1553644117.png', 'DJT', '234 234 3252', '345 North Canton Center Road, Canton, MI, USA', 'Wayne County', 'Michigan', 'United States', '48187', '42.3045569', '-83.4872145', 1, '', '2019-03-27 05:18:13', '2019-03-27 05:18:37', '2019-03-27 05:18:41'),
-(8, 'sumakpn@yahoo.com', '$2y$10$cNMVnc99PzPJy/qmmTc4SOcdklf7IUUDsiW9YX64tYtLfHEGKUfm.', 'delivery_dispatcher_1553644359.png', 'Suma C', '248 678 5598', '7017 Fox Hills Road', 'Canton', 'MI', 'United States', '48188', '', '', 1, '', '2019-03-27 05:22:15', '2019-03-27 05:22:39', NULL);
+INSERT INTO `delivery_dispatcher` (`id`, `email`, `password`, `profile_picture`, `full_name`, `contact_no`, `address`, `city`, `state`, `country`, `zip_code`, `latitude`, `longitude`, `status`, `activation_token`, `remember_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'dispatcher@gmail.com', '', '', 'dispatcher one', '', '', '', '', '', '', '', '', 1, '', '', '2019-01-02 09:31:53', '2019-01-14 08:51:46', NULL),
+(2, 'dispatcher2@gmail.com', '', '', 'dispatcher two', '', '', '', '', '', '', '', '', 2, '', '', '2019-01-03 09:31:53', NULL, '2019-01-02 06:49:34'),
+(3, 'deliverydispatcher@gmail.com', '$2y$10$5bllpD4EDDtQirrFD4Jr7u.6Osz.gQx6J.7pOr8rDvW5/CzNZErgG', 'dispatcher_1547186657.png', 'Deliverydispatcher Three', '5656657567567', 'DSS and E Middle Tpke, Manchester, CT, USA', '', '', '', '', '', '', 1, '', '', '2019-01-02 07:07:22', '2019-01-11 06:04:17', NULL),
+(4, 'deliverydispatcher4@excellentwebworld.in', '$2y$10$Z0crSvWW855EpkF7GKL0XeIbEHkcXhCOcvU4ECAJyEzIHvyuBmguG', 'dispatcher_1555332250.jpg', 'Jane Mark Clark', '488 745 6897', 'Old Canton Lane, East Lansing, MI, USA', 'Ingham County', 'Michigan', 'United States', '48823', '', '', 1, '', '', '2019-01-02 07:09:10', '2019-04-15 18:14:10', NULL),
+(5, 'sunvenk04@gmail.com', '$2y$10$ri16BYgvYI9xXLkIFNIatuy14yoZVw5ELFsYQ2znlin.eq4WSGX3K', '', 'Sunitha', '9902366827', '#5,1 floor,1 main road,rama chandra purhgdsj', '', '', '', '', '', '', 2, '', '', '2019-01-14 08:47:16', '2019-01-14 08:50:39', '2019-01-14 08:50:47'),
+(6, 'sunvenk04@gmail.com', '$2y$10$xqb0fY30frqMsmacIf.VcOPxog6CWQ8FFD/5mBdyWin/J.PNzxQMO', '', 'Sunitha', '9902366824', '#5,1 floor,1 main road,rama chandra pura', '', '', '', '', '', '', 1, '', '', '2019-01-14 08:52:25', NULL, NULL),
+(7, 'admin@eww.com', '$2y$10$kl0O4pDCQyRwKm6leF.xEeuH5O001T0CQf0eOjNs9AQrwPlNBsg3q', 'delivery_dispatcher_1553644117.png', 'DJT', '234 234 3252', '345 North Canton Center Road, Canton, MI, USA', 'Wayne County', 'Michigan', 'United States', '48187', '42.3045569', '-83.4872145', 1, '', '', '2019-03-27 05:18:13', '2019-03-27 05:18:37', '2019-03-27 05:18:41'),
+(8, 'sumakpn@yahoo.com', '$2y$10$cNMVnc99PzPJy/qmmTc4SOcdklf7IUUDsiW9YX64tYtLfHEGKUfm.', 'delivery_dispatcher_1553644359.png', 'Suma C', '248 678 5598', '7017 Fox Hills Road', 'Canton', 'MI', 'United States', '48188', '', '', 1, '', '', '2019-03-27 05:22:15', '2019-03-27 05:22:39', NULL),
+(9, 'dhrumi.m96@gmail.com', '', 'delivery_dispatcher_1555131865.png', 'Dhrumi', '886 658 0502', 'Sattadhar Cross Road, Vardhamankrupa Society, Ghatlodiya, Ahmedabad, Gujarat, India', 'Ahmedabad', 'Gujarat', 'India', '380081', '34.0197481', '-118.28239919999999', 0, 'a0689def2e802f96d4d8d7b6e5d567c2fcde0681', '', '2019-04-13 10:34:25', '2019-04-13 18:58:51', NULL);
 
 -- --------------------------------------------------------
 
@@ -655,7 +690,8 @@ INSERT INTO `email_template` (`id`, `emat_email_type`, `emat_email_name`, `emat_
 INSERT INTO `email_template` (`id`, `emat_email_type`, `emat_email_name`, `emat_email_subject`, `emat_email_message`, `created_at`, `updated_at`, `emat_is_active`) VALUES
 (26, 8, 'account_re_activated', 'You Are Activated!', 0x3c7461626c6520646174612d6d6f64756c653d226865726f2d69636f6e2d6f75746c696e65302220646174612d7468756d623d226865726f2d69636f6e2d6f75746c696e652e706e67222077696474683d2231303025222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e223e3c74626f64793e3c74723e3c746420636c6173733d226f5f62672d6c69676874206f5f70782d78732220616c69676e3d2263656e7465722220646174612d6267636f6c6f723d224267204c6967687422207374796c653d226261636b67726f756e642d636f6c6f723a20236462653565613b70616464696e672d6c6566743a203870783b70616464696e672d72696768743a203870783b223e3c7461626c6520636c6173733d226f5f626c6f636b222077696474683d2231303025222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e22207374796c653d226d61782d77696474683a2036333270783b6d617267696e3a2030206175746f3b223e3c74626f64793e3c74723e3c746420636c6173733d226f5f62672d756c7472615f6c69676874206f5f70782d6d64206f5f70792d786c206f5f78732d70792d6d64206f5f73616e73206f5f746578742d6d64206f5f746578742d6c696768742220616c69676e3d2263656e7465722220646174612d6267636f6c6f723d22426720556c747261204c696768742220646174612d636f6c6f723d224c696768742220646174612d73697a653d2254657874204d442220646174612d6d696e3d2231352220646174612d6d61783d22323322207374796c653d226d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203070783b206c696e652d6865696768743a20323870783b206261636b67726f756e642d636f6c6f723a20726762283233352c203234352c20323530293b2070616464696e673a203430707820323470783b223e3c7461626c652063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e22207374796c653d22636f6c6f723a20726762283133302c203133372c20313534293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20313970783b223e3c74626f64793e3c74723e3c746420636c6173733d226f5f73616e73206f5f74657874206f5f746578742d7365636f6e64617279206f5f622d7072696d617279206f5f7078206f5f7079206f5f62722d6d61782220616c69676e3d2263656e7465722220646174612d636f6c6f723d225365636f6e646172792220646174612d626f726465722d746f702d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d626f74746f6d2d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d6c6566742d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d72696768742d636f6c6f723d22426f72646572205072696d6172792220646174612d73697a653d22546578742044656661756c742220646174612d6d696e3d2231322220646174612d6d61783d22323022207374796c653d22666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b6d617267696e2d746f703a203070783b6d617267696e2d626f74746f6d3a203070783b666f6e742d73697a653a20313670783b6c696e652d6865696768743a20323470783b636f6c6f723a20233234326233643b626f726465723a2032707820736f6c696420233234326233643b626f726465722d7261646975733a20393670783b70616464696e672d6c6566743a20313670783b70616464696e672d72696768743a20313670783b70616464696e672d746f703a20313670783b70616464696e672d626f74746f6d3a20313670783b223e3c696d67207372633d22687474703a2f2f31332e35382e3230312e3137382f6173736574732f696d616765732f656d61696c2d696d616765732f636865636b2d34382d7072696d6172792e706e67222077696474683d22343822206865696768743d2234382220616c743d2222207374796c653d226d61782d77696474683a20343870783b2d6d732d696e746572706f6c6174696f6e2d6d6f64653a20626963756269633b766572746963616c2d616c69676e3a206d6964646c653b626f726465723a20303b6c696e652d6865696768743a20313030253b6865696768743a206175746f3b6f75746c696e653a206e6f6e653b746578742d6465636f726174696f6e3a206e6f6e653b2220646174612d63726f703d2266616c7365223e3c2f74643e3c2f74723e3c74723e3c7464207374796c653d22666f6e742d73697a653a20323470783b206c696e652d6865696768743a20323470783b206865696768743a20323470783b223e266e6273703b3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c683220636c6173733d226f5f68656164696e67206f5f746578742d6461726b206f5f6d622d7878732220646174612d636f6c6f723d224461726b2220646174612d73697a653d2248656164696e6720322220646174612d6d696e3d2232302220646174612d6d61783d22343022207374796c653d226d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203470783b206c696e652d6865696768743a20333970783b223e3c7370616e207374796c653d22746578742d616c69676e3a206c6566743b20666f6e742d73697a653a20333070783b223e3c666f6e7420636f6c6f723d22233234326233642220666163653d22526f626f746f2c2073616e732d7365726966223e3c623e436f6e67726174756c6174696f6e733c2f623e3c2f666f6e743e3c2f7370616e3e3c666f6e7420636f6c6f723d22233234326233642220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e3c7370616e207374796c653d22666f6e742d73697a653a20333070783b223e3c623e213c2f623e3c2f7370616e3e3c2f666f6e743e3c2f68323e3c70207374796c653d22636f6c6f723a20726762283133302c203133372c20313534293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20313970783b206d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203070783b223e596f7572206163636f756e7420686173206265656e20726561637469766174656420627920636c69636b6c756e6368266e6273703b7465616d3c2f703e3c7461626c6520636c6173733d226f5f626c6f636b222077696474683d2231303025222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e22207374796c653d22636f6c6f723a20726762283133302c203133372c20313534293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20313970783b206d61782d77696474683a2036333270783b206d617267696e3a2032307078206175746f203070783b223e3c74626f64793e3c74723e3c746420636c6173733d226f5f62672d7768697465206f5f70782d6d64206f5f70792d78732220616c69676e3d2263656e74657222207374796c653d226261636b67726f756e642d636f6c6f723a207472616e73706172656e743b70616464696e672d6c6566743a20323470783b70616464696e672d72696768743a20323470783b70616464696e672d746f703a203870783b70616464696e672d626f74746f6d3a203870783b223e3c7461626c6520616c69676e3d2263656e746572222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e223e3c74626f64793e3c74723e3c74642077696474683d223330302220636c6173733d226f5f62746e206f5f62672d6461726b206f5f6272206f5f68656164696e67206f5f746578742220616c69676e3d2263656e74657222207374796c653d22666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b666f6e742d7765696768743a20626f6c643b6d617267696e2d746f703a203070783b6d617267696e2d626f74746f6d3a203070783b666f6e742d73697a653a20313670783b6c696e652d6865696768743a20323470783b6d736f2d70616464696e672d616c743a203132707820323470783b6261636b67726f756e642d636f6c6f723a20233234326233643b626f726465722d7261646975733a203470783b223e3c6120636c6173733d226f5f746578742d77686974652220687265663d2268747470733a2f2f7777772e636c69636b6c756e63682e636f6d2f636f6e746163742d757322207374796c653d22746578742d6465636f726174696f6e3a206e6f6e653b6f75746c696e653a206e6f6e653b636f6c6f723a20236666666666663b646973706c61793a20626c6f636b3b70616464696e673a203132707820323470783b6d736f2d746578742d72616973653a203370783b22207461726765743d225f626c616e6b223e566973697420436c69636b6c756e63683c2f613e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e, '2018-10-18 18:30:00', '2019-04-08 16:19:23', 1),
 (27, 9, 'shop_requested', 'New Restaurant Request Received', 0x3c7461626c6520646174612d6d6f64756c653d226865726f2d69636f6e2d6f75746c696e65302220646174612d7468756d623d226865726f2d69636f6e2d6f75746c696e652e706e67222077696474683d2231303025222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e223e3c74626f64793e3c74723e3c746420636c6173733d226f5f62672d6c69676874206f5f70782d78732220616c69676e3d2263656e7465722220646174612d6267636f6c6f723d224267204c6967687422207374796c653d226261636b67726f756e642d636f6c6f723a20236462653565613b70616464696e672d6c6566743a203870783b70616464696e672d72696768743a203870783b223e3c7461626c6520636c6173733d226f5f626c6f636b222077696474683d2231303025222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e22207374796c653d226d61782d77696474683a2036333270783b6d617267696e3a2030206175746f3b223e3c74626f64793e3c74723e3c746420636c6173733d226f5f62672d756c7472615f6c69676874206f5f70782d6d64206f5f70792d786c206f5f78732d70792d6d64206f5f73616e73206f5f746578742d6d64206f5f746578742d6c696768742220616c69676e3d2263656e7465722220646174612d6267636f6c6f723d22426720556c747261204c696768742220646174612d636f6c6f723d224c696768742220646174612d73697a653d2254657874204d442220646174612d6d696e3d2231352220646174612d6d61783d22323322207374796c653d226d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203070783b206c696e652d6865696768743a20323870783b206261636b67726f756e642d636f6c6f723a20726762283233352c203234352c20323530293b2070616464696e673a203430707820323470783b223e3c7461626c652063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e22207374796c653d22636f6c6f723a20726762283133302c203133372c20313534293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20313970783b223e3c74626f64793e3c74723e3c746420636c6173733d226f5f73616e73206f5f74657874206f5f746578742d7365636f6e64617279206f5f622d7072696d617279206f5f7078206f5f7079206f5f62722d6d61782220616c69676e3d2263656e7465722220646174612d636f6c6f723d225365636f6e646172792220646174612d626f726465722d746f702d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d626f74746f6d2d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d6c6566742d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d72696768742d636f6c6f723d22426f72646572205072696d6172792220646174612d73697a653d22546578742044656661756c742220646174612d6d696e3d2231322220646174612d6d61783d22323022207374796c653d22666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b6d617267696e2d746f703a203070783b6d617267696e2d626f74746f6d3a203070783b666f6e742d73697a653a20313670783b6c696e652d6865696768743a20323470783b636f6c6f723a20233234326233643b626f726465723a2032707820736f6c696420233234326233643b626f726465722d7261646975733a20393670783b70616464696e672d6c6566743a20313670783b70616464696e672d72696768743a20313670783b70616464696e672d746f703a20313670783b70616464696e672d626f74746f6d3a20313670783b223e3c696d67207372633d22687474703a2f2f31332e35382e3230312e3137382f6173736574732f696d616765732f656d61696c2d696d616765732f6e6f74696669636174696f6e732d34382d7072696d6172792e706e67222077696474683d22343822206865696768743d2234382220616c743d2222207374796c653d226d61782d77696474683a20343870783b2d6d732d696e746572706f6c6174696f6e2d6d6f64653a20626963756269633b766572746963616c2d616c69676e3a206d6964646c653b626f726465723a20303b6c696e652d6865696768743a20313030253b6865696768743a206175746f3b6f75746c696e653a206e6f6e653b746578742d6465636f726174696f6e3a206e6f6e653b2220646174612d63726f703d2266616c7365223e3c2f74643e3c2f74723e3c74723e3c7464207374796c653d22666f6e742d73697a653a20323470783b206c696e652d6865696768743a20323470783b206865696768743a20323470783b223e266e6273703b3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c683220636c6173733d226f5f68656164696e67206f5f746578742d6461726b206f5f6d622d7878732220646174612d636f6c6f723d224461726b2220646174612d73697a653d2248656164696e6720322220646174612d6d696e3d2232302220646174612d6d61783d22343022207374796c653d22636f6c6f723a207267622833362c2034332c203631293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20333070783b20666f6e742d7765696768743a20626f6c643b206d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203470783b206c696e652d6865696768743a20333970783b223e4e65772052657175657374205265636569766564213c2f68323e3c70207374796c653d226d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203070783b223e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e3c7370616e207374796c653d22666f6e742d73697a653a20313970783b223e7b706572736f6e5f6e616d657d206861732072657175657374656420666f72206c697374696e67266e6273703b3c2f7370616e3e3c2f666f6e743e3c7370616e207374796c653d22746578742d616c69676e3a206c6566743b20666f6e742d73697a653a20313970783b223e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e72657374617572616e74266e6273703b3c2f666f6e743e3c2f7370616e3e3c7370616e207374796c653d22666f6e742d73697a653a20313970783b20636f6c6f723a20726762283133302c203133372c20313534293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20746578742d616c69676e3a206c6566743b223e7b73686f705f6e616d657d2e3c2f7370616e3e3c2f703e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e, '2019-04-09 18:30:00', '2019-04-09 19:05:00', 1),
-(28, 10, 'order_completed', 'Thank You For Ordering', 0x3c7461626c6520646174612d6d6f64756c653d226865726f2d69636f6e2d6f75746c696e65302220646174612d7468756d623d226865726f2d69636f6e2d6f75746c696e652e706e67222077696474683d2231303025222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e223e3c74626f64793e3c74723e3c746420636c6173733d226f5f62672d6c69676874206f5f70782d78732220616c69676e3d2263656e7465722220646174612d6267636f6c6f723d224267204c6967687422207374796c653d226261636b67726f756e642d636f6c6f723a20236462653565613b70616464696e672d6c6566743a203870783b70616464696e672d72696768743a203870783b223e3c7461626c6520636c6173733d226f5f626c6f636b222077696474683d2231303025222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e22207374796c653d226d61782d77696474683a2036333270783b6d617267696e3a2030206175746f3b223e3c74626f64793e3c74723e3c746420636c6173733d226f5f62672d756c7472615f6c69676874206f5f70782d6d64206f5f70792d786c206f5f78732d70792d6d64206f5f73616e73206f5f746578742d6d64206f5f746578742d6c696768742220616c69676e3d2263656e7465722220646174612d6267636f6c6f723d22426720556c747261204c696768742220646174612d636f6c6f723d224c696768742220646174612d73697a653d2254657874204d442220646174612d6d696e3d2231352220646174612d6d61783d22323322207374796c653d226d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203070783b206c696e652d6865696768743a20323870783b206261636b67726f756e642d636f6c6f723a20726762283233352c203234352c20323530293b2070616464696e673a203430707820323470783b223e3c7461626c652063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e22207374796c653d22636f6c6f723a20726762283133302c203133372c20313534293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20313970783b223e3c74626f64793e3c74723e3c746420636c6173733d226f5f73616e73206f5f74657874206f5f746578742d7365636f6e64617279206f5f622d7072696d617279206f5f7078206f5f7079206f5f62722d6d61782220616c69676e3d2263656e7465722220646174612d636f6c6f723d225365636f6e646172792220646174612d626f726465722d746f702d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d626f74746f6d2d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d6c6566742d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d72696768742d636f6c6f723d22426f72646572205072696d6172792220646174612d73697a653d22546578742044656661756c742220646174612d6d696e3d2231322220646174612d6d61783d22323022207374796c653d22666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b6d617267696e2d746f703a203070783b6d617267696e2d626f74746f6d3a203070783b666f6e742d73697a653a20313670783b6c696e652d6865696768743a20323470783b636f6c6f723a20233234326233643b626f726465723a2032707820736f6c696420233234326233643b626f726465722d7261646975733a20393670783b70616464696e672d6c6566743a20313670783b70616464696e672d72696768743a20313670783b70616464696e672d746f703a20313670783b70616464696e672d626f74746f6d3a20313670783b223e3c696d67207372633d22687474703a2f2f31332e35382e3230312e3137382f6173736574732f696d616765732f656d61696c2d696d616765732f6e6f74696669636174696f6e732d34382d7072696d6172792e706e67222077696474683d22343822206865696768743d2234382220616c743d2222207374796c653d226d61782d77696474683a20343870783b2d6d732d696e746572706f6c6174696f6e2d6d6f64653a20626963756269633b766572746963616c2d616c69676e3a206d6964646c653b626f726465723a20303b6c696e652d6865696768743a20313030253b6865696768743a206175746f3b6f75746c696e653a206e6f6e653b746578742d6465636f726174696f6e3a206e6f6e653b2220646174612d63726f703d2266616c7365223e3c2f74643e3c2f74723e3c74723e3c7464207374796c653d22666f6e742d73697a653a20323470783b206c696e652d6865696768743a20323470783b206865696768743a20323470783b223e266e6273703b3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c683220636c6173733d226f5f68656164696e67206f5f746578742d6461726b206f5f6d622d7878732220646174612d636f6c6f723d224461726b2220646174612d73697a653d2248656164696e6720322220646174612d6d696e3d2232302220646174612d6d61783d22343022207374796c653d22636f6c6f723a207267622833362c2034332c203631293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20333070783b20666f6e742d7765696768743a20626f6c643b206d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203470783b206c696e652d6865696768743a20333970783b223e5468616e6b20596f7520466f72204f72646572696e67213c2f68323e3c70207374796c653d226d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203070783b223e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e3c7370616e207374796c653d22666f6e742d73697a653a20313970783b223e596f7572206f72646572206e6f3a207b6f726465725f69647d2066726f6d207b73686f705f6e616d657d266e6273703b3c2f7370616e3e3c2f666f6e743e3c7370616e207374796c653d22746578742d616c69676e3a206c6566743b20666f6e742d73697a653a20313970783b223e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e72657374617572616e74266e6273703b3c2f666f6e743e3c2f7370616e3e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d736572696622207374796c653d22746578742d616c69676e3a206c6566743b223e3c7370616e207374796c653d22666f6e742d73697a653a20313970783b223e6973266e6273703b3c2f7370616e3e3c2f666f6e743e3c7370616e207374796c653d22746578742d616c69676e3a206c6566743b20666f6e742d73697a653a20313970783b223e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e636f6d706c657465642e3c2f666f6e743e3c2f7370616e3e3c2f703e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e, '2019-04-11 18:30:00', '2019-04-11 12:11:40', 1);
+(28, 10, 'order_completed', 'Thank You For Ordering', 0x3c7461626c6520646174612d6d6f64756c653d226865726f2d69636f6e2d6f75746c696e65302220646174612d7468756d623d226865726f2d69636f6e2d6f75746c696e652e706e67222077696474683d2231303025222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e223e3c74626f64793e3c74723e3c746420636c6173733d226f5f62672d6c69676874206f5f70782d78732220616c69676e3d2263656e7465722220646174612d6267636f6c6f723d224267204c6967687422207374796c653d226261636b67726f756e642d636f6c6f723a20236462653565613b70616464696e672d6c6566743a203870783b70616464696e672d72696768743a203870783b223e3c7461626c6520636c6173733d226f5f626c6f636b222077696474683d2231303025222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e22207374796c653d226d61782d77696474683a2036333270783b6d617267696e3a2030206175746f3b223e3c74626f64793e3c74723e3c746420636c6173733d226f5f62672d756c7472615f6c69676874206f5f70782d6d64206f5f70792d786c206f5f78732d70792d6d64206f5f73616e73206f5f746578742d6d64206f5f746578742d6c696768742220616c69676e3d2263656e7465722220646174612d6267636f6c6f723d22426720556c747261204c696768742220646174612d636f6c6f723d224c696768742220646174612d73697a653d2254657874204d442220646174612d6d696e3d2231352220646174612d6d61783d22323322207374796c653d226d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203070783b206c696e652d6865696768743a20323870783b206261636b67726f756e642d636f6c6f723a20726762283233352c203234352c20323530293b2070616464696e673a203430707820323470783b223e3c7461626c652063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e22207374796c653d22636f6c6f723a20726762283133302c203133372c20313534293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20313970783b223e3c74626f64793e3c74723e3c746420636c6173733d226f5f73616e73206f5f74657874206f5f746578742d7365636f6e64617279206f5f622d7072696d617279206f5f7078206f5f7079206f5f62722d6d61782220616c69676e3d2263656e7465722220646174612d636f6c6f723d225365636f6e646172792220646174612d626f726465722d746f702d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d626f74746f6d2d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d6c6566742d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d72696768742d636f6c6f723d22426f72646572205072696d6172792220646174612d73697a653d22546578742044656661756c742220646174612d6d696e3d2231322220646174612d6d61783d22323022207374796c653d22666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b6d617267696e2d746f703a203070783b6d617267696e2d626f74746f6d3a203070783b666f6e742d73697a653a20313670783b6c696e652d6865696768743a20323470783b636f6c6f723a20233234326233643b626f726465723a2032707820736f6c696420233234326233643b626f726465722d7261646975733a20393670783b70616464696e672d6c6566743a20313670783b70616464696e672d72696768743a20313670783b70616464696e672d746f703a20313670783b70616464696e672d626f74746f6d3a20313670783b223e3c696d67207372633d22687474703a2f2f31332e35382e3230312e3137382f6173736574732f696d616765732f656d61696c2d696d616765732f6e6f74696669636174696f6e732d34382d7072696d6172792e706e67222077696474683d22343822206865696768743d2234382220616c743d2222207374796c653d226d61782d77696474683a20343870783b2d6d732d696e746572706f6c6174696f6e2d6d6f64653a20626963756269633b766572746963616c2d616c69676e3a206d6964646c653b626f726465723a20303b6c696e652d6865696768743a20313030253b6865696768743a206175746f3b6f75746c696e653a206e6f6e653b746578742d6465636f726174696f6e3a206e6f6e653b2220646174612d63726f703d2266616c7365223e3c2f74643e3c2f74723e3c74723e3c7464207374796c653d22666f6e742d73697a653a20323470783b206c696e652d6865696768743a20323470783b206865696768743a20323470783b223e266e6273703b3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c683220636c6173733d226f5f68656164696e67206f5f746578742d6461726b206f5f6d622d7878732220646174612d636f6c6f723d224461726b2220646174612d73697a653d2248656164696e6720322220646174612d6d696e3d2232302220646174612d6d61783d22343022207374796c653d22636f6c6f723a207267622833362c2034332c203631293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20333070783b20666f6e742d7765696768743a20626f6c643b206d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203470783b206c696e652d6865696768743a20333970783b223e5468616e6b20596f7520466f72204f72646572696e67213c2f68323e3c70207374796c653d226d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203070783b223e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e3c7370616e207374796c653d22666f6e742d73697a653a20313970783b223e596f7572206f72646572206e6f3a207b6f726465725f69647d2066726f6d207b73686f705f6e616d657d266e6273703b3c2f7370616e3e3c2f666f6e743e3c7370616e207374796c653d22746578742d616c69676e3a206c6566743b20666f6e742d73697a653a20313970783b223e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e72657374617572616e74266e6273703b3c2f666f6e743e3c2f7370616e3e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d736572696622207374796c653d22746578742d616c69676e3a206c6566743b223e3c7370616e207374796c653d22666f6e742d73697a653a20313970783b223e6973266e6273703b3c2f7370616e3e3c2f666f6e743e3c7370616e207374796c653d22746578742d616c69676e3a206c6566743b20666f6e742d73697a653a20313970783b223e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e636f6d706c657465642e3c2f666f6e743e3c2f7370616e3e3c2f703e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e, '2019-04-11 18:30:00', '2019-04-11 12:11:40', 1),
+(29, 11, 'order_cancelled', 'Order Cancelled', 0x3c7461626c6520646174612d6d6f64756c653d226865726f2d69636f6e2d6f75746c696e65302220646174612d7468756d623d226865726f2d69636f6e2d6f75746c696e652e706e67222077696474683d2231303025222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e223e3c74626f64793e3c74723e3c746420636c6173733d226f5f62672d6c69676874206f5f70782d78732220616c69676e3d2263656e7465722220646174612d6267636f6c6f723d224267204c6967687422207374796c653d226261636b67726f756e642d636f6c6f723a20236462653565613b70616464696e672d6c6566743a203870783b70616464696e672d72696768743a203870783b223e3c7461626c6520636c6173733d226f5f626c6f636b222077696474683d2231303025222063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e22207374796c653d226d61782d77696474683a2036333270783b6d617267696e3a2030206175746f3b223e3c74626f64793e3c74723e3c746420636c6173733d226f5f62672d756c7472615f6c69676874206f5f70782d6d64206f5f70792d786c206f5f78732d70792d6d64206f5f73616e73206f5f746578742d6d64206f5f746578742d6c696768742220616c69676e3d2263656e7465722220646174612d6267636f6c6f723d22426720556c747261204c696768742220646174612d636f6c6f723d224c696768742220646174612d73697a653d2254657874204d442220646174612d6d696e3d2231352220646174612d6d61783d22323322207374796c653d226d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203070783b206c696e652d6865696768743a20323870783b206261636b67726f756e642d636f6c6f723a20726762283233352c203234352c20323530293b2070616464696e673a203430707820323470783b223e3c7461626c652063656c6c73706163696e673d2230222063656c6c70616464696e673d22302220626f726465723d22302220726f6c653d2270726573656e746174696f6e22207374796c653d22636f6c6f723a20726762283133302c203133372c20313534293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20313970783b223e3c74626f64793e3c74723e3c746420636c6173733d226f5f73616e73206f5f74657874206f5f746578742d7365636f6e64617279206f5f622d7072696d617279206f5f7078206f5f7079206f5f62722d6d61782220616c69676e3d2263656e7465722220646174612d636f6c6f723d225365636f6e646172792220646174612d626f726465722d746f702d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d626f74746f6d2d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d6c6566742d636f6c6f723d22426f72646572205072696d6172792220646174612d626f726465722d72696768742d636f6c6f723d22426f72646572205072696d6172792220646174612d73697a653d22546578742044656661756c742220646174612d6d696e3d2231322220646174612d6d61783d22323022207374796c653d22666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b6d617267696e2d746f703a203070783b6d617267696e2d626f74746f6d3a203070783b666f6e742d73697a653a20313670783b6c696e652d6865696768743a20323470783b636f6c6f723a20233234326233643b626f726465723a2032707820736f6c696420233234326233643b626f726465722d7261646975733a20393670783b70616464696e672d6c6566743a20313670783b70616464696e672d72696768743a20313670783b70616464696e672d746f703a20313670783b70616464696e672d626f74746f6d3a20313670783b223e3c696d67207372633d22687474703a2f2f31332e35382e3230312e3137382f6173736574732f696d616765732f656d61696c2d696d616765732f6e6f74696669636174696f6e732d34382d7072696d6172792e706e67222077696474683d22343822206865696768743d2234382220616c743d2222207374796c653d226d61782d77696474683a20343870783b2d6d732d696e746572706f6c6174696f6e2d6d6f64653a20626963756269633b766572746963616c2d616c69676e3a206d6964646c653b626f726465723a20303b6c696e652d6865696768743a20313030253b6865696768743a206175746f3b6f75746c696e653a206e6f6e653b746578742d6465636f726174696f6e3a206e6f6e653b2220646174612d63726f703d2266616c7365223e3c2f74643e3c2f74723e3c74723e3c7464207374796c653d22666f6e742d73697a653a20323470783b206c696e652d6865696768743a20323470783b206865696768743a20323470783b223e266e6273703b3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c683220636c6173733d226f5f68656164696e67206f5f746578742d6461726b206f5f6d622d7878732220646174612d636f6c6f723d224461726b2220646174612d73697a653d2248656164696e6720322220646174612d6d696e3d2232302220646174612d6d61783d22343022207374796c653d22636f6c6f723a207267622833362c2034332c203631293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20333070783b20666f6e742d7765696768743a20626f6c643b206d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203470783b206c696e652d6865696768743a20333970783b223e596f7572204f7264657220486173204265656e2043616e63656c6c6564213c2f68323e3c70207374796c653d22746578742d616c69676e3a2063656e7465723b206d617267696e2d746f703a203070783b206d617267696e2d626f74746f6d3a203070783b223e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e3c7370616e207374796c653d22666f6e742d73697a653a20313970783b223e596f7572206f72646572206e6f3a207b6f726465725f69647d2066726f6d207b73686f705f6e616d657d266e6273703b3c2f7370616e3e3c2f666f6e743e3c7370616e207374796c653d22746578742d616c69676e3a206c6566743b20666f6e742d73697a653a20313970783b223e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e72657374617572616e7420686173206265656e3c2f666f6e743e3c2f7370616e3e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d736572696622207374796c653d22746578742d616c69676e3a206c6566743b223e3c7370616e207374796c653d22666f6e742d73697a653a20313970783b223e266e6273703b3c2f7370616e3e3c2f666f6e743e3c7370616e207374796c653d22746578742d616c69676e3a206c6566743b20666f6e742d73697a653a20313970783b223e3c666f6e7420636f6c6f723d22233832383939612220666163653d2248656c7665746963612c20417269616c2c2073616e732d7365726966223e63616e63656c6c65643c2f666f6e743e3c2f7370616e3e3c7370616e207374796c653d22636f6c6f723a20726762283133302c203133372c20313534293b20666f6e742d66616d696c793a2048656c7665746963612c20417269616c2c2073616e732d73657269663b20666f6e742d73697a653a20313970783b20746578742d616c69676e3a206c6566743b223e2e20436f6e7461637420636c69636b6c756e6368207465616d20666f7220616e792071756572792e3c2f7370616e3e3c2f703e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c2f74643e3c2f74723e3c2f74626f64793e3c2f7461626c653e3c62723e, '2019-04-13 18:30:00', '2019-04-13 12:55:31', 1);
 
 -- --------------------------------------------------------
 
@@ -740,9 +776,9 @@ CREATE TABLE `highlight` (
 --
 
 INSERT INTO `highlight` (`id`, `txt1`, `txt2`, `txt3`, `updated_at`) VALUES
-(1, '25', 'Minutes Saved', 'By Ordering With Us', '2019-04-02 07:48:26'),
+(1, '30', 'Minutes Saved', 'By Ordering With Us', '2019-04-14 02:26:44'),
 (2, '99', '% Lunches Delivered', 'Accurately On Time,Every Time', '2019-04-05 18:12:19'),
-(3, '25', 'Restaurant', 'Options Per Week', '2019-04-02 07:45:45');
+(3, '15', 'Restaurant', 'Options Per Week', '2019-04-14 02:26:03');
 
 -- --------------------------------------------------------
 
@@ -777,7 +813,7 @@ CREATE TABLE `item` (
 --
 
 INSERT INTO `item` (`id`, `shop_id`, `name`, `short_name`, `cuisine_id`, `quantity`, `price`, `offer_price`, `item_description`, `item_picture`, `is_combo`, `category_id`, `inventory_status`, `recommended`, `notify_stock`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(18, 52, 'Masala Frankie', 'masala-frienkie', 10, 39, '60.00', '56.00', 'Combine The Mashed Potatoes, Carrot, Cheese, Onions, Chat Masala Powder, Lemon Juice And Salt', 'item_1541501653.jpg', 0, '3', 1, 0, 12, 1, '2018-11-06 06:24:13', NULL, NULL),
+(18, 52, 'Masala Frankie', 'masala-frienkie', 10, 34, '60.00', '56.00', 'Combine The Mashed Potatoes, Carrot, Cheese, Onions, Chat Masala Powder, Lemon Juice And Salt', 'item_1541501653.jpg', 0, '3', 1, 0, 12, 1, '2018-11-06 06:24:13', NULL, NULL),
 (19, 52, 'Chinese Frankie', 'chinese-frankie', 10, 98, '90.00', '89.00', 'Mashed Potatoes, Carrot, Cheese, Onions, Chat Masala Powder, Lemon Juice And Salt', 'item_1541501826.jpeg', 0, '3', 0, 0, 0, 1, '2018-11-06 06:27:06', NULL, NULL),
 (20, 52, 'Chicken Pizza', 'chicken-pizza', 1, 10, '200.00', '189.00', 'Our Family Will Never Guess That This Fun Twist On Typical Pizza Uses Up Leftover Pesto. Loaded With Protein, Hearty Slices Of This Chicken Pizza\\\" Will Fill Them Up Fast!', 'item_1542019186.png', 1, '3', 1, 0, 0, 1, '2019-04-04 16:11:56', NULL, NULL),
 (21, 52, 'Test', 'test', 10, 1, '33.33', '10.00', 'Dfgdfg', 'item_1542018900.jpg', 1, '3', 0, 0, 0, 1, '2018-11-12 06:05:00', NULL, '2018-11-12 06:05:24'),
@@ -791,22 +827,37 @@ INSERT INTO `item` (`id`, `shop_id`, `name`, `short_name`, `cuisine_id`, `quanti
 (29, 58, 'French Fries', 'french-fries', 19, 2, '15.00', '10.00', 'Spicy And Tasty', 'item_1547462625.jpg', 0, '3', 1, 0, 0, 0, '2019-01-14 10:43:45', NULL, '2019-04-05 15:05:33'),
 (30, 58, 'Veg Meal + Coco Drinks', 'veg-meal-coco-drinks', 9, 38, '20.00', '15.00', 'Biriyani + Coco Drinks', 'item_1547462856.jpg', 1, '3', 1, 0, 2, 0, '2019-04-04 16:14:59', NULL, '2019-04-05 15:05:26'),
 (31, 62, 'Ice Cream', 'ice-cream', 2, 100, '166.00', '150.00', 'Eld Our Little One?s First Birthday Here. The Cake Was Also Made By Fiona From The Restaurant And Was Exactly How I Wanted It. Was Guided By The Owner As To Where I Could Find Party Decorations As Per Our Colour Theme. We Only Needed To Deliver The Things To Them And Did Not Have To Worry About Anything. The Guests Appreciated The Ambience And The Food.. Thank You To The Entire Team For Making Our Special Day Perfect And Hassle Free And Providing Lip Smacking Food To Our Guests.', 'item_1547722922.png', 0, '7', 1, 0, 40, 1, '2019-01-17 11:02:02', NULL, NULL),
-(32, 52, 'Farmhouse Pizza', 'farmhouse-pizza', 20, 31, '120.00', '100.00', 'Delightful Combination Of Onion, Capsicum, Tomato & Grilled Mushroom', 'item_1554800309.jpg', 0, '3', 1, 0, 0, 1, '2019-04-09 14:29:20', NULL, NULL),
-(33, 52, 'Veg Parcel', 'veg-parcel', 3, 48, '30.00', '25.00', 'Mexican Herbs Sprinkled On Onion, Capsicum, Tomato & Jalapeno', 'item_1551249143.png', 0, '3', 1, 0, 0, 1, '2019-02-27 06:32:23', NULL, NULL),
+(32, 52, 'Farmhouse Pizza', 'farmhouse-pizza', 20, 27, '120.00', '100.00', 'Delightful Combination Of Onion, Capsicum, Tomato & Grilled Mushroom', 'item_1554800309.jpg', 0, '3', 1, 0, 0, 1, '2019-04-09 14:29:20', NULL, NULL),
+(33, 52, 'Veg Parcel', 'veg-parcel', 3, 47, '30.00', '25.00', 'Mexican Herbs Sprinkled On Onion, Capsicum, Tomato & Jalapeno', 'item_1551249143.png', 0, '3', 1, 0, 0, 1, '2019-02-27 06:32:23', NULL, NULL),
 (34, 58, 'Pizza', 'pizza', 18, 1, '23.00', '22.00', '', '', 0, '5', 1, 1, 0, 0, '2019-04-04 16:14:11', NULL, '2019-04-05 15:05:28'),
 (36, 58, 'Pan Cake', 'pan-cake', 20, 0, '55.00', '5.00', 'Cake', '', 0, '6', 1, 0, 0, 1, '2019-04-05 15:20:23', NULL, NULL),
-(37, 58, 'Cheese Pizza', 'cheese-pizza', 26, 99, '100.00', '99.00', 'Sddf', '', 0, '5', 1, 0, 0, 1, '2019-04-05 15:21:56', NULL, NULL),
-(38, 58, 'Tacos', 'tacos', 20, 7, '66.00', '6.00', '', '', 0, '3', 1, 0, 0, 1, '2019-04-05 15:51:15', NULL, NULL),
+(37, 58, 'Cheese Pizza', 'cheese-pizza', 26, 98, '100.00', '99.00', 'Sddf', '', 0, '5', 1, 0, 0, 1, '2019-04-05 15:21:56', NULL, NULL),
+(38, 58, 'Tacos', 'tacos', 20, 5, '66.00', '6.00', '', '', 0, '3', 1, 0, 0, 1, '2019-04-05 15:51:15', NULL, NULL),
 (39, 58, 'Honey Cake', 'honey-cake', 18, 43, '55.00', '5.00', 'Fghfg', 'item_1554460210.jpg', 0, '2', 1, 0, 0, 1, '2019-04-05 16:00:24', NULL, NULL),
 (40, 58, 'Coke Float', 'coke-float', 9, 100, '10.00', '5.00', '', 'item_1554460901.jpg', 0, '1', 1, 0, 0, 1, '2019-04-05 16:11:41', NULL, NULL),
 (41, 58, 'Mc Save Pack', 'mc-save-pack', 20, 0, '20.30', '20.00', '', 'item_1554460963.jpg', 1, '5', 0, 0, 0, 1, '2019-04-05 16:12:43', NULL, NULL),
-(42, 86, 'Mexican Rice With Salsa Curry', 'mexican-rice-with-salsa-curry', 19, 77, '148.00', '100.00', 'Cottage Cheese Bell Pepper Rice', 'item_1554466525.jpg', 0, '3', 1, 1, 0, 1, '2019-04-05 17:47:37', NULL, NULL),
-(43, 86, 'Punjabi Platter', 'punjabi-platter', 9, 86, '12.00', '10.00', 'Paneer Tikka Served With Kulcha Bread, Salad And Buttermilk.', 'item_1554466753.jpg', 0, '5', 1, 1, 0, 1, '2019-04-09 16:34:30', NULL, NULL),
-(44, 86, 'Corn Flakes And Milk', 'corn-flakes-and-milk', 3, 0, '12.00', '10.00', 'Corn Flakes And Milk Corn Flakes And Milk', 'item_1554466868.jpg', 1, '3', 0, 0, 0, 1, '2019-04-05 17:51:08', NULL, NULL),
+(42, 86, 'Mexican Rice With Salsa Curry', 'mexican-rice-with-salsa-curry', 19, 71, '148.00', '100.00', 'Cottage Cheese Bell Pepper Rice', 'item_1554466525.jpg', 0, '3', 1, 1, 0, 1, '2019-04-05 17:47:37', NULL, NULL),
+(43, 86, 'Punjabi Platter', 'punjabi-platter', 9, 83, '12.00', '10.00', 'Paneer Tikka Served With Kulcha Bread, Salad And Buttermilk.', 'item_1554466753.jpg', 0, '5', 1, 1, 0, 1, '2019-04-09 16:34:30', NULL, NULL),
+(44, 86, 'Corn Flakes And Milk', 'corn-flakes-and-milk', 3, 0, '12.00', '10.00', 'Corn Flakes And Milk Corn Flakes And Milk', 'item_1555051231.jpg', 1, '3', 0, 0, 0, 1, '2019-04-12 12:10:31', NULL, NULL),
 (45, 88, 'Pizza', 'pizza-1', 9, 5, '200.00', '150.00', 'Capsicum, Fresh Tomatoes', 'item_1554703380.jpg', 0, '5', 1, 1, 0, 1, '2019-04-08 11:34:55', NULL, NULL),
-(46, 94, 'Idli +Vada', 'idli-vada', 9, 96, '80.00', '50.00', '2 Idlis ,1 Vada, Sambar Chutney', '', 0, '11', 1, 0, 0, 1, '2019-04-09 13:57:54', NULL, NULL),
+(46, 94, 'Idli +Vada', 'idli-vada', 9, 95, '80.00', '50.00', '2 Idlis ,1 Vada, Sambar Chutney', '', 0, '11', 1, 0, 0, 1, '2019-04-09 13:57:54', NULL, NULL),
 (47, 94, 'Idli', 'idli-1', 9, 100, '50.00', '40.00', '2 Idlis,sambar ,chutney', '', 0, '11', 1, 0, 0, 1, '2019-04-09 14:00:28', NULL, NULL),
-(48, 94, 'Idli +Vada +Coffee', 'idli-vada-coffee', 9, 90, '80.00', '50.00', '2 Idlis,1 Vada,sambar,chutney, 1 Cup Coffee', '', 1, '11', 1, 0, 10, 1, '2019-04-09 14:02:29', NULL, NULL);
+(48, 94, 'Idli +Vada +Coffee', 'idli-vada-coffee', 9, 90, '80.00', '50.00', '2 Idlis,1 Vada,sambar,chutney, 1 Cup Coffee', '', 1, '11', 1, 0, 10, 1, '2019-04-09 14:02:29', NULL, NULL),
+(49, 96, 'Butter Naan', 'butter-naan', 9, 25, '2.00', '1.99', 'Fresh Baked Tandoor Bread With Butter', '', 0, '5', 1, 1, 0, 1, '2019-04-11 23:54:07', NULL, NULL),
+(50, 96, 'Paneer Tikka Masala', 'paneer-tikka-masala', 9, 24, '12.00', '11.00', 'Paneer Cubes Cooked In Extra Creamy Sauce', '', 0, '3', 1, 1, 0, 1, '2019-04-12 00:03:41', NULL, NULL),
+(51, 96, 'Veg Biriyani', 'veg-biriyani', 9, 16, '13.00', '12.00', 'Rice Cooked With Vegetables', '', 0, '5', 1, 1, 0, 1, '2019-04-11 23:59:09', NULL, NULL),
+(52, 96, 'Naan+Paneer Tikka Masala+Veg Biriyani', 'naanpaneer-tikka-masalaveg-biriyani', 9, 24, '18.00', '16.00', '', '', 1, '5', 1, 0, 0, 1, '2019-04-12 00:01:41', NULL, NULL),
+(53, 96, 'Veg Hakka Noodles', 'veg-hakka-noodles', 1, 28, '19.00', '15.00', 'Vegetables With Noodles', '', 0, '5', 1, 0, 0, 1, '2019-04-12 00:01:58', NULL, NULL),
+(54, 86, 'Lebanese Grilled Wrap', 'lebanese-grilled-wrap', 19, 0, '36.00', '32.00', '', 'item_1555048374.png', 1, '3', 0, 0, 0, 1, '2019-04-12 11:22:54', NULL, NULL),
+(55, 86, 'Chocolate Avalanche', 'chocolate-avalanche', 20, 0, '229.00', '119.00', 'Chocolate Mousse, Brownie, Sponge And Chocolate Truffle Served Together To Treat You Chocolate Mousse, Brownie, Sponge And Chocolate Truffle Served Together To Treat You', 'item_1555048534.jpg', 0, '6', 0, 0, 0, 1, '2019-04-12 11:25:34', NULL, NULL),
+(56, 86, 'Our Famous Pancake Stacks', 'our-famous-pancake-stacks', 20, 0, '20.00', '12.50', 'With Your Choice Of Whipped Butter, Cream Or Ice Cream, All Stacks Are Served With Maple Syrup.', 'item_1555051166.jpg', 0, '6', 0, 0, 0, 1, '2019-04-12 12:09:26', NULL, NULL),
+(57, 100, 'Vegetarian Pizza', 'vegetarian-pizza', 20, 24, '15.00', '14.00', '', '', 0, '5', 1, 1, 0, 1, '2019-04-13 20:24:22', NULL, NULL),
+(58, 100, 'Cheese Pizza', 'cheese-pizza-1', 20, 19, '13.00', '12.00', '', '', 0, '5', 1, 1, 0, 1, '2019-04-13 20:22:57', NULL, NULL),
+(59, 100, 'Salad', 'salad', 20, 19, '8.00', '6.00', '', '', 0, '2', 1, 0, 0, 1, '2019-04-13 20:17:55', NULL, NULL),
+(60, 100, 'Coke', 'coke-1', 20, 19, '8.00', '7.00', '', '', 0, '1', 1, 1, 0, 1, '2019-04-13 20:18:50', NULL, NULL),
+(61, 100, 'Pizza +Coke+ Salad', 'pizza-coke-salad', 20, 20, '25.00', '22.00', '', '', 1, '5', 1, 0, 0, 1, '2019-04-13 20:21:00', NULL, NULL),
+(62, 58, 'Spagetti', 'spagetti', 20, 30, '15.00', '12.00', 'Spaghetti Is Long, Thin Pasta. ... Spaghetti Is A Popular Italian Pasta, Often Served With A Tomato Sauce Sometimes Called Spaghetti Sauce. The Italian Word Spago Means String, And Spaghetti Is The Plural Of Spago ? A Description Of What Spaghetti Looks Like.', 'item_1555169981.png', 0, '5', 1, 0, 0, 1, '2019-04-13 21:11:21', NULL, NULL),
+(63, 86, 'Diet Coke', 'diet-coke', 20, 0, '22.00', '20.00', 'Diet Coke? Is The Perfect Balance Of Crisp And Refreshing, Now Available In Sweet New Cans. Enjoy The Great Diet Cola Flavor That\\\'s Fizzing Delicious!', 'item_1555304687.jpg', 0, '1', 0, 1, 0, 1, '2019-04-15 10:34:47', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1018,7 +1069,84 @@ INSERT INTO `notification` (`id`, `notification_type`, `customer_id`, `order_id`
 (164, 6, 33, 354, 'New message for order: CL354', 'Please take your order', '2019-04-11 11:21:40'),
 (165, 6, 33, 354, 'New message for order: CL354', 'Hi! I am near you', '2019-04-11 11:21:46'),
 (166, 6, 33, 354, 'New message for order: CL354', 'Please take your order', '2019-04-11 11:21:53'),
-(167, 6, 33, 354, 'New message for order: CL354', 'Please open a door and take your order', '2019-04-11 11:21:59');
+(167, 6, 33, 354, 'New message for order: CL354', 'Please open a door and take your order', '2019-04-11 11:21:59'),
+(168, 4, 41, 381, 'Delivery Boy Assigned', 'Dhrumi will deliver your order. You can call on 9874563210 for live update.', '2019-04-12 07:13:59'),
+(169, 5, 41, 381, 'Order Picked Up', 'Your order no. CL381 has been picked up', '2019-04-12 07:14:27'),
+(170, 6, 41, 381, 'New message for order: CL381', 'Hi, I am near you', '2019-04-12 07:14:44'),
+(171, 6, 41, 381, 'New message for order: CL381', 'Please open your door and take your order', '2019-04-12 07:14:49'),
+(172, 6, 41, 381, 'New message for order: CL381', 'Please take your order', '2019-04-12 07:14:54'),
+(173, 4, 41, 382, 'Delivery Boy Assigned', 'Dhrumi will deliver your order. You can call on 9874563210 for live update.', '2019-04-12 07:22:33'),
+(174, 5, 41, 382, 'Order Picked Up', 'Your order no. CL382 has been picked up', '2019-04-12 07:23:02'),
+(175, 4, 41, 382, 'Delivery Boy Assigned', 'Dhrumi will deliver your order. You can call on 9874563210 for live update.', '2019-04-12 07:25:49'),
+(176, 5, 41, 382, 'Order Picked Up', 'Your order no. CL382 has been picked up', '2019-04-12 07:25:58'),
+(177, 4, 33, 383, 'Delivery Boy Assigned', 'Dhrumi will deliver your order. You can call on 9874563210 for live update.', '2019-04-12 07:32:42'),
+(178, 5, 33, 383, 'Order Picked Up', 'Your order no. CL383 has been picked up', '2019-04-12 07:33:03'),
+(179, 6, 33, 383, 'New message for order: CL383', 'Please take your order', '2019-04-12 07:33:19'),
+(180, 4, 33, 383, 'Delivery Boy Assigned', 'Dhrumi will deliver your order. You can call on 9874563210 for live update.', '2019-04-12 07:36:19'),
+(181, 5, 33, 383, 'Order Picked Up', 'Your order no. CL383 has been picked up', '2019-04-12 07:36:24'),
+(182, 4, 41, 384, 'Delivery Boy Assigned', 'Dhrumi will deliver your order. You can call on 9874563210 for live update.', '2019-04-12 07:46:19'),
+(183, 5, 41, 384, 'Order Picked Up', 'Your order no. CL384 has been picked up', '2019-04-12 07:46:28'),
+(184, 6, 41, 384, 'New message for order: CL384', 'Please take your order', '2019-04-12 07:46:34'),
+(185, 7, 41, 384, 'Order Completed', 'Your order no. CL384 has been delivered', '2019-04-12 07:46:39'),
+(186, 4, 41, 385, 'Delivery Boy Assigned', 'Dhrumi will deliver your order. You can call on 9874563210 for live update.', '2019-04-12 09:02:13'),
+(187, 5, 41, 385, 'Order Picked Up', 'Your order no. CL385 has been picked up', '2019-04-12 09:08:41'),
+(188, 7, 41, 385, 'Order Completed', 'Your order no. CL385 has been delivered', '2019-04-12 09:09:32'),
+(189, 1, 25, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(190, 1, 33, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(191, 1, 35, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(192, 1, 36, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(193, 1, 41, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(194, 1, 43, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(195, 1, 45, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(196, 1, 48, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(197, 1, 73, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(198, 1, 92, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(199, 1, 93, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(200, 1, 94, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(201, 1, 95, 0, 'Hello', 'Test 66', '2019-04-12 13:39:24'),
+(202, 2, 48, 404, 'Order Accepted by Restaurant', 'Your order no. CL404 has been accepted by restaurant.', '2019-04-13 07:13:06'),
+(203, 3, 48, 404, 'Order Cancelled', 'Your order no. CL404 from Excellent Webworld Cafe has been cancelled.', '2019-04-13 07:13:29'),
+(204, 2, 48, 405, 'Order Accepted by Restaurant', 'Your order no. CL405 has been accepted by restaurant.', '2019-04-13 07:28:34'),
+(205, 3, 48, 405, 'Order Cancelled', 'Your order no. CL405 from Excellent Webworld Cafe has been cancelled.', '2019-04-13 07:28:43'),
+(206, 2, 48, 406, 'Order Accepted by Restaurant', 'Your order no. CL406 has been accepted by restaurant.', '2019-04-13 07:29:58'),
+(207, 2, 48, 407, 'Order Accepted by Restaurant', 'Your order no. CL407 has been accepted by restaurant.', '2019-04-13 07:55:20'),
+(208, 2, 45, 386, 'Order Accepted by Restaurant', 'Your order no. CL386 has been accepted by restaurant.', '2019-04-13 17:20:27'),
+(209, 2, 45, 375, 'Order Accepted by Restaurant', 'Your order no. CL375 has been accepted by restaurant.', '2019-04-13 17:20:34'),
+(210, 2, 33, 367, 'Order Accepted by Restaurant', 'Your order no. CL367 has been accepted by restaurant.', '2019-04-13 17:20:40'),
+(211, 2, 33, 364, 'Order Accepted by Restaurant', 'Your order no. CL364 has been accepted by restaurant.', '2019-04-13 17:20:48'),
+(212, 2, 72, 417, 'Order Accepted by Restaurant', 'Your order no. CL417 has been accepted by restaurant.', '2019-04-13 21:50:40'),
+(213, 4, 72, 417, 'Delivery Boy Assigned', 'Sumana will deliver your order. You can call on 248 605 8831 for live update.', '2019-04-13 21:53:04'),
+(214, 5, 72, 417, 'Order Picked Up', 'Your order no. CL417 has been picked up', '2019-04-13 21:53:25'),
+(215, 6, 72, 417, 'New message for order: CL417', 'Please open a door and take your order', '2019-04-13 21:53:40'),
+(216, 7, 72, 417, 'Order Completed', 'Your order no. CL417 has been delivered', '2019-04-13 21:57:21'),
+(217, 7, 72, 417, 'Order Completed', 'Your order no. CL417 has been delivered', '2019-04-13 21:57:30'),
+(218, 2, 72, 419, 'Order Accepted by Restaurant', 'Your order no. CL419 has been accepted by restaurant.', '2019-04-13 22:24:23'),
+(219, 2, 72, 421, 'Order Accepted by Restaurant', 'Your order no. CL421 has been accepted by restaurant.', '2019-04-13 22:24:31'),
+(220, 2, 72, 420, 'Order Accepted by Restaurant', 'Your order no. CL420 has been accepted by restaurant.', '2019-04-13 22:24:38'),
+(221, 2, 72, 372, 'Order Accepted by Restaurant', 'Your order no. CL372 has been accepted by restaurant.', '2019-04-13 22:24:54'),
+(222, 4, 72, 420, 'Delivery Boy Assigned', 'Sumana will deliver your order. You can call on 248 605 8831 for live update.', '2019-04-13 22:28:00'),
+(223, 5, 72, 420, 'Order Picked Up', 'Your order no. CL420 has been picked up', '2019-04-13 22:28:39'),
+(224, 7, 72, 420, 'Order Completed', 'Your order no. CL420 has been delivered', '2019-04-13 22:29:10'),
+(225, 2, 72, 422, 'Order Accepted by Restaurant', 'Your order no. CL422 has been accepted by restaurant.', '2019-04-13 23:13:29'),
+(226, 2, 72, 423, 'Order Accepted by Restaurant', 'Your order no. CL423 has been accepted by restaurant.', '2019-04-13 23:17:40'),
+(227, 2, 72, 424, 'Order Accepted by Restaurant', 'Your order no. CL424 has been accepted by restaurant.', '2019-04-13 23:17:50'),
+(228, 4, 72, 424, 'Delivery Boy Assigned', 'Sumana will deliver your order. You can call on 248 605 8831 for live update.', '2019-04-13 23:20:24'),
+(229, 5, 72, 424, 'Order Picked Up', 'Your order no. CL424 has been picked up', '2019-04-13 23:20:43'),
+(230, 7, 72, 424, 'Order Completed', 'Your order no. CL424 has been delivered', '2019-04-13 23:20:52'),
+(231, 2, 72, 425, 'Order Accepted by Restaurant', 'Your order no. CL425 has been accepted by restaurant.', '2019-04-13 23:23:09'),
+(232, 2, 41, 428, 'Order Accepted by Restaurant', 'Your order no. CL428 has been accepted by restaurant.', '2019-04-15 05:29:10'),
+(233, 4, 41, 428, 'Delivery Boy Assigned', 'Dhrumi will deliver your order. You can call on 9874563210 for live update.', '2019-04-15 05:36:39'),
+(234, 2, 98, 430, 'Order Accepted by Restaurant', 'Your order no. CL430 has been accepted by restaurant.', '2019-04-15 07:14:16'),
+(235, 2, 98, 430, 'Order Accepted by Restaurant', 'Your order no. CL430 has been accepted by restaurant.', '2019-04-15 07:14:48'),
+(236, 3, 98, 430, 'Order Rejected by Restaurant', 'Your order no. CL430 has been rejected by restaurant.', '2019-04-15 07:17:18'),
+(237, 3, 98, 430, 'Order Rejected by Restaurant', 'Your order no. CL430 has been rejected by restaurant.', '2019-04-15 07:17:50'),
+(238, 3, 98, 430, 'Order Rejected by Restaurant', 'Your order no. CL430 has been rejected by restaurant.', '2019-04-15 07:18:09'),
+(239, 2, 98, 430, 'Order Accepted by Restaurant', 'Your order no. CL430 has been accepted by restaurant.', '2019-04-15 07:18:24'),
+(240, 6, 98, 430, 'Order Completed By Shop', 'Order CL430 completed by shop', '2019-04-15 07:34:58'),
+(241, 2, 98, 430, 'Order Cancel By Shop', 'Order CL430 rejected', '2019-04-15 07:35:15'),
+(242, 2, 98, 430, 'Order Cancel By Shop', 'Order CL430 rejected', '2019-04-15 07:35:34'),
+(243, 6, 98, 430, 'Order Completed By Shop', 'Order CL430 completed by shop', '2019-04-15 07:35:45'),
+(244, 2, 98, 430, 'Order Cancel By Shop', 'Order CL430 rejected', '2019-04-15 07:37:35');
 
 -- --------------------------------------------------------
 
@@ -1264,7 +1392,7 @@ INSERT INTO `orders` (`id`, `customer_id`, `shop_id`, `order_type`, `later_time`
 (287, 36, 86, '5', '', '89.80', '60.00', '25.00', '', '0.00', '6.00', '2.00', '2019-04-11', '02:29 PM', 5, 35, 9, 1, 0, '', 'CL287_1554710375.png', 0, '0', '2019-04-08 13:29:35', '2019-04-08 13:30:02', NULL),
 (288, 36, 52, '2', '07:40 PM', '445.33', '399.60', '10.96', '', '0.00', '6.00', '2.70', '0000-00-00', '', 4, 34, 9, 1, 0, '', 'CL288_1554714641.png', 0, '0', '2019-04-08 14:40:41', '2019-04-08 14:44:19', NULL),
 (289, 36, 52, '1', '', '77.29', '56.00', '16.42', '', '0.00', '6.00', '2.70', '0000-00-00', '', 4, 84, 9, 1, 0, '', 'CL289_1554715389.png', 0, '0', '2019-04-08 14:53:09', '2019-04-08 14:53:42', NULL),
-(290, 36, 52, '2', '09:56 PM', '1115.81', '1011.40', '16.42', '', '0.00', '6.00', '2.70', '0000-00-00', '', 1, 13, 0, 1, 0, '', 'CL290_1554716515.png', 0, '0', '2019-04-08 15:11:55', '2019-04-08 15:27:11', NULL),
+(290, 36, 52, '2', '09:56 PM', '1115.81', '1011.40', '16.42', '', '0.00', '6.00', '2.70', '0000-00-00', '', 3, 13, 5, 1, 0, '', 'CL290_1554716515.png', 0, '0', '2019-04-08 15:11:55', '2019-04-08 15:27:11', NULL),
 (291, 36, 52, '5', '', '337.06', '300.00', '10.96', '', '0.00', '6.00', '2.70', '2019-04-10', '04:28 AM', 4, 35, 9, 1, 0, '', 'CL291_1554717563.png', 0, '0', '2019-04-08 15:29:23', '2019-04-08 15:30:06', NULL),
 (292, 36, 52, '6', '', '445.33', '399.60', '0.00', '', '0.00', '6.00', '2.70', '2019-04-11', '01:31 PM', 1, 0, 0, 1, 0, '', 'CL292_1554717705.png', 0, '0', '2019-04-08 15:31:45', '2019-04-08 15:43:27', NULL),
 (293, 36, 52, '5', '', '77.29', '56.00', '16.42', '', '0.00', '6.00', '2.70', '2019-04-13', '07:45 PM', 4, 84, 9, 1, 0, '', 'CL293_1554718582.png', 0, '0', '2019-04-08 15:46:22', '2019-04-08 15:46:45', NULL),
@@ -1311,8 +1439,8 @@ INSERT INTO `orders` (`id`, `customer_id`, `shop_id`, `order_type`, `later_time`
 (334, 36, 86, '3', '', '133.00', '100.00', '0.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 2, 0, 0, 1, 0, '', 'CL334_1554802788.png', 0, '0', '2019-04-09 15:09:48', NULL, NULL),
 (335, 36, 52, '1', '', '628.25', '567.00', '11.92', '', '0.00', '6.00', '2.70', '0000-00-00', '', 1, 34, 0, 1, 0, '', 'CL335_1554804896.png', 0, '0', '2019-04-09 15:44:56', '2019-04-09 15:52:54', NULL),
 (336, 36, 52, '1', '', '237.97', '207.00', '12.96', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 34, 0, 1, 0, '', 'CL336_1554806262.png', 0, '0', '2019-04-09 16:07:42', NULL, NULL),
-(337, 36, 52, '3', '', '73.83', '56.00', '0.00', '', '0.00', '6.00', '2.70', '0000-00-00', '', 3, 0, 9, 1, 0, '', 'CL337_1554806507.png', 1, '0', '2019-04-09 16:11:47', '2019-04-09 16:12:02', NULL),
-(338, 45, 94, '1', '', '54.50', '50.00', '1.00', '', '0.00', '6.00', '1.00', '0000-00-00', '', 6, 53, 5, 1, 0, '', 'CL338_1554813280.png', 0, '0', '2019-04-09 18:04:40', '2019-04-09 18:34:52', NULL),
+(337, 36, 52, '3', '', '73.83', '56.00', '0.00', '', '0.00', '6.00', '2.70', '0000-00-00', '', 3, 0, 5, 1, 0, '', 'CL337_1554806507.png', 1, '0', '2019-04-09 16:11:47', '2019-04-09 16:12:02', NULL),
+(338, 45, 94, '1', '', '54.50', '50.00', '1.00', '', '0.00', '6.00', '1.00', '0000-00-00', '', 3, 53, 9, 1, 0, '', 'CL338_1554813280.png', 0, '0', '2019-04-09 18:04:40', '2019-04-09 18:34:52', NULL),
 (339, 33, 52, '1', '', '62.37', '56.00', '1.50', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 47, 0, 1, 0, '', 'CL339_1554901309.png', 0, '0', '2019-04-10 18:31:49', NULL, NULL),
 (340, 33, 52, '1', '', '164.55', '150.00', '1.50', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 47, 0, 1, 0, '', 'CL340_1554901414.png', 0, '0', '2019-04-10 18:33:34', NULL, NULL),
 (341, 33, 58, '1', '', '8.23', '5.00', '2.90', '', '0.00', '6.00', '0.50', '0000-00-00', '', 0, 47, 0, 1, 0, '', 'CL341_1554901476.png', 0, '0', '2019-04-10 18:34:36', NULL, NULL),
@@ -1325,12 +1453,12 @@ INSERT INTO `orders` (`id`, `customer_id`, `shop_id`, `order_type`, `later_time`
 (348, 72, 58, '1', '', '13.55', '10.00', '2.90', '', '0.00', '6.00', '0.50', '0000-00-00', '', 0, 81, 0, 1, 2, '', 'CL348_1554950852.png', 0, '0', '2019-04-11 02:47:32', NULL, NULL),
 (349, 36, 86, '1', '', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 2, 33, 0, 1, 0, '', 'CL349_1554960892.png', 0, '0', '2019-04-11 11:04:52', NULL, NULL),
 (350, 36, 86, '1', '', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 2, 34, 0, 1, 0, '', 'CL350_1554961157.png', 0, '0', '2019-04-11 11:09:17', NULL, NULL),
-(351, 36, 86, '1', '', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 6, 34, 9, 1, 0, '', 'CL351_1554961515.png', 0, '0', '2019-04-11 11:15:15', NULL, NULL),
+(351, 36, 86, '1', '', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 3, 34, 5, 1, 0, '', 'CL351_1554961515.png', 0, '0', '2019-04-11 11:15:15', NULL, NULL),
 (352, 33, 52, '1', '', '431.97', '424.00', '5.00', '', '0.00', '0.20', '0.50', '0000-00-00', '', 2, 70, 0, 1, 2, '', 'CL352.png', 0, '0', '2019-04-11 12:40:22', NULL, NULL),
 (353, 33, 86, '5', '', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '2019-04-16', '05:40 AM', 8, 71, 0, 1, 0, '', 'CL353.png', 0, '0', '2019-04-11 15:11:00', NULL, NULL);
 INSERT INTO `orders` (`id`, `customer_id`, `shop_id`, `order_type`, `later_time`, `total`, `subtotal`, `delivery_charges`, `promocode_id`, `promo_amount`, `tax`, `service_charge`, `schedule_date`, `schedule_time`, `order_status`, `delivery_address_id`, `delivery_boy_id`, `payment_status`, `payment_mode`, `transaction_id`, `QR_code`, `favourite`, `rating`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (354, 33, 52, '5', '', '62.37', '56.00', '1.50', '', '0.00', '6.00', '2.70', '2019-04-11', '05:41 AM', 5, 36, 9, 1, 0, '', 'CL354.png', 0, '0', '2019-04-11 15:12:01', '2019-04-11 16:06:58', NULL),
-(355, 45, 58, '1', '', '8.02', '5.00', '13.35', '51', '10.00', '6.00', '0.50', '0000-00-00', '', 0, 86, 0, 1, 2, '', 'CL355_1554978901.png', 0, '0', '2019-04-11 10:35:01', NULL, NULL),
+(355, 45, 58, '1', '', '8.02', '5.00', '13.35', '51', '10.00', '6.00', '0.50', '0000-00-00', '', 0, 86, 0, 1, 2, '', 'CL355_1554978901.png', 1, '0', '2019-04-11 10:35:01', NULL, NULL),
 (356, 48, 58, '2', '10:13 PM', '181.92', '178.00', '3.00', '59', '10.00', '6.00', '0.50', '0000-00-00', '', 0, 50, 0, 1, 0, '', 'CL356_1554983040.png', 0, '0', '2019-04-11 11:44:00', NULL, NULL),
 (357, 48, 86, '3', '', '21.60', '20.00', '0.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 50, 0, 1, 0, '', 'CL357_1554983452.png', 0, '0', '2019-04-11 11:50:52', NULL, NULL),
 (358, 48, 86, '1', '', '13.80', '10.00', '3.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 50, 0, 1, 0, '', 'CL358_1554983483.png', 0, '0', '2019-04-11 11:51:23', NULL, NULL),
@@ -1339,14 +1467,80 @@ INSERT INTO `orders` (`id`, `customer_id`, `shop_id`, `order_type`, `later_time`
 (361, 46, 86, '4', '06:55 PM', '118.80', '110.00', '0.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 0, 0, 1, 0, '', 'CL361_1554985537.png', 0, '0', '2019-04-11 12:25:37', NULL, NULL),
 (362, 48, 86, '4', '08:56 PM', '118.80', '110.00', '0.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 0, 0, 1, 0, '', 'CL362_1554985604.png', 0, '0', '2019-04-11 12:26:44', NULL, NULL),
 (363, 33, 86, '1', '', '100.60', '110.00', '25.00', '60', '40.00', '6.00', '2.00', '0000-00-00', '', 0, 47, 0, 1, 0, '', 'CL363.png', 0, '0', '2019-04-11 18:09:44', NULL, NULL),
-(364, 33, 58, '1', '', '243.69', '226.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 0, 47, 0, 1, 0, '', 'CL364.png', 0, '0', '2019-04-11 18:11:38', NULL, NULL),
+(364, 33, 58, '1', '', '243.69', '226.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 1, 47, 0, 1, 0, '', 'CL364.png', 0, '0', '2019-04-11 18:11:38', '2019-04-13 22:50:48', NULL),
 (365, 36, 86, '4', '11:30 PM', '262.60', '220.00', '0.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 0, 0, 1, 0, '', 'CL365.png', 0, '0', '2019-04-11 18:50:17', NULL, NULL),
 (366, 36, 86, '2', '07:39 PM', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 33, 0, 1, 0, '', 'CL366.png', 0, '0', '2019-04-11 18:51:40', NULL, NULL),
-(367, 33, 58, '1', '', '161.69', '159.00', '3.00', '51', '10.00', '6.00', '0.50', '0000-00-00', '', 0, 47, 0, 1, 0, '', 'CL367.png', 0, '0', '2019-04-11 18:53:30', NULL, NULL),
+(367, 33, 58, '1', '', '161.69', '159.00', '3.00', '51', '10.00', '6.00', '0.50', '0000-00-00', '', 3, 47, 14, 1, 0, '', 'CL367.png', 0, '0', '2019-04-11 18:53:30', '2019-04-13 22:50:40', NULL),
 (368, 36, 86, '1', '', '262.60', '220.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 33, 0, 1, 0, '', 'CL368.png', 0, '0', '2019-04-11 19:05:09', NULL, NULL),
 (369, 36, 86, '1', '', '262.60', '220.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 33, 0, 1, 0, '', 'CL369.png', 0, '0', '2019-04-11 19:05:43', NULL, NULL),
 (370, 36, 86, '1', '', '338.20', '330.00', '25.00', '60', '40.00', '6.00', '2.00', '0000-00-00', '', 0, 33, 0, 1, 0, '', 'CL370.png', 0, '0', '2019-04-11 19:21:13', NULL, NULL),
-(371, 33, 86, '1', '', '338.20', '330.00', '25.00', '60', '40.00', '6.00', '2.00', '0000-00-00', '', 0, 47, 0, 1, 0, '', 'CL371.png', 0, '0', '2019-04-11 19:26:00', NULL, NULL);
+(371, 33, 86, '1', '', '338.20', '330.00', '25.00', '60', '40.00', '6.00', '2.00', '0000-00-00', '', 3, 47, 14, 1, 0, '', 'CL371.png', 0, '0', '2019-04-11 19:26:00', NULL, NULL),
+(372, 72, 58, '1', '', '243.69', '226.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 1, 87, 0, 1, 2, '', 'CL372_1554996618.png', 0, '0', '2019-04-11 15:30:18', '2019-04-14 03:54:54', NULL),
+(373, 72, 58, '1', '', '116.96', '107.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 3, 87, 14, 1, 2, '', 'CL373_1554996862.png', 0, '0', '2019-04-11 15:34:22', '2019-04-13 22:51:00', NULL),
+(374, 72, 58, '3', '', '-5.33', '5.00', '0.00', '51', '10.00', '6.00', '0.50', '0000-00-00', '', 1, 87, 0, 1, 2, '', 'CL374_1554997010.png', 0, '0', '2019-04-11 15:36:50', '2019-04-13 22:50:55', NULL),
+(375, 45, 58, '1', '', '22.17', '20.00', '3.00', '53', '2.00', '6.00', '0.50', '0000-00-00', '', 3, 53, 14, 1, 0, '', 'CL375.png', 0, '0', '2019-04-11 22:13:21', '2019-04-13 22:50:33', NULL),
+(376, 72, 58, '1', '', '116.96', '107.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 3, 87, 14, 1, 2, '', 'CL376_1555019925.png', 0, '0', '2019-04-11 21:58:45', '2019-04-13 22:50:17', NULL),
+(377, 72, 52, '1', '', '74.74', '66.00', '3.00', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 0, 0, 1, 2, '', 'CL377_1555020537.png', 0, '0', '2019-04-11 22:08:57', NULL, NULL),
+(378, 72, 52, '1', '', '80.18', '71.00', '3.00', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 0, 0, 1, 2, '', 'CL378_1555020633.png', 0, '0', '2019-04-11 22:10:33', NULL, NULL),
+(379, 72, 52, '1', '', '80.18', '71.00', '3.00', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 0, 0, 1, 2, '', 'CL379_1555020687.png', 0, '0', '2019-04-11 22:11:27', NULL, NULL),
+(380, 72, 52, '1', '', '63.87', '56.00', '3.00', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 0, 0, 1, 2, '', 'CL380_1555020731.png', 0, '0', '2019-04-11 22:12:11', NULL, NULL),
+(381, 41, 86, '1', '', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 88, 9, 1, 0, '', 'CL381.png', 0, '0', '2019-04-12 12:36:11', NULL, NULL),
+(382, 41, 86, '1', '', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 88, 9, 1, 0, '', 'CL382.png', 0, '4.9', '2019-04-12 12:46:09', NULL, NULL),
+(383, 33, 86, '1', '', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 47, 9, 1, 0, '', 'CL383.png', 0, '0', '2019-04-12 13:00:27', NULL, NULL),
+(384, 41, 86, '1', '', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 6, 88, 9, 1, 0, '', 'CL384.png', 0, '0', '2019-04-12 13:15:12', NULL, NULL),
+(385, 41, 86, '1', '', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 6, 88, 9, 1, 0, '', 'CL385.png', 0, '0', '2019-04-12 13:28:05', NULL, NULL),
+(386, 45, 58, '1', '', '111.63', '107.00', '3.00', '53', '5.00', '6.00', '0.50', '0000-00-00', '', 3, 53, 14, 1, 0, '', 'CL386_1555063671.png', 0, '0', '2019-04-12 10:07:51', '2019-04-13 22:50:27', NULL),
+(387, 33, 52, '1', '', '431.97', '424.00', '5.00', '', '0.00', '0.20', '0.50', '0000-00-00', '', 0, 70, 0, 1, 2, '', 'CL387.png', 0, '0', '2019-04-12 16:39:41', NULL, NULL),
+(388, 95, 86, '2', '07:15 PM', '160.00', '135.00', '25.00', '59', '10.00', '6.00', '2.00', '0000-00-00', '', 0, 89, 0, 1, 2, '', 'CL388_1555068007.png', 0, '0', '2019-04-12 11:20:07', NULL, NULL),
+(389, 72, 52, '1', '', '73.24', '66.00', '1.50', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 13, 0, 1, 2, '', 'CL389_1555069472.png', 0, '0', '2019-04-12 11:44:32', NULL, NULL),
+(390, 72, 58, '1', '', '116.96', '107.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 3, 87, 14, 1, 2, '', 'CL390_1555069510.png', 0, '0', '2019-04-12 11:45:10', '2019-04-13 22:50:05', NULL),
+(391, 72, 86, '1', '', '143.80', '110.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 87, 0, 1, 2, '', 'CL391_1555069545.png', 0, '0', '2019-04-12 11:45:45', NULL, NULL),
+(392, 95, 86, '3', '', '284.04', '273.00', '0.00', '57', '10.00', '6.00', '2.00', '0000-00-00', '', 0, 0, 0, 1, 2, '', 'CL392_1555071452.png', 0, '0', '2019-04-12 12:17:32', NULL, NULL),
+(393, 95, 86, '1', '', '603.88', '546.00', '25.00', '57', '10.00', '6.00', '2.00', '0000-00-00', '', 0, 89, 0, 1, 2, '', 'CL393_1555071694.png', 1, '0', '2019-04-12 12:21:34', NULL, NULL),
+(394, 95, 86, '6', '', '382.86', '364.50', '0.00', '56', '10.00', '6.00', '2.00', '2019-04-14', '09:46 AM', 0, 0, 0, 1, 0, '', 'CL394.png', 1, '0', '2019-04-12 18:17:33', NULL, NULL),
+(395, 33, 52, '1', '', '62.37', '56.00', '1.50', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 18, 0, 1, 0, '', 'CL395.png', 0, '0', '2019-04-12 18:42:29', NULL, NULL),
+(396, 72, 52, '1', '', '98.24', '89.00', '1.50', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 87, 0, 1, 2, '', 'CL396_1555076157.png', 0, '0', '2019-04-12 13:35:57', NULL, NULL),
+(397, 72, 58, '1', '', '9.39', '6.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 3, 87, 14, 1, 2, '', 'CL397_1555076368.png', 0, '0', '2019-04-12 13:39:28', '2019-04-13 22:49:58', NULL),
+(398, 95, 52, '2', '11:41 AM', '39.55', '35.00', '1.50', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 89, 0, 1, 0, '', 'CL398.png', 0, '5.0', '2019-04-12 19:11:32', NULL, NULL),
+(399, 72, 86, '1', '', '46.60', '20.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 87, 0, 1, 2, '', 'CL399_1555076513.png', 0, '0', '2019-04-12 13:41:53', NULL, NULL),
+(400, 72, 52, '1', '', '98.24', '89.00', '1.50', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 87, 0, 1, 2, '', 'CL400_1555077196.png', 0, '0', '2019-04-12 13:53:16', NULL, NULL),
+(401, 95, 86, '2', '10:54 AM', '156.22', '121.50', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 89, 0, 1, 0, '', 'CL401.png', 0, '0', '2019-04-12 19:24:54', NULL, NULL),
+(402, 95, 86, '1', '', '35.80', '10.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 89, 0, 1, 0, '', 'CL402.png', 0, '0', '2019-04-12 19:26:30', NULL, NULL),
+(403, 95, 52, '3', '', '431.97', '424.00', '0.00', '', '0.00', '0.20', '0.50', '0000-00-00', '', 0, 0, 0, 1, 2, '', 'CL403.png', 0, '0', '2019-04-12 19:35:20', NULL, NULL),
+(404, 48, 86, '4', '01:15 PM', '37.91', '39.00', '0.00', '53', '3.90', '6.00', '2.00', '0000-00-00', '', 8, 0, 0, 1, 0, '', 'CL404_1555139569.png', 0, '0', '2019-04-13 07:12:49', '2019-04-13 12:43:29', NULL),
+(405, 48, 86, '3', '', '13.50', '12.50', '0.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 8, 0, 0, 1, 0, '', 'CL405_1555140498.png', 0, '0', '2019-04-13 07:28:18', '2019-04-13 12:58:43', NULL),
+(406, 48, 86, '4', '01:30 PM', '32.40', '30.00', '0.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 1, 0, 0, 1, 0, '', 'CL406_1555140584.png', 0, '0', '2019-04-13 07:29:44', '2019-04-13 12:59:58', NULL),
+(407, 48, 86, '3', '', '13.50', '12.50', '0.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 1, 0, 0, 1, 0, '', 'CL407_1555142107.png', 0, '0', '2019-04-13 07:55:07', '2019-04-13 13:25:20', NULL),
+(408, 33, 52, '3', '', '60.87', '56.00', '0.00', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 0, 0, 1, 0, '', 'CL408.png', 0, '0', '2019-04-13 13:25:47', NULL, NULL),
+(409, 33, 52, '3', '', '60.87', '56.00', '0.00', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 0, 0, 1, 0, '', 'CL409.png', 0, '0', '2019-04-13 13:25:48', NULL, NULL),
+(410, 72, 58, '1', '', '116.96', '107.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 6, 87, 13, 1, 2, '', 'CL410_1555161838.png', 0, '0', '2019-04-13 13:23:58', '2019-04-13 19:00:59', NULL),
+(411, 72, 58, '3', '', '5.33', '5.00', '0.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 3, 0, 14, 1, 2, '', 'CL411_1555167896.png', 0, '0', '2019-04-13 15:04:56', '2019-04-13 20:37:19', NULL),
+(412, 72, 58, '1', '', '18.98', '15.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 6, 87, 14, 1, 2, '', 'CL412_1555170264.png', 0, '0', '2019-04-13 15:44:24', '2019-04-13 22:49:36', NULL),
+(413, 72, 58, '1', '', '8.33', '15.00', '3.00', '51', '10.00', '6.00', '0.50', '0000-00-00', '', 6, 87, 14, 1, 2, '', 'CL413_1555170384.png', 0, '0', '2019-04-13 15:46:24', '2019-04-13 21:22:07', NULL),
+(414, 45, 94, '1', '', '54.50', '50.00', '1.00', '', '0.00', '6.00', '1.00', '0000-00-00', '', 0, 56, 0, 1, 0, '', 'CL414.png', 1, '0', '2019-04-13 22:50:47', NULL, NULL),
+(415, 45, 86, '2', '11:55 PM', '46.60', '20.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 91, 0, 1, 0, '', 'CL415.png', 0, '0', '2019-04-13 23:13:10', NULL, NULL),
+(416, 45, 86, '2', '11:55 PM', '46.60', '20.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 3, 91, 5, 1, 0, '', 'CL416.png', 0, '0', '2019-04-13 23:13:22', NULL, NULL),
+(417, 72, 58, '1', '', '9.39', '6.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 6, 87, 14, 1, 0, '', 'CL417.png', 0, '0', '2019-04-14 03:17:59', '2019-04-14 03:20:40', NULL),
+(418, 97, 58, '1', '', '34.95', '30.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 3, 92, 14, 1, 2, '', 'CL418_1555193691.png', 0, '0', '2019-04-13 22:14:51', '2019-04-14 03:54:46', NULL),
+(419, 72, 58, '1', '', '9.39', '6.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 3, 87, 14, 1, 0, '', 'CL419_1555193803.png', 0, '0', '2019-04-13 22:16:43', '2019-04-14 03:54:23', NULL),
+(420, 72, 58, '1', '', '9.39', '6.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 6, 87, 14, 1, 0, '', 'CL420.png', 0, '0', '2019-04-14 03:50:25', '2019-04-14 03:54:37', NULL),
+(421, 72, 58, '3', '', '113.96', '107.00', '0.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 1, 0, 0, 1, 0, '', 'CL421.png', 0, '0', '2019-04-14 03:51:16', '2019-04-14 03:54:31', NULL),
+(422, 72, 58, '3', '', '6.39', '6.00', '0.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 1, 0, 0, 1, 0, '', 'CL422_1555197157.png', 0, '0', '2019-04-13 23:12:37', '2019-04-14 04:43:29', NULL),
+(423, 72, 58, '3', '', '31.95', '30.00', '0.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 1, 0, 0, 1, 0, '', 'CL423_1555197334.png', 0, '0', '2019-04-13 23:15:34', '2019-04-14 04:47:40', NULL),
+(424, 72, 58, '1', '', '34.95', '30.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 6, 87, 14, 1, 0, '', 'CL424_1555197399.png', 0, '0', '2019-04-13 23:16:39', '2019-04-14 04:47:50', NULL),
+(425, 72, 58, '1', '', '16.85', '13.00', '3.00', '', '0.00', '6.00', '0.50', '0000-00-00', '', 3, 87, 14, 1, 0, '', 'CL425_1555197764.png', 0, '0', '2019-04-13 23:22:44', '2019-04-14 04:53:09', NULL),
+(426, 87, 52, '1', '', '100.42', '91.00', '1.50', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 93, 0, 1, 2, '', 'CL426_1555249449.png', 0, '0', '2019-04-14 13:44:09', NULL, NULL),
+(427, 48, 86, '1', '', '43.36', '57.00', '25.00', '60', '40.00', '6.00', '2.00', '0000-00-00', '', 0, 82, 0, 1, 0, '', 'CL427_1555263607.png', 0, '0', '2019-04-14 17:40:07', NULL, NULL),
+(428, 41, 86, '2', '03:55 PM', '46.60', '20.00', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 4, 95, 9, 1, 0, '', 'CL428.png', 0, '0', '2019-04-15 10:58:36', '2019-04-15 10:59:10', NULL),
+(429, 98, 86, '1', '', '156.22', '121.50', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 94, 0, 1, 0, '', 'CL429_1555308325.png', 0, '0', '2019-04-15 06:05:25', NULL, NULL),
+(430, 98, 100, '2', '01:32 PM', '52.18', '48.00', '10.00', '52', '10.00', '6.00', '5.00', '0000-00-00', '', 2, 94, 0, 1, 0, '', 'CL430_1555311746.png', 0, '0', '2019-04-15 07:02:26', NULL, NULL),
+(431, 45, 58, '1', '', '572.48', '535.00', '13.35', '52', '10.00', '6.00', '0.50', '0000-00-00', '', 0, 86, 0, 1, 0, '', 'CL431_1555320439.png', 1, '0', '2019-04-15 09:27:19', NULL, NULL),
+(432, 98, 86, '1', '', '156.22', '121.50', '25.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 94, 0, 1, 0, '', 'CL432.png', 0, '0', '2019-04-15 14:59:34', NULL, NULL),
+(433, 48, 86, '4', '06:14 PM', '21.60', '20.00', '0.00', '', '0.00', '6.00', '2.00', '0000-00-00', '', 0, 0, 0, 1, 0, '', 'CL433_1555328646.png', 0, '0', '2019-04-15 11:44:06', NULL, NULL),
+(434, 45, 100, '3', '', '46.62', '42.00', '0.00', '', '0.00', '6.00', '5.00', '0000-00-00', '', 0, 0, 0, 1, 0, '', 'CL434.png', 0, '0', '2019-04-15 17:20:27', NULL, NULL),
+(435, 33, 52, '3', '', '60.87', '56.00', '0.00', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 0, 0, 1, 0, '', 'CL435.png', 0, '0', '2019-04-15 19:22:32', NULL, NULL),
+(436, 33, 52, '3', '', '60.87', '56.00', '0.00', '', '0.00', '6.00', '2.70', '0000-00-00', '', 0, 0, 0, 1, 0, '', 'CL436.png', 0, '0', '2019-04-15 19:23:11', NULL, NULL),
+(437, 33, 86, '6', '', '118.80', '110.00', '0.00', '', '0.00', '6.00', '2.00', '2019-04-16', '07:26 PM', 0, 0, 0, 1, 0, '', 'CL437.png', 0, '0', '2019-04-15 19:26:19', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1748,7 +1942,87 @@ INSERT INTO `order_items` (`id`, `order_id`, `item_id`, `item_price`, `variants_
 (493, 368, 42, '100.00', '10.00', 2, '220.00'),
 (494, 369, 42, '100.00', '10.00', 2, '220.00'),
 (495, 370, 42, '100.00', '10.00', 3, '330.00'),
-(496, 371, 42, '100.00', '10.00', 3, '330.00');
+(496, 371, 42, '100.00', '10.00', 3, '330.00'),
+(497, 372, 37, '99.00', '8.00', 2, '214.00'),
+(498, 372, 38, '6.00', '0.00', 2, '12.00'),
+(499, 373, 37, '99.00', '8.00', 1, '107.00'),
+(500, 374, 39, '5.00', '0.00', 1, '5.00'),
+(501, 375, 41, '20.00', '0.00', 1, '20.00'),
+(502, 376, 37, '99.00', '8.00', 1, '107.00'),
+(503, 377, 18, '56.00', '10.00', 1, '66.00'),
+(504, 378, 18, '56.00', '15.00', 1, '71.00'),
+(505, 379, 18, '56.00', '15.00', 1, '71.00'),
+(506, 380, 18, '56.00', '0.00', 1, '56.00'),
+(507, 381, 42, '100.00', '10.00', 1, '110.00'),
+(508, 382, 42, '100.00', '10.00', 1, '110.00'),
+(509, 383, 42, '100.00', '10.00', 1, '110.00'),
+(510, 384, 42, '100.00', '10.00', 1, '110.00'),
+(511, 385, 42, '100.00', '10.00', 1, '110.00'),
+(512, 386, 37, '99.00', '8.00', 1, '107.00'),
+(513, 387, 32, '100.00', '0.00', 1, '100.00'),
+(514, 387, 32, '100.00', '62.00', 2, '324.00'),
+(515, 388, 56, '12.50', '0.00', 2, '25.00'),
+(516, 388, 42, '100.00', '10.00', 1, '110.00'),
+(517, 389, 18, '56.00', '10.00', 1, '66.00'),
+(518, 390, 37, '99.00', '8.00', 1, '107.00'),
+(519, 391, 42, '100.00', '10.00', 1, '110.00'),
+(520, 392, 55, '119.00', '2.50', 2, '243.00'),
+(521, 392, 44, '10.00', '20.00', 1, '30.00'),
+(522, 393, 54, '32.00', '7.00', 14, '546.00'),
+(523, 394, 55, '119.00', '2.50', 3, '364.50'),
+(524, 395, 18, '56.00', '0.00', 1, '56.00'),
+(525, 396, 19, '89.00', '0.00', 1, '89.00'),
+(526, 397, 38, '6.00', '0.00', 1, '6.00'),
+(527, 398, 33, '25.00', '10.00', 1, '35.00'),
+(528, 399, 44, '10.00', '10.00', 1, '20.00'),
+(529, 400, 19, '89.00', '0.00', 1, '89.00'),
+(530, 401, 55, '119.00', '2.50', 1, '121.50'),
+(531, 402, 43, '10.00', '0.00', 1, '10.00'),
+(532, 403, 32, '100.00', '0.00', 1, '100.00'),
+(533, 403, 32, '100.00', '62.00', 2, '324.00'),
+(534, 404, 54, '32.00', '7.00', 1, '39.00'),
+(535, 405, 56, '12.50', '0.00', 1, '12.50'),
+(536, 406, 43, '10.00', '0.00', 1, '10.00'),
+(537, 406, 44, '10.00', '10.00', 1, '20.00'),
+(538, 407, 56, '12.50', '0.00', 1, '12.50'),
+(539, 408, 18, '56.00', '0.00', 1, '56.00'),
+(540, 409, 18, '56.00', '0.00', 1, '56.00'),
+(541, 410, 37, '99.00', '8.00', 1, '107.00'),
+(542, 411, 39, '5.00', '0.00', 1, '5.00'),
+(543, 412, 62, '12.00', '3.00', 1, '15.00'),
+(544, 413, 62, '12.00', '3.00', 1, '15.00'),
+(545, 414, 46, '50.00', '0.00', 1, '50.00'),
+(546, 415, 43, '10.00', '0.00', 1, '10.00'),
+(547, 415, 44, '10.00', '0.00', 1, '10.00'),
+(548, 416, 43, '10.00', '0.00', 1, '10.00'),
+(549, 416, 44, '10.00', '0.00', 1, '10.00'),
+(550, 417, 38, '6.00', '0.00', 1, '6.00'),
+(551, 418, 41, '20.00', '10.00', 1, '30.00'),
+(552, 419, 38, '6.00', '0.00', 1, '6.00'),
+(553, 420, 38, '6.00', '0.00', 1, '6.00'),
+(554, 421, 37, '99.00', '8.00', 1, '107.00'),
+(555, 422, 38, '6.00', '0.00', 1, '6.00'),
+(556, 423, 41, '20.00', '10.00', 1, '30.00'),
+(557, 424, 41, '20.00', '10.00', 1, '30.00'),
+(558, 425, 62, '12.00', '1.00', 1, '13.00'),
+(559, 426, 19, '89.00', '2.00', 1, '91.00'),
+(560, 427, 54, '32.00', '5.00', 1, '37.00'),
+(561, 427, 44, '10.00', '10.00', 1, '20.00'),
+(562, 428, 63, '20.00', '0.00', 1, '20.00'),
+(563, 429, 55, '119.00', '2.50', 1, '121.50'),
+(564, 430, 61, '22.00', '0.00', 1, '22.00'),
+(565, 430, 58, '12.00', '0.00', 1, '12.00'),
+(566, 430, 58, '12.00', '2.00', 1, '14.00'),
+(567, 431, 37, '99.00', '8.00', 5, '535.00'),
+(568, 432, 55, '119.00', '2.50', 1, '121.50'),
+(569, 433, 63, '20.00', '0.00', 1, '20.00'),
+(570, 434, 57, '14.00', '1.00', 1, '15.00'),
+(571, 434, 60, '7.00', '0.00', 1, '7.00'),
+(572, 434, 59, '6.00', '0.00', 1, '6.00'),
+(573, 434, 58, '12.00', '2.00', 1, '14.00'),
+(574, 435, 18, '56.00', '0.00', 1, '56.00'),
+(575, 436, 18, '56.00', '0.00', 1, '56.00'),
+(576, 437, 42, '100.00', '10.00', 1, '110.00');
 
 -- --------------------------------------------------------
 
@@ -2396,7 +2670,71 @@ INSERT INTO `order_item_variant` (`id`, `order_item_id`, `variant_group_id`, `va
 (961, 493, 25, 125, '10.00'),
 (962, 494, 25, 125, '10.00'),
 (963, 495, 25, 125, '10.00'),
-(964, 496, 25, 125, '10.00');
+(964, 496, 25, 125, '10.00'),
+(965, 497, 16, 121, '8.00'),
+(966, 499, 16, 121, '8.00'),
+(967, 502, 16, 121, '8.00'),
+(968, 503, 7, 18, '10.00'),
+(969, 504, 7, 20, '15.00'),
+(970, 505, 7, 20, '15.00'),
+(971, 507, 25, 125, '10.00'),
+(972, 508, 25, 125, '10.00'),
+(973, 509, 25, 125, '10.00'),
+(974, 510, 25, 125, '10.00'),
+(975, 511, 25, 125, '10.00'),
+(976, 512, 16, 121, '8.00'),
+(977, 513, 21, 161, '0.00'),
+(978, 513, 22, 167, '0.00'),
+(979, 514, 21, 161, '0.00'),
+(980, 514, 22, 166, '50.00'),
+(981, 514, 23, 168, '10.00'),
+(982, 514, 23, 169, '2.00'),
+(983, 516, 25, 125, '10.00'),
+(984, 517, 7, 18, '10.00'),
+(985, 518, 16, 121, '8.00'),
+(986, 519, 25, 125, '10.00'),
+(987, 520, 25, 187, '2.50'),
+(988, 521, 25, 188, '10.00'),
+(989, 521, 25, 189, '10.00'),
+(990, 522, 25, 185, '2.00'),
+(991, 522, 25, 186, '5.00'),
+(992, 523, 25, 187, '2.50'),
+(993, 527, 22, 102, '10.00'),
+(994, 528, 25, 188, '10.00'),
+(995, 530, 25, 187, '2.50'),
+(996, 531, 29, 181, '0.00'),
+(997, 532, 21, 161, '0.00'),
+(998, 532, 22, 167, '0.00'),
+(999, 533, 21, 161, '0.00'),
+(1000, 533, 22, 166, '50.00'),
+(1001, 533, 23, 168, '10.00'),
+(1002, 533, 23, 169, '2.00'),
+(1003, 534, 25, 185, '2.00'),
+(1004, 534, 25, 186, '5.00'),
+(1005, 536, 29, 180, '0.00'),
+(1006, 537, 25, 189, '10.00'),
+(1007, 541, 16, 121, '8.00'),
+(1008, 543, 19, 196, '2.00'),
+(1009, 543, 24, 194, '1.00'),
+(1010, 544, 19, 196, '2.00'),
+(1011, 544, 24, 194, '1.00'),
+(1012, 546, 29, 181, '0.00'),
+(1013, 548, 29, 181, '0.00'),
+(1014, 551, 15, 122, '10.00'),
+(1015, 554, 16, 121, '8.00'),
+(1016, 556, 15, 122, '10.00'),
+(1017, 557, 15, 122, '10.00'),
+(1018, 558, 19, 195, '1.00'),
+(1019, 559, 7, 21, '2.00'),
+(1020, 560, 25, 186, '5.00'),
+(1021, 561, 25, 188, '10.00'),
+(1022, 563, 25, 187, '2.50'),
+(1023, 566, 31, 190, '2.00'),
+(1024, 567, 16, 121, '8.00'),
+(1025, 568, 25, 187, '2.50'),
+(1026, 570, 32, 191, '1.00'),
+(1027, 573, 31, 190, '2.00'),
+(1028, 576, 25, 125, '10.00');
 
 -- --------------------------------------------------------
 
@@ -2483,7 +2821,8 @@ INSERT INTO `promocode` (`id`, `shop_id`, `group_type`, `promo_type`, `usage_lim
 (57, '', '4', '2', 3, '10.00', '', 'TEST20', '10.00', '1', '2019-04-11', '2019-05-13', '50.00', 'Use Promocode TEST20 To Get 10.00% Discount* On Total Order Value (Max Discount $10.00)', 1, '2019-04-05 18:41:34', '2019-04-10 08:30:38', NULL),
 (58, '94', '7', '1', 1, '', '', 'SAVI10', '50.00', '0', '2019-04-09', '2019-04-10', '300.00', 'Use Promocode SAVI10 To Get flat $50.00 Cashback* On Total Product(s) Value ', 1, '2019-04-09 14:45:44', NULL, NULL),
 (59, '', '4', '2', 1, '', '', 'EWW10', '10.00', '0', '2019-04-11', '2019-05-09', '70.00', 'Use Promocode EWW10 To Get Flat $10.00 Discount* On Total Order Value ', 1, '2019-04-11 11:04:27', '2019-04-11 11:04:50', NULL),
-(60, '86', '4', '1', 50, '', '', 'GANPAT50', '40.00', '0', '2019-04-11', '2020-04-23', '100.00', 'Use Promocode GANPAT50 To Get Flat $40.00 Discount* On Total Product(s) Value ', 1, '2019-04-11 17:54:09', '2019-04-11 18:08:11', NULL);
+(60, '86', '4', '1', 50, '', '', 'GANPAT50', '40.00', '0', '2019-04-11', '2020-04-23', '100.00', 'Use Promocode GANPAT50 To Get Flat $40.00 Discount* On Total Product(s) Value ', 1, '2019-04-11 17:54:09', '2019-04-11 18:08:11', NULL),
+(61, '100', '6', '2', 2, '', '3', 'SAVE5', '5.00', '0', '2019-04-14', '2019-04-27', '0.00', 'Use Promocode SAVE5 To Get flat $5.00 Cashback* On Total Order Value ', 1, '2019-04-14 02:34:32', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2697,7 +3036,7 @@ CREATE TABLE `shop` (
 --
 
 INSERT INTO `shop` (`id`, `email`, `password`, `shop_name`, `short_name`, `percentage`, `vender_name`, `shop_code`, `profile_picture`, `address`, `zip_code`, `city`, `state`, `country`, `latitude`, `longitude`, `about`, `contact_no1`, `contact_no2`, `website`, `facebook_link`, `twitter_link`, `pinterest_link`, `min_order`, `delivery_time`, `order_by_time`, `delivery_charges_per_mile`, `minimum_mile`, `charges_of_minimum_mile`, `payment_mode`, `tax_number`, `service_charge`, `device_type`, `device_token`, `broacher`, `takeout_delivery_status`, `weekly_status`, `status`, `admin_verified`, `message`, `remember_token`, `activation_token`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(52, 'sugar@mailinator.com', '$2y$10$2Qov5hbktXILNk8/EezJi.rakocg80gqr75xA7JIFLNVHLoLgQlvi', 'Cafe Ristro', 'eww-decvv-1', '10', 'Mr Ristretto', 'RIS52', 'vender_1541502113.jpg', 'Sola, Ahmedabad, Gujarat, India', '38006', 'Ahmedabad', 'Gujarat', 'India', '23.0757184', '72.50903659999994', 'Your family will never guess that this fun twist on typical pizza uses up leftover pesto. Loaded with protein, hearty slices of this chicken pizza will fill them up fast!', '986 532 1245', '774 587 1466', 'https://www.zomato.com/ah', '', '', '', '8.00', '11:30 AM', '10:00 AM', '2.00', '2.00', '1.50', '0,1,2', '657-57-5765', '2.70', 0, 'fzt87ju8e1M:APA91bFFn7ix_xcUQHAxCBrNgSr3ectbUbxY-dC6hmnpjIceySuPkE1_3_G93rQ1BDVgMqI0wVNU0JoiW7NntZfpZuS5mhklwgaFhvC2PnZYhImrSUCp5l4GKFintUDQ_BLg-Kx3ctEi', 'brochure_1541502113.jpg', 3, 1, 1, 1, '', '6c0bf58d69c1a8adead8c7c158badc2f87430bf9', '', '2018-11-06 05:49:41', '2019-04-09 15:12:40', NULL),
+(52, 'sugar@mailinator.com', '$2y$10$2Qov5hbktXILNk8/EezJi.rakocg80gqr75xA7JIFLNVHLoLgQlvi', 'Cafe Ristro', 'eww-decvv-1', '10', 'Mr Ristretto', 'RIS52', 'vender_1555132438.jpg', 'Sola, Ahmedabad, Gujarat, India', '38006', 'Ahmedabad', 'Gujarat', 'India', '23.0757184', '72.50903659999994', 'Your family will never guess that this fun twist on typical pizza uses up leftover pesto. Loaded with protein, hearty slices of this chicken pizza will fill them up fast!', '986 532 1245', '774 587 1466', 'https://www.zomato.com/ah', '', '', '', '8.00', '11:30 AM', '10:00 AM', '2.00', '2.00', '1.50', '0,1,2', '657-57-5765', '2.70', 0, '212', 'brochure_1541502113.jpg', 3, 1, 1, 1, '', '6c0bf58d69c1a8adead8c7c158badc2f87430bf9', '', '2018-11-06 05:49:41', '2019-04-09 15:12:40', NULL),
 (53, 'palboy@mailinator.com', '', 'Test Shop', '', '10.50', 'Pal', 'TES53', 'vender_1541999590.jpg', 'Gota, Ahmedabad, Gujarat, India', '', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '11:30 AM', '10:00 AM', '1.50', '2.50', '2.20', '', '', '0.50', 0, '', '', 3, 1, 0, 1, '', '', '', '2018-11-12 00:43:10', NULL, NULL),
 (54, 'palcakes@mailinator.com', '$2y$10$9H2n2v7cI.lNp3E0JvAJoerpKhmOQxebMeWD2rnlcEETivT5B3nky', 'Git', '', '8.00', 'Frl', 'GIT54', '', 'Del\\\"hi, Ind\\\"ia', '', '0', '0', '', '', '', '', '', '', '', '', '', '', '', '11:30 AM', '10:00 AM', '1.50', '2.50', '2.20', '2', '', '0.50', 0, '', '', 3, 1, 1, 1, '', '', '', '2018-11-12 09:06:52', '2018-11-23 00:41:26', NULL),
 (55, 'Cafe@eww.com', '', 'The Hytt Cafe', '', '10.00', 'Giop', 'THE55', '', 'Hynes Convention Center, Boston, MA, USA', '02115', 'Suffolk County', 'Massachusetts', 'United States', '42.34797469999999', '-71.08792840000001', '', '', '', '', '', '', '', '', '11:30 AM', '10:00 AM', '1.50', '2.50', '2.20', '', '', '0.50', 0, '', '', 3, 1, 0, 1, '', '', '', '2019-01-03 09:21:24', NULL, NULL),
@@ -2712,26 +3051,30 @@ INSERT INTO `shop` (`id`, `email`, `password`, `shop_name`, `short_name`, `perce
 (64, 'MaleTater@mailinator.com', '$2y$10$u0u3DECZfKltNRAC..VwRegw2gUoiLY1dd.m3FcyOjRTVWNDu8LgG', 'MaleTater', '', '', 'MaleTater', 'MAL64', '', 'Aha Macav Parkway, Needles, CA, USA', '66666', 'San Bernardino County', 'California', 'United States', '35.0402223', '-114.64573039999999', '', '', '', '', '', '', '', '', '11:30 AM', '10:00 AM', '1.50', '2.50', '2.20', '0', '66-66-6666', '0.50', 0, '', '', 3, 1, 1, 1, '', '', '', '2019-01-23 06:11:39', '2019-01-23 06:12:38', NULL),
 (65, 'developer.eww2@gmail.com', '$2y$10$4htY1Ibb10PR4qZfxVm0SeUKxI7/AKd.3ktlWfS6sQvcG7XT/Ef.m', 'Exotica Cafe', 'exotica-cafe-1', '', 'Eww', 'EWW65', 'vender_1554806046.png', 'Urban Management Center, GCP Business Centre, 120 Feet Ring Road, Sarvottam Nagar Society, Navrangpura, Ahmedabad, Gujarat', '380014', 'Ahmedabad', 'Gujarat', 'India', '23.045133', '72.551322', '', '9856457812', '555 555 5555', '', '', '', '', '', '11:30 AM', '10:00 AM', '1.50', '2.50', '2.20', '2', '555-55-5555', '0.50', 0, 'SD', '', 3, 1, 1, 1, '', '', '', '2019-01-23 06:15:09', '2019-04-09 16:04:06', NULL),
 (66, 'developer.eww3@gmail.com', '', 'The Esplendido Cafe', '', '', 'Mr Esplendo', 'THE66', '', 'Glendale, CA, USA', '32205', 'Duval County', 'Florida', 'United States', '', '', '', '555 555 5556', '', '', '', '', '', '', '11:30 AM', '10:00 AM', '9', '2.50', '2.20', '0', '555-55-5555', '0.50', 0, '', '', 3, 1, 0, 1, '', '', 'e5234ea06feeb57a1a78e1594224fa175fc054b8', '2019-01-23 06:37:05', NULL, NULL),
-(67, 'myshop@binkmail.com', '', 'Waffles Store', '', '', 'Dhrumi', 'WAF67', '', 'Jollyville Road, Austin, TX, USA', '78759', 'Travis County', 'Texas', 'United States', '30.4065779', '-97.7478949', '', '', '', '', '', '', '', '', '11:30 AM', '10:00 AM', '2', '2.50', '2.20', '0', '666-66-6666', '0.50', 0, '', '', 3, 1, 0, 1, '', '', 'a03cc2da19ad20a31997fd09e4756843e301664d', '2019-01-31 12:04:09', NULL, NULL),
+(67, 'myshop@binkmail.com', '', 'Waffles Store', 'waffles-store', '', 'Dhrumi', 'WAF67', '', 'Jollyville Road, Austin, TX, USA', '78759', 'Travis County', 'Texas', 'United States', '30.4065779', '30.4065779', '', '', '', '', '', '', '', '', '11:30 AM', '10:00 AM', '2.00', '2.50', '2.20', '0', '666-66-6666', '0.50', 0, '', '', 3, 1, 0, 1, '', '', 'a03cc2da19ad20a31997fd09e4756843e301664d', '2019-01-31 12:04:09', '2019-04-14 02:30:15', NULL),
 (68, 'Stingo@tradermail.info', '$2y$10$jyWKXLh14gxxlD93JJjyq.NPUnvByej8bWVHr5akuh4rsIBwsXhBW', 'Stingo, Ace Hotel', 'stingo-ace-hotel', '', 'Stingo', 'STI68', 'vender_1549620927.jpg', 'Ace Hotel, Portland, OR, USA', '97205', 'Multnomah County', 'Oregon', 'United States', '45.52211399999999', '-122.681602', 'The Main Bar at Willy\\\'s Wine Bar is a private event venue available to hire in the City of London.\r\n\r\nIf there is one place in the City you need to experience, it?s Willy?s Wine Bar.\r\n\r\nThis is one of London?s most established wine bars in London. Not only is it bursting with tradition and charm, but it also plays host to some of London?s best wine quizzes and tastings.', '787 878 7878', '787 878 7878', 'https://www.zomato.com/ah', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', '5', '08:00 AM', '07:00 AM', '1.50', '2.50', '2.20', '0,1', '790-65-7575', '0.50', 0, '', '', 3, 1, 1, 1, '', '', '', '2019-02-08 10:13:18', '2019-02-13 13:25:33', NULL),
 (69, 'fire@devnullmail.com', '$2y$10$5iTn3WKnCn/z1LjrNeYca.7YmU0vhPKXqF9ZgYL3TQ0bya1DzcAAW', 'Nation Fire 2', 'nation-fire', '', 'Miss Boby', 'NAT69', '', 'King of Prussia, PA, USA', '19406', 'Montgomery County', 'Pennsylvania', 'United States', '', '', 'Your family will never guess that this fun twist on typical pizza uses up leftover pesto. Loaded with protein, hearty slices of this chicken pizza will fill them up fast!', '610 265 5794', '610 265 5794', 'https://www.simon.com/mall/king-of-prussia-mall', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', 'https://www.zomato.com/ahmedabad/', '150.00', '10:00 AM', '09:30 AM', '1.50', '12.00', '10.00', '0,1', '676-76-7676', '2.00', 0, '', '', 2, 1, 1, 1, '', '', '', '2019-03-02 08:09:51', '2019-03-02 08:11:10', NULL),
 (70, 'foody@letthemeatspam.com', '', 'Food Track', 'food-track', '', 'Miss Green', 'FOO70', '', 'H K Allen Parkway, Temple, TX, USA', '76502', 'Bell County', 'Texas', 'United States', '31.04998459999999', '-97.37216409999996', '', '777 777 7777', '', '', '', '', '', '', '', '', '2.00', '5.00', '5.00', '1,2', '777-77-7777', '', 0, '', '', 3, 1, 0, 1, '', '', 'a77ad09ca43d8ac2945bd81b8067b241d60444cf', '2019-03-04 05:17:57', NULL, '2019-03-04 05:19:07'),
 (71, 'ThumbBub88@mailinator.com', '', 'Mcdonalds', 'mcdonalds', '', 'Ffgdf', 'MUU71', '', 'F.S.C.J. Kent Campus, Jacksonville, FL, USA', '32205', 'Duval County', 'Florida', 'United States', '', '', '', '666 666 6655', '', '', '', '', '', '', '', '', '60.00', '6.00', '6.00', '0', '565-67-5675', '', 0, '', '', 3, 1, 0, 1, '', '', '15d88eb35fa90c9b123b37676381a10d70b46370', '2019-03-06 11:07:32', '2019-03-08 03:34:27', NULL),
 (76, 'rahul.bbit@gmail.comz', '', 'Dr Pizza', 'dr-pizza', '', 'Rahul', 'DRP76', '', '1109 Decatur Street, New Orleans, LA 70116, USA', '70116', 'Orleans Parish', 'Louisiana', 'United States', '29.9601404', '-90.05985670000001', '', '756 782 7928', '', '', '', '', '', '', '', '', '5.00', '3.00', '3.00', '1', '456-56-4564', '', 0, '', '', 3, 1, 0, 1, '', '', 'e508285af9500a5221824da3f5344b3b63ac59c9', '2019-03-15 06:09:24', NULL, NULL),
-(77, 'savisagar@yopmail.com', '', 'Savi Sagar', 'savi-sagar', '7.00', 'Savitha', 'SAV77', '', '5,1st main road,ramachandrapura', '56002', 'Bengaluru', 'Karnataka', 'India', '', '', '', '990 236 6824', '866 016 6775', 'www.savisagar.com', '', '', '', '', '', '', '2.00', '1.00', '2.00', '0,1,2', '123-34-5676', '', 0, '', '', 3, 1, 0, 1, '', '', '352b85714b9f9bc60cae1dd8affe6373850f32ba', '2019-03-23 10:46:42', NULL, '2019-03-26 03:56:02'),
-(78, 'sunvenk04@gmail.com', '$2y$10$8QLUD6tUq.J7ZAOSUYvRWuhjuUlvzmyaeCYdfMvYdoG0D5iOU9/1m', 'Dr Pizza', 'dr-pizza-3', '10.00', 'Amit', 'DRP78', '', '5,1st main road,ramachandrapura', '56002', 'Bengaluru', 'Karnataka', 'India', '', '', '', '756 782 7928', '', '', '', '', '', '', '', '', '2.00', '5.00', '4.00', '0,1,2', '123-44-6568', '', 0, '', '', 3, 1, 1, 1, '', '', '', '2019-03-23 11:10:24', '2019-04-01 23:13:18', '2019-04-07 16:15:01'),
-(79, 'suma@oviotechnologies.com', '$2y$10$bZG0PnL5lavCRwOWrMXehO1bqnvgP/Vy8QLSwM5VDCAw4bxSoDrw2', 'BombaY Tawa', 'bombay-tawa', '', 'Mumabi Takrey', 'BOM79', '', '43433 Cherrywood lane', '48187', 'Canton', 'MI', 'USA', '', '', '', '248 522 9427', '', 'www.tacobell.com', '', '', '', '', '', '', '1.00', '2.50', '2.00', '0,1,2', '324-23-4324', '', 0, '', '', 3, 1, 2, 1, '', '', '', '2019-03-26 23:47:13', '2019-03-26 23:48:34', '2019-04-10 21:12:07'),
+(77, 'savisagar@yopmail.com', '', 'Savi Sagar', 'savi-sagar', '7.00', 'Savitha', 'SAV77', '', '5,1st main road,ramachandrapura', '56002', 'Bengaluru', 'Karnataka', 'India', '12.9923118', '77.5600852', '', '990 236 6824', '866 016 6775', 'www.savisagar.com', '', '', '', '', '', '', '2.00', '1.00', '2.00', '0,1,2', '123-34-5676', '', 0, '', '', 3, 1, 0, 1, '', '', '352b85714b9f9bc60cae1dd8affe6373850f32ba', '2019-03-23 10:46:42', NULL, '2019-03-26 03:56:02'),
+(78, 'sunvenk04@gmail.com', '$2y$10$8QLUD6tUq.J7ZAOSUYvRWuhjuUlvzmyaeCYdfMvYdoG0D5iOU9/1m', 'Dr Pizza', 'dr-pizza-3', '10.00', 'Amit', 'DRP78', '', '55, 2nd Main Road, Ramachandrapuram, S.S.I.Area, Dayananda Nagar, Rajaji Nagar, Bengaluru, Karnataka, India', '56002', 'Bangalore Urban', 'Karnataka', 'India', '12.9871134', '77.56302460000006', '', '756 782 7928', '', '', '', '', '', '', '', '', '2.00', '5.00', '4.00', '0,1,2', '123-44-6568', '', 0, '', '', 3, 1, 1, 1, '', '', '', '2019-03-23 11:10:24', '2019-04-01 23:13:18', '2019-04-07 16:15:01'),
+(79, 'suma@oviotechnologies.com', '$2y$10$qNgPOSO1HQOffft8tbQBRuy9yrcnZ44.49AI8MIQ301KLKUmF7lGq', 'BombaY Tawa', 'bombay-tawa', '', 'Mumabi Takrey', 'BOM79', '', '55, 2nd Main Road, Ramachandrapuram, S.S.I.Area, Dayananda Nagar, Rajaji Nagar, Bengaluru, Karnataka, India', '56002', 'Bangalore Urban', 'Karnataka', 'India', '12.9871134', '77.56302460000006', '', '248 522 9427', '', 'www.tacobell.com', '', '', '', '', '', '', '1.00', '2.50', '2.00', '0,1,2', '324-23-4324', '', 0, '', '', 3, 1, 1, 1, '', '', '', '2019-03-26 23:47:13', '2019-04-13 20:27:20', '2019-04-10 21:12:07'),
 (80, 'rahul.bbit@gmail.com', '$2y$10$ATQ8ruLA9BznZASjwD4sU.1W7bUuTMumkufPUPXE8Uh61kUsmZDay', 'Dr Pizza', 'dr-pizza-2', '', 'DJP', 'DRP80', '', '6908 Fox Hills Road, Canton, MI, USA', '48187', 'Canton', 'Michigan', 'United States', '42.3317731', '-83.48375679999998', '', '756 782 7928', '', '', '', '', '', '', '', '', '10.00', '2.00', '1.00', '0,1,2', '423-42-3423', '2.', 0, '', '', 3, 1, 1, 1, '', '', '', '2019-03-27 05:05:31', '2019-04-09 16:21:19', NULL),
 (81, 'yo@yomail.com', '', 'Dr Pizza', 'dr-pizza-3', '', 'DFFF', 'DRP81', '', '43433 Cherrywood lane', '48188', 'Canton', 'MI', 'United States', '', '', '', '756 782 7928', '', '', '', '', '', '', '', '', '1.00', '1.00', '1.00', '0', '343-24-3242', '', 0, '', '', 3, 1, 0, 1, '', '', '09881aaa8ce86c8a93b45b29533b29c5cd28026d', '2019-03-27 06:19:55', NULL, '2019-04-02 10:46:34'),
-(82, 'sun_venk04@yahoo.com', '', 'Savi Sagar', 'savi-sagar-1', '', 'Savitha', 'SAV82', '', '55,2st main road,ramachandrapura', '56002', 'Bengaluru', 'Karnataka', 'India', '', '', '', '990 236 8269', '', '', '', '', '', '', '', '', '1.50', '10.00', '2.00', '0,1,2', '132-34-5657', '', 0, '', '', 3, 0, 0, 1, '', '', 'ca70c7253f7069c91dba2bf4ba70dfb129dde589', '2019-04-01 22:53:40', '2019-04-01 22:59:15', '2019-04-07 16:14:50'),
+(82, 'sun_venk04@yahoo.com', '', 'Savi Sagar', 'savi-sagar-1', '', 'Savitha', 'SAV82', '', '55,2st main road,ramachandrapura', '56002', 'Bengaluru', 'Karnataka', 'India', '12.9871134', '77.56302460000006', '', '990 236 8269', '', '', '', '', '', '', '', '', '1.50', '10.00', '2.00', '0,1,2', '132-34-5657', '', 0, '', '', 3, 0, 0, 1, '', '', 'ca70c7253f7069c91dba2bf4ba70dfb129dde589', '2019-04-01 22:53:40', '2019-04-01 22:59:15', '2019-04-07 16:14:50'),
 (84, 'dhrumi_1996@yopmail.com', '$2y$10$HuQcPtSYrzPGY5c0PgKbE.M/4YCfZxdcfJrSvk2OlXlrbfBYMNWs2', 'Burger King', 'burger-king', '', 'Dhrumii', 'BUR84', '', 'Housing and Dining Administration Building, San Diego, CA, USA', '92161', 'San Diego County', 'California', 'United States', '32.8745634', '-117.2431431', '', '345 345 3453', '', '', '', '', '', '', '', '', '4.00', '4.00', '4.00', '0', '345-34-5354', '', 0, '', '', 3, 0, 1, 1, '', '', '', '2019-04-02 10:45:42', '2019-04-02 10:46:14', NULL),
 (85, 'clicklunch24@gmail.com', '$2y$10$J3/K72/VsJ85SbR9BEvaheQ8xNBn4kNweEbbH2lsgIqN2UQM1zw2O', 'Cafe Baraco', 'cafe-baraco', '', 'Baraco', 'CAF85', '', 'CIMS Hospital Road, Panchamrut Bunglows II, Sola, Ahmedabad, Gujarat, India', '38005', 'Ahmedabad', 'Gujarat', 'India', '23.0697106', '72.51729209999996', '', '535 345 3453', '', '', '', '', '', '', '', '', '2.00', '1.00', '1.00', '0', '345-35-3453', '', 0, '', '', 3, 0, 1, 0, '', '', '', '2019-04-02 11:04:59', '2019-04-02 11:05:20', NULL),
-(86, 'excellent@yopmail.com', '$2y$10$lYJBX5dAWxy7xNP.rXVD5.CgEndlB78FsYJTJO2AM4BWQoT04ohHu', 'Excellent Webworld Cafe', 'excellent-webworld', '12.00', 'Mr Webworld', 'EXC86', 'vender_1554465960.jpg', 'Science City Road, Panchamrut Bunglows II, Sola, Ahmedabad, Gujarat, India', '38006', 'Ahmedabad', 'Gujarat', 'India', '23.0708523', '72.5199543', 'Find the perfect Mcdonalds stock photos and editorial news pictures from Getty Images. Download premium ... France, Mc Donald\\\'s sign. RF. Editorial use only.Find the perfect Mcdonalds stock photos and editorial news pictures from Getty Images. Download premium ... France, Mc Donald\\\'s sign. RF. Editorial use only.Find the perfect Mcdonalds stock photos and editorial news pictures from Getty Images. Download premium ... France, Mc Donald\\\'s sign. RF. Editorial use only.Find the perfect Mcdonalds stock photos and editorial news pictures from Getty Images. Download premium ... France, Mc Donald\\\'s sign. RF. Editorial use only.', '787 435 0950', '787 435 0950', 'https://www.excellentwebworld.com/', '', '', '', '20.00', '04:00 PM', '05:00 AM', '1.50', '50.00', '25.00', '0,1,2', '435-34-5345', '2.00', 0, 'fy2VtuAPcQs:APA91bEOBl433QUoSbGXAdx0rvP7fJGYT_ycTfNBeaTQ1DkzlszfJbCC73ElaiPVAKSNg6nCYeYlKkYD2egSvFF79c_Kkdj__UgqNzwknAMCJiq742npOQDhS84r7S_nsLyo1K32fJba', '', 3, 1, 1, 1, '', '', '', '2019-04-05 17:24:21', '2019-04-05 17:31:32', NULL),
+(86, 'excellent@yopmail.com', '$2y$10$lYJBX5dAWxy7xNP.rXVD5.CgEndlB78FsYJTJO2AM4BWQoT04ohHu', 'Excellent Webworld Cafe', 'excellent-webworld', '12.00', 'Mr Webworld', 'EXC86', 'vender_1555050101.jpg', 'Science City Road, Panchamrut Bunglows II, Sola, Ahmedabad, Gujarat, India', '38006', 'Ahmedabad', 'Gujarat', 'India', '23.0708523', '72.5199543', 'Find the perfect Mcdonalds stock photos and editorial news pictures from Getty Images. Download premium ... France, Mc Donald\\\'s sign. RF. Editorial use only.Find the perfect Mcdonalds stock photos and editorial news pictures from Getty Images. Download premium ... France, Mc Donald\\\'s sign. RF. Editorial use only.Find the perfect Mcdonalds stock photos and editorial news pictures from Getty Images. Download premium ... France, Mc Donald\\\'s sign. RF. Editorial use only.Find the perfect Mcdonalds stock photos and editorial news pictures from Getty Images. Download premium ... France, Mc Donald\\\'s sign. RF. Editorial use only.', '787 435 0950', '787 435 0950', 'https://www.excellentwebworld.com/', '', '', '', '20.00', '04:00 PM', '05:00 AM', '1.50', '50.00', '25.00', '0,1,2', '435-34-5345', '2.00', 0, 'fZrHm_6H7Cw:APA91bE5FYEe1QlZAeT3839T26j0up3a_ucT9YZxe9gDNzPI9vSw2tADbSqsOmf8D1thcaegGNySwLe3vRZdAgnOxvLbdNnqDCRxUc6JeIYNtk7yMnHgm26__Fl_I_wxWPqVDxlr1Q26', '', 3, 1, 1, 1, '', '', '', '2019-04-05 17:24:21', '2019-04-05 17:31:32', NULL),
 (87, 'ewr@dfg.fthy', '', 'Werewr', 'werewr', '', 'Gfhh', 'WER87', '', 'GGICO Metro Station - Dubai - United Arab Emirates', '56456', 'Dubai', 'Dubai', 'United Arab Emirates', '25.24948329999999', '55.33996879999995', '', '546 456 5645', '', '', '', '', '', '', '', '', '5.00', '5.00', '5.00', '0,1,2', '345-34-5345', '', 0, '', '', 3, 0, 0, 1, '', '', 'a8e70651768cb705eebdbbf8c6581aeafac25b6f', '2019-04-05 17:25:06', NULL, '2019-04-05 17:25:11'),
-(94, 'sun_venk04@yahoo.com', '$2y$10$vWho6oKRI0by.RdWUlYCdeqxf4cLjImldl7ETn5rG1kP2K1n0fqLy', 'Savi Sagar', 'savi-sagar-2', '10.00', 'Savitha', 'SAV94', '', '5, 1st Main Road, Ramachandrapuram, Dayananda Nagar, Rajaji Nagar, Bengaluru, Karnataka, India', '56002', 'Bangalore Urban', 'Karnataka', 'India', '12.9907873', '77.56385279999995', 'hghsdghdsgjsdjgsgjsjhkdjhkkhjfjdhkjfddjfkjhshsjshuohjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjigsoositsitspraspiaspriapkgogiorgorsjgrosgurigfre8y5yyjjfjdrrhjjjjjjh', '866 017 7665', '', '', '', '', '', '10.00', '09:00 AM', '08:00 AM', '1.99', '1.00', '1.00', '0', '999-06-5478', '1.00', 0, '', '', 3, 1, 1, 1, '', '', '', '2019-04-08 20:40:09', '2019-04-09 10:58:59', NULL),
+(94, 'sun_venk04@yahoo.com', '$2y$10$vWho6oKRI0by.RdWUlYCdeqxf4cLjImldl7ETn5rG1kP2K1n0fqLy', 'Savi Sagar 1', 'savi-sagar-2', '10.00', 'Savitha Suman', 'SAV94', 'vender_1555165491.png', '5, 1st Main Road, Ramachandrapuram, Rajaji Nagar, Bengaluru, Karnataka, India', '560021', 'Bangalore Urban', 'Karnataka', 'India', '12.9907873', '77.56302460000006', 'hghsdghdsgjsdjgsgjsjhkdjhkkhjfjdhkjfddjfkjhshsjshuohjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjigsoositsitspraspiaspriapkgogiorgorsjgrosgurigfre8y5yyjjfjdrrhjjjjjjh', '866 017 7665', '325 454 6576', '', '', '', '', '10.00', '09:00 AM', '08:00 AM', '1.99', '1.00', '1.00', '0', '999-06-5478', '1.00', 0, '', '', 3, 1, 1, 1, '', '', '', '2019-04-08 20:40:09', '2019-04-13 19:54:51', NULL),
 (95, 'sumakpn@yahoo.com', '$2y$10$FLxfSeTXmCktVkrDyNeCeeLJ7AnZhBs/p9CzvxebaxV5h2r1qPoFO', 'BombaY Tawa', 'bombay-tawa-1', '', 'Suma', 'BOM95', '', 'Balaji Pure Veg. Pure Fun, North Canton Center Road, Canton, MI, USA', '48187', 'Wayne County', 'Michigan', 'United States', '42.3370353', '-83.48998540000002', '', '614 546 0961', '', '', '', '', '', '', '', '', '1.50', '1.00', '1.00', '0', '', '', 0, '', '', 3, 0, 1, 0, '', '', '', '2019-04-10 15:48:35', '2019-04-10 21:20:20', NULL),
-(96, 'sumakpn@gmail.com', '$2y$10$qqVkkAdh6dGRxUsCBCbj0eP.9YzAojdqq2yD.2.Bv4S7dRrkBQ8YW', 'BombaY Tawa', 'bombay-tawa-2', '', 'Suma', 'BOM96', '', 'Balaji Pure Veg. Pure Fun, North Canton Center Road, Canton, MI, USA', '48187', 'Canton', 'Michigan', 'United States', '', '', 'Delicious Indian and Chinese cuisine Restaurant in Canton center road. We are open all the time. Delivery and take out available.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '456 789 9861', '', '', '', '', '', '5.00', '12:00 PM', '02:00 PM', '5.00', '2.00', '5.00', '0', '345-34-5345', '2.00', 0, '', '', 3, 0, 1, 1, '', '', '', '2019-04-10 21:50:36', '2019-04-10 21:51:58', NULL),
-(97, 'bhavesh@excellentwebworld.info', '', 'Yahoo Food Center', 'yahoo-food-center', '', 'Bhavesh', 'YAH97', '', 'Iscon Mega Mall Sarkhej - Gandhinagar Hwy, Bodakdev, Ahmedabad, Gujarat 380054, India', '380054', 'Ahmedabad', 'Gujarat', 'India', '23.030513', '72.5075401', '', '1234567890', '', '', '', '', '', '', '', '', '1.50', '1.00', '1.00', '0', '', '', 0, '', '', 3, 0, 0, 0, 'All food are here', '', '2c6944dde6cd3004b09e4ad89f9b47cfa1901dab', '2019-04-11 19:14:53', NULL, NULL);
+(96, 'sumakpn@gmail.com', '$2y$10$qqVkkAdh6dGRxUsCBCbj0eP.9YzAojdqq2yD.2.Bv4S7dRrkBQ8YW', 'BombaY Tawa', 'bombay-tawa-2', '', 'Suma', 'BOM96', '', '7017 Fox Hills Road', '48187', 'Canton', 'MI', 'United States', '', '', 'Delicious Indian and Chinese cuisine Restaurant in Canton center road. We are open all the time. Delivery and take out available.xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '456 789 9861', '', '', '', '', '', '5.00', '12:00 PM', '02:00 PM', '5.00', '2.00', '5.00', '0,1', '345-34-5345', '2.00', 0, '', '', 3, 0, 1, 1, '', '', '', '2019-04-10 21:50:36', '2019-04-12 04:23:15', NULL),
+(97, 'bhavesh@excellentwebworld.info', '$2y$10$6Dl4MGaBnIvBYzrbw41PrOtQxhNZzzLGfmfvDXVGOwN8eSdhv42yq', 'Yahoo Food Center', 'yahoo-food-center', '', 'Bhavesh', 'YAH97', '', 'Iscon Mega Mall Sarkhej - Gandhinagar Hwy, Bodakdev, Ahmedabad, Gujarat 380054, India', '380054', 'Ahmedabad', 'Gujarat', 'India', '23.030513', '72.5075401', '', '1234567890', '', '', '', '', '', '', '', '', '1.50', '1.00', '1.00', '0', '', '', 0, '', '', 3, 0, 1, 0, 'All food are here', '', '', '2019-04-11 19:14:53', '2019-04-12 11:13:28', NULL),
+(98, 'patron@yopmail.com', '$2y$10$eUYhwEAom29bkDCE7FK5yeL7E6h4JLiznGZsJ5PfvXs12SLXaPkuW', 'La Patron Cafe', 'la-patron-cafe', '', 'Miss Patron', 'LAP98', 'vender_1555074055.jpg', 'Rivera Arcade, 100 Feet Anand Nagar Road, opp barbeque nation, Prahlad Nagar, Ahmedabad, Gujarat, India', '380009', 'Ahmedabad', 'Gujarat', 'India', '23.0123098', '72.50994500000002', 'Come and enjoy the ongoing cricket fever with the best food and the best people at La Patron CafeCome and enjoy the ongoing cricket fever with the best food and the best people at La Patron CafeCome and enjoy the ongoing cricket fever with the best food and the best people at La Patron Cafe', '714 456 6666', '', 'https://www.zomato.com/ahmedabad/la-patron-cafe-c-g-road?zrp_bid=283598&zrp_pid=14&zrp_cid=351386', '', '', '', '20.00', '12:30 AM', '12:00 AM', '2.00', '2.00', '2.50', '0,1', '567-54-5555', '2.00', 0, '', '', 3, 1, 1, 1, '', '', '', '2019-04-12 18:30:55', '2019-04-12 18:56:37', NULL),
+(99, 'blue@yopmail.com', '$2y$10$aWKbc3K93Wn/fEI3I5n.tOqAS.LLf3nmdwDo44MheInmtDwpNtXrq', 'Blue Bottle Cafe1', 'blue-bottle-cafe', '', 'Mr Blue White', 'BLU99', 'vender_1555075024.jpg', 'TGB Express Maninagar, Kankaria Lake, Ahmedabad, Punit Maharaj Road, Near, Kankaria, Maninagar, Ahmedabad, Gujarat, India', '380008', 'Ahmedabad', 'Gujarat', 'India', '23.004873', '23.004873', 'The most loved T20 cricket league in the world is here.The most loved T20 cricket league in the world is here.The most loved T20 cricket league in the world is here.The most loved T20 cricket league in the world is here.The most loved T20 cricket league in the world is here.The most loved T20 cricket league in the world is here.', '567 567 5656', '435 465 6576', '', '', '', '', '100.00', '01:00 AM', '12:30 AM', '1.00', '2.00', '2.00', '0', '567-56-7575', '1.30', 0, '', '', 3, 1, 1, 1, '', '', '', '2019-04-12 18:43:27', '2019-04-13 19:49:58', NULL),
+(100, 'suma@oviotechnologies.com', '$2y$10$qNgPOSO1HQOffft8tbQBRuy9yrcnZ44.49AI8MIQ301KLKUmF7lGq', 'Rovan', 'rovan', '', 'Suma', 'ROV100', 'vender_1555166687.png', '7017 Main St Parking, Main street, Houston, TX, USA', '77030', 'Harris County', 'Texas', 'United States', '29.7046166', '-95.405261', 'Pizza bread is a type of sandwich that is often served open-faced which consists of bread, tomato sauce, cheese and various toppings. ... Pizza sticks may be prepared with pizza dough and pizza ingredients, in which the dough is shaped into stick forms, sauce and toppings are added, and it is then baked.', '248 605 8831', '', '', '', '', '', '25.00', '12:00 PM', '09:00 AM', '2.00', '5.00', '10.00', '0,2', '123-23-4567', '5.00', 0, '', '', 3, 1, 1, 1, '', '', '', '2019-04-13 20:08:09', '2019-04-13 20:27:20', NULL),
+(101, 'sunitha@oviotechnologies.com', '$2y$10$X1JpyBEPV9izoWtvoDMK.O44RlW95Pdl8Hf5BXn36j6.6XIrILNcq', 'Ice And Nice', 'ice-and-nice', '', 'Sunny', 'ICE101', 'vender_1555245583.jpg', '55, 2nd Main Road, Ramachandrapuram, S.S.I.Area, Dayananda Nagar, Rajaji Nagar, Bengaluru, Karnataka, India', '56002', 'Bangalore Urban', 'Karnataka', 'India', '12.9871134', '12.9871134', 'gfjhsdjdkfslgopskgoergioreigreigopwfpweopfodofwiofiuwhgijogksdopfaosfidsgiewhgisdjoffaspaofhgfjfgijgioiogewwigewiughwuihggjjiweefoewkofeopfeihhruiweoiweoiw', '997 643 2334', '456 788 9999', '', '', '', '', '10.00', '02:00 PM', '01:30 AM', '1.99', '2.00', '2.50', '0,1,2', '567-89-9900', '1.00', 0, '', '', 3, 1, 1, 1, '', '14d7b4a945de39f24369936dc6cbd9593f9f65f6', '', '2019-04-14 18:09:43', '2019-04-15 15:18:34', NULL);
 
 -- --------------------------------------------------------
 
@@ -2805,20 +3148,6 @@ INSERT INTO `shop_availibality` (`id`, `shop_id`, `day`, `from_time`, `to_time`,
 (493, 85, 'Thursday', '', '', 0, 1, '2019-04-02 05:35:20'),
 (494, 85, 'Friday', '', '', 0, 1, '2019-04-02 05:35:20'),
 (495, 85, 'Saturday', '', '', 0, 1, '2019-04-02 05:35:20'),
-(545, 58, 'Sunday', '', '', 0, 1, '2019-04-05 15:40:12'),
-(546, 58, 'Monday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-05 15:40:12'),
-(547, 58, 'Tuesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-05 15:40:12'),
-(548, 58, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-05 15:40:12'),
-(549, 58, 'Thursday', '', '', 1, 0, '2019-04-05 15:40:12'),
-(550, 58, 'Friday', '04:30 PM', '05:00 PM', 0, 0, '2019-04-05 15:40:12'),
-(551, 58, 'Saturday', '12:00 PM', '06:00 PM', 0, 0, '2019-04-05 15:40:12'),
-(601, 86, 'Sunday', '', '', 0, 1, '2019-04-05 17:36:41'),
-(602, 86, 'Monday', '', '', 0, 0, '2019-04-05 17:36:41'),
-(603, 86, 'Tuesday', '', '', 1, 0, '2019-04-05 17:36:41'),
-(604, 86, 'Wednesday', '', '', 0, 0, '2019-04-05 17:36:41'),
-(605, 86, 'Thursday', '', '', 0, 0, '2019-04-05 17:36:41'),
-(606, 86, 'Friday', '', '', 0, 0, '2019-04-05 17:36:41'),
-(607, 86, 'Saturday', '', '', 0, 1, '2019-04-05 17:36:41'),
 (615, 88, 'Sunday', '', '', 0, 1, '2019-04-08 05:54:41'),
 (616, 88, 'Monday', '', '', 0, 1, '2019-04-08 05:54:41'),
 (617, 88, 'Tuesday', '', '', 0, 1, '2019-04-08 05:54:41'),
@@ -2840,13 +3169,6 @@ INSERT INTO `shop_availibality` (`id`, `shop_id`, `day`, `from_time`, `to_time`,
 (668, 94, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-09 14:33:35'),
 (669, 94, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-09 14:33:35'),
 (670, 94, 'Saturday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-09 14:33:35'),
-(671, 52, 'Sunday', '', '', 1, 0, '2019-04-09 16:02:37'),
-(672, 52, 'Monday', '12:00 AM', '10:30 AM', 0, 0, '2019-04-09 16:02:37'),
-(673, 52, 'Tuesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-09 16:02:37'),
-(674, 52, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-09 16:02:37'),
-(675, 52, 'Thursday', '', '', 1, 0, '2019-04-09 16:02:37'),
-(676, 52, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-09 16:02:37'),
-(677, 52, 'Saturday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-09 16:02:37'),
 (678, 80, 'Sunday', '', '', 0, 1, '2019-04-09 10:51:19'),
 (679, 80, 'Monday', '', '', 0, 1, '2019-04-09 10:51:19'),
 (680, 80, 'Tuesday', '', '', 0, 1, '2019-04-09 10:51:19'),
@@ -2861,13 +3183,69 @@ INSERT INTO `shop_availibality` (`id`, `shop_id`, `day`, `from_time`, `to_time`,
 (689, 95, 'Thursday', '', '', 0, 1, '2019-04-10 15:50:20'),
 (690, 95, 'Friday', '', '', 0, 1, '2019-04-10 15:50:20'),
 (691, 95, 'Saturday', '', '', 0, 1, '2019-04-10 15:50:20'),
-(706, 96, 'Sunday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-10 22:06:20'),
-(707, 96, 'Monday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-10 22:06:20'),
-(708, 96, 'Tuesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-10 22:06:20'),
-(709, 96, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-10 22:06:20'),
-(710, 96, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-10 22:06:20'),
-(711, 96, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-10 22:06:20'),
-(712, 96, 'Saturday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-10 22:06:20');
+(720, 96, 'Sunday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-11 20:12:58'),
+(721, 96, 'Monday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-11 20:12:58'),
+(722, 96, 'Tuesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-11 20:12:58'),
+(723, 96, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-11 20:12:58'),
+(724, 96, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-11 20:12:58'),
+(725, 96, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-11 20:12:58'),
+(726, 96, 'Saturday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-11 20:12:58'),
+(727, 97, 'Sunday', '', '', 0, 1, '2019-04-12 05:43:28'),
+(728, 97, 'Monday', '', '', 0, 1, '2019-04-12 05:43:28'),
+(729, 97, 'Tuesday', '', '', 0, 1, '2019-04-12 05:43:28'),
+(730, 97, 'Wednesday', '', '', 0, 1, '2019-04-12 05:43:28'),
+(731, 97, 'Thursday', '', '', 0, 1, '2019-04-12 05:43:28'),
+(732, 97, 'Friday', '', '', 0, 1, '2019-04-12 05:43:28'),
+(733, 97, 'Saturday', '', '', 0, 1, '2019-04-12 05:43:28'),
+(755, 98, 'Sunday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-12 18:34:43'),
+(756, 98, 'Monday', '', '', 0, 1, '2019-04-12 18:34:43'),
+(757, 98, 'Tuesday', '', '', 0, 1, '2019-04-12 18:34:43'),
+(758, 98, 'Wednesday', '', '', 0, 1, '2019-04-12 18:34:43'),
+(759, 98, 'Thursday', '', '', 0, 1, '2019-04-12 18:34:43'),
+(760, 98, 'Friday', '', '', 0, 1, '2019-04-12 18:34:43'),
+(761, 98, 'Saturday', '10:30 AM', '05:00 PM', 0, 0, '2019-04-12 18:34:43'),
+(769, 99, 'Sunday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-12 18:47:04'),
+(770, 99, 'Monday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-12 18:47:04'),
+(771, 99, 'Tuesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-12 18:47:04'),
+(772, 99, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-12 18:47:04'),
+(773, 99, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-12 18:47:04'),
+(774, 99, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-12 18:47:04'),
+(775, 99, 'Saturday', '', '', 0, 1, '2019-04-12 18:47:04'),
+(797, 52, 'Sunday', '', '', 1, 0, '2019-04-13 10:43:58'),
+(798, 52, 'Monday', '12:00 AM', '10:30 AM', 0, 0, '2019-04-13 10:43:58'),
+(799, 52, 'Tuesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-13 10:43:58'),
+(800, 52, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-13 10:43:58'),
+(801, 52, 'Thursday', '', '', 1, 0, '2019-04-13 10:43:58'),
+(802, 52, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-13 10:43:58'),
+(803, 52, 'Saturday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-13 10:43:58'),
+(818, 100, 'Sunday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-13 20:14:47'),
+(819, 100, 'Monday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-13 20:14:47'),
+(820, 100, 'Tuesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-13 20:14:47'),
+(821, 100, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-13 20:14:47'),
+(822, 100, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-13 20:14:47'),
+(823, 100, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-13 20:14:47'),
+(824, 100, 'Saturday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-13 20:14:47'),
+(825, 58, 'Sunday', '', '', 1, 0, '2019-04-14 03:17:48'),
+(826, 58, 'Monday', '', '', 1, 0, '2019-04-14 03:17:48'),
+(827, 58, 'Tuesday', '', '', 1, 0, '2019-04-14 03:17:48'),
+(828, 58, 'Wednesday', '', '', 1, 0, '2019-04-14 03:17:48'),
+(829, 58, 'Thursday', '', '', 1, 0, '2019-04-14 03:17:48'),
+(830, 58, 'Friday', '', '', 1, 0, '2019-04-14 03:17:48'),
+(831, 58, 'Saturday', '', '', 1, 0, '2019-04-14 03:17:48'),
+(839, 101, 'Sunday', '09:00 AM', '11:00 PM', 0, 0, '2019-04-14 19:05:16'),
+(840, 101, 'Monday', '09:00 AM', '11:00 PM', 0, 0, '2019-04-14 19:05:16'),
+(841, 101, 'Tuesday', '09:00 AM', '11:30 PM', 0, 0, '2019-04-14 19:05:16'),
+(842, 101, 'Wednesday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-14 19:05:16'),
+(843, 101, 'Thursday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-14 19:05:16'),
+(844, 101, 'Friday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-14 19:05:16'),
+(845, 101, 'Saturday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-14 19:05:16'),
+(846, 86, 'Sunday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-15 10:58:33'),
+(847, 86, 'Monday', '12:00 AM', '05:00 PM', 0, 0, '2019-04-15 10:58:33'),
+(848, 86, 'Tuesday', '', '', 1, 0, '2019-04-15 10:58:33'),
+(849, 86, 'Wednesday', '', '', 0, 1, '2019-04-15 10:58:33'),
+(850, 86, 'Thursday', '', '', 0, 1, '2019-04-15 10:58:33'),
+(851, 86, 'Friday', '09:00 AM', '11:30 PM', 0, 0, '2019-04-15 10:58:33'),
+(852, 86, 'Saturday', '09:00 AM', '05:00 PM', 0, 0, '2019-04-15 10:58:33');
 
 -- --------------------------------------------------------
 
@@ -2902,15 +3280,21 @@ INSERT INTO `shop_cuisines` (`id`, `shop_id`, `cuisine_id`) VALUES
 (88, 68, 22),
 (89, 68, 23),
 (94, 69, 9),
-(130, 58, 1),
-(131, 58, 3),
-(138, 86, 3),
 (148, 94, 9),
 (149, 94, 18),
-(150, 52, 3),
-(151, 52, 7),
-(154, 96, 1),
-(155, 96, 9);
+(158, 96, 1),
+(159, 96, 9),
+(162, 98, 4),
+(163, 98, 9),
+(164, 99, 18),
+(170, 52, 3),
+(171, 52, 7),
+(174, 100, 18),
+(175, 58, 1),
+(176, 58, 3),
+(177, 101, 7),
+(178, 101, 20),
+(179, 86, 3);
 
 -- --------------------------------------------------------
 
@@ -2936,16 +3320,24 @@ INSERT INTO `shop_hours` (`id`, `shop_id`, `order_delivery`, `morning_evening`, 
 (26, 68, 2, 2, '02:30 PM', '10:30 PM'),
 (35, 69, 2, 1, '07:00 AM', '12:30 PM'),
 (36, 69, 2, 2, '02:00 PM', '11:30 PM'),
-(71, 58, 2, 1, '', ''),
-(72, 58, 2, 2, '', ''),
-(85, 86, 2, 1, '', ''),
-(86, 86, 2, 2, '', ''),
 (97, 94, 2, 1, '', ''),
 (98, 94, 2, 2, '', ''),
-(99, 52, 2, 1, '', ''),
-(100, 52, 2, 2, '', ''),
-(103, 96, 2, 1, '', ''),
-(104, 96, 2, 2, '', '');
+(107, 96, 2, 1, '', ''),
+(108, 96, 2, 2, '', ''),
+(113, 98, 2, 1, '', ''),
+(114, 98, 2, 2, '', ''),
+(115, 99, 2, 1, '', ''),
+(116, 99, 2, 2, '', ''),
+(123, 52, 2, 1, '', ''),
+(124, 52, 2, 2, '', ''),
+(127, 100, 2, 1, '', ''),
+(128, 100, 2, 2, '', ''),
+(129, 58, 2, 1, '', ''),
+(130, 58, 2, 2, '', ''),
+(131, 101, 2, 1, '', ''),
+(132, 101, 2, 2, '', ''),
+(133, 86, 2, 1, '', ''),
+(134, 86, 2, 2, '', '');
 
 -- --------------------------------------------------------
 
@@ -3024,7 +3416,8 @@ INSERT INTO `subscriber` (`id`, `email`, `created_at`) VALUES
 (9, 'developer.eww@gmail.com', '2019-04-05 09:25:16'),
 (10, 'lol6@mailinator.com', '2019-04-11 06:04:59'),
 (11, 'shivam@mailinator.com', '2019-04-11 06:08:34'),
-(12, 'admin@tickpay.com', '2019-04-11 09:58:04');
+(12, 'admin@tickpay.com', '2019-04-11 09:58:04'),
+(13, 'dhrumi@gmail.com', '2019-04-14 17:32:24');
 
 -- --------------------------------------------------------
 
@@ -3072,7 +3465,12 @@ INSERT INTO `variant_group` (`id`, `shop_id`, `name`, `selection`, `availability
 (26, 94, 'Large', 1, 0, '2019-04-08 23:13:19', NULL, NULL),
 (27, 94, 'Medium', 0, 1, '2019-04-08 23:38:36', NULL, NULL),
 (28, 94, 'Small', 0, 0, '2019-04-08 23:39:30', NULL, NULL),
-(29, 86, 'Jain Prepration', 0, 1, '2019-04-09 16:27:24', NULL, NULL);
+(29, 86, 'Jain Prepration', 0, 1, '2019-04-09 16:27:24', NULL, NULL),
+(30, 96, 'Extra Cream', 1, 1, '2019-04-12 00:02:56', NULL, NULL),
+(31, 100, 'Cheese', 0, 0, '2019-04-13 20:21:15', NULL, NULL),
+(32, 100, 'Extra Vegetables', 1, 0, '2019-04-13 20:21:40', NULL, NULL),
+(33, 101, 'Small', 0, 1, '2019-04-14 13:14:53', NULL, '2019-04-14 18:44:53'),
+(34, 101, 'Small,Medium,Large', 1, 1, '2019-04-14 18:45:56', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3132,8 +3530,6 @@ INSERT INTO `variant_items` (`id`, `variant_group_id`, `name`, `item_id`, `price
 (121, 16, 'ff', 37, '8', '2019-04-05 15:21:56'),
 (122, 15, 'Add', 41, '10', '2019-04-05 16:12:43'),
 (125, 25, 'cheese', 42, '10.00', '2019-04-05 17:47:37'),
-(127, 25, 'Chocos', 44, '10', '2019-04-05 17:51:08'),
-(128, 25, 'Extra flexs', 44, '10', '2019-04-05 17:51:08'),
 (161, 21, 'New Hand Tossed', 32, '0.00', '2019-04-09 14:29:20'),
 (162, 21, 'Wheat Thin Crust', 32, '5.00', '2019-04-09 14:29:20'),
 (163, 21, 'Cheese Burst', 32, '10.00', '2019-04-09 14:29:20'),
@@ -3151,7 +3547,20 @@ INSERT INTO `variant_items` (`id`, `variant_group_id`, `name`, `item_id`, `price
 (175, 23, 'Fresh Tomato', 32, '2.00', '2019-04-09 14:29:20'),
 (176, 23, 'Jalapeno', 32, '2.00', '2019-04-09 14:29:20'),
 (180, 29, 'Yes', 43, '0.00', '2019-04-09 16:34:30'),
-(181, 29, 'No', 43, '0.00', '2019-04-09 16:34:30');
+(181, 29, 'No', 43, '0.00', '2019-04-09 16:34:30'),
+(182, 30, 'Small', 50, '1.00', '2019-04-12 00:03:41'),
+(185, 25, 'Sauces', 54, '2.00', '2019-04-12 11:22:54'),
+(186, 25, 'Cheese', 54, '5.00', '2019-04-12 11:22:54'),
+(187, 25, 'Extra Choco', 55, '2.5', '2019-04-12 11:25:34'),
+(188, 25, 'Chocos', 44, '10.00', '2019-04-12 12:10:31'),
+(189, 25, 'Extra flexs', 44, '10.00', '2019-04-12 12:10:31'),
+(190, 31, 'Mozarella', 58, '2', '2019-04-13 20:22:57'),
+(191, 32, 'Pineapple', 57, '1.00', '2019-04-13 20:24:22'),
+(192, 32, 'Olives', 57, '1.00', '2019-04-13 20:24:22'),
+(193, 32, 'Green pepper', 57, '2', '2019-04-13 20:24:22'),
+(194, 24, 'Tomato', 62, '1.00', '2019-04-13 21:11:21'),
+(195, 19, 'Mozarella', 62, '1.00', '2019-04-13 21:11:21'),
+(196, 19, 'American', 62, '2', '2019-04-13 21:11:21');
 
 --
 -- Indexes for dumped tables
@@ -3405,7 +3814,7 @@ ALTER TABLE `variant_items`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `appsetting`
@@ -3447,43 +3856,43 @@ ALTER TABLE `cuisine`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT for table `customer_payment_card`
 --
 ALTER TABLE `customer_payment_card`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `delivery_address`
 --
 ALTER TABLE `delivery_address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `delivery_address_popular_request`
 --
 ALTER TABLE `delivery_address_popular_request`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `delivery_boy`
 --
 ALTER TABLE `delivery_boy`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `delivery_dispatcher`
 --
 ALTER TABLE `delivery_dispatcher`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `email_template`
 --
 ALTER TABLE `email_template`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `employee`
@@ -3507,7 +3916,7 @@ ALTER TABLE `highlight`
 -- AUTO_INCREMENT for table `item`
 --
 ALTER TABLE `item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `keys`
@@ -3519,25 +3928,25 @@ ALTER TABLE `keys`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=168;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=245;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=372;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=438;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=497;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=577;
 
 --
 -- AUTO_INCREMENT for table `order_item_variant`
 --
 ALTER TABLE `order_item_variant`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=965;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1029;
 
 --
 -- AUTO_INCREMENT for table `payment_settings`
@@ -3549,7 +3958,7 @@ ALTER TABLE `payment_settings`
 -- AUTO_INCREMENT for table `promocode`
 --
 ALTER TABLE `promocode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `promocode_products`
@@ -3591,25 +4000,25 @@ ALTER TABLE `setting`
 -- AUTO_INCREMENT for table `shop`
 --
 ALTER TABLE `shop`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT for table `shop_availibality`
 --
 ALTER TABLE `shop_availibality`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=713;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=853;
 
 --
 -- AUTO_INCREMENT for table `shop_cuisines`
 --
 ALTER TABLE `shop_cuisines`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
 
 --
 -- AUTO_INCREMENT for table `shop_hours`
 --
 ALTER TABLE `shop_hours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=135;
 
 --
 -- AUTO_INCREMENT for table `shop_request`
@@ -3627,19 +4036,19 @@ ALTER TABLE `state`
 -- AUTO_INCREMENT for table `subscriber`
 --
 ALTER TABLE `subscriber`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `variant_group`
 --
 ALTER TABLE `variant_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `variant_items`
 --
 ALTER TABLE `variant_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=197;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

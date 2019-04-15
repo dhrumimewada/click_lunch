@@ -398,10 +398,12 @@ class Profile extends CI_Controller {
 
 		
 
-		// echo "<pre>";
-		// print_r($order);
-		// exit;
+	
 		$output_data["order"] = $this->profile_model->order_history($config["per_page"], $page);
+
+		// echo "<pre>";
+		// print_r($output_data["order"]);
+		// exit;
 		$output_data['main_content'] = 'order_history';
 		$this->load->view('web/template',$output_data);
 	}

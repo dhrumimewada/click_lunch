@@ -272,7 +272,7 @@ if (isset($delivery_dispatcher_detail->profile_picture) && ($delivery_dispatcher
   function initAutocomplete() {
     autocomplete = new google.maps.places.Autocomplete(
        (document.getElementById('autocomplete')),
-        {types: ['geocode'] , componentRestrictions: {country: "us"} });
+        {types: ['geocode'] });
     autocomplete.addListener('place_changed', fillInAddress);
   }
 
@@ -316,7 +316,6 @@ if (isset($delivery_dispatcher_detail->profile_picture) && ($delivery_dispatcher
   }
 
   function geolocate() {
-    $('.loader').show();
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         var geolocation = {
@@ -332,7 +331,6 @@ if (isset($delivery_dispatcher_detail->profile_picture) && ($delivery_dispatcher
         autocomplete.setBounds(circle.getBounds());
       });
     }
-     $('.loader').hide();
   }
 </script>
 <?php

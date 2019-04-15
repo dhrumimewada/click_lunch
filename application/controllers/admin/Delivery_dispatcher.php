@@ -46,7 +46,7 @@ class Delivery_dispatcher extends CI_Controller {
 	                $disabled = '';
 
 	            }elseif($delivery_dispatcher["status"] == 2){
-	                $btn_name = 'Deactivate';
+	                $btn_name = 'Deactivated';
 	                $btn_class = 'btn-deactive';
 	                $disabled = '';
 	            }else{

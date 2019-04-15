@@ -28,7 +28,9 @@
         </div>
     </div>
 </footer>
-
+<div id="scroll" class="scroll">
+    <span><i class="mdi mdi-arrow-up"></i></span>
+</div>
 <?php $register_link = base_url().'register'; ?>
 <style type="text/css" media="screen">
  .form-check-input.validation-error-label{

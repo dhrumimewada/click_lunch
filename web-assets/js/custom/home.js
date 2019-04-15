@@ -372,7 +372,7 @@ function update_shops() {
                             '<div class="col-lg-3 px-2">'
                                 +'<div class="card">'
                                     // +'<a href="'+shop_url+val.short_name+'">'
-                                        +'<div class="restaurant-img position-relative">'
+                                        +'<div class="restaurant-img position-relative select-type pointer">'
                                             +'<img src="'+profile_picture+'" class="card-img-top" alt="Card image cap">'
                                             +'<div class="rating txt1">Ratings</div>'
                                             +'<div class="rating txt2 txt-red">'+val.rating+'</div>'

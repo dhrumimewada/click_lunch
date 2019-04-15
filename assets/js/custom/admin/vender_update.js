@@ -153,7 +153,7 @@
             },
             profile_picture:{
                 accept: "image/jpg, image/jpeg, image/png",
-                filesize: 10
+                filesize: 2
             }
         },
         messages: {
@@ -245,11 +245,21 @@
             },
             profile_picture:{
                 accept: "Accepted image formats: jpg, jpeg, png",
-                filesize: "File size limit executed: 10MB Maximum"
+                filesize: "File size limit executed: 2MB Maximum"
             }
         },
         submitHandler: function(form) {
-            form.submit();
+
+            if($('#latitude').val() == '' || $('#longitude').val() == ''){
+                swal(
+                    'Your restaurant address seems wrong',
+                    'Please select address from google suggestion',
+                    'warning'
+                )
+            }else{
+                form.submit();
+            }
+            
         }
     });
 
@@ -320,4 +330,6 @@ $( document ).ready(function() {
     $(document).on('change', '#imgInp', function() {
         readURL(this);
     });
+
+    
  });

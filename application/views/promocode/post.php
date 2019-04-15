@@ -365,7 +365,7 @@ if($field_value == 1){
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label class="required" for="from_date">Form Date</label>
+                                        <label class="required" for="from_date">From Date</label>
                                         <div>
                                             <div class="input-group">
                                                 <?php

@@ -12,15 +12,14 @@ class Cart extends CI_Controller {
 
 	public function cart_destroy(){
 		echo "<pre>";
-		echo "Before destroy";
-		print_r($this->cart->contents());
-		exit;
-		echo "after destroy";
-		//print_r($_SESSION);
-		$shops = $this->welcome_model->get_popular_shops();
-		// $this->cart->destroy();
+		// echo "Before destroy";
+		 print_r($this->cart->contents());
+		// exit;
+		// echo "after destroy";
+		//print_r($this->cart->destroy());
+		 
 		// echo "<pre>";
-		 print_r($shops);
+		// print_r($shops);
 
 		// $insert_data = array(
   //   				'id' => "8d39e3679e0898c5292a7e59105bda96",
@@ -100,6 +99,25 @@ class Cart extends CI_Controller {
 			}
 		}
 
+		$continue_shopping_url = '';
+		if($this->cart->contents() !== NULL && !empty($this->cart->contents())){
+			foreach ($this->cart->contents() as $key => $value) {
+				$shop_id = $value['shop_id'];
+				$order_type = $value['order_type'];
+				break;
+			}
+			$this->db->select('short_name');
+            $this->db->where("id",$shop_id);
+            $this->db->from("shop");
+            $sql_query = $this->db->get();
+            if ($sql_query->num_rows() > 0){
+            	$shop_data = $sql_query->row();
+            	$shop_short_name = $shop_data->short_name;
+            	$continue_shopping_url = base_url().'restaurant/'.$order_type.'/naerby/'.$shop_short_name;
+            }
+		}
+		$output_data['continue_shopping_url'] = $continue_shopping_url;
+
 		$additional_recommendation = $this->welcome_model->additional_recommendation_items($this->cart->contents());
 		$output_data['additional_recommendation'] = $additional_recommendation;
 		$output_data['cart_contents'] = $this->cart->contents();
@@ -162,7 +180,7 @@ class Cart extends CI_Controller {
 					$item_data['group_data'] = $_POST['group'];
 
 	        	}else{
-	        		$item_data['group_data'] = '';
+	        		$item_data['group_data'] = array();
 	        	}
 
 	        	if($item_data['offer_price'] == ''){
@@ -194,8 +212,20 @@ class Cart extends CI_Controller {
 									'group_data' => $item_data['group_data']
 								);
 
+				// echo "<pre>";
+				// print_r('Current cart:');
+				// print_r($this->cart->contents());
+				// print_r('Insering data:');
+				// print_r($insert_data);
+				
+				$this->cart->product_name_rules  = '^.';
+
 				// This function add items into cart.
 				if($this->cart->insert($insert_data)){
+
+					// print_r('After Insering data cart:');
+					// print_r($this->cart->contents());
+					// exit;
 					//echo 'inserted';
 					$where = array('id' => $_POST['shop_id'], 'deleted_at' => NULL);
 			        $select = array('short_name');
@@ -206,6 +236,10 @@ class Cart extends CI_Controller {
 			        	$this->session->set_userdata('shop_short_name',$shop_short_name);
 			        }
 				}else{
+
+					// print_r('Not inserted');
+					// print_r($this->cart->contents());
+					// exit;
 					//echo 'fail';
 				}
 	        }

@@ -3,10 +3,6 @@ $prof_url = base_url() .  'web-assets/images/logo-3.png';
 $assets = $this->config->item('website_assest');
 $d_none = 'd-none';
 $add_address_link = base_url()."customer-add-address";
-
-if(isset($_SESSION['shop_short_name']) && $_SESSION['shop_short_name'] != ''){
-	$url = base_url().'restaurant/'.$_SESSION['shop_short_name'];
-}
 ?>
 <!-- model -->
 <div class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="customize-item-modal">
@@ -237,8 +233,16 @@ if(isset($_SESSION['shop_short_name']) && $_SESSION['shop_short_name'] != ''){
 				}
 				?>
 				<?php
-				$order_type = array_column($cart_contents, 'order_type');
-				if($order_type[0] == 'delivery'){
+				$order_type_array = array_column($cart_contents, 'order_type');
+				if (strpos($order_type_array[0], 'weekly') !== false){
+                    $weekly_array = explode("_",$order_type_array[0]);
+                    $order_type = $weekly_array[0];
+                }else{
+                    $order_type = $order_type_array[0];
+                }
+                // print_r($order_type);
+
+				if($order_type == 'delivery'){
 				?>
 				<div class="select-delivery-address-wrapper text-center">
 					<h3 class="text-with-border-right">Select Delivery Address</h3>
@@ -284,10 +288,16 @@ if(isset($_SESSION['shop_short_name']) && $_SESSION['shop_short_name'] != ''){
 				}
 				?>
 				
+				<?php
+				if(isset($continue_shopping_url) && $continue_shopping_url != ''){
+				?>
 				<div class="form-actions d-flex justify-content-between">
-					<a href="<?php echo $url; ?>" name="continue-shopping" class="white-btn continue-shopping-btn pointer" id="continue-shopping-btn">Continue Shopping</a>
+					<a href="<?php echo $continue_shopping_url; ?>" name="continue-shopping" class="white-btn continue-shopping-btn pointer" id="continue-shopping-btn">Continue Shopping</a>
 					<input type="button" name="checkout" class="small-red-btn checkout-btn pointer" id="checkout-btn" value="Checkout">
 				</div>
+				<?php 
+				}
+				?>
 			</div>
 			</form>
 		</div>
@@ -317,7 +327,7 @@ include 'add_address_modal.php';
 	var add_direct_to_cart_url = "<?php echo base_url().'add-direct-recommended-item-cart'; ?>";
 	var checkout_url = "<?php echo base_url().'checkout'; ?>";
 
-	var cart_order_type = "<?php echo $order_type[0]; ?>";
+	var cart_order_type = "<?php echo $order_type; ?>";
 
 	console.log(defualt_delivery_address_id);
 	console.log(cart_contents_data);

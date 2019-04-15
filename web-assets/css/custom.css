@@ -128,10 +128,10 @@ li.dropdown.notification-list.last-div:before{
 	color: #ff0000;
 	text-transform: capitalize;
 }
-.caption-2{
+/* .caption-2{
 	
 	font-size: 2rem;
-}
+} */
 .search-div {
     background-color: #dee2e6;
     height: 3rem;
@@ -525,7 +525,7 @@ li.dropdown.notification-list.last-div:before{
     margin-top: 90px;
 }
 .favourites-order-block .pagination li{
-    padding: 1px 10px;
+    padding: 5px 10px 1px 10px;
     border: 1px solid #2E2D4D;
     margin: 8px;
     color: #2E2D4D;
@@ -606,8 +606,8 @@ li.dropdown.notification-list.last-div:before{
 #search-div{
     position: absolute;
     width: 35%;
-    top: 54%;
-    right: 10%;
+    right: 180px;
+    bottom: 160px;
 }
 @keyframes spin {
   100% {

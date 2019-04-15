@@ -72,9 +72,9 @@ $field_value = $temp_value;
                                                         $selected = 'selected';
                                                     }
                                                     if($to == 'delivery boy'){
-                                                        $option_name = $value['username'];
+                                                        $option_name = stripslashes($value['username']);
                                                     }else {
-                                                        $option_name = $value['shop_name'];
+                                                        $option_name = stripslashes($value['shop_name']);
                                                     }
                                                     
                                                     echo "<option value='".$value['id']."' ".$selected.">".$option_name."</option>";

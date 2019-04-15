@@ -15,8 +15,8 @@ if($is_customer){
         <div class="header-bar"> 
             <nav class="navbar navbar-expand-lg navbar-light header-box">
                 <div class="header-app">
-                    <a class="navbar-brand logo" href="<?php echo BASE_URL(); ?>welcome"><img src="<?php echo BASE_URL(); ?>assets/images/click-lunch.png" alt="" class="logo-large"></a>
-                    <a href="<?php echo BASE_URL(); ?>welcome">Get the App </a>
+                    <a class="navbar-brand logo" href="https://play.google.com/store?hl=en"><img src="<?php echo BASE_URL(); ?>assets/images/click-lunch.png" alt="" class="logo-large"></a>
+                    <a href="https://play.google.com/store?hl=en">Get the App </a>
                 </div>                      
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

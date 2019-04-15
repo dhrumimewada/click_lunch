@@ -124,16 +124,22 @@ $order_detail_url = base_url().'order-success/';
 							<div class="favourite-order-type">
 								<span class="delivered order-type">
 								<?php
-								if($value['order_status'] == 0 || 1 || 3){
+								if($value['order_status'] == 0){
 									$str = 'Pending';
+								}elseif($value['order_status'] == 1){
+									$str = 'Accepted by Restaurant';
 								}elseif($value['order_status'] == 2){
-									$str = 'Cancelled';
+									$str = 'Cancelled by Restaurant';
+								}elseif($value['order_status'] == 3){
+									$str = 'Accepted by Restaurant';
 								}elseif($value['order_status'] == 4){
-									$str = 'Accepted';
+									$str = 'Delivery Boy Assigned';
 								}elseif($value['order_status'] == 5){
 									$str = 'Picked';
 								}elseif($value['order_status'] == 6){
 									$str = 'Delivered';
+								}elseif($value['order_status'] == 7){
+									$str = 'Cancelled';
 								}else{
 									$str = 'Fail';
 								}

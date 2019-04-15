@@ -233,6 +233,10 @@ class Auth_model extends CI_Model {
 			$email_var_data["recovery_link"] = base_url() . 'employee-reset-password/'. $remember_token;
 		}elseif($user_type == 'customer'){
 			$email_var_data["recovery_link"] = base_url() . 'customer-reset-password/'. $remember_token;
+		}elseif($user_type == 'dispatcher'){
+			$email_var_data["recovery_link"] = base_url() . 'dispatcher-reset-password/'. $remember_token;
+		}elseif($user_type == 'admin'){
+			$email_var_data["recovery_link"] = base_url() . 'admin-reset-password/'. $remember_token;
 		}else{
 			$email_var_data["recovery_link"] = '';
 		}
@@ -273,6 +277,10 @@ class Auth_model extends CI_Model {
 				$this->db->update("employee", $token_array);
 			}elseif($user_type == 'customer'){
 				$this->db->update("customer", $token_array);
+			}elseif($user_type == 'dispatcher'){
+				$this->db->update("delivery_dispatcher", $token_array);
+			}elseif($user_type == 'admin'){
+				$this->db->update("admin", $token_array);
 			}else{
 			}
 		}

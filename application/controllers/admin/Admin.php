@@ -112,28 +112,7 @@ class Admin extends CI_Controller {
 						} else {
 							$file_upload_data = $this->upload->data();
 							$modal_data['profile_picture'] = $file_upload_data;
-
-							$this->load->library('image_lib');
-
-							$config['image_library'] = 'gd2';
-							$config['source_image'] = FCPATH . $this->config->item("profile_path").'/'.$file_upload_data['file_name'];
-							$config['create_thumb'] = TRUE;
-						    $config['maintain_ratio'] = TRUE;
-						    $config['thumb_marker'] = '';
-						    $config['width'] = 600;
-	    					$config['height'] = 600;
-
-						    $this->image_lib->clear();
-						    $this->image_lib->initialize($config);
-
-						    if (!$this->image_lib->resize()){
-							    ucfirst($this->upload->display_errors());
-								$this->auth->set_error_message(ucfirst($this->upload->display_errors()));
-								$this->session->set_flashdata($this->auth->get_messages_array());
-								$file_upload = false;
-							}else{
-								$file_upload = true;
-							}
+							
 
 						}
 

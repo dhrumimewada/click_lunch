@@ -17,6 +17,16 @@ $vender_login_link = '#';
     $forgot_link = base_url()."vender-forgot-password";
     $vender_login_link = base_url() . "login-vender";
 
+ }elseif($user_type == 'admin'){
+
+    $forgot_link = base_url()."admin-forgot-password";
+    $vender_login_link = base_url() . "login-admin";
+
+ }elseif($user_type == 'dispatcher'){
+
+    $forgot_link = base_url()."dispatcher-forgot-password";
+    $vender_login_link = base_url() . "login-dispatcher";
+
  }else{
  }
 

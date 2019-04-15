@@ -229,6 +229,10 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
     }
     ?>
                                             <input id="autocomplete" placeholder="Enter street" onFocus="geolocate()" class="form-control" type="text" value='<?php echo $field_value; ?>' name="address">
+                                            <input type="hidden" id="administrative_area_level_2" name="city">
+                                            <input type="hidden" id="administrative_area_level_1" name="state">
+                                            <input type="hidden" name="latitude" id="latitude" value="<?php echo $vender_detail->latitude ?>">
+                                            <input type="hidden" name="longitude" id="longitude" value="<?php echo $vender_detail->latitude ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('address'); ?>
                                             </div>
@@ -250,7 +254,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = stripslashes($vender_detail->city);
     }
     ?>
-                                            <input type="text" name="city" class="form-control" id="city" placeholder="Enter city" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="city" class="form-control city" id="city" placeholder="Enter city" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('city'); ?>
                                             </div>
@@ -272,7 +276,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = stripslashes($vender_detail->state);
     }
     ?>
-                                            <input type="text" name="state" class="form-control" id="state" placeholder="Enter state" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="state" class="form-control state" id="state" placeholder="Enter state" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('state'); ?>
                                             </div>
@@ -298,7 +302,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = stripslashes($vender_detail->country);
     }
     ?>
-                                            <input type="text" name="country" class="form-control" id="country" placeholder="Enter country" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="country" class="form-control country" id="country" placeholder="Enter country" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('country'); ?>
                                             </div>
@@ -320,7 +324,7 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         $field_value = $vender_detail->zip_code;
     }
     ?>
-                                            <input type="text" name="zipcode" class="form-control" id="zipcode" placeholder="XXXXX" value="<?php echo $field_value; ?>">
+                                            <input type="text" name="zipcode" class="form-control zipcode" id="zipcode" placeholder="XXXXX" value="<?php echo $field_value; ?>">
                                             <div class="validation-error-label">
                                                 <?php echo form_error('zipcode'); ?>
                                             </div>
@@ -553,10 +557,12 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         administrative_area_level_1: 'long_name'
       };
 
+
+
   function initAutocomplete() {
     autocomplete = new google.maps.places.Autocomplete(
        (document.getElementById('autocomplete')),
-        {types: ['geocode']});
+        {types: ['establishment'] });
     autocomplete.addListener('place_changed', fillInAddress);
   }
 
@@ -568,25 +574,46 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
       document.getElementById(component).disabled = false;
     }
 
+   if (typeof place.address_components != "undefined" || place.address_components != null){
+
+    $('#latitude').val(place.geometry.location.lat());
+    $('#longitude').val(place.geometry.location.lng());
+
     console.log(place.address_components);
 
-    for (var i = 0; i < place.address_components.length; i++) {
-      var addressType = place.address_components[i].types[0];
-      if (componentForm[addressType]) {
-        var val = place.address_components[i][componentForm[addressType]];
-        document.getElementById(addressType).value = val;
-      }
+        for (var i = 0; i < place.address_components.length; i++) {
+            for (var j = 0; j < place.address_components[i].types.length; j++){
+                if (place.address_components[i].types[j] == "postal_code") {
+                    $('.zipcode').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "country") {
+                    $('.country').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "administrative_area_level_1") {
+                    $('.state').val(place.address_components[i].long_name);
+                }
+                if (place.address_components[i].types[j] == "administrative_area_level_2") {
+                    $('.city').val(place.address_components[i].long_name);
+                }
+            }
+            var addressType = place.address_components[i].types[0];
+            if (componentForm[addressType]) {
+                var val = place.address_components[i][componentForm[addressType]];
+                document.getElementById(addressType).value = val;
+            }
+        }
     }
   }
 
   function geolocate() {
-    $('.loader').show();
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         var geolocation = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
+
+        // console.log(geolocation);
         var circle = new google.maps.Circle({
           center: geolocation,
           radius: position.coords.accuracy
@@ -594,7 +621,6 @@ if (isset($vender_detail->profile_picture) && ($vender_detail->profile_picture !
         autocomplete.setBounds(circle.getBounds());
       });
     }
-     $('.loader').hide();
   }
 </script>
 <?php

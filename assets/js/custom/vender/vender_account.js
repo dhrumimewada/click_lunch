@@ -1,4 +1,4 @@
- var validator = $(".form-validate1").validate({
+ var validator = $(".form-validate").validate({
 
         ignore: 'input[type=hidden], .select2-search__field', // ignore hidden fields
         errorClass: 'validation-error-label',
@@ -336,8 +336,15 @@
         submitHandler: function(form) {
 
             if(validate_store_time()){
-               // console.log('true');
-                form.submit();
+                if($('#latitude').val() == '' || $('#longitude').val() == ''){
+                    swal(
+                        'Your restaurant address seems wrong',
+                        'Please select address from google suggestion',
+                        'warning'
+                    )
+                }else{
+                    form.submit();
+                }
             }else{
                 $(".validation-availibality").append('<label class="validation-error-label" style="">The restaurant availability time field is invalid.</label>');
             }      
@@ -563,6 +570,15 @@ $( document ).ready(function() {
         }
     });
 
+    $(document).on('change','#autocomplete',function(){
+        $('#latitude').val('');
+        $('#longitude').val('');
+        $('#city').val('');
+        $('#state').val('');
+        $('#country').val('');
+        $('#zip_code').val('');
+    });
+
  });
 
     function validate_store_time(){
@@ -638,7 +654,7 @@ $( document ).ready(function() {
   }
 
   function geolocate() {
-    $('.loader').show();
+    $(".overlay").css("display", "block");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         var geolocation = {
@@ -654,5 +670,5 @@ $( document ).ready(function() {
         autocomplete.setBounds(circle.getBounds());
       });
     }
-     $('.loader').hide();
+    $(".overlay").css("display", "none");
   }

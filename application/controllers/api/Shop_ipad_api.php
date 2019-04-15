@@ -844,6 +844,11 @@ class Shop_ipad_api extends REST_Controller {
                 $this->db->where("id",$_POST['order_id']);
                 if($this->db->update("orders",$order_update))
                 {
+                    $push_title = 'Order Rejected by Restaurant';
+                    $message = 'Your order no. CL'.$_POST['order_id'].' has been rejected by restaurant.';
+                    $push_type = 'order_rejected';
+                    $notification_type = 3;
+
                     $response['status'] = true;
                     $response['message'] = 'Order CL'.$_POST['order_id'].' rejected';
                 }
@@ -860,6 +865,11 @@ class Shop_ipad_api extends REST_Controller {
                 $this->db->where("id",$_POST['order_id']);
                 if($this->db->update("orders",$order_update))
                 {
+                    $push_title = 'Order Accepted by Restaurant';
+                    $message = 'Your order no. CL'.$_POST['order_id'].' has been accepted by restaurant.';
+                    $push_type = 'order_accepted';
+                    $notification_type = 2;
+
                     $response['status'] = true;
                     $response['message'] = 'Order CL'.$_POST['order_id'].' accepted by shop';
                 }
@@ -867,14 +877,36 @@ class Shop_ipad_api extends REST_Controller {
                 {
                     $response['status'] = false;
                     $response['message'] = 'Server encountered an error. please try again';
-                }
+                }                
 
             }
             else
             {
                 $response['status'] = false;
                 $response['message'] = 'Something went wrong';
-            }                
+            }    
+            $customer_data = array();
+            $this->db->select('t1.device_type, t1.device_token, t2.customer_id');
+            $this->db->from('customer t1');
+            $this->db->join('orders t2', 't1.id = t2.customer_id');
+            $this->db->where('t2.id', $_POST['order_id']);
+            $this->db->where('t1.device_type !=', '');
+            $this->db->where('t1.device_type !=', 0);
+            $this->db->where('t1.device_token !=', '');
+            $sql_query = $this->db->get();
+            $customer_data = (array)$sql_query->row();
+            $device_type = $customer_data['device_type'];
+            $device_token = $customer_data['device_token'];
+
+            $push_data = array(
+                'order_id' => $_POST['order_id'],
+                'customer_id' => $_POST['customer_id'],
+                'message' => $message
+                );
+            $result = send_push($device_type,$device_token, $push_title, $push_data, $push_type);
+
+            $success_data = notification_add($notification_type, $customer_data['customer_id'], $push_title, $message, $_POST['order_id']);
+                            
             
         }
         else
@@ -903,7 +935,9 @@ class Shop_ipad_api extends REST_Controller {
                 {
                     $order_data = (array)$this->db->get_where('orders',array('id'=>$_POST['order_id']))->row();
                     $order_data['message'] = 'Order CL'.$_POST['order_id'].' rejected';
-                    send_push($customer['device_type'],$customer['device_token'],'Order Cancel By Shop',$order_data,'CancelByShop');
+                    send_push($customer['device_type'],$customer['device_token'],'Order Cancel By Shop',$order_data,'order_rejected');
+                    notification_add(2, $customer['id'], 'Order Cancel By Shop', $order_data['message'] , $_POST['order_id']);
+
                     $response['status'] = true;
                     $response['message'] = 'Order CL'.$_POST['order_id'].' rejected';
                 }
@@ -946,7 +980,10 @@ class Shop_ipad_api extends REST_Controller {
                     }
                     $order_data = (array)$this->db->get_where('orders',array('id'=>$_POST['order_id']))->row();
                     $order_data['message'] = 'Order CL'.$_POST['order_id'].' completed by shop';
+
                     send_push($customer['device_type'],$customer['device_token'],'Order Completed By Shop',$order_data,'order_completed');
+                    notification_add(6, $customer['id'], 'Order Completed By Shop', $order_data['message'] , $_POST['order_id']);
+
                     $response['status'] = true;
                     $response['message'] = 'Order CL'.$_POST['order_id'].' completed by shop';
                 }

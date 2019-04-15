@@ -186,10 +186,19 @@ $(document).on('hidden.bs.modal','#orderSuccessful',function(){
 });
 
 $(document).on('click','#placeorder',function(){
+    // console.log($('#weekly_time').val());
+    // return false;
     if($("input[name='deliveroption']:checked")){
         if( (($("input[name='deliveroption']:checked").val() == 2) && ($('#deliver_time').val() == '')) ||  (($("input[name='deliveroption']:checked").val() == 4) && ($('#takeout_time').val() == '')) ){
             swal(
                 'Please select delivery or takeout time',
+                'Order time is required',
+                'warning'
+            )
+            return false;
+        }else if(weekly_status == 1 && $('#weekly_time').val() == ''){
+            swal(
+                'Please select order time',
                 'Order time is required',
                 'warning'
             )
@@ -202,6 +211,8 @@ $(document).on('click','#placeorder',function(){
                 var later_time =  $('#deliver_time').val();
             }else if($("input[name='deliveroption']:checked").val() == 4){
                 var later_time =  $('#takeout_time').val();
+            }else if(weekly_status == 1){
+                var later_time =  $('#weekly_time').val();
             }else{
                 var later_time = '';
             }
@@ -239,7 +250,13 @@ $(document).on('click','#placeorder',function(){
                     return false;
                 }
             }
-            var order_type =  $("input[name='deliveroption']:checked").val();
+
+            if(weekly_status == 1){
+                var order_type = weekly_order_type;
+            }else{
+                var order_type =  $("input[name='deliveroption']:checked").val();
+            }
+            
             var payment_type = $("input[name='payment_card']:checked").attr('data-payment-type');
             var card_id = '';
             if(payment_type == 0){
@@ -247,6 +264,8 @@ $(document).on('click','#placeorder',function(){
             }
 
             console.log('order_type'+order_type+' ');
+            console.log('weekly_status'+weekly_status+' ');
+            console.log('weekly_day'+weekly_day+' ');
             console.log('later_time'+later_time+' ');
             console.log('promocode_applied'+promocode_applied+' ');
             console.log('payment_type'+payment_type+'   ');
@@ -254,7 +273,7 @@ $(document).on('click','#placeorder',function(){
             console.log('delivery_amount'+delivery_amount+' ');
             console.log('tax'+tax+' ');
             console.log('service_charge'+service_charge+'   ');
-            // return false;
+             // return false;
 
             $.ajax({
                 url: place_order_url,
@@ -262,6 +281,8 @@ $(document).on('click','#placeorder',function(){
                 data:{
                     later_time:later_time,
                     order_type:order_type,
+                    weekly_status:weekly_status,
+                    schedule_day:weekly_day,
                     promocode:promocode_applied,
                     payment_type:payment_type,
                     card_id:card_id,
@@ -312,6 +333,10 @@ $( document ).ready(function(){
     if(takeout_delivery_status == 2){
         $('#deliver').hide();
         $('#takeout').show();
+    }
+
+    if(weekly_status == 1){
+        $("#weekly .select-time").show();
     }
 
 	$("#cvv").inputmask("9999",{"placeholder": ""});

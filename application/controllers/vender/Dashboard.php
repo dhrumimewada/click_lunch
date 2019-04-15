@@ -21,6 +21,12 @@ class Dashboard extends CI_Controller {
 
 	public function vender_dashboard(){
 		$output_data['total'] = $this->dashboard_model->get_total();
+		$output_data['order'] = $this->dashboard_model->get_order();
+		
+		// echo "<pre>";
+		// print_r($output_data);
+		// exit;
+
 		$output_data['main_content'] = "vender/dashboard";
 		$this->load->view('template/template',$output_data);	
 	}

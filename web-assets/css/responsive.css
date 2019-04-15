@@ -66,6 +66,7 @@
 .caption-2{ font-size: 20px; }
 .caption-1 {
     font-size: 50px;}
+#search-div{ right: 152px; bottom: 160px; }
 
 }
 @media only screen and (max-width: 1199px) {
@@ -81,6 +82,7 @@
 .carousel-caption {width: 450px; padding: 0;}
 .caption-2 {font-size: 18px;}
 .caption-1 {font-size: 25px;}
+#search-div{ right: 123px; bottom: 132px; }
 
 /*sani 11-01-19 home-page*/
 .home-header a.dropdown-toggle.nav-link.arrow-none.waves-effect.nav-user {
@@ -170,7 +172,7 @@
 .search-div .search-txt{     position: static; max-width: 100%; display: block; font-size: 18px;}
 .home-banner input.search-btn { font-size: 16px; position: static; transform: none;}
 .home-banner input.search-btn.float-right { margin-top: 10px; text-align: center; padding: 0 10px; max-width: 200px;}
-
+#search-div{ right: 126px; }
 
 
 
@@ -228,6 +230,10 @@
 .search-div.row input {
     margin-bottom: 0px;
    
+}
+#search-div{
+    right: 100px;
+    bottom: 72px;
 }
 .search-div .search-txt{ font-size: 15px; background-position: 15px 7px;     padding-left: 45px;}
 
@@ -404,14 +410,17 @@ div#navbarSupportedContent { margin: 30px 0 20px; padding: 0 15px;}
 .card-body.bg-cyan .p-5 {
     padding: 20px 0 50px 30px !important;
 }
-     .full-slider {
- 
+.full-slider {
+    object-fit: cover;
     width: 100% !important;
 }
 .carousel-control-prev-icon{ display: none; }
 .carousel-control-next-icon{ display: none; }
 a.carousel-control-next{ display: none; }
 a.carousel-control-prev { display: none; }
+#search-div{
+    display: none;
+}
 
 
 #testimonial-slider .owl-nav {
@@ -511,7 +520,7 @@ select#order-price{ padding-left: 25px; }
      .offer-title2.mt-5 #offers .text-center{ text-align: left !important; }
 
 .home-banner     .carousel {
-    height: auto;
+    height: 300px;
 }
 
 .bg-cyan {

@@ -11,10 +11,13 @@ if($user_type == 'vender'){
     $vender_forgot_link = base_url() . "vender-forgot-password";
 }else if($user_type == 'admin'){
     $login_link = base_url() . "login-admin";
-}
-else if($user_type == 'employee'){
+    $vender_forgot_link = base_url() . "admin-forgot-password";
+}else if($user_type == 'employee'){
     $login_link = base_url() . "login-employee";
     $vender_forgot_link = base_url() . "employee-forgot-password";
+}else if($user_type == 'dispatcher'){
+    $login_link = base_url() . "login-dispatcher";
+    $vender_forgot_link = base_url() . "dispatcher-forgot-password";
 }else{
     $login_link = '#';
 }
@@ -73,10 +76,7 @@ if (isset($temp_value) && !empty($temp_value)) {
                                         <input type="checkbox" class="custom-control-input" id="customControlInline">
                                         <label class="custom-control-label" for="customControlInline">Remember me</label>
                                     </div> -->
-                                    <?php if($user_type != 'admin'){ 
-                                        if($user_type != 'dispatcher'){?>
-                                        <a href="<?php echo $vender_forgot_link; ?>" class="text-muted"><i class="mdi mdi-lock"></i> Forgot your password?</a>
-                                    <?php } } ?>
+                                    <a href="<?php echo $vender_forgot_link; ?>" class="text-muted"><i class="mdi mdi-lock"></i> Forgot your password?</a>
                                 </div>
                                 <div class="col-6 text-right">
                                     <button class="btn btn-primary w-md waves-effect waves-light" type="submit" name="submit">Log In</button>

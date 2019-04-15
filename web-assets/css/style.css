@@ -300,7 +300,7 @@ button:focus {outline: 0;}
 .favourites-order-list .favourites-order {border-bottom: 2px solid #f8f8f8; padding-bottom: 25px; margin-bottom: 10px !important;}
 .favourites-order-list .favourites-order:last-child {border-bottom: 0; padding-bottom: 0;}
 .order-history-wrapper .favourites-order-list .reorder-block {max-width: 95px; padding: 0;}
-.order-history-wrapper .favourites-order-list .reorder-block a, .order-history-wrapper .favourites-order-list .reorder-block .order-type {background-color: #2E2D4D; color: #fff; font-weight: 700; width: 95px; display: flex; border-radius: 15px; height: 30px; margin-bottom: 12px; justify-content: center; align-items: center; float: right;}
+.order-history-wrapper .favourites-order-list .reorder-block a, .order-history-wrapper .favourites-order-list .reorder-block .order-type {background-color: #2E2D4D; color: #fff; font-weight: 700; width: 110px; display: flex; border-radius: 15px; min-height: 30px; margin-bottom: 12px; justify-content: center; align-items: center; float: right; padding: 5px 0;line-height: normal;}
 .order-history-wrapper .favourites-order-list .reorder-block .order-type {margin-bottom: 0;}
 .order-history-wrapper .favourites-order-list .reorder-block a.reorder {background-color: #ACACAC;}
 .order-history-wrapper .favourites-order-list .reorder-block .order-type.delivered {background-color: #2E2D4D;}
@@ -600,14 +600,14 @@ img.hover-icon {
 /*.home-banner .carousel-item:before { position: absolute; content: ""; background: rgba(0, 0, 0, 0.3); top: 0; bottom: 0; left: 0; right: 0;}*/
 
 .caption-1 {
-    font-size: 68px;
+    font-size: 55px;
     line-height: 1;
     margin-bottom: 30px;
     display: inline-block;
 }
 .caption-2 {
     color: #636c73;
-    font-size: 2rem;
+    font-size: 30px;
     line-height: 1.2;
     margin-bottom: 15px;
 }

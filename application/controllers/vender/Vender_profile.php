@@ -45,7 +45,6 @@ class Vender_profile extends CI_Controller {
 
 			if (isset($_POST['submit'])){
 
-				
 				$validation_rules = array(
 
 					array('field' => 'shop_name', 'label' => 'shop title', 'rules' => 'trim|required|max_length[50]'),
@@ -59,8 +58,8 @@ class Vender_profile extends CI_Controller {
 					array('field' => 'state', 'label' => 'state', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'country', 'label' => 'country', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'zipcode', 'label' => 'zip code', 'rules' => 'trim|required|max_length[255]'),
-					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|max_length[255]'),
-					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|max_length[255]'),
+					array('field' => 'latitude', 'label' => 'latitude', 'rules' => 'trim|required|max_length[255]'),
+					array('field' => 'longitude', 'label' => 'longitude', 'rules' => 'trim|required|max_length[255]'),
 					array('field' => 'delivery_time', 'label' => 'delivery time', 'rules' => 'trim|required'),
 					array('field' => 'order_by_time', 'label' => 'order by time', 'rules' => 'trim|required'),
 
@@ -92,7 +91,6 @@ class Vender_profile extends CI_Controller {
 						$config['encrypt_name'] = FALSE;
 						$config['file_name'] = 'vender' . '_' . time();
 						$config['file_ext_tolower'] = TRUE;
-						$config['max_size'] = '2';
 
 						$this->load->library('upload');
 						$this->upload->initialize($config, TRUE);

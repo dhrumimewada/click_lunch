@@ -29,7 +29,7 @@ function get_msg() {
 	return $str;
 }
 
-function sendmail($from=NULL, $to = NULL, $subject = NULL, $message = NULL){
+function sendmail($from=NULL, $to = NULL, $subject = NULL, $message = NULL, $bcc = NULL){
 	$CI = &get_instance();
 
 
@@ -45,8 +45,16 @@ function sendmail($from=NULL, $to = NULL, $subject = NULL, $message = NULL){
 
 	$CI->load->library('email', $config);
 	$CI->email->set_newline("\r\n");
-	$CI->email->from($from, "Click Lunch"); // change it to yours
-	$CI->email->to($to);// change it to yours
+	$CI->email->from($from, "Click Lunch");
+	
+
+	if($to != NULL){
+		$CI->email->to($to);
+	}
+
+	if($bcc != NULL){
+		$CI->email->bcc($bcc);
+	}
 	$CI->email->subject($subject);
 	$CI->email->message($message);
 	if($CI->email->send()){

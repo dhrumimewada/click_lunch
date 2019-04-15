@@ -47,7 +47,7 @@ $edit_link = base_url().'banner-update';
                                         $btn_name = 'Active';
                                         $btn_class = 'btn-success';
                                     }else{
-                                        $btn_name = 'Deactivate';
+                                        $btn_name = 'Deactivated';
                                         $btn_class = 'btn-deactive';
                                     }
                                     echo "<td data-id='" . $value["id"] . "' class='text-center'><button type='button' class='btn ".$btn_class." waves-effect waves-light btn-sm deactive_banner' status-id='" . $value["status"] . "' title='".$btn_name."' data-popup='tooltip' >" . $btn_name . "</button></td>";

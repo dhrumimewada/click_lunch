@@ -49,7 +49,7 @@ class Customer extends CI_Controller {
 	                $btn_name = 'Active';
 	                $btn_class = 'btn-success';
 	            }else{
-	                $btn_name = 'Deactivate';
+	                $btn_name = 'Deactivated';
 	                $btn_class = 'btn-deactive';
 	            }
 
